@@ -17,6 +17,7 @@
       name: "vm-screen-main0",
       data() {
           return {
+            timers:null,
             degree:[],
             category:[],
             degreeIndex:0,
@@ -29,9 +30,12 @@
         this.getData();
       },
       mounted() {
-        setInterval(()=>{
+        this.timers = setInterval(()=>{
           this.getData();
-        },10000 * 6 * 5);
+        },10000 * 30);
+      },
+      destroyed(){
+        clearInterval(this.timers);
       },
       methods:{
         //获取数据
@@ -45,7 +49,6 @@
               this.category = [];
               this.degreeIndex = 0;
               this.categoryIndex = 0;
-
 
               clearInterval(this.timer);
               clearInterval(this.timer1);
@@ -123,7 +126,7 @@
                 center: ['50%', '42%'],
                 radius: ["45%", "70%"],
                 avoidLabelOverlap: false,
-                hoverAnimation: "false",
+                //hoverAnimation: false,
                 legendHoverLink: false,
                 hoverOffset: 3,
                 selectedOffset: 0,
@@ -169,25 +172,6 @@
             dataIndex: 0
           });*/
 
-          //设置默认选中高亮部分
-          /*rank.on("mouseover", function(e) {
-            if (e.dataIndex != index) {
-              rank.dispatchAction({
-                type: "downplay",
-                seriesIndex: 0,
-                dataIndex: index
-              });
-            }
-          });
-          rank.on("mouseout", function(e) {
-            index = e.dataIndex;
-            rank.dispatchAction({
-              type: "highlight",
-              seriesIndex: 0,
-              dataIndex: e.dataIndex
-            });
-          });*/
-
           //自动轮播
           let index = this.degreeIndex;
           this.timer = setInterval(function () {
@@ -205,23 +189,34 @@
               seriesIndex: 0,
               dataIndex: index
             });
-
-            //console.log(index);
-
-            // 显示 tooltip
-            myEcharts.dispatchAction({
-              type: 'showTip',
-              seriesIndex: 0,
-              dataIndex: index
-            });
           }, 3000);
 
+          //设置默认选中高亮部分
+          myEcharts.on("mouseover", function(e) {
+            console.log('mouseover')
+            clearInterval(this.timer);
+            /*if (e.dataIndex != index) {
+              myEcharts.dispatchAction({
+                type: "downplay",
+                seriesIndex: 0,
+                dataIndex: index
+              });
+            }*/
+          });
+          /*myEcharts.on("mouseout", function(e) {
+            index = e.dataIndex;
+            myEcharts.dispatchAction({
+              type: "highlight",
+              seriesIndex: 0,
+              dataIndex: e.dataIndex
+            });
+          });*/
 
           window.addEventListener("resize", () => {
             myEcharts.resize();
           });
         },
-        drawScat(){
+        drawScat() {
           let categories = this.category;
           if(categories){
             categories.filter(item => {
@@ -257,7 +252,6 @@
                 center: ['50%', '42%'],
                 radius: ["45%", "70%"],
                 avoidLabelOverlap: false,
-                hoverAnimation: "false",
                 legendHoverLink: false,
                 hoverOffset: 3,
                 selectedOffset: 0,
@@ -349,7 +343,12 @@
           window.addEventListener("resize", () => {
             myEcharts.resize();
           });
+        },
+
+        setCousel() {
+
         }
+
       }
     }
 </script>

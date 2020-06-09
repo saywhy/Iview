@@ -2,17 +2,17 @@
     <div class="vm-screen-main6">
       <div class="attention" v-if="dataInfo.length">
         <div class="item">
-          <div class="name">{{dataInfo[0].name}}</div>
+          <div class="name">{{dataInfo[0].name | alarm}}</div>
           <div id="attent1"></div>
           <div class="num">{{dataInfo[0].value.alert_count}}</div>
         </div>
         <div class="item">
-          <div class="name">{{dataInfo[1].name}}</div>
+          <div class="name">{{dataInfo[1].name | alarm}}</div>
           <div id="attent2"></div>
           <div class="num">{{dataInfo[1].value.alert_count}}</div>
         </div>
         <div class="item">
-          <div class="name">{{dataInfo[2].name}}</div>
+          <div class="name">{{dataInfo[2].name | alarm}}</div>
           <div id="attent3"></div>
           <div class="num">{{dataInfo[2].value.alert_count}}</div>
         </div>
@@ -20,9 +20,9 @@
       <div class="attention-table" v-if="dataInfo.length">
         <el-table :data="tableData" class="screen-table">
           <el-table-column prop="type" align="center" label="告警类型"></el-table-column>
-          <el-table-column prop="data0" align="center" :label="dataInfo[0].name" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="data1" align="center" :label="dataInfo[1].name" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="data2" align="center" :label="dataInfo[2].name" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="data0" align="center" :label="dataInfo[0].name | alarm" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="data1" align="center" :label="dataInfo[1].name | alarm" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="data2" align="center" :label="dataInfo[2].name | alarm" show-overflow-tooltip></el-table-column>
         </el-table>
       </div>
     </div>
@@ -33,6 +33,7 @@
       name: "vm-screen-main6",
       data(){
           return{
+            timers: null,
             dataInfo:[],
             tableData: [{
               type: '影响资产数',
@@ -46,9 +47,12 @@
         this.getData();
       },
       mounted() {
-        setInterval(()=>{
+        this.timers = setInterval(()=>{
           this.getData();
-        },10000 * 6 * 5);
+        },10000 * 30);
+      },
+      destroyed(){
+        clearInterval(this.timers);
       },
       methods:{
         //获取数据
@@ -70,7 +74,6 @@
                 });
 
                 //console.log(this.dataInfo);
-
                 this.$nextTick(function() {
                   this.drawGraph();
                 });
