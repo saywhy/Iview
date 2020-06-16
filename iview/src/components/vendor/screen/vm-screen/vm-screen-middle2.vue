@@ -68,6 +68,8 @@
                 this.flow.legendData = Object.keys(data);
                 this.flow.legendData = this.flow.legendData.map(item => {return item.toUpperCase();});
 
+                //console.log(this.flow.legendData)
+
                 Object.values(data).forEach((val,key) => {
 
                   if(key == 0){
@@ -80,8 +82,12 @@
                     return item.flow;
                   });
 
+                  flow = flow.reverse();
+
                   this.flow.xAxisData = this.flow.xAxisData.reverse();
+
                   let legendName = this.flow.legendData[key];
+
                   legendName = legendName.toUpperCase();
 
                   if(legendName == 'http' || legendName == 'HTTP'){
@@ -137,12 +143,12 @@
           myChart.showLoading({ text: '正在加载数据...' });
           myChart.clear();
           let option = {
-            /*tooltip: {
+            tooltip: {
               trigger: 'axis',
               axisPointer: {
                 type: 'shadow'
               }
-            },*/
+            },
             color: this.flow.legendColor,
             legend: {
               bottom: -5,
@@ -204,9 +210,6 @@
                 }
               }
             },
-            tooltip:{
-              show:false
-            },
             series: this.flow.series
           };
 
@@ -245,6 +248,8 @@
 
           let realData = this.realData;
 
+          //console.log(realData)
+
           if(realData.length > 0){
             realData.forEach(item => {
               var obj = {}, linkobj = {};
@@ -258,7 +263,6 @@
               linkobj.lineStyle = {color:'#00D7E9',width: 2, curveness: 0.4};
 
               linklist.push(linkobj);
-
 
               relelist.push(item.category);
             });
@@ -284,6 +288,8 @@
 
           //实时威胁检测
           let releAttr = [];
+
+          //console.log(relelist)
           relelist.forEach((item,index) => {
             let col = '';
             if(index == 0){
@@ -295,7 +301,10 @@
             }else if(index == 3){
               col = '#FF00C9';
             }
-            releAttr.push({name:item,itemStyle:{color:col}});
+            releAttr.push({
+              name:item,
+              itemStyle:{color:col}
+            });
           });
 
           datalist = newAttr;
@@ -303,7 +312,12 @@
           var mychart = this.$echarts.init(document.getElementById("info_relation"));
 
           var option = {
-            tooltip: {},
+            tooltip:{
+              show: true,
+              formatter:function (params) {
+                return params.data.name;
+              }
+            },
             animationDurationUpdate: 1500,
             animationEasingUpdate: "quinticInOut",
             series: [
@@ -363,7 +377,9 @@
           var relation = this.$echarts.init(document.getElementById("relation"));
 
           var option1 = {
-            tooltip: {},
+            tooltip: {
+              show:  false
+            },
             animationDurationUpdate: 1500,
             animationEasingUpdate: "quinticInOut",
             series: [
@@ -384,7 +400,7 @@
                 },
                 edgeLabel: {
                   normal: {
-                    show: true,
+                    show: false,
                     textStyle: {
                       fontSize: 8,
                       color: "#fff"

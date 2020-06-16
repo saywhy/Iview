@@ -326,7 +326,8 @@
                                value="email">邮件通知</el-checkbox>
                   <el-checkbox label="message"
                                value="message">短信通知</el-checkbox>
-             <el-checkbox label="news" value="news">消息中心通知</el-checkbox>
+                  <el-checkbox label="news"
+                               value="news">消息中心通知</el-checkbox>
                 </el-checkbox-group>
               </li>
             </div>
@@ -532,6 +533,7 @@
 <script type="text/ecmascript-6">
 import vmEmergeLine from "./vm-emerge/vm-emerge-line";
 import vmEmergePicker from "@/components/common/vm-emerge-picker";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: "Network",
   components: {
@@ -716,10 +718,31 @@ export default {
     };
   },
   mounted () {
+    this.check_passwd();
     this.get_echarts();
     this.get_list_risk();
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     // 获取折现图表
     get_echarts () {
       this.$axios.get('/yiiapi/alert/alert-trend')
@@ -1315,21 +1338,39 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.get('/yiiapi/site/check-auth-exist', {
-          params: {
-            pathInfo: 'yararule/download',
-          }
-        })
-          .then(response => {
-            var url1 = "/yiiapi/alert/export-alerts?status=" + this.params.status + '&start_time=' + this.params.startTime
-              + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.threat + '&key_word=' + this.params.key;
-            window.location.href = url1;
-          })
-          .catch(error => {
-            console.log(error);
+
+        this.$axios.get('/yiiapi/site/check-passwd-reset')
+          .then((resp) => {
+            let {
+              status,
+              msg,
+              data
+            } = resp.data;
+            if (status == '602') {
+              this.$message(
+                {
+                  message: msg,
+                  type: 'warning',
+                }
+              );
+              eventBus.$emit('reset')
+            } else {
+              this.$axios.get('/yiiapi/site/check-auth-exist', {
+                params: {
+                  pathInfo: 'yararule/download',
+                }
+              })
+                .then(response => {
+                  var url1 = "/yiiapi/alert/export-alerts?status=" + this.params.status + '&start_time=' + this.params.startTime
+                    + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.threat + '&key_word=' + this.params.key;
+                  window.location.href = url1;
+                })
+                .catch(error => {
+                  console.log(error);
+                })
+            }
           })
       }).catch(() => {
-
         this.$message({ type: 'info', message: '已取消导出' });
 
         this.$refs.multipleTable.clearSelection();

@@ -151,6 +151,7 @@
 </template>
 <script type="text/ecmascript-6">
 import VmEmergePicker from "@/components/common/vm-emerge-picker";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: "invest_ioc",
   components: {
@@ -198,8 +199,44 @@ export default {
   },
   mounted () {
     this.get_data()
+    this.test()
+    this.check_passwd();
   },
   methods: {
+    // 测试600专用
+    test () {
+      this.$axios.get('/yiiapi/investigate/ioc-scanning-list', {
+        params: {
+          pathInfo: 'investigate/host-network-investigation',
+        }
+      })
+        .then(response => {
+
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     // 获取列表
     get_data () {
       this.ioc_data.loading = true
@@ -311,17 +348,35 @@ export default {
     },
     // 下载模板
     download_template () {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
-        params: {
-          pathInfo: 'yararule/download',
-        }
-      })
-        .then(response => {
-          var url1 = "/yiiapi/investigate/download-ioc-template";
-          window.location.href = url1;
-        })
-        .catch(error => {
-          console.log(error);
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          } else {
+            this.$axios.get('/yiiapi/site/check-auth-exist', {
+              params: {
+                pathInfo: 'yararule/download',
+              }
+            })
+              .then(response => {
+                var url1 = "/yiiapi/investigate/download-ioc-template";
+                window.location.href = url1;
+              })
+              .catch(error => {
+                console.log(error);
+              })
+          }
         })
     },
     // 禁止选中的项目

@@ -72,29 +72,36 @@ export function setRedirect(per) {
 
     //系统
   }else if(per.includes('132')){
-
-    if(per.includes('133')){
-      redirect = '/system/manage';
-    }else if(per.includes('139')){
-      redirect = '/system/monitor';
-    }else if(per.includes('144')){
-      redirect = '/system/account';
-    }else if(per.includes('157')){
-      redirect = '/system/electric';
-    }else if(per.includes('162')){
-      redirect = '/system/option';
-    }else if(per.includes('169')){
-      redirect = '/system/rule';
-    }else if(per.includes('183')){
-      redirect = '/system/react';
-    }else if(per.includes('187')){
-      redirect = '/system/threat';
-    }else if(per.includes('191')){
-      redirect = '/system/record';
-    }else if(per.includes('204')){
-      redirect = '/system/resume';
-    }else if(per.includes('207')) {
-      redirect = '/system/licence';
+    if(per.includes('61')){
+      if(per.includes('611')){
+        redirect = '/system/control/move';
+      }else if(per.includes('612')){
+        redirect = '/system/control/safe';
+      }
+    }else if(per.includes('62')){
+      if(per.includes('133')){
+        redirect = '/system/setting/manage';
+      }else if(per.includes('139')){
+        redirect = '/system/setting/monitor';
+      }else if(per.includes('144')){
+        redirect = '/system/setting/account';
+      }else if(per.includes('157')){
+        redirect = '/system/setting/electric';
+      }else if(per.includes('162')){
+        redirect = '/system/setting/option';
+      }else if(per.includes('169')){
+        redirect = '/system/setting/rule';
+      }else if(per.includes('183')){
+        redirect = '/system/setting/react';
+      }else if(per.includes('187')){
+        redirect = '/system/setting/threat';
+      }else if(per.includes('191')){
+        redirect = '/system/setting/record';
+      }else if(per.includes('204')){
+        redirect = '/system/setting/resume';
+      }else if(per.includes('207')) {
+        redirect = '/system/setting/licence';
+      }
     }
   }
   return redirect;

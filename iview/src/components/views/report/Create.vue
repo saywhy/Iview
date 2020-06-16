@@ -134,6 +134,7 @@
 </template>
 <script type="text/ecmascript-6">
 import VmEmergePicker from "@/components/common/vm-emerge-picker";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: "report_create",
   data () {
@@ -176,8 +177,29 @@ export default {
   components: { VmEmergePicker },
   mounted () {
     this.get_data()
+    this.check_passwd()
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     // 生成报表
     create () {
       console.log(this.report);
@@ -241,14 +263,21 @@ export default {
                 alert_trend: this.alert_trend_data.base64,
               })
                 .then(response => {
-                  let { status, data } = response.data;
+                  this.report.loading = false
+                  let { status, data, msg } = response.data;
                   if (status == 0) {
-                    this.report.loading = false
                     this.get_data();
                     this.$message(
                       {
                         message: '报表生成成功',
                         type: 'success',
+                      }
+                    );
+                  } else {
+                    this.$message(
+                      {
+                        message: msg,
+                        type: 'warning',
                       }
                     );
                   }
@@ -303,9 +332,9 @@ export default {
                 alert_trend: this.alert_trend_data.base64,
               })
                 .then(response => {
-                  let { status, data } = response.data;
+                  this.report.loading = false
+                  let { status, data, msg } = response.data;
                   if (status == 0) {
-                    this.report.loading = false
                     this.get_data();
                     this.$message(
                       {
@@ -313,8 +342,14 @@ export default {
                         type: 'success',
                       }
                     );
+                  } else {
+                    this.$message(
+                      {
+                        message: msg,
+                        type: 'warning',
+                      }
+                    );
                   }
-
                 })
                 .catch(error => {
                   console.log(error);
@@ -333,9 +368,9 @@ export default {
           report_type: 'csv',
         })
           .then(response => {
-            let { status, data } = response.data;
+            this.report.loading = false
+            let { status, data, msg } = response.data;
             if (status == 0) {
-              this.report.loading = false
               this.get_data();
               this.$message(
                 {
@@ -346,8 +381,8 @@ export default {
             } else {
               this.$message(
                 {
-                  message: data.msg,
-                  type: 'error',
+                  message: msg,
+                  type: 'warning',
                 }
               );
             }
@@ -512,29 +547,32 @@ export default {
       this.application_protocol_data.base64 = myChart.getDataURL();
     },
     alert_trend (params) {
+      console.log(params);
       this.alert_trend_data.alert_trend_name = [];
       this.alert_trend_data.alert_trend_value = [];
       params.forEach(element => {
         this.alert_trend_data.alert_trend_name.push(element.date_time);
         this.alert_trend_data.alert_trend_value.push(element.count - 0);
       });
+      console.log(this.alert_trend_data);
       var myChart = this.$echarts.init(document.getElementById("alert_trend"));
       var option_file = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
         grid: {
-          left: 100,
-          right: 70,
-          top: 15,
-          bottom: 100
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          top: '5%',
+          containLabel: true
         },
         xAxis: {
           type: 'category',
           data: this.alert_trend_data.alert_trend_name,
-          boundaryGap: false,
-          splitLine: {
-            show: false,
-            interval: 'auto', //0：表示全部显示不间隔；auto:表示自动根据刻度个数和宽度自动设置间隔个数
-            maxInterval: 3600 * 24 * 1000,
-          },
           axisTick: {
             show: false
           },
@@ -547,7 +585,7 @@ export default {
             }
           }
         },
-        yAxis: {
+        yAxis: [{
           type: 'value',
           axisTick: {
             show: false
@@ -558,37 +596,20 @@ export default {
               fontSize: 16
             }
           }
-        },
+        }],
         series: [{
-          name: '文件',
-          type: 'line',
-          smooth: true,
+          // name: '高危',
+          type: 'bar',
+          barWidth: 20,
           animation: false,
-          showSymbol: false,
-          symbol: 'circle',
-          symbolSize: 6,
-          data: this.alert_trend_data.alert_trend_value,
-          areaStyle: {
-            normal: {
-              color: this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: 'rgba(150,33,22,.8)'
-              }, {
-                offset: 1,
-                color: 'rgba(150,33,22,.2)'
-              }], false)
-            }
-          },
+          stack: '搜索引擎',
           itemStyle: {
             normal: {
-              color: 'rgba(150,33,22,1)'
+              barBorderRadius: [4, 4, 4, 4], //柱形图圆角，初始化效果
+              color: 'rgba(150,33,22,.8)'
             }
           },
-          lineStyle: {
-            normal: {
-              width: 3
-            }
-          }
+          data: this.alert_trend_data.alert_trend_value
         }]
       };
       myChart.setOption(option_file);

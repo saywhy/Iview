@@ -5,24 +5,33 @@
 </template>
 
 <script type="text/ecmascript-6">
+/*  import logo0 from 'static/image/f0.png';
+  import logo1 from 'static/image/f1.png';*/
   export default {
     name: "Ddos",
     data() {
       return {
         timers: null,
+        myEcharts:null,
         loading:true,
-        mapData:[{dest_ip:'202.106.40.115',dest_label:"[]",dest_location:[52.6953,6.9075],
+
+        mapData:[{dest_ip:'202.106.40.115',dest_label:"[]",dest_location:[116.29845, 39.95933],
           dest_type:'remote',id:173,src_ip:'192.168.1.195',src_label:"['11234分支']",
-          src_location:[97.417,39.945],src_type:'local'}]
+          src_location:[116.29845, 39.95933],src_type:'local'},
+          {dest_ip:'202.106.46.151',dest_label:"[]",dest_location:[39.907501220703,116.39723205566],
+            dest_type:'remote',id:66201,src_ip:'192.168.1.185',src_label:"['11234分支','小美女分支']",
+            src_location:null,src_type:'local'}]
       }
     },
     created(){
+      console.log('555')
+      this.myEcharts = null;
       this.getData();
     },
     mounted() {
       this.timers = setInterval(() => {
-        this.getData();
-      },10000 * 3);
+       this.getData();
+      }, 10000 * 3);
     },
     destroyed(){
       clearInterval(this.timers);
@@ -31,11 +40,15 @@
       //获取数据
       getData(){
         this.loading = false;
+        /*this.$nextTick(() => {
+          this.drawGraph();
+        });*/
         this.$axios
           .get('/yiiapi/demonstration/external-distribution')
 
           .then((resp) => {
             this.loading = true;
+
             let {status, data} = resp.data;
 
             //clearInterval(this.timer);
@@ -44,9 +57,12 @@
 
               this.mapData = data;
 
-              this.$nextTick(() => {
-                this.drawGraph();
-              });
+              setTimeout(() => {
+                this.$nextTick(() => {
+                  this.drawGraph();
+                });
+              },1000);
+
             }
           })
           .catch((error) => {
@@ -61,59 +77,62 @@
 
         let symbol2 = ['image://static/image/f1.png', 'image://static/image/f0.png'];
 
-        var symbolSize1 = [12,16],symbolSize2 = [16,12];
+        var symbolSize1 = [12,12],symbolSize2 = [12,12];
 
         let mapData = this.mapData;
 
         mapData.forEach(item => {
 
-          let symbol = [];
-          let symbolSize = [];
+          if((!!item.src_location) && (!!item.dest_location)){
+            let symbol = [];
+            let symbolSize = [];
 
-          if(item.src_type == 'local'){
-            symbol = symbol1;
-            symbolSize = symbolSize1;
-          }else {
-            symbol = symbol2;
-            symbolSize = symbolSize2;
+            if(item.src_type == 'local'){
+              symbol = symbol1;
+              symbolSize = symbolSize1;
+            }else {
+              symbol = symbol2;
+              symbolSize = symbolSize2;
+            }
+
+            series.push({
+              type: "lines",
+              coordinateSystem: "geo",
+              zlevel: 1,
+              // 线数据集。  从哪个城市to哪个城市
+              data: [{
+                name: item.src_ip,
+                toname: item.dest_ip,
+                //coords: [item.src_location, [item.dest_location[1],item.dest_location[0]]]
+                coords: [item.src_location, item.dest_location]
+              }],
+              //线上面的动态特效
+              effect: {
+                show: true,
+                period: 3, //特效动画的时间，单位为 s。
+                //trailLength: .9,
+                color: "#00D7E9", //射线颜色
+                symbol:'triangle',
+                symbolSize: 2
+              },
+              symbol: symbol,
+              symbolSize: symbolSize,
+              lineStyle: {
+                normal: {
+                  width: "",
+                  curveness: 0.3
+                }
+              },
+              label:{
+                show: false,
+                color:'#ccc',
+                position:'end',
+                fontSize: 10
+              },
+              animation:false,
+              animationThreshold: 0
+            });
           }
-
-          series.push({
-            type: "lines",
-            coordinateSystem: "geo",
-            zlevel: 1,
-            // 线数据集。  从哪个城市to哪个城市
-            data: [{
-              name: item.src_ip,
-              toname: item.dest_ip,
-              coords: [item.src_location, [item.dest_location[1],item.dest_location[0]]]
-            }],
-            //线上面的动态特效
-            effect: {
-              show: true,
-              period: 4, //特效动画的时间，单位为 s。
-              trailLength: .9,
-              color: "#00D7E9", //射线颜色
-              symbol:'triangle',
-              symbolSize: 2
-            },
-            symbol: symbol,
-            symbolSize: symbolSize,
-            lineStyle: {
-              normal: {
-                width: "",
-                curveness: 0.3
-              }
-            },
-            label:{
-              show: true,
-              color:'#ccc',
-              position:'end',
-              fontSize: 10
-            },
-            animation:false,
-            animationThreshold: 0
-          })
         });
 
         series.push({
@@ -135,11 +154,11 @@
           }*/
         });
 
-        let myChart = this.$echarts.init(document.getElementById("screenMap"));
+        this.myEcharts = this.$echarts.init(document.getElementById("screenMap"));
 
-        myChart.showLoading({ text: '正在加载数据...' });
+        this.myEcharts.showLoading({ text: '正在加载数据...' });
 
-        myChart.clear();
+        this.myEcharts.clear();
 
         let options = {
           //设置标题文本
@@ -184,14 +203,15 @@
           series: series
         };
 
-        myChart.setOption(options);
+        this.myEcharts.setOption(options);
 
-        myChart.hideLoading();
+        this.myEcharts.hideLoading();
 
         window.addEventListener("resize", () => {
-          myChart.resize();
+          //this.myEcharts.resize();
+          //this.myEcharts = null;
+          //this.getData();
         });
-
       }
     }
   };

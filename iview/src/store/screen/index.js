@@ -9,7 +9,7 @@ export default {
     },
     //两侧数据
     asideLists:[{name:'威胁分布',alias:'threatDistribution', flag: true, aside_id: 0},
-      {name: '威胁指标热力图',alias:'threatIndicators', flag: false, aside_id: 1},
+      {name: '威胁指标热力图',alias:'threatIndicators', flag: true, aside_id: 1},
       {name: '全球安全动态',alias:'threatDynamics', flag: false, aside_id: 2},
       {name: '横向态势威胁',alias:'horizontalThreatSituation', flag: false, aside_id: 3},
       {name: '分支安全',alias:'branchSafe', flag: false, aside_id: 4},
@@ -19,13 +19,13 @@ export default {
       {name: '风险趋势',alias:'riskTrend', flag: false, aside_id: 8},
       {name: '威胁排行',alias:'threatRange', flag: false, aside_id: 9}],
     //顶部数据
-    topLists: [{name:'风险资产数',alias:'risk_asset_count', flag: false, top_id: 0},
-      {name: '外连资产数',alias:'outreachthreat_assets_count', flag: false, top_id: 1},
-      {name: '告警数',alias:'alert_count', flag: false, top_id: 2},
-      {name: '未处理告警数',alias:'untreated_alert_count', flag: false, top_id: 3},
-      {name: '风险服务器数',alias:'risk_server_count', flag: false, top_id: 4},
-      {name: '风险终端数',alias:'risk_terminal_count', flag: false, top_id: 5},
-      {name: '风险网络设备数',alias:'risk_network_count', flag: false, top_id: 6}]
+    topLists: [{name:'风险资产数',alias:'risk_asset_count', flag: false, top_id: 0,num:[0,0,0,0,0]},
+      {name: '外连资产数',alias:'outreachthreat_assets_count', flag: false, top_id: 1,num:[0,0,0,0,0]},
+      {name: '告警数',alias:'alert_count', flag: false, top_id: 2,num:[0,0,0,0,0]},
+      {name: '未处理告警数',alias:'untreated_alert_count', flag: false, top_id: 3,num:[0,0,0,0,0]},
+      {name: '风险服务器数',alias:'servers', flag: false, top_id: 4,num:[0,0,0,0,0]},
+      {name: '风险终端数',alias:'workstation', flag: false, top_id: 5,num:[0,0,0,0,0]},
+      {name: '风险网络设备数',alias:'network_equipment', flag: false, top_id: 6,num:[0,0,0,0,0]}]
   },
   getters: {
     baseInfo: state => state.baseInfo,
@@ -77,6 +77,28 @@ export default {
         }
       });
       state.topLists = lists;
+    },
+    SET_TOP_LISTS_NUM: (state,args) => {
+
+      state.topLists.map(item => {
+
+        for (let key in args) {
+
+          if(item.alias == key){
+            if(Number(args[key]) > 99999){
+              args[key] = 99999;
+            }
+            if(args[key] == undefined || args[key] == null){
+              args[key] == 0;
+            }
+            let count = String(args[key]).padStart(5,'0');
+             /*if(!item.num){
+               Object.assign(item,{num:count.toString().split('')});
+             }*/
+            item.num = count.toString().split('');
+          }
+        }
+      });
     }
   },
   actions: {
@@ -117,6 +139,11 @@ export default {
     async getScreenTop({commit,dispatch},context){
       let resp = await axios('/yiiapi/demonstration/get-top-config',{params:context});
       let {status, data} = resp.data;
+      data.forEach(item => {
+        if(!item.num){
+          item.num = [0,0,0,0,0];
+        }
+      })
       if(status == 0){
         commit('SET_TOP_LISTS',data);
         return true;

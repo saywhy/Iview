@@ -302,7 +302,8 @@ export const asyncRouterMap = [
       role: ['admin']
     },
     component: Layout,
-    children: [{
+    children: [
+      {
       path: '/handle/assets',
       name: 'assets',
       meta: {
@@ -584,148 +585,205 @@ export const asyncRouterMap = [
       auth: '132'
     },
     component: Layout,
-    children: [{
-      path: '/system/manage',
-      name: 'manage',
-      meta: {
-        title: '设备管理',
-        auth: '133',
-        icon: 'e-aside-sign',
-        parentAuth: '132',
-        rootAuth: '132',
-        deep: 1
-      },
-      component: () => import('@/components/views/system/Manage')
-    },
+    children: [
       {
-        path: '/system/monitor',
-        name: 'monitor',
+        path: '/system/control',
+        name: 'control',
         meta: {
-          title: '受监控IP',
-          auth: '139',
-          icon: 'e-aside-assets',
+          title: '系统监控',
+          auth: '61',
+          icon: 'e-aside-control',
           parentAuth: '132',
           rootAuth: '132',
           deep: 1
         },
-        component: () => import('@/components/views/system/Monitor')
+        component: () => import('@/components/views/system/Control'),
+        children:[
+          {
+            path: '/system/control/move',
+            name: 'move',
+            meta: {
+              title: '运行监控',
+              auth: '611',
+              icon: 'e-aside-move',
+              parentAuth: '61',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/control/Move')
+          },
+          {
+            path: '/system/control/safe',
+            name: 'safe',
+            meta: {
+              title: '安全设备',
+              auth: '612',
+              icon: 'e-aside-safe',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/control/Safe')
+          }
+        ]
       },
       {
-        path: '/system/account',
-        name: 'account',
-        meta: {
-          title: '账号管理',
-          auth: '144',
-          icon: 'e-aside-works',
+        path: '/system/setting',
+        name: 'setting',
+        meta:{
+          title: '系统设置',
+          auth: '62',
+          icon: 'e-aside-control',
           parentAuth: '132',
           rootAuth: '132',
           deep: 1
         },
-        component: () => import('@/components/views/system/Account')
-      },
-      {
-        path: '/system/electric',
-        name: 'electric',
-        meta: {
-          title: '网络配置',
-          auth: '157',
-          icon: 'e-aside-network',
-          parentAuth: '132',
-          rootAuth: '132',
-          deep: 1
-        },
-        component: () => import('@/components/views/system/Electric')
-      },
-      {
-        path: '/system/option',
-        name: 'option',
-        meta: {
-          title: '系统选项',
-          auth: '162',
-          icon: 'e-aside-terminal',
-          parentAuth: '132',
-          rootAuth: '132',
-          deep: 1
-        },
-        component: () => import('@/components/views/system/Option')
-      },
-      {
-        path: '/system/rule',
-        name: 'rule',
-        meta: {
-          title: '规则库及白名单',
-          auth: '169',
-          icon: 'e-aside-journal',
-          parentAuth: '132',
-          rootAuth: '132',
-          deep: 1
-        },
-        component: () => import('@/components/views/system/Rule')
-      },
-      {
-        path: '/system/react',
-        name: 'react',
-        meta: {
-          title: '联动',
-          auth: '183',
-          icon: 'e-aside-dns',
-          parentAuth: '132',
-          rootAuth: '132',
-          deep: 1
-        },
-        component: () => import('@/components/views/system/React')
-      },
-      {
-        path: '/system/threat',
-        name: 'threat',
-        meta: {
-          title: '威胁通知',
-          auth: '187',
-          icon: 'e-aside-user',
-          parentAuth: '132',
-          rootAuth: '132',
-          deep: 1
-        },
-        component: () => import('@/components/views/system/Threat')
-      },
-      {
-        path: '/system/record',
-        name: 'record',
-        meta: {
-          title: '日志',
-          auth: '191',
-          icon: 'e-aside-data',
-          parentAuth: '132',
-          rootAuth: '132',
-          deep: 1
-        },
-        component: () => import('@/components/views/system/Record')
-      },
-      {
-        path: '/system/resume',
-        name: 'resume',
-        meta: {
-          title: '恢复/重启',
-          auth: '204',
-          icon: 'e-aside-flow',
-          parentAuth: '132',
-          rootAuth: '132',
-          deep: 1
-        },
-        component: () => import('@/components/views/system/Resume')
-      },
-      {
-        path: '/system/licence',
-        name: 'licence',
-        meta: {
-          title: '许可证',
-          auth: '207',
-          icon: 'e-aside-ioc',
-          parentAuth: '132',
-          rootAuth: '132',
-          deep: 1
-        },
-        component: () => import('@/components/views/system/Licence')
+        component: () => import('@/components/views/system/Setting'),
+        children: [
+          {
+            path: '/system/setting/manage',
+            name: 'manage',
+            meta: {
+              title: '设备管理',
+              auth: '133',
+              icon: 'e-aside-sign',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Manage')
+          },
+          {
+            path: '/system/setting/monitor',
+            name: 'monitor',
+            meta: {
+              title: '受监控IP',
+              auth: '139',
+              icon: 'e-aside-assets',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Monitor')
+          },
+          {
+            path: '/system/setting/account',
+            name: 'account',
+            meta: {
+              title: '账号管理',
+              auth: '144',
+              icon: 'e-aside-works',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Account')
+          },
+          {
+            path: '/system/setting/electric',
+            name: 'electric',
+            meta: {
+              title: '网络配置',
+              auth: '157',
+              icon: 'e-aside-network',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Electric')
+          },
+          {
+            path: '/system/setting/option',
+            name: 'option',
+            meta: {
+              title: '系统选项',
+              auth: '162',
+              icon: 'e-aside-terminal',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Option')
+          },
+          {
+            path: '/system/setting/rule',
+            name: 'rule',
+            meta: {
+              title: '规则库及白名单',
+              auth: '169',
+              icon: 'e-aside-journal',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Rule')
+          },
+          {
+            path: '/system/setting/react',
+            name: 'react',
+            meta: {
+              title: '联动',
+              auth: '183',
+              icon: 'e-aside-dns',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/React')
+          },
+          {
+            path: '/system/setting/threat',
+            name: 'threat',
+            meta: {
+              title: '威胁通知',
+              auth: '187',
+              icon: 'e-aside-user',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Threat')
+          },
+          {
+            path: '/system/setting/record',
+            name: 'record',
+            meta: {
+              title: '日志',
+              auth: '191',
+              icon: 'e-aside-data',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Record')
+          },
+          {
+            path: '/system/setting/resume',
+            name: 'resume',
+            meta: {
+              title: '恢复/重启',
+              auth: '204',
+              icon: 'e-aside-flow',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Resume')
+          },
+          {
+            path: '/system/setting/licence',
+            name: 'licence',
+            meta: {
+              title: '许可证',
+              auth: '207',
+              icon: 'e-aside-ioc',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Licence')
+          }
+        ]
       }
     ]
   }

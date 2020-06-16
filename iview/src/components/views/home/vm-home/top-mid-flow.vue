@@ -17,13 +17,16 @@ export default {
   methods: {
     graph () {
 
+      //console.log(this.top_mid)
+      if(!!!this.top_mid){
+        return false;
+      }
+
       let statistics_time = this.top_mid.statistics_time;
       let flow_diff = []
       this.top_mid.flow_diff.forEach(element => {
         flow_diff.push(Math.floor(element * 100) / 100)
       });
-
-
 
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("flow"));

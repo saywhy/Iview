@@ -78,7 +78,7 @@
             },
             grid: {
               top:'0',
-              left: '-8%',
+              left: '-12%',
               right: '0',
               bottom: '-8%',
               containLabel: true
@@ -100,7 +100,7 @@
                   color:'#fff',
                   fontSize:12,
                   fontFamily:'PingFangSC-Regular',
-                  margin: 10
+                  margin: 20
                 },
                 position:'left',
                 data: this.branch.branchCount,
@@ -121,9 +121,29 @@
                   color:'#fff',
                   fontSize:12,
                   fontFamily:'PingFangSC-Regular',
-                  margin: 60,
+                  margin: 80,
                   formatter: function (value) {
-                    return (value.length > 5 ? (value.slice(0,5)+"...") : value )
+                    let valAttr = value.split('');
+                    let reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+
+                    if(reg.test(value)){
+                      return (value.length > 5 ? (value.slice(0,5)+"...") : value )
+                    }else {
+                      return (value.length > 8 ? (value.slice(0,8)+"...") : value )
+                    }
+                   /* valAttr.forEach(item => {
+                      if(num < 10){
+                        if (re.test(item)){
+                          num += 2;
+                          length += 1;
+                        }else {
+                          num += 1;
+                          length += 1;
+                        }
+                      }else {
+                        return false;
+                      }
+                    });*/
                   },
                 },
                 position:'left',
@@ -167,8 +187,12 @@
           });
 
           var id = document.getElementById("extension");
-          if(!id) {
+          /*if(!id) {
             var div = "<marquee id='extension' behavior='scroll' direction='left' sytle='display:block'></marquee>";
+            $("html").append(div);
+          }*/
+          if(!id) {
+            var div = "<span id='extension' sytle='display:block'></span>";
             $("html").append(div);
           }
 
@@ -206,6 +230,7 @@
 <style scoped lang="less">
 .vm-screen-main4{
   padding: 0 16px 16px;
+  margin-right: 10px;
   #branch{
     height: 240px;
     width: 100%;

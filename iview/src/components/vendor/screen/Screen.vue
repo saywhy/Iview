@@ -2,7 +2,7 @@
   <div class="home-screen" :class="{'active':!close}" v-cloak>
     <div class="home-top">
       <div class="home_l">
-        <label class="e_label"></label>
+        <!--<label class="e_label"></label>-->
       </div>
       <div class="home_c">{{baseInfo.ScreenName}}</div>
       <div class="home_r">
@@ -107,7 +107,7 @@
         baseInfo:'baseInfo',
         lists:'asideLists',
         topLists:'topLists',
-      })
+      }),
     },
     created() {
       //大屏基础信息
@@ -143,6 +143,7 @@
       topLists: {
         handler:function(newVal,oldVal){
           let topLists = newVal.filter(item => { return item.flag == true; });
+          //console.log(topLists)
           this.totalTopLists = topLists;
         },
         //深度监听
@@ -244,6 +245,15 @@
           background-image: url("../../../assets/images/screen/head-logo.png");
           background-repeat: no-repeat;
           background-size: 64px 48px;
+
+          /*width: 128px;
+          height: 128px;
+          margin-top: -30px;
+          margin-left: 50px;
+          display: block;
+          background-image: url("../../../assets/images/screen/head-logo1.png");
+          background-repeat: no-repeat;
+          background-size: 128px 128px;*/
         }
       }
       .home_c {

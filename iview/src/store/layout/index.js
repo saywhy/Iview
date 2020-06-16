@@ -117,12 +117,12 @@ export default {
       try {
         //真实数据
         let resp = await axios('/yiiapi/site/menu');
-
         let roles = forRoleList(resp);
-
         // console.log(roles);
+        roles.push('995');
 
-         roles.push('995');
+        //临时测试数据
+        roles = [...roles,...['61','62','611','612']]
 
         if (!roles.includes('117')) {
           roles.push('117');
