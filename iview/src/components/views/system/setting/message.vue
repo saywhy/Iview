@@ -8,7 +8,7 @@
 </template>
 <script type="text/ecmascript-6">
 export default {
-  name: "system_control_message",
+  name: "system_setting_message",
   data () {
     return {
 

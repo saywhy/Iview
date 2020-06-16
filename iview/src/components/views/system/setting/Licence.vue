@@ -139,7 +139,7 @@
 <script type="text/ecmascript-6">
 import moment from 'moment'
 export default {
-  name: "system_control_licence",
+  name: "system_setting_licence",
   data () {
     return {
       loading: false,

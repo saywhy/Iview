@@ -27,7 +27,7 @@ export default {
     outsideSet,
     outsideList
   },
-  name: "system_control_react",
+  name: "system_setting_react",
   data () {
     return {
       activeName: "first",

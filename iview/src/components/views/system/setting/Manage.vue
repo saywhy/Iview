@@ -256,7 +256,7 @@
 
 <script type="text/ecmascript-6">
 export default {
-  name: "system_control_orient",
+  name: "system_setting_orient",
   data () {
     return {
       activeDiv: '1',

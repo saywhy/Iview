@@ -14,7 +14,7 @@
 </template>
 <script type="text/ecmascript-6">
 export default {
-  name: "system_control_resume",
+  name: "system_setting_resume",
   data () {
     return {
       loading: false

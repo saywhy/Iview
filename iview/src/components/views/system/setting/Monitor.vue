@@ -421,7 +421,7 @@
 import moment from 'moment'
 import { pca, pcaa } from "area-data";
 export default {
-  name: "system_control_monitor",
+  name: "system_setting_monitor",
   data () {
     return {
       area_array: [],

@@ -36,7 +36,7 @@ export default {
     proxyServer,
     routerSet
   },
-  name: "system_control_electric",
+  name: "system_setting_electric",
   data () {
     return {
       activeName: "first",

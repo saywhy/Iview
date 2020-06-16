@@ -641,51 +641,25 @@ export const asyncRouterMap = [
         component: () => import('@/components/views/system/Setting'),
         children: [
           {
-            path: '/system/setting/manage',
-            name: 'manage',
+            path: '/system/setting/wizard',
+            name: 'wizard',
             meta: {
-              title: '设备管理',
-              auth: '133',
-              icon: 'e-aside-sign',
+              title: '配置向导',
+              auth: '621',
+              icon: 'e-aside-none',
               parentAuth: '62',
               rootAuth: '132',
               deep: 2
             },
-            component: () => import('@/components/views/system/setting/Manage')
-          },
-          {
-            path: '/system/setting/monitor',
-            name: 'monitor',
-            meta: {
-              title: '受监控IP',
-              auth: '139',
-              icon: 'e-aside-assets',
-              parentAuth: '62',
-              rootAuth: '132',
-              deep: 2
-            },
-            component: () => import('@/components/views/system/setting/Monitor')
-          },
-          {
-            path: '/system/setting/account',
-            name: 'account',
-            meta: {
-              title: '账号管理',
-              auth: '144',
-              icon: 'e-aside-works',
-              parentAuth: '62',
-              rootAuth: '132',
-              deep: 2
-            },
-            component: () => import('@/components/views/system/setting/Account')
+            component: () => import('@/components/views/system/setting/Wizard')
           },
           {
             path: '/system/setting/electric',
             name: 'electric',
             meta: {
               title: '网络配置',
-              auth: '157',
-              icon: 'e-aside-network',
+              auth: '622',
+              icon: 'e-aside-none',
               parentAuth: '62',
               rootAuth: '132',
               deep: 2
@@ -697,8 +671,8 @@ export const asyncRouterMap = [
             name: 'option',
             meta: {
               title: '系统选项',
-              auth: '162',
-              icon: 'e-aside-terminal',
+              auth: '623',
+              icon: 'e-aside-none',
               parentAuth: '62',
               rootAuth: '132',
               deep: 2
@@ -706,38 +680,25 @@ export const asyncRouterMap = [
             component: () => import('@/components/views/system/setting/Option')
           },
           {
-            path: '/system/setting/rule',
-            name: 'rule',
+            path: '/system/setting/monitor',
+            name: 'monitor',
             meta: {
-              title: '规则库及白名单',
-              auth: '169',
-              icon: 'e-aside-journal',
+              title: '受监控IP',
+              auth: '624',
+              icon: 'e-aside-none',
               parentAuth: '62',
               rootAuth: '132',
               deep: 2
             },
-            component: () => import('@/components/views/system/setting/Rule')
-          },
-          {
-            path: '/system/setting/react',
-            name: 'react',
-            meta: {
-              title: '联动',
-              auth: '183',
-              icon: 'e-aside-dns',
-              parentAuth: '62',
-              rootAuth: '132',
-              deep: 2
-            },
-            component: () => import('@/components/views/system/setting/React')
+            component: () => import('@/components/views/system/setting/Monitor')
           },
           {
             path: '/system/setting/threat',
             name: 'threat',
             meta: {
               title: '威胁通知',
-              auth: '187',
-              icon: 'e-aside-user',
+              auth: '625',
+              icon: 'e-aside-none',
               parentAuth: '62',
               rootAuth: '132',
               deep: 2
@@ -745,12 +706,77 @@ export const asyncRouterMap = [
             component: () => import('@/components/views/system/setting/Threat')
           },
           {
+            path: '/system/setting/account',
+            name: 'account',
+            meta: {
+              title: '账号管理',
+              auth: '626',
+              icon: 'e-aside-none',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Account')
+          },
+          {
+            path: '/system/setting/rule',
+            name: 'rule',
+            meta: {
+              title: '规则库及白名单',
+              auth: '627',
+              icon: 'e-aside-none',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Rule')
+          },
+          {
+            path: '/system/setting/intellience',
+            name: 'intellience',
+            meta: {
+              title: '情报管理',
+              auth: '628',
+              icon: 'e-aside-none',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Intellience')
+          },
+          {
+            path: '/system/setting/label',
+            name: 'label',
+            meta: {
+              title: '标签管理',
+              auth: '629',
+              icon: 'e-aside-none',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/Label')
+          },
+          {
+            path: '/system/setting/react',
+            name: 'react',
+            meta: {
+              title: '联动',
+              auth: '6210',
+              icon: 'e-aside-none',
+              parentAuth: '62',
+              rootAuth: '132',
+              deep: 2
+            },
+            component: () => import('@/components/views/system/setting/React')
+          },
+          {
             path: '/system/setting/record',
             name: 'record',
             meta: {
               title: '日志',
-              auth: '191',
-              icon: 'e-aside-data',
+              auth: '6211',
+              icon: 'e-aside-none',
               parentAuth: '62',
               rootAuth: '132',
               deep: 2
@@ -762,8 +788,8 @@ export const asyncRouterMap = [
             name: 'resume',
             meta: {
               title: '恢复/重启',
-              auth: '204',
-              icon: 'e-aside-flow',
+              auth: '6212',
+              icon: 'e-aside-none',
               parentAuth: '62',
               rootAuth: '132',
               deep: 2
@@ -775,8 +801,8 @@ export const asyncRouterMap = [
             name: 'licence',
             meta: {
               title: '许可证',
-              auth: '207',
-              icon: 'e-aside-ioc',
+              auth: '6213',
+              icon: 'e-aside-none',
               parentAuth: '62',
               rootAuth: '132',
               deep: 2

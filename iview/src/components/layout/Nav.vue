@@ -419,7 +419,7 @@ export default {
     clearInterval(this.timer); //关闭
   },
   destroyed () {
-    console.log('33333');
+    //console.log('33333');
   },
 }
 </script>

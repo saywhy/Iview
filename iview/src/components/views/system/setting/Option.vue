@@ -102,7 +102,7 @@
 </template>
 <script type="text/ecmascript-6">
 export default {
-  name: "system_control_option",
+  name: "system_setting_option",
   data () {
     return {
       option: {

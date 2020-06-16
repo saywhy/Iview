@@ -34,7 +34,7 @@ export default {
     roleManagement,
     securityPolicy
   },
-  name: "system_control_account",
+  name: "system_setting_account",
   data () {
     return {
       activeName: "first",

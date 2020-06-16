@@ -36,7 +36,7 @@ export default {
     yaraRule,
     whiteList,
   },
-  name: "system_control_rule",
+  name: "system_setting_rule",
   data () {
     return {
       activeName: "first",

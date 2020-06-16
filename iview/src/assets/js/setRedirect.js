@@ -79,27 +79,31 @@ export function setRedirect(per) {
         redirect = '/system/control/safe';
       }
     }else if(per.includes('62')){
-      if(per.includes('133')){
-        redirect = '/system/setting/manage';
-      }else if(per.includes('139')){
-        redirect = '/system/setting/monitor';
-      }else if(per.includes('144')){
-        redirect = '/system/setting/account';
-      }else if(per.includes('157')){
+      if(per.includes('621')){
+        redirect = '/system/setting/wizard';
+      }else if(per.includes('622')){
         redirect = '/system/setting/electric';
-      }else if(per.includes('162')){
+      }else if(per.includes('623')){
         redirect = '/system/setting/option';
-      }else if(per.includes('169')){
-        redirect = '/system/setting/rule';
-      }else if(per.includes('183')){
-        redirect = '/system/setting/react';
-      }else if(per.includes('187')){
+      }else if(per.includes('624')){
+        redirect = '/system/setting/monitor';
+      }else if(per.includes('625')){
         redirect = '/system/setting/threat';
-      }else if(per.includes('191')){
+      }else if(per.includes('626')){
+        redirect = '/system/setting/account';
+      }else if(per.includes('627')){
+        redirect = '/system/setting/rule';
+      }else if(per.includes('628')){
+        redirect = '/system/setting/intellience';
+      }else if(per.includes('629')){
+        redirect = '/system/setting/label';
+      }else if(per.includes('6210')) {
+        redirect = '/system/setting/react';
+      }else if(per.includes('6211')) {
         redirect = '/system/setting/record';
-      }else if(per.includes('204')){
+      }else if(per.includes('6212')) {
         redirect = '/system/setting/resume';
-      }else if(per.includes('207')) {
+      }else if(per.includes('6213')) {
         redirect = '/system/setting/licence';
       }
     }

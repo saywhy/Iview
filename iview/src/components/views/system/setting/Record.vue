@@ -34,7 +34,7 @@ export default {
     faultLog,
     syslogSet
   },
-  name: "system_control_record",
+  name: "system_setting_record",
   data () {
     return {
       activeName: "first",
