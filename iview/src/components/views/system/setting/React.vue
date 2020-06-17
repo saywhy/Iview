@@ -20,14 +20,15 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import outsideSet from "@/components/views/system/setting/vm-react/outside-set";
-import outsideList from "@/components/views/system/setting/vm-react/outside-list";
+import outsideSet from "@/components/views/system/vm-react/outside-set";
+import outsideList from "@/components/views/system/vm-react/outside-list";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   components: {
     outsideSet,
     outsideList
   },
-  name: "system_setting_react",
+  name: "system_control_react",
   data () {
     return {
       activeName: "first",
@@ -37,7 +38,30 @@ export default {
       }
     };
   },
+  mounted () {
+    this.check_passwd()
+  },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     handleClick (tab, event) {
       console.log(tab);
       switch (tab.name) {
@@ -57,8 +81,8 @@ export default {
 };
 </script>
 <style lang='less'>
-@import '../../../../assets/css/less/reset_css/reset_tab.less';
+@import '../../../assets/css/less/reset_css/reset_tab.less';
 </style>
 <style scoped lang='less'>
-@import '../../../../assets/css/less/system/setting/common_box.less';
+@import '../../../assets/css/less/system/setting/common_box.less';
 </style>

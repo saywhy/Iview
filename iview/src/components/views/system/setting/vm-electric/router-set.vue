@@ -183,6 +183,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: "router_set",
   data () {
@@ -220,8 +221,29 @@ export default {
   },
   mounted () {
     this.get_data();
+    this.check_passwd();
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     // 获取列表
     get_data (name) {
       this.router_data.loading = true
@@ -415,8 +437,8 @@ export default {
 };
 </script>
 <style lang='less'>
-@import '../../../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../../assets/css/less/reset_css/reset_pop.less';
 #router_set {
   .el-dialog {
     width: 440px !important;

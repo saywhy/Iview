@@ -255,8 +255,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
-  name: "system_setting_orient",
+  name: "system_control_orient",
   data () {
     return {
       activeDiv: '1',
@@ -303,8 +304,29 @@ export default {
     this.get_data();
     this.get_top();
     this.get_version();
+    this.check_passwd()
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     chooseDiv (index) {
       this.activeDiv = index
     },
@@ -959,8 +981,8 @@ export default {
 </style>
 
 <style lang='less'>
-@import '../../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../assets/css/less/reset_css/reset_pop.less';
 #equipment {
   .add_box {
     .el-dialog {

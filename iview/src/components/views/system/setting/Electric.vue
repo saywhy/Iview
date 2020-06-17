@@ -27,16 +27,17 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import networkCard from "@/components/views/system/setting/vm-electric/network-card";
-import proxyServer from "@/components/views/system/setting/vm-electric/proxy-server";
-import routerSet from "@/components/views/system/setting/vm-electric/router-set";
+import networkCard from "@/components/views/system/vm-electric/network-card";
+import proxyServer from "@/components/views/system/vm-electric/proxy-server";
+import routerSet from "@/components/views/system/vm-electric/router-set";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   components: {
     networkCard,
     proxyServer,
     routerSet
   },
-  name: "system_setting_electric",
+  name: "system_control_electric",
   data () {
     return {
       activeName: "first",
@@ -48,8 +49,29 @@ export default {
     };
   },
   mounted () {
+    this.check_passwd()
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     handleClick (tab, event) {
       console.log(tab);
       switch (tab.name) {
@@ -78,10 +100,10 @@ export default {
 };
 </script>
 <style lang='less'>
-@import '../../../../assets/css/less/reset_css/reset_tab.less';
+@import '../../../assets/css/less/reset_css/reset_tab.less';
 </style>
 <style scoped lang='less'>
-@import '../../../../assets/css/less/system/setting/common_box.less';
+@import '../../../assets/css/less/system/setting/common_box.less';
 </style>
 
 

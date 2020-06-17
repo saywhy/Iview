@@ -70,6 +70,7 @@
 
 <script type="text/ecmascript-6">
 import vmEmergePicker from "@/components/common/vm-emerge-picker";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   components: {
     vmEmergePicker,
@@ -100,9 +101,29 @@ export default {
   },
   mounted () {
     this.get_data()
+    this.check_passwd()
   },
-
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     get_data () {
       this.loading = true;
       this.$axios.get('/yiiapi/userlog/page', {
@@ -160,21 +181,36 @@ export default {
       }
     },
     download () {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
-        params: {
-          pathInfo: 'yararule/download',
-        }
-      })
-        .then(response => {
-          var url2 = "/yiiapi/userlog/export?username=" + this.audit_data.key + "&start_time=" + this.audit_data.start_time + '&end_time=' + this.audit_data.end_time;
-          window.location.href = url2;
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          } else {
+            this.$axios.get('/yiiapi/site/check-auth-exist', {
+              params: {
+                pathInfo: 'yararule/download',
+              }
+            })
+              .then(response => {
+                var url2 = "/yiiapi/userlog/export?username=" + this.audit_data.key + "&start_time=" + this.audit_data.start_time + '&end_time=' + this.audit_data.end_time;
+                window.location.href = url2;
+              })
+              .catch(error => {
+                console.log(error);
+              })
+          }
         })
-        .catch(error => {
-          console.log(error);
-        })
-
-
-
     }
   }
 };
@@ -228,8 +264,8 @@ export default {
 }
 </style>
 <style lang='less'>
-@import '../../../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../../assets/css/less/reset_css/reset_pop.less';
 #audit_log {
 }
 </style>

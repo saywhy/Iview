@@ -420,8 +420,9 @@
 <script type="text/ecmascript-6">
 import moment from 'moment'
 import { pca, pcaa } from "area-data";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
-  name: "system_setting_monitor",
+  name: "system_control_monitor",
   data () {
     return {
       area_array: [],
@@ -467,6 +468,7 @@ export default {
   },
   mounted () {
     this.get_data()
+    this.check_passwd()
     var options = []
     // 遍历省级
     Object.keys(pca[86]).forEach(function (key) {
@@ -493,6 +495,26 @@ export default {
     this.area_array = options
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     init () {
       var options = []
       // 遍历省级
@@ -989,19 +1011,38 @@ export default {
     },
     // 下载模板
     download_template () {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
-        params: {
-          pathInfo: 'yararule/download',
-        }
-      })
-        .then(response => {
-          var url1 = '/yiiapi/ipsegment/template-download';
-          window.location.href = url1;
-        })
-        .catch(error => {
-          console.log(error);
-        })
 
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.monitor_state.import = false;
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          } else {
+            this.$axios.get('/yiiapi/site/check-auth-exist', {
+              params: {
+                pathInfo: 'yararule/download',
+              }
+            })
+              .then(response => {
+                var url1 = '/yiiapi/ipsegment/template-download';
+                window.location.href = url1;
+              })
+              .catch(error => {
+                console.log(error);
+              })
+          }
+        })
     },
     // 导入
 
@@ -1073,17 +1114,35 @@ export default {
     },
     // 导出
     download () {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
-        params: {
-          pathInfo: 'yararule/download',
-        }
-      })
-        .then(response => {
-          var url2 = '/yiiapi/ipsegment/export';
-          window.location.href = url2;
-        })
-        .catch(error => {
-          console.log(error);
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          } else {
+            this.$axios.get('/yiiapi/site/check-auth-exist', {
+              params: {
+                pathInfo: 'yararule/download',
+              }
+            })
+              .then(response => {
+                var url2 = '/yiiapi/ipsegment/export';
+                window.location.href = url2;
+              })
+              .catch(error => {
+                console.log(error);
+              })
+          }
         })
     }
   },
@@ -1095,8 +1154,8 @@ export default {
 };
 </script>
 <style lang='less'>
-@import '../../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../assets/css/less/reset_css/reset_pop.less';
 #system_control_monitor {
   .add_box {
     .el-dialog {
@@ -1192,7 +1251,7 @@ export default {
 }
 </style>
 <style scoped lang='less'>
-@import '../../../../assets/css/less/system/setting/common_box.less';
+@import '../../../assets/css/less/system/setting/common_box.less';
 #system_control_monitor {
   .content_box {
     .monitor_title {

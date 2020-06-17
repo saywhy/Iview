@@ -13,8 +13,9 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
-  name: "system_setting_resume",
+  name: "system_control_resume",
   data () {
     return {
       loading: false
@@ -22,8 +23,29 @@ export default {
   },
   mounted () {
     this.test()
+    this.check_passwd()
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     // 测试600专用
     test () {
       this.$axios.get('/yiiapi/site/check-auth-exist', {
@@ -107,7 +129,7 @@ export default {
 </script>
 
 <style scoped lang='less'>
-@import '../../../../assets/css/less/system/setting/common_box.less';
+@import '../../../assets/css/less/system/setting/common_box.less';
 #system_control_resume {
   .content_box {
     .title {

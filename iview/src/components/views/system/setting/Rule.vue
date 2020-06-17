@@ -27,16 +27,17 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import ruleBase from "@/components/views/system/setting/vm-rule/rule-base";
-import yaraRule from "@/components/views/system/setting/vm-rule/yara-rule";
-import whiteList from "@/components/views/system/setting/vm-rule/white-list";
+import ruleBase from "@/components/views/system/vm-rule/rule-base";
+import yaraRule from "@/components/views/system/vm-rule/yara-rule";
+import whiteList from "@/components/views/system/vm-rule/white-list";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   components: {
     ruleBase,
     yaraRule,
     whiteList,
   },
-  name: "system_setting_rule",
+  name: "system_control_rule",
   data () {
     return {
       activeName: "first",
@@ -48,7 +49,30 @@ export default {
     };
   },
 
+  mounted () {
+    this.check_passwd()
+  },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     handleClick (tab, event) {
       console.log(tab);
       switch (tab.name) {
@@ -76,10 +100,10 @@ export default {
 };
 </script>
 <style lang='less'>
-@import '../../../../assets/css/less/reset_css/reset_tab.less';
+@import '../../../assets/css/less/reset_css/reset_tab.less';
 </style>
 <style scoped lang='less'>
-@import '../../../../assets/css/less/system/setting/common_box.less';
+@import '../../../assets/css/less/system/setting/common_box.less';
 </style>
 
 

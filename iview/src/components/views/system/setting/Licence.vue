@@ -138,8 +138,9 @@
 </template>
 <script type="text/ecmascript-6">
 import moment from 'moment'
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
-  name: "system_setting_licence",
+  name: "system_control_licence",
   data () {
     return {
       loading: false,
@@ -183,8 +184,29 @@ export default {
     this.get_data();
     this.get_license();
     this.get_version();
+    this.check_passwd();
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     get_data () {
       this.$axios.get('/yiiapi/license/get', {
         params: {
@@ -193,6 +215,10 @@ export default {
         }
       })
         .then(response => {
+          console.log(response);
+          if (response.data.status == 602) {
+            return false
+          }
           this.license_list = response.data.data.license
           this.licence_pop.key = response.data.data.key
           this.license_list.list.forEach((item, index) => {
@@ -416,7 +442,7 @@ export default {
 }
 </script>
 <style scoped lang='less'>
-@import '../../../../assets/css/less/system/setting/common_box.less';
+@import '../../../assets/css/less/system/setting/common_box.less';
 #system_control_licence {
   .content_box {
     padding-right: 24px;
@@ -454,8 +480,8 @@ export default {
 }
 </style>
 <style lang='less'>
-@import '../../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../assets/css/less/reset_css/reset_pop.less';
 #system_control_licence {
   .el-dialog {
     width: 440px;
