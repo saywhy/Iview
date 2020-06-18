@@ -64,7 +64,6 @@
     <div class="right"></div>
   </div>
 </template>
-
 <script type="text/ecmascript-6">
 import { eventBus } from '@/components/common/eventBus.js';
 export default {

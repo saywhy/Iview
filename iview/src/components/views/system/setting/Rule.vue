@@ -27,9 +27,9 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import ruleBase from "@/components/views/system/vm-rule/rule-base";
-import yaraRule from "@/components/views/system/vm-rule/yara-rule";
-import whiteList from "@/components/views/system/vm-rule/white-list";
+import ruleBase from "@/components/views/system/setting/vm-rule/rule-base";
+import yaraRule from "@/components/views/system/setting/vm-rule/yara-rule";
+import whiteList from "@/components/views/system/setting/vm-rule/white-list";
 import { eventBus } from '@/components/common/eventBus.js';
 export default {
   components: {
@@ -100,10 +100,10 @@ export default {
 };
 </script>
 <style lang='less'>
-@import '../../../assets/css/less/reset_css/reset_tab.less';
+@import '../../../../assets/css/less/reset_css/reset_tab.less';
 </style>
 <style scoped lang='less'>
-@import '../../../assets/css/less/system/setting/common_box.less';
+@import '../../../../assets/css/less/system/setting/common_box.less';
 </style>
 
 

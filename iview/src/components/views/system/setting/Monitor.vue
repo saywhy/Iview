@@ -1154,8 +1154,8 @@ export default {
 };
 </script>
 <style lang='less'>
-@import '../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../../assets/css/less/reset_css/reset_pop.less';
 #system_control_monitor {
   .add_box {
     .el-dialog {
@@ -1251,7 +1251,7 @@ export default {
 }
 </style>
 <style scoped lang='less'>
-@import '../../../assets/css/less/system/setting/common_box.less';
+@import '../../../../assets/css/less/system/setting/common_box.less';
 #system_control_monitor {
   .content_box {
     .monitor_title {

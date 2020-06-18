@@ -27,9 +27,9 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import networkCard from "@/components/views/system/vm-electric/network-card";
-import proxyServer from "@/components/views/system/vm-electric/proxy-server";
-import routerSet from "@/components/views/system/vm-electric/router-set";
+import networkCard from "@/components/views/system/setting/vm-electric/network-card";
+import proxyServer from "@/components/views/system/setting/vm-electric/proxy-server";
+import routerSet from "@/components/views/system/setting/vm-electric/router-set";
 import { eventBus } from '@/components/common/eventBus.js';
 export default {
   components: {
@@ -100,10 +100,10 @@ export default {
 };
 </script>
 <style lang='less'>
-@import '../../../assets/css/less/reset_css/reset_tab.less';
+@import '../../../../assets/css/less/reset_css/reset_tab.less';
 </style>
 <style scoped lang='less'>
-@import '../../../assets/css/less/system/setting/common_box.less';
+@import '../../../../assets/css/less/system/setting/common_box.less';
 </style>
 
 

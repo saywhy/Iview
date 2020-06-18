@@ -981,8 +981,8 @@ export default {
 </style>
 
 <style lang='less'>
-@import '../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../../assets/css/less/reset_css/reset_pop.less';
 #equipment {
   .add_box {
     .el-dialog {

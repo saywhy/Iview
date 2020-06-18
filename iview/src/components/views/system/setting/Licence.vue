@@ -442,7 +442,7 @@ export default {
 }
 </script>
 <style scoped lang='less'>
-@import '../../../assets/css/less/system/setting/common_box.less';
+@import '../../../../assets/css/less/system/setting/common_box.less';
 #system_control_licence {
   .content_box {
     padding-right: 24px;
@@ -480,8 +480,8 @@ export default {
 }
 </style>
 <style lang='less'>
-@import '../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../../assets/css/less/reset_css/reset_pop.less';
 #system_control_licence {
   .el-dialog {
     width: 440px;

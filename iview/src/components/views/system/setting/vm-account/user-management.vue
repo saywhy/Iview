@@ -712,8 +712,8 @@ export default {
 </script>
 
 <style lang='less'>
-@import '../../../../assets/css/less/reset_css/reset_table.less';
-@import '../../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../../../assets/css/less/reset_css/reset_table.less';
+@import '../../../../../assets/css/less/reset_css/reset_pop.less';
 #user_management {
   .el-dialog {
     width: 550px;
