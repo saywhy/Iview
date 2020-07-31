@@ -19,6 +19,7 @@
     "moment": "^2.24.0",
     "nprogress": "^0.2.0",
     "screenfull": "^5.0.2",
+    "v-blur": "^1.0.4",
     "vue": "^2.5.2",
     "vue-area-linkage": "^5.1.0",
     "vue-router": "^3.0.1",

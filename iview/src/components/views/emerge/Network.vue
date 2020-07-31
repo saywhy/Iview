@@ -5,19 +5,19 @@
     <div class="e_line"
          v-loading="e_line.loading">
       <p class="title">实时告警监测</p>
-      <vm-emerge-line :data='echarts_data'
-                      v-if="e_line.data_show"></vm-emerge-line>
+      <!--<vm-emerge-line :data='echarts_data'
+                      v-if="e_line.data_show">
+      </vm-emerge-line>-->
     </div>
     <!--告警-->
     <div class="alert_risk">
       <el-form class="common-pattern">
         <h3 class="title">告警监测</h3>
-        <el-row class="common_box"
-                style="padding: 15px 0;">
-          <el-col :span="24"
-                  class="common_box_list">
+        <el-row class="common_box" style="padding: 15px 0;">
+          <!--1-->
+          <el-col :span="24" class="common_box_list">
             <!--搜索关键词-->
-            <el-input class="s_key"
+            <el-input class="s_key_network"
                       placeholder="搜索关键词"
                       v-model="params.key"
                       clearable>
@@ -26,11 +26,11 @@
             </el-input>
             <!--时间-->
             <vm-emerge-picker @changeTime='changeTime'></vm-emerge-picker>
-            <!--失陷确定性-->
-            <el-select class="s_key s_key_types"
+            <!--安全域-->
+            <el-select class="s_key_network s_key_types_network"
                        v-model="params.threat"
                        clearable
-                       placeholder="失陷确定性"
+                       placeholder="安全域"
                        :popper-append-to-body="false">
               <el-option v-for="item in options_threat"
                          :key="item.value"
@@ -38,11 +38,11 @@
                          :value="item.value">
               </el-option>
             </el-select>
-            <!--威胁等级-->
-            <el-select class="s_key"
+            <!--失陷确定性-->
+            <el-select class="s_key_network"
                        v-model="params.degree"
                        clearable
-                       placeholder="威胁等级"
+                       placeholder="失陷确定性"
                        :popper-append-to-body="false">
               <el-option v-for="item in options_degrees"
                          :key="item.value"
@@ -50,8 +50,23 @@
                          :value="item.value">
               </el-option>
             </el-select>
+          </el-col>
+          <!--2-->
+          <el-col :span="24" class="common_box_list common_box_list_network">
+            <!--威胁等级-->
+            <el-select class="s_key_network"
+                       v-model="params.status"
+                       clearable
+                       placeholder="威胁等级"
+                       :popper-append-to-body="false">
+              <el-option v-for="item in options_status"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
+            </el-select>
             <!--处理状态-->
-            <el-select class="s_key"
+            <el-select class="s_key_network1"
                        v-model="params.status"
                        clearable
                        placeholder="处理状态"
@@ -66,51 +81,65 @@
                        @click="submitClick();">搜索</el-button>
             <el-link class="s_link"
                      @click="resetClick();">重置</el-link>
-
             <el-button class="s_btn_edit"
                        @click="export_box">导出</el-button>
           </el-col>
         </el-row>
         <!--按钮组-->
-        <el-row class="common_btn">
-          <el-col :span="24"
-                  class="common_btn_list">
-            <el-dropdown @command="change_state"
-                         trigger="click"
-                         placement='bottom-start'
-                         size='148'>
-              <el-button type="primary"
-                         class="change_btn">
-                <span>状态变更</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown"
-                                class="dropdown_ul_box">
-                <el-dropdown-item command="处置中"
-                                  class="select_item">处置中</el-dropdown-item>
-                <el-dropdown-item command="已处置"
-                                  class="select_item">已处置</el-dropdown-item>
-                <el-dropdown-item command="已忽略"
-                                  class="select_item">已忽略</el-dropdown-item>
-                <el-dropdown-item command="误报"
-                                  class="select_item">误报</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <el-dropdown @command="change_task"
-                         placement='bottom-start'
-                         trigger="click">
-              <el-button type="primary"
-                         class="change_btn">
-                <span>工单任务</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown"
-                                class="dropdown_ul_box">
-                <el-dropdown-item command="新建工单">新建工单</el-dropdown-item>
-                <el-dropdown-item command="添加到工单">添加到工单</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-
+        <el-row class="common_btn" style="width: 100%;">
+          <el-col :span="24" class="common_btn_list">
+            <div style="display: initial;">
+              <el-dropdown @command="change_state"
+                           trigger="click"
+                           placement='bottom-start'
+                           size='148'>
+                <el-button type="primary"
+                           class="change_btn">
+                  <span>状态变更</span>
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown"
+                                  class="dropdown_ul_box">
+                  <el-dropdown-item command="处置中"
+                                    class="select_item">处置中</el-dropdown-item>
+                  <el-dropdown-item command="已处置"
+                                    class="select_item">已处置</el-dropdown-item>
+                  <el-dropdown-item command="已忽略"
+                                    class="select_item">已忽略</el-dropdown-item>
+                  <el-dropdown-item command="误报"
+                                    class="select_item">误报</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <el-dropdown @command="change_task"
+                           placement='bottom-start'
+                           trigger="click">
+                <el-button type="primary"
+                           class="change_btn">
+                  <span>工单任务</span>
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown"
+                                  class="dropdown_ul_box">
+                  <el-dropdown-item command="新建工单">新建工单</el-dropdown-item>
+                  <el-dropdown-item command="添加到工单">添加到工单</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </div>
+            <!--配置到-->
+            <div class="c_b_1">
+              <span class="s_btn_train" @click.stop="fieldFlag = !fieldFlag">
+              <i class="t_img"></i>
+              <span class="t_name">配置到</span>
+              </span>
+              <div class="s_btn_list" v-show="fieldFlag">
+                <h4 class="s_b_name">展示字段</h4>
+                <ul class="s_b_list">
+                  <li class="item" v-for="(item,$index) in fieldList" :key="$index">
+                    <el-checkbox v-model="item.checked" :disabled="item.disabled">{{item.name}}</el-checkbox>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </el-col>
         </el-row>
       </el-form>
@@ -128,20 +157,31 @@
                     @mouseup.native="mouseup"
                     @selection-change="handleSelChange"
                     @header-click="header_click"
+                    row-key="id"
                     @row-click="detail_click">
             <el-table-column label=" "
+                             fixed="left"
                              align="center"
                              prop="type"
+                             :resizable="false"
                              width="20">
               <template slot-scope="scope">
-                <div class="new_dot"
-                     v-show="scope.row.new_alert=='1'"></div>
+                <div class="new_dot" v-show="scope.row.new_alert=='1'"></div>
               </template>
             </el-table-column>
-            <el-table-column type="selection"
-                             align="center"
-                             width="50"></el-table-column>
-            <el-table-column label="告警时间"
+            <el-table-column type="selection" fixed="left" align="center" width="50" :resizable="false">
+            </el-table-column>
+
+            <el-table-column v-for="(item, index) in col" :key="`col_${index}`"
+                             align="center" show-overflow-tooltip
+                             :prop="dropCol[index].prop"  :label="item.label">
+              <!--<template v-if="" scope="scope">
+                {{ scope.row.status | toAdmin }}
+              </template>-->
+
+            </el-table-column>
+
+            <!--<el-table-column label="告警时间"
                              align="center"
                              width="200"
                              show-overflow-tooltip>
@@ -191,11 +231,10 @@
                              align="center"
                              width="80">
               <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
-            </el-table-column>
+            </el-table-column>-->
           </el-table>
         </el-col>
-        <el-col :span="24"
-                class="e-pagination">
+        <el-col :span="24" class="e-pagination">
           <el-pagination class="handle-pagination"
                          @size-change="handleSizeChange"
                          @current-change="handleCurrentChange"
@@ -506,8 +545,7 @@
               </el-table-column>
             </el-table>
           </el-col>
-          <el-col :span="24"
-                  class="e-pagination">
+          <el-col :span="24" class="e-pagination">
             <el-pagination class="handle-pagination"
                            @size-change="sc_table_add_works"
                            @current-change="hcc_table_add_works"
@@ -534,6 +572,8 @@
 import vmEmergeLine from "./vm-emerge/vm-emerge-line";
 import vmEmergePicker from "@/components/common/vm-emerge-picker";
 import { eventBus } from '@/components/common/eventBus.js';
+//拖拽
+import Sortable from 'sortablejs';
 export default {
   name: "Network",
   components: {
@@ -542,6 +582,41 @@ export default {
   },
   data () {
     return {
+      col:[{label: '告警时间', prop: 'alert_time' },
+        { label: '告警类型',  prop: 'category'},
+        {label: '威胁指标', prop: 'indicator'},
+        {label: '源地址', prop: 'src_ip'},
+        {label: '目的地址', prop: 'dest_ip'},
+        {label: '应用', prop: 'application'},
+        {label: '威胁等级', prop: 'degree'},
+        {label: '失陷确定性', prop: 'fall_certainty'},
+        {label: '状态', prop: 'status'}],
+      dropCol:[{label: '告警时间', prop: 'alert_time' },
+        { label: '告警类型',  prop: 'category'},
+        {label: '威胁指标', prop: 'indicator'},
+        {label: '源地址', prop: 'src_ip'},
+        {label: '目的地址', prop: 'dest_ip'},
+        {label: '应用', prop: 'application'},
+        {label: '威胁等级', prop: 'degree'},
+        {label: '失陷确定性', prop: 'fall_certainty'},
+        {label: '状态', prop: 'status'}],
+      fieldFlag:false,
+      fieldList:[{checked:true,disabled:true,name:"告警时间"},
+        {checked:true,disabled:true,name:"告警类型"},
+        {checked:true,disabled:true,name:"描述"},
+        {checked:false,disabled:false,name:"安全域"},
+        {checked:false,disabled:false,name:"源地址"},
+        {checked:false,disabled:false,name:"目的地址"},
+        {checked:false,disabled:false,name:"关联资产名"},
+        {checked:false,disabled:false,name:"用户"},
+        {checked:false,disabled:false,name:"标签"},
+        {checked:false,disabled:false,name:"威胁等级"},
+        {checked:false,disabled:false,name:"失陷确定性"},
+        {checked:false,disabled:false,name:"风险指数"},
+        {checked:false,disabled:false,name:"更新时间"},
+        {checked:false,disabled:false,name:"工单状态"},
+        {checked:false,disabled:false,name:"日志数量"},
+        {checked:false,disabled:false,name:"状态"}],
       echarts_data: {},
       e_line: {
         loading: true,
@@ -714,15 +789,35 @@ export default {
       newPositon: {
         x: '',
         y: ''
-      }
+      },
     };
   },
   mounted () {
     this.check_passwd();
     this.get_echarts();
     this.get_list_risk();
+
+    //行列拖拽
+    this.columnDrop();
   },
   methods: {
+    // 列拖拽
+    columnDrop () {
+      const wrapperTr = document.querySelector('.el-table__header-wrapper tr');
+      this.sortable = Sortable.create(wrapperTr, {
+        animation: 180,
+        delay: 0,
+        onEnd: evt => {
+
+          let newIndex = evt.newIndex - 2;
+          let oldIndex = evt.oldIndex - 2;
+          const oldItem = this.dropCol[oldIndex];
+
+          this.dropCol.splice(oldIndex, 1);
+          this.dropCol.splice(newIndex, 0, oldItem);
+        }
+      });
+    },
     // 测试密码过期
     check_passwd () {
       this.$axios.get('/yiiapi/site/check-passwd-reset')
@@ -790,11 +885,11 @@ export default {
         if (status == 0) {
 
           let { data, count, maxPage, pageNow } = datas;
-
           this.table.tableData = data;
           this.table.count = count;
           this.table.maxPage = maxPage;
           this.table.pageNow = pageNow;
+
           //console.log(data)
         }
       })
@@ -1913,4 +2008,13 @@ export default {
     }
   }
 }
+</style>
+<style lang="less">
+  .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
+    background-color: #bbb;
+    border-color: #bbb;
+  }
+  .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
+    border-color: #fff;
+  }
 </style>

@@ -120,11 +120,11 @@ export const constantRouterMap = [{
       },
     ]
   },
-  /*{
-    path: '/text',
-    name:'text',
-    component: () => import('@/components/vendor/screen/text')
-  },*/
+  {
+    path: '/test',
+    name:'test',
+    component: () => import('@/components/vendor/screen/test')
+  },
   {
     path: '/screen',
     name:'screen',
@@ -366,6 +366,19 @@ export const asyncRouterMap = [
               deep: 2
             },
             component: () => import('@/components/views/handle/risks/Outreath')
+          },
+          {
+            path: '/handle/risks/locality',
+            name: 'locality',
+            meta: {
+              title: '本机威胁',
+              auth: '44',
+              icon: 'e-aside-none',
+              parentAuth: '23',
+              rootAuth: '13',
+              deep: 2
+            },
+            component: () => import('@/components/views/handle/risks/Locality')
           }
         ]
       },

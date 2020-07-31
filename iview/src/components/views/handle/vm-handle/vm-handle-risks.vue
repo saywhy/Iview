@@ -6,10 +6,14 @@
       <div class="ost ost-1">
         <div class="ost-title">
           <slot name="name"></slot>威胁资产 Top5</div>
-        <div class="ost-progress">
+        <div class="ost-progress" v-if="threats =='locality'">
+          <vm-handle-local></vm-handle-local>
+        </div>
+        <div class="ost-progress" v-else>
           <vm-handle-progress :progress_data="progress_data_source5"
                               v-if="progress_data_source5_show"></vm-handle-progress>
         </div>
+
       </div>
       <div class="ost ost-2">
         <div class="ost-title">
@@ -548,6 +552,7 @@
 
 <script type="text/ecmascript-6">
 import VmHandleProgress from './vm-handle-progress';
+import VmHandleLocal from './vm-handle-local';
 import VmHandleForm from './vm-handle-form';
 import VmEmergePicker from "@/components/common/vm-emerge-picker";
 
@@ -730,6 +735,7 @@ export default {
   },
   components: {
     VmHandleProgress,
+    VmHandleLocal,
     VmHandleForm,
     VmEmergePicker
   },

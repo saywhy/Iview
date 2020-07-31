@@ -2,7 +2,8 @@
   height: 80px;
   padding: 19px 0;
   display: inline-block;
-  .common_btn_list {
+  float: left;
+  .common_btn_list{
     font-size: 0;
     text-align: left;
     /deep/
@@ -75,6 +76,88 @@
           height: 34px;
           width: 124px;
           padding: 0;
+        }
+      }
+    }
+  }
+  .c_b_1{
+    float: right;
+    margin-top: 10px;
+    position: relative;
+    z-index: 999;
+    .s_btn_train{
+      background: #fff;
+      float: right;
+      font-family: PingFang;
+      font-size: 14px;
+      color: #0070ff;
+      line-height: 20px;
+      display: inline-block;
+      cursor: pointer;
+      .t_img{
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        background-size: 14px 14px;
+        vertical-align: middle;
+        background-image: url("../../images/emerge/detail_pei.png");
+      }
+      .t_name{
+        font-family: PingFangSC-Medium;
+        font-size: 14px;
+        color: #999999;
+        vertical-align: middle;
+      }
+    }
+    .s_btn_list{
+      position: absolute;
+      top: 30px;
+      right: 0;
+      width: 288px;
+      height: 406px;
+      background: #FFFFFF;
+      padding: 10px 10px;
+      box-shadow: 0 0 4px 0 rgba(0,0,0,0.24);
+
+      .s_b_name{
+        height: 30px;
+        line-height: 30px;
+        font-family: PingFangSC-Medium;
+        font-size: 16px;
+        color: #333333;
+        font-weight: bold;
+      }
+      .s_b_list{
+        height: 352px;
+        overflow-y: auto;
+        .item{
+          line-height: 24px;
+          font-family: PingFangSC-Regular;
+          font-size: 16px;
+          color: #333333;
+          /deep/
+          .el-checkbox{
+            .el-checkbox__label{
+              font-family: PingFangSC-Regular;
+              font-size: 16px;
+              color: #333333;
+            }
+          }
+        }
+        &::-webkit-scrollbar {
+          /*滚动条整体样式*/
+          width: 4px;
+          /*高宽分别对应横竖滚动条的尺寸*/
+          /* border-radius: 6px;*/
+        }
+        &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+          border-radius: 6px;
+          background: #0070FF;
+          /*background: red;*/
+        }
+        &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+          border-radius: 6px;
+          background: #f4f4f4;
         }
       }
     }

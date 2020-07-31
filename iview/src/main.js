@@ -13,7 +13,7 @@ import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/theme/index.css'
 Vue.use(ElementUI);
-import '@/assets/js/common'
+//import '@/assets/js/common.js'
 // 引入echarts
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
@@ -25,6 +25,9 @@ import uploader from 'vue-simple-uploader'
 
 import "echarts/extension/bmap/bmap.js";
 import '../node_modules/echarts/map/js/world.js'
+
+import vBlur from 'v-blur'
+Vue.use(vBlur)
 
 Vue.use(uploader)
 
