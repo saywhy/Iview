@@ -172,66 +172,50 @@
             <el-table-column type="selection" fixed="left" align="center" width="50" :resizable="false">
             </el-table-column>
 
-            <el-table-column v-for="(item, index) in col" :key="`col_${index}`"
-                             align="center" show-overflow-tooltip
-                             :prop="dropCol[index].prop"  :label="item.label">
-              <!--<template v-if="" scope="scope">
-                {{ scope.row.status | toAdmin }}
-              </template>-->
-
-            </el-table-column>
-
-            <!--<el-table-column label="告警时间"
-                             align="center"
-                             width="200"
-                             show-overflow-tooltip>
-              <template slot-scope="scope">{{ scope.row.alert_time | time }}</template>
-            </el-table-column>
-            <el-table-column prop="category"
-                             align="center"
-                             label="告警类型"
-                             width="100"
-                             show-overflow-tooltip></el-table-column>
-            <el-table-column prop="indicator"
-                             align="center"
-                             label="威胁指标"
-                             min-width="120"
-                             show-overflow-tooltip></el-table-column>
-            <el-table-column prop="src_ip"
-                             align="center"
-                             label="源地址"
-                             show-overflow-tooltip></el-table-column>
-            <el-table-column prop="dest_ip"
-                             align="center"
-                             label="目的地址"
-                             show-overflow-tooltip></el-table-column>
-            <el-table-column prop="application"
-                             align="center"
-                             label="应用"
-                             width="60"
-                             show-overflow-tooltip></el-table-column>
-            <el-table-column label="威胁等级"
-                             align="center"
-                             width="100">
-              <template slot-scope="scope">
-                <span class="btn_alert_background"
-                      :class="{'high_background':scope.row.degree =='高','mid_background':scope.row.degree =='中','low_background':scope.row.degree =='低'}">
+            <template v-for="(item, index) in col">
+              <!--告警时间-->
+              <el-table-column align="center" v-if="dropCol[index].prop == 'alert_time'" :key="`col_${index}`"
+                               show-overflow-tooltip
+                               :prop="dropCol[index].prop"
+                               :label="item.label">
+                <template slot-scope="scope" >{{ scope.row.alert_time | time }}</template>
+              </el-table-column>
+              <!--威胁等级-->
+              <el-table-column align="center" v-else-if="dropCol[index].prop == 'degree'" :key="`col_${index}`"
+                               show-overflow-tooltip
+                               :prop="dropCol[index].prop"
+                               :label="item.label">
+                <template slot-scope="scope">
+                  <span class="btn_alert_background"
+                      :class="{'high_background':scope.row.degree =='高',
+                      'mid_background':scope.row.degree =='中','low_background':scope.row.degree =='低'}">
                   {{ scope.row.degree | degree_sino }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="失陷确定性"
-                             align="center"
-                             width="120">
-              <template slot-scope="scope">
+                </template>
+              </el-table-column>
+              <!--失陷确定性-->
+              <el-table-column align="center" v-else-if="dropCol[index].prop == 'fall_certainty'" :key="`col_${index}`"
+                               show-overflow-tooltip
+                               :prop="dropCol[index].prop"
+                               :label="item.label">
+                <template slot-scope="scope">
                 <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
                   {{ scope.row.fall_certainty | certainty }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="状态"
-                             align="center"
-                             width="80">
-              <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
-            </el-table-column>-->
+                </template>
+              </el-table-column>
+              <!--状态-->
+              <el-table-column align="center" v-else-if="dropCol[index].prop == 'status'" :key="`col_${index}`"
+                               show-overflow-tooltip
+                               :prop="dropCol[index].prop"
+                               :label="item.label">
+                <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
+              </el-table-column>
+              <!--其他-->
+              <el-table-column align="center" v-else :key="`col_${index}`"
+                               show-overflow-tooltip
+                               :prop="dropCol[index].prop"
+                               :label="item.label">
+              </el-table-column>
+            </template>
           </el-table>
         </el-col>
         <el-col :span="24" class="e-pagination">
@@ -583,7 +567,7 @@ export default {
   data () {
     return {
       col:[{label: '告警时间', prop: 'alert_time' },
-        { label: '告警类型',  prop: 'category'},
+        { label: '告警类型', prop: 'category'},
         {label: '威胁指标', prop: 'indicator'},
         {label: '源地址', prop: 'src_ip'},
         {label: '目的地址', prop: 'dest_ip'},
@@ -592,7 +576,7 @@ export default {
         {label: '失陷确定性', prop: 'fall_certainty'},
         {label: '状态', prop: 'status'}],
       dropCol:[{label: '告警时间', prop: 'alert_time' },
-        { label: '告警类型',  prop: 'category'},
+        { label: '告警类型', prop: 'category'},
         {label: '威胁指标', prop: 'indicator'},
         {label: '源地址', prop: 'src_ip'},
         {label: '目的地址', prop: 'dest_ip'},
@@ -885,12 +869,28 @@ export default {
         if (status == 0) {
 
           let { data, count, maxPage, pageNow } = datas;
+
+          //过滤器处理
+          /*data.forEach((item,index) => {
+            console.log(item);
+            //时间处理
+            let val = item.alert_time;
+            if (val){
+              val = val.toString();
+              if (val.length == 10) {val = val * 1000;}
+              item.alert_time = moment(val).format('YYYY-MM-DD HH:mm:ss')
+            }
+
+          })*/
+
+
+          console.log(data)
+
           this.table.tableData = data;
           this.table.count = count;
           this.table.maxPage = maxPage;
           this.table.pageNow = pageNow;
 
-          //console.log(data)
         }
       })
         .catch(error => {
