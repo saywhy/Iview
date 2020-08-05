@@ -234,7 +234,7 @@ export const asyncRouterMap = [
         rootAuth: '1',
         deep: 1
       },
-      component: () => import('@/components/views/home/Overview')
+      component: () => import('@/components/views/home/Overview1')
      },
       {
         path: '/home/screen_index',
@@ -248,47 +248,6 @@ export const asyncRouterMap = [
           deep: 1
         },
         redirect: '/screen'
-       /* children: [
-          {
-            path: '/home/base_screen',
-            name: 'base_screen',
-            meta: {
-              title: '基础设置',
-              auth: '996',
-              icon: 'e-aside-none',
-              parentAuth: '995',
-              rootAuth: '1',
-              deep: 2
-            },
-            component: () => import('@/components/views/home/vm-screen/vm-screen-base')
-          },
-          {
-            path: '/home/top_index',
-            name: 'top_index',
-            meta: {
-              title: '顶部指标设置',
-              auth: '997',
-              icon: 'e-aside-none',
-              parentAuth: '995',
-              rootAuth: '1',
-              deep: 2
-            },
-            component: () => import('@/components/views/home/vm-screen/vm-screen-top')
-          },
-          {
-            path: '/home/aside_content',
-            name: 'aside_content',
-            meta: {
-              title: '两侧内容设置',
-              auth: '998',
-              icon: 'e-aside-none',
-              parentAuth: '995',
-              rootAuth: '1',
-              deep: 2
-            },
-            component: () => import('@/components/views/home/vm-screen/vm-screen-aside')
-          }
-        ]*/
       }]
   },
   /*处置*/

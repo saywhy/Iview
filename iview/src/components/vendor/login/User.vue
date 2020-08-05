@@ -1,6 +1,5 @@
 <template>
   <div id="UserLogin">
-
     <el-form class="login-form"
              status-icon
              :rules="loginRules"
@@ -9,7 +8,6 @@
              label-width="0">
       <!--用户名-->
       <el-form-item prop="username">
-        <label class="view-label">账户名称</label>
         <el-input class="view-input"
                   @keyup.enter.native="handleLogin"
                   v-model="loginForm.username"
@@ -23,7 +21,6 @@
       </el-form-item>
       <!--密码-->
       <el-form-item prop="password">
-        <label class="view-label">用户密码</label>
         <el-input class="view-input"
                   @keyup.enter.native="handleLogin"
                   :type="passwordType"
@@ -41,11 +38,9 @@
       </el-form-item>
 
       <!--验证码模块-->
-      <!--<div class="code_info">-->
       <div class="code_info"
            v-show="count >= 3">
         <el-form-item prop="code">
-          <label class="view-label">验证码</label>
           <div class="code-list">
             <el-input class="view-input view-code"
                       maxlength="8"
@@ -53,24 +48,24 @@
                       v-model="loginForm.code"
                       auto-complete="off"
                       placeholder="请输入图形验证码">
-              <i slot="prefix"
+             <!-- <i slot="prefix"
                  class="icon-yanzhengma"></i>
               <div slot="prefix"
-                   class="d-split"></div>
+                   class="d-split"></div>-->
             </el-input>
             <!--验证码组件-->
-            <div class="code"
-                 @click="refreshCode">
+            <div class="code" @click="refreshCode">
               <s-identify :identifyCode="identifyCode"
-                          :contentHeight="contentHeight"></s-identify>
+                          :contentHeight="contentHeight">
+              </s-identify>
             </div>
           </div>
         </el-form-item>
+
         <div class="code_p3_error">
           <span class="p3_error">
             <i class="el-icon-warning"></i>
             <span class="p3_error_title">用户名密码输入错误超过三次。</span>
-            <!-- <a class="p3_tips">点击联系管理员</a>-->
           </span>
         </div>
       </div>
@@ -83,11 +78,6 @@
       </el-form-item>
     </el-form>
 
-    <!--忘记密码-->
-    <!--<div class="forget_pass">
-      <a href="javascript:false;"
-         class="pass_a">忘记密码？</a>
-    </div>-->
   </div>
 </template>
 
@@ -97,29 +87,13 @@ import { isvalidUsername, isvalidPassword } from '@/assets/js/validate'
 export default {
   name: 'UserLogin',
   data () {
-    /*const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (!isvalidPassword(value)) {
-        callback(new Error('密码不正确，请重新输入'))
-      } else {
-        callback()
-      }
-    }*/
     return {
       count: 0,
-      contentHeight: 48,
+      contentHeight: 54,
       loginForm: {
         username: '',  //admin
-        // username: '',
-        // password: ''
         password: '' //Hoohoolab*123
-        // password: '!@#QWEasd123'
+        //password: '!@#QWEasd123'
       },
       code: '',
       identifyCodes: '1234567890',
@@ -156,7 +130,7 @@ export default {
   methods: {
     setHeight () {
       let width = document.body.clientWidth;
-      let height = (48 * width / 1920).toFixed(0);
+      let height = (54 * width / 1920).toFixed(0);
       this.contentHeight = height;
     },
     randomNum (min, max) {
@@ -206,7 +180,9 @@ export default {
               if (resp[0]) {
                 this.$message.success('登录成功');
                 this.$router.push('/', () => { });//登录成功之后重定向到首页
-                this.count = 0;
+                setTimeout(()=>{
+                  this.count = 0;
+                },1000)
                 //失败
               } else {
                 this.$message.error(resp[1]);
@@ -224,35 +200,28 @@ export default {
     SIdentify
   }
 }
-
-
 </script>
 <style scoped lang="less">
 #UserLogin {
-  /deep/ .el-form {
+  /deep/
+  .el-form {
     .el-form-item {
-      margin-top: 20px;
-      margin-bottom: 0;
+      margin-bottom: 30px;
       .el-form-item__content {
         line-height: 1;
-        .view-label {
-          font-family: PingFang;
-          font-size: 14px;
-          color: #bbbbbb;
-          line-height: 30px;
-        }
         .view-input {
           position: relative;
           .el-input__inner {
-            border: 1px solid #bbbbbb;
+            border: 2px solid rgba(255,255,255,.48);
             background-color: transparent;
             color: #bbbbbb;
-            height: 48px;
+            height: 54px;
+            width: 360px;
             padding-left: 45px;
           }
           .d-split {
             position: absolute;
-            top: 14px;
+            top: 17px;
             left: 30px;
             height: 20px;
             width: 2px;
@@ -261,13 +230,12 @@ export default {
           .el-input__prefix {
             i {
               display: block;
-              height: 48px;
+              height: 54px;
               width: 25px;
               text-align: center;
               -webkit-transition: all 0.3s;
               transition: all 0.3s;
-              /*line-height: 40px;*/
-              background-position: 4px 15px;
+              background-position: 4px 18px;
               background-repeat: no-repeat;
               background-size: 16px;
             }
@@ -284,13 +252,20 @@ export default {
         }
         .code-list {
           display: flex;
-          height: 48px;
+          height: 54px;
+          width: 360px;
+          /deep/
           .view-code {
             flex: 1;
+            text-align: left;
+            .el-input__inner{
+              width: 210px;
+              padding-left: 15px;
+            }
           }
           .s-canvas {
             padding-left: 20px;
-            height: 48px !important;
+            height: 54px !important;
           }
         }
         .login-submit {
@@ -298,7 +273,7 @@ export default {
           width: 100%;
           border-color: #0070ff;
           margin: 20px 0 0;
-          height: 48px;
+          height: 54px;
         }
       }
     }
@@ -312,12 +287,13 @@ export default {
         text-align: right;
         font-family: PingFang;
         font-size: 14px;
-        /deep/ .el-icon-warning {
+        /deep/
+        .el-icon-warning {
           color: #ff3a36;
         }
         .p3_error_title {
           text-align: right;
-          color: #333333;
+          color: #fff;
         }
         .p3_tips {
           text-align: right;
@@ -326,17 +302,6 @@ export default {
           text-decoration: underline;
         }
       }
-    }
-  }
-
-  .forget_pass {
-    line-height: 80px;
-    text-align: center;
-    .pass_a {
-      text-decoration: none;
-      ont-family: PingFang;
-      font-size: 16px;
-      color: #bbbbbb;
     }
   }
 }

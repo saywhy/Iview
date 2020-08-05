@@ -28,23 +28,23 @@
             <vm-emerge-picker @changeTime='changeTime'></vm-emerge-picker>
             <!--安全域-->
             <el-select class="s_key_network s_key_types_network"
-                       v-model="params.threat"
+                       v-model="params.domain"
                        clearable
                        placeholder="安全域"
                        :popper-append-to-body="false">
-              <el-option v-for="item in options_threat"
+              <el-option v-for="item in options_domains"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
               </el-option>
             </el-select>
             <!--失陷确定性-->
-            <el-select class="s_key_network"
-                       v-model="params.degree"
+            <el-select class="s_key_network s_key_types_network_ok"
+                       v-model="params.threat"
                        clearable
                        placeholder="失陷确定性"
                        :popper-append-to-body="false">
-              <el-option v-for="item in options_degrees"
+              <el-option v-for="item in options_threat"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -55,11 +55,11 @@
           <el-col :span="24" class="common_box_list common_box_list_network">
             <!--威胁等级-->
             <el-select class="s_key_network"
-                       v-model="params.status"
+                       v-model="params.degree"
                        clearable
                        placeholder="威胁等级"
                        :popper-append-to-body="false">
-              <el-option v-for="item in options_status"
+              <el-option v-for="item in options_degrees"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -88,61 +88,68 @@
         <!--按钮组-->
         <el-row class="common_btn" style="width: 100%;">
           <el-col :span="24" class="common_btn_list">
-            <div style="display: initial;">
-              <el-dropdown @command="change_state"
-                           trigger="click"
-                           placement='bottom-start'
-                           size='148'>
-                <el-button type="primary"
-                           class="change_btn">
-                  <span>状态变更</span>
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown"
-                                  class="dropdown_ul_box">
-                  <el-dropdown-item command="处置中"
-                                    class="select_item">处置中</el-dropdown-item>
-                  <el-dropdown-item command="已处置"
-                                    class="select_item">已处置</el-dropdown-item>
-                  <el-dropdown-item command="已忽略"
-                                    class="select_item">已忽略</el-dropdown-item>
-                  <el-dropdown-item command="误报"
-                                    class="select_item">误报</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              <el-dropdown @command="change_task"
-                           placement='bottom-start'
-                           trigger="click">
-                <el-button type="primary"
-                           class="change_btn">
-                  <span>工单任务</span>
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown"
-                                  class="dropdown_ul_box">
-                  <el-dropdown-item command="新建工单">新建工单</el-dropdown-item>
-                  <el-dropdown-item command="添加到工单">添加到工单</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </div>
-            <!--配置到-->
-            <div class="c_b_1">
-              <span class="s_btn_train" @click.stop="fieldFlag = !fieldFlag">
-              <i class="t_img"></i>
-              <span class="t_name">配置到</span>
+            <el-dropdown @command="change_state"
+                         trigger="click"
+                         placement='bottom-start'
+                         size='148'>
+              <el-button type="primary"
+                         class="change_btn">
+                <span>状态变更</span>
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown"
+                                class="dropdown_ul_box">
+                <el-dropdown-item command="处置中"
+                                  class="select_item">处置中</el-dropdown-item>
+                <el-dropdown-item command="已处置"
+                                  class="select_item">已处置</el-dropdown-item>
+                <el-dropdown-item command="已忽略"
+                                  class="select_item">已忽略</el-dropdown-item>
+                <el-dropdown-item command="误报"
+                                  class="select_item">误报</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown @command="change_task"
+                         placement='bottom-start'
+                         trigger="click">
+              <el-button type="primary"
+                         class="change_btn">
+                <span>工单任务</span>
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown"
+                                class="dropdown_ul_box">
+                <el-dropdown-item command="新建工单">新建工单</el-dropdown-item>
+                <el-dropdown-item command="添加到工单">添加到工单</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+
+            <!--配置列-->
+            <el-dropdown class="e_deplay" trigger="click">
+              <span class="s_btn_train">
+                  <i class="t_img"></i>
+                  <span class="t_name">配置列</span>
               </span>
-              <div class="s_btn_list" v-show="fieldFlag">
-                <h4 class="s_b_name">展示字段</h4>
+              <el-dropdown-menu class="s_btn_list" slot="dropdown">
+                <span class="s_b_name">展示字段</span>
                 <ul class="s_b_list">
                   <li class="item" v-for="(item,$index) in fieldList" :key="$index">
-                    <el-checkbox v-model="item.checked" :disabled="item.disabled">{{item.name}}</el-checkbox>
+                    <el-checkbox v-model="item.checked" :disabled="item.disabled"
+                                 @change="fieldChange(item.alias,item.name)">{{item.name}}
+                    </el-checkbox>
                   </li>
                 </ul>
-              </div>
-            </div>
+                <div class="s_b_group">
+                  <el-button type="primary" class="s_bg s_bg_cancel">取消</el-button>
+                  <el-button type="primary" class="s_bg s_bg_submit">确认</el-button>
+                </div>
+              </el-dropdown-menu>
+            </el-dropdown>
+
           </el-col>
         </el-row>
       </el-form>
+      <!--:render-header="col"-->
       <el-row class="common-table-pattern">
         <el-col :span="24">
           <el-table ref="multipleTable"
@@ -157,7 +164,9 @@
                     @mouseup.native="mouseup"
                     @selection-change="handleSelChange"
                     @header-click="header_click"
+                    @sort-change="header_cell"
                     row-key="id"
+                    :key="randomKey"
                     @row-click="detail_click">
             <el-table-column label=" "
                              fixed="left"
@@ -171,50 +180,51 @@
             </el-table-column>
             <el-table-column type="selection" fixed="left" align="center" width="50" :resizable="false">
             </el-table-column>
-
-            <template v-for="(item, index) in col">
-              <!--告警时间-->
-              <el-table-column align="center" v-if="dropCol[index].prop == 'alert_time'" :key="`col_${index}`"
-                               show-overflow-tooltip
-                               :prop="dropCol[index].prop"
-                               :label="item.label">
-                <template slot-scope="scope" >{{ scope.row.alert_time | time }}</template>
-              </el-table-column>
-              <!--威胁等级-->
-              <el-table-column align="center" v-else-if="dropCol[index].prop == 'degree'" :key="`col_${index}`"
-                               show-overflow-tooltip
-                               :prop="dropCol[index].prop"
-                               :label="item.label">
-                <template slot-scope="scope">
-                  <span class="btn_alert_background"
-                      :class="{'high_background':scope.row.degree =='高',
-                      'mid_background':scope.row.degree =='中','low_background':scope.row.degree =='低'}">
-                  {{ scope.row.degree | degree_sino }}</span>
-                </template>
-              </el-table-column>
-              <!--失陷确定性-->
-              <el-table-column align="center" v-else-if="dropCol[index].prop == 'fall_certainty'" :key="`col_${index}`"
-                               show-overflow-tooltip
-                               :prop="dropCol[index].prop"
-                               :label="item.label">
-                <template slot-scope="scope">
-                <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
-                  {{ scope.row.fall_certainty | certainty }}</span>
-                </template>
-              </el-table-column>
-              <!--状态-->
-              <el-table-column align="center" v-else-if="dropCol[index].prop == 'status'" :key="`col_${index}`"
-                               show-overflow-tooltip
-                               :prop="dropCol[index].prop"
-                               :label="item.label">
-                <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
-              </el-table-column>
-              <!--其他-->
-              <el-table-column align="center" v-else :key="`col_${index}`"
-                               show-overflow-tooltip
-                               :prop="dropCol[index].prop"
-                               :label="item.label">
-              </el-table-column>
+            <!--:key="`col_${index}`"-->
+            <template v-for="(item, index) in dropCol">
+                <!--告警时间-->
+                <el-table-column align="center" v-if="dropCol[index].prop == 'alert_time'"
+                                 show-overflow-tooltip
+                                 sortable="custom"
+                                 :prop="dropCol[index].prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{index}}{{ scope.row.alert_time | time }}</template>
+                </el-table-column>
+                <!--威胁等级-->
+                <el-table-column align="center" v-else-if="dropCol[index].prop == 'degree'"
+                                 show-overflow-tooltip
+                                 :prop="dropCol[index].prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">
+                    <span class="btn_alert_background"
+                        :class="{'high_background':scope.row.degree =='高',
+                        'mid_background':scope.row.degree =='中','low_background':scope.row.degree =='低'}">
+                    {{ scope.row.degree | degree_sino }}</span>
+                  </template>
+                </el-table-column>
+                <!--失陷确定性-->
+                <el-table-column align="center" v-else-if="dropCol[index].prop == 'fall_certainty'"
+                                 show-overflow-tooltip
+                                 :prop="dropCol[index].prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">
+                   <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
+                    {{ scope.row.fall_certainty | certainty }}</span>
+                  </template>
+                </el-table-column>
+                <!--状态-->
+                <el-table-column align="center" v-else-if="dropCol[index].prop == 'status'"
+                                 show-overflow-tooltip
+                                 :prop="dropCol[index].prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
+                </el-table-column>
+                <!--其他-->
+                <el-table-column align="center" v-else
+                                 show-overflow-tooltip
+                                 :prop="dropCol[index].prop"
+                                 :label="item.label">
+                </el-table-column>
             </template>
           </el-table>
         </el-col>
@@ -566,41 +576,25 @@ export default {
   },
   data () {
     return {
-      col:[{label: '告警时间', prop: 'alert_time' },
-        { label: '告警类型', prop: 'category'},
-        {label: '威胁指标', prop: 'indicator'},
-        {label: '源地址', prop: 'src_ip'},
-        {label: '目的地址', prop: 'dest_ip'},
-        {label: '应用', prop: 'application'},
-        {label: '威胁等级', prop: 'degree'},
-        {label: '失陷确定性', prop: 'fall_certainty'},
-        {label: '状态', prop: 'status'}],
-      dropCol:[{label: '告警时间', prop: 'alert_time' },
-        { label: '告警类型', prop: 'category'},
-        {label: '威胁指标', prop: 'indicator'},
-        {label: '源地址', prop: 'src_ip'},
-        {label: '目的地址', prop: 'dest_ip'},
-        {label: '应用', prop: 'application'},
-        {label: '威胁等级', prop: 'degree'},
-        {label: '失陷确定性', prop: 'fall_certainty'},
-        {label: '状态', prop: 'status'}],
+      randomKey:0,
+      dropCol:[],
       fieldFlag:false,
-      fieldList:[{checked:true,disabled:true,name:"告警时间"},
-        {checked:true,disabled:true,name:"告警类型"},
-        {checked:true,disabled:true,name:"描述"},
-        {checked:false,disabled:false,name:"安全域"},
-        {checked:false,disabled:false,name:"源地址"},
-        {checked:false,disabled:false,name:"目的地址"},
-        {checked:false,disabled:false,name:"关联资产名"},
-        {checked:false,disabled:false,name:"用户"},
-        {checked:false,disabled:false,name:"标签"},
-        {checked:false,disabled:false,name:"威胁等级"},
-        {checked:false,disabled:false,name:"失陷确定性"},
-        {checked:false,disabled:false,name:"风险指数"},
-        {checked:false,disabled:false,name:"更新时间"},
-        {checked:false,disabled:false,name:"工单状态"},
-        {checked:false,disabled:false,name:"日志数量"},
-        {checked:false,disabled:false,name:"状态"}],
+      fieldList:[{checked:true,disabled:true,name:"告警时间",alias:'alert_time'},
+        {checked:true,disabled:true,name:"告警类型",alias:'category'},
+        {checked:true,disabled:true,name:"威胁等级",alias:'degree'},
+        {checked:true,disabled:false,name:"描述",alias:'describute'},
+        {checked:true,disabled:false,name:"安全域",alias:'sec_domain'},
+        {checked:true,disabled:false,name:"源地址",alias:'src_ip'},
+        {checked:true,disabled:false,name:"目的地址",alias:'dest_ip'},
+        {checked:false,disabled:false,name:"关联资产名",alias:'assets'},
+        {checked:false,disabled:false,name:"用户",alias:'user'},
+        {checked:false,disabled:false,name:"标签",alias:'label'},
+        {checked:false,disabled:false,name:"失陷确定性",alias:'certainty'},
+        {checked:false,disabled:false,name:"风险指数",alias:'risk_index'},
+        {checked:true,disabled:false,name:"更新时间",alias:'update_time'},
+        {checked:false,disabled:false,name:"工单状态",alias:'order'},
+        {checked:false,disabled:false,name:"日志数量",alias:'num_log'},
+        {checked:true,disabled:false,name:"状态",alias:'status'}],
       echarts_data: {},
       e_line: {
         loading: true,
@@ -615,7 +609,8 @@ export default {
         status: "",
         startTime: '',
         endTime: '',
-        degree: ''
+        degree: '',
+        domain: ''
       },
       options_degrees: [
         {
@@ -635,6 +630,24 @@ export default {
         {
           value: "1",
           label: "已失陷"
+        }
+      ],
+      options_domains: [
+        {
+          value: "net1",
+          label: "网络"
+        },
+        {
+          value: "net2",
+          label: "端点"
+        },
+        {
+          value: "net3",
+          label: "UEBA"
+        },
+        {
+          value: "net4",
+          label: "审计"
         }
       ],
       options_status: [
@@ -779,12 +792,48 @@ export default {
   mounted () {
     this.check_passwd();
     this.get_echarts();
+
     this.get_list_risk();
 
-    //行列拖拽
-    this.columnDrop();
+   this.getColumn();
   },
   methods: {
+    getColumn(){
+      this.$axios.get('/yiiapi/site/check-passwd-reset')
+        .then((resp) => {
+
+          this.dropCol = [{label: '告警时间', prop: 'alert_time'},
+            { label: '告警类型', prop: 'category'},
+            {label: '描述', prop: 'describute'},
+            {label: '安全域', prop: 'sec_domain'},
+            {label: '源地址', prop: 'src_ip'},
+            {label: '目的地址', prop: 'dest_ip'},
+            {label: '威胁等级', prop: 'degree'},
+            {label: '更新时间', prop: 'update_time'},
+            {label: '状态', prop: 'status'}];
+
+          this.columnDrop();
+
+        });
+    },
+    //下拉框勾选事件
+    fieldChange(alias,name){
+
+      let colAttr = this.dropCol.map((item) => {
+        return item.prop;
+      });
+      console.log(colAttr);
+
+      if(colAttr.includes(alias)){
+        var index = colAttr.findIndex((element)=>(element == alias));
+        this.dropCol.splice(index,1);
+      } else {
+        this.dropCol.push({label: name, prop: alias});
+      }
+
+      console.log(this.dropCol);
+
+    },
     // 列拖拽
     columnDrop () {
       const wrapperTr = document.querySelector('.el-table__header-wrapper tr');
@@ -796,11 +845,60 @@ export default {
           let newIndex = evt.newIndex - 2;
           let oldIndex = evt.oldIndex - 2;
           const oldItem = this.dropCol[oldIndex];
-
           this.dropCol.splice(oldIndex, 1);
           this.dropCol.splice(newIndex, 0, oldItem);
+
+          this.randomKey += 1;
+
+          setTimeout(()=>{
+             this.columnDrop();
+          },500)
         }
       });
+    },
+
+    // 获取告警列表
+    get_list_risk () {
+      this.table.loading = true;
+      let params_alert = {
+        threat: ''
+      };
+      if (this.params.threat == 1) {
+        params_alert.threat = 1;
+      }
+      this.$axios.get('/yiiapi/alert/list', {
+        params: {
+          start_time: this.params.startTime,
+          end_time: this.params.endTime,
+          key_word: this.params.key,
+          fall_certainty: params_alert.threat,
+          status: this.params.status,
+          degree: this.params.degree,
+          page: this.table.pageNow,
+          rows: this.table.eachPage,
+        }
+      }).then(resp => {
+
+        this.table.loading = false;
+
+        let { status, data } = resp.data;
+        let datas = data;
+
+        if (status == 0) {
+
+          let { data, count, maxPage, pageNow } = datas;
+         // console.log(data)
+
+          this.table.tableData = data;
+          this.table.count = count;
+          this.table.maxPage = maxPage;
+          this.table.pageNow = pageNow;
+
+        }
+      })
+        .catch(error => {
+          console.log(error);
+        })
     },
     // 测试密码过期
     check_passwd () {
@@ -835,64 +933,6 @@ export default {
             this.echarts_data = [{ statistics_time: '', alert_count: 0 }]
           }
         })
-        .catch(error => {
-          console.log(error);
-        })
-    },
-    // 获取告警列表
-    get_list_risk () {
-      this.table.loading = true;
-      let params_alert = {
-        threat: ''
-      };
-      if (this.params.threat == 1) {
-        params_alert.threat = 1;
-      }
-      this.$axios.get('/yiiapi/alert/list', {
-        params: {
-          start_time: this.params.startTime,
-          end_time: this.params.endTime,
-          key_word: this.params.key,
-          fall_certainty: params_alert.threat,
-          status: this.params.status,
-          degree: this.params.degree,
-          page: this.table.pageNow,
-          rows: this.table.eachPage,
-        }
-      }).then(resp => {
-
-        this.table.loading = false;
-
-        let { status, data } = resp.data;
-        let datas = data;
-
-        if (status == 0) {
-
-          let { data, count, maxPage, pageNow } = datas;
-
-          //过滤器处理
-          /*data.forEach((item,index) => {
-            console.log(item);
-            //时间处理
-            let val = item.alert_time;
-            if (val){
-              val = val.toString();
-              if (val.length == 10) {val = val * 1000;}
-              item.alert_time = moment(val).format('YYYY-MM-DD HH:mm:ss')
-            }
-
-          })*/
-
-
-          console.log(data)
-
-          this.table.tableData = data;
-          this.table.count = count;
-          this.table.maxPage = maxPage;
-          this.table.pageNow = pageNow;
-
-        }
-      })
         .catch(error => {
           console.log(error);
         })
@@ -952,6 +992,10 @@ export default {
     },
     header_click (val) {
       this.detail_click_val = {}
+    },
+    //列排序
+    header_cell(val){
+      console.log(val)
     },
     mousedown (event) {
       this.oldPositon = {
@@ -2016,5 +2060,93 @@ export default {
   }
   .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
     border-color: #fff;
+  }
+  .s_btn_list{
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 288px!important;
+    height: 456px!important;
+    background: #FFFFFF;
+    padding: 10px 10px;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.24);
+    .s_b_name{
+      height: 30px;
+      line-height: 30px;
+      font-family: PingFangSC-Medium;
+      font-size: 16px;
+      color: #333333;
+      font-weight: bold;
+    }
+    .s_b_list{
+      height: 352px;
+      overflow-y: auto;
+      .item{
+        line-height: 24px;
+        font-family: PingFangSC-Regular;
+        font-size: 16px;
+        color: #333333;
+        /deep/
+        .el-checkbox{
+          .el-checkbox__label{
+            font-family: PingFangSC-Regular;
+            font-size: 16px;
+            color: #333333;
+          }
+        }
+      }
+      &::-webkit-scrollbar {
+        /*滚动条整体样式*/
+        width: 4px;
+        /*高宽分别对应横竖滚动条的尺寸*/
+        /* border-radius: 6px;*/
+      }
+      &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 6px;
+        background: #0070FF;
+        /*background: red;*/
+      }
+      &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        border-radius: 6px;
+        background: #f4f4f4;
+      }
+    }
+    .s_b_group{
+      margin-top: 10px;
+      height: 40px;
+      line-height: 50px;
+      text-align: center;
+      /deep/
+      .s_bg{
+        font-size: 14px;
+        height: 34px;
+        width: 96px;
+        outline: none;
+        margin-right: 8px;
+        line-height: 0;
+        padding: 0;
+        font-family: PingFangMedium;
+        &.s_bg_submit {
+          color: #fff;
+          background: #0070FF;
+          border: 1px solid #0070FF;
+          &:hover{
+            color: #fff;
+            background: #0070FF;
+            border: 1px solid #0070FF;
+          }
+        }
+        &.s_bg_cancel {
+          color: #0070FF;
+          border: 1px solid #0070FF;
+          background-color: #fff;
+          &:hover{
+            color: #0070FF;
+            border: 1px solid #0070FF;
+            background-color: #fff;
+          }
+        }
+      }
+    }
   }
 </style>

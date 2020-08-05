@@ -217,6 +217,7 @@ textarea {
   cursor: text !important;
 }
 
+
 .el-table td {
   text-align: center;
   border: none;
@@ -228,14 +229,11 @@ textarea {
 
 .el-table thead {
   text-align: center;
-  border: 1px solid red !important;
 }
 
-
-/* .el-table thead th {
-  background: #f8f8f8
-} */
-
+.el-table th.is-leaf {
+  border-width: 0!important;
+}
 
 .el-table--border th {
   border-right: 1px solid #EBEEF5;

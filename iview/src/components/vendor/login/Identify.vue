@@ -41,7 +41,7 @@
         default: 90
       },
       contentHeight:{
-        default: 48
+        default: 54
       }
     },
     methods: {

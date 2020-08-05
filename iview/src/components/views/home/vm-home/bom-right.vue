@@ -26,10 +26,14 @@
           <span>{{ scope.row.category}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="indicator"
+      <el-table-column prop="domain"
+                       align="center"
+                       label="安全域"
+                       show-overflow-tooltip></el-table-column>
+      <!--<el-table-column prop="indicator"
                        align="center"
                        label="威胁指标"
-                       show-overflow-tooltip></el-table-column>
+                       show-overflow-tooltip></el-table-column>-->
       <el-table-column prop="src_ip"
                        align="center"
                        label="源地址"

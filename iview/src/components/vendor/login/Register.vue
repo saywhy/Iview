@@ -9,7 +9,7 @@
              label-width="0">
       <!--用户名-->
       <el-form-item prop="username">
-        <label class="view-label">账户名称</label>
+       <!-- <label class="view-label">账户名称</label>-->
         <el-input class="view-input"
                   @keyup.enter.native="handleLogin"
                   v-model="registerForm.username"
@@ -23,7 +23,6 @@
       </el-form-item>
       <!--密码-->
       <el-form-item prop="password">
-        <label class="view-label">用户密码</label>
         <el-input class="view-input"
                   @keyup.enter.native="handleLogin"
                   :type="passwordType"
@@ -42,7 +41,6 @@
 
       <!--确认密码-->
       <el-form-item prop="repassword">
-        <label class="view-label">密码确认</label>
         <el-input class="view-input"
                   @keyup.enter.native="handleLogin"
                   :type="passwordType"
@@ -130,7 +128,6 @@ export default {
         (this.passwordType = '');
     },
     handleLogin () {
-
       console.log('注册')
       this.$refs.registerForm.validate(valid => {
         if (valid) {
@@ -158,28 +155,28 @@ export default {
   /deep/
   .el-form {
     .el-form-item {
-      margin-top: 20px;
-      margin-bottom: 0;
+      margin-bottom: 30px;
       .el-form-item__content {
         line-height: 1;
-        .view-label {
+        /*.view-label {
           font-family: PingFang;
           font-size: 14px;
           color: #bbbbbb;
           line-height: 30px;
-        }
+        }*/
         .view-input {
           position: relative;
           .el-input__inner {
-            border: 1px solid #bbbbbb;
+            border: 2px solid rgba(255,255,255,.48);
             background-color: transparent;
             color: #bbbbbb;
-            height: 48px;
+            height: 54px;
+            width: 360px;
             padding-left: 45px;
           }
           .d-split {
             position: absolute;
-            top: 14px;
+            top: 17px;
             left: 30px;
             height: 20px;
             width: 2px;
@@ -188,13 +185,13 @@ export default {
           .el-input__prefix {
             i {
               display: block;
-              height: 48px;
+              height: 54px;
               width: 25px;
               text-align: center;
               -webkit-transition: all 0.3s;
               transition: all 0.3s;
               /*line-height: 40px;*/
-              background-position: 4px 15px;
+              background-position: 4px 18px;
               background-repeat: no-repeat;
               background-size: 16px;
             }
@@ -210,8 +207,8 @@ export default {
           background: #0070ff;
           width: 100%;
           border-color: #0070ff;
-          margin: 20px 0 30px;
-          height: 48px;
+          margin: 10px 0;
+          height: 54px;
         }
       }
     }

@@ -1,20 +1,22 @@
 <template>
   <div id="Login" class="login-container" v-cloak>
     <div class="logo">
-      <img class="l_product_logo" src="@/assets/images/login/logo.png" alt="logo"/>
-      <span class="l_product_title">ThreatEye</span>
-      <h4 class="l_product_name">ThreatEye高级威胁检测系统</h4>
-      <p class="l_product_content">ThreatEye Advanced Threat Detection System</p>
+      <img class="l_product_logo" src="@/assets/images/login/logo01.png" alt="logo"/>
     </div>
-
+    <p class="login-copyright">
+      ©2019虎特信息科技（上海）有限公司  版权所有
+    </p>
     <div class="login-box">
+      <div class="border-line"></div>
       <div class="login-main">
+        <div class="l-container">
+          <img class="l-container_img" src="@/assets/images/login/logo.png" alt="logo"/>
+        </div>
         <h2 class="l-title">{{name}}</h2>
         <User v-if="stu"></User>
         <Register v-if="!stu"></Register>
       </div>
     </div>
-    <p class="ty_copyright">©虎特信息科技（上海）有限公司  版权所有</p>
   </div>
 </template>
 
@@ -25,14 +27,12 @@
     name: 'Login',
     data() {
       return {
+        name:'iView 安全感知系统',
         activeName: 'user',
-        website:{
-          title: 'nx-admin',
-        },
-        name:'登录',
-        stu:true
+        stu: true
       }
     },
+    components:{User,Register},
     created(){
       this.register();
     },
@@ -41,28 +41,18 @@
         this.$axios.post('/yiiapi/site/login')
           .then(resp => {
 
-            console.log(resp)
-        //  let datas = resp.data;
-
             let {status, msg} = resp.data;
 
             if(status == 207){
-              this.name = '注册';
               this.stu = false;
             }else {
-              this.name = '登录';
               this.stu = true;
             }
-        }).catch(error => {
+          }).catch(error => {
           console.log(error);
         })
       }
     },
-    components:{
-      User,
-      Register
-    },
-
   }
 </script>
 
@@ -76,7 +66,7 @@
     position: fixed;
     height: 100%;
     width: 100%;
-    padding: 0 100px;
+    padding: 0 240px;
     &:before{
       z-index: -999;
       content: "";
@@ -86,74 +76,85 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-image: url("../../../assets/images/login/login.png");
+      background-image: url("../../../assets/images/login/login1.png");
       background-repeat: no-repeat;
       background-size: cover;
     }
     .logo{
       position: absolute;
-      top: 360px;
-      left: 156px;
-      text-align: initial;
+      top: 50px;
+      left: 50px;
       .l_product_logo{
         vertical-align: middle;
         width: 108px;
-        height: 108px;
-      }
-      .l_product_title{
-        font-family: HelveticaNeue-Bold;
-        font-size: 48px;
-        color: #FFFFFF;
-        letter-spacing: 4px;
-        vertical-align: middle;
-      }
-      .l_product_name{
-        font-family: PingFangSC-Semibold;
-        font-size: 30px;
-        color: #FFFFFF;
-        margin-top: 48px;
-      }
-      .l_product_content{
-        font-family: PingFang;
-        font-size: 20px;
-        color: #FFFFFF;
-        margin-top: 12px;
+        height: 80px;
       }
     }
-    .login-box {
+    .login-copyright{
+      text-align: center;
       position: absolute;
-      top: 210px;
-      right: 180px;
-      width: 480px;
-      min-height: 462px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 48px 4px rgba(0,0,0,0.16);
-      /*&.add-code{
-        height: 582px;
-      }*/
+      bottom: 0;
+      left: 0;
+      height: 50px;
+      line-height: 30px;
+      font-size: 16px;
+      color: #FFFFFF;
+      font-weight: normal;
+      width: 100%;
+      font-family: PingFangSC-Regular;
+    }
+    .login-box {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      .border-line{
+        height: 6px;
+        width: 100%;
+        background-color: #0070ff;
+      }
       .login-main{
-        text-align: left;
-        padding: 24px 42px;
+        justify-content: center;
+        padding: 25px 60px 18px;
+        background-color: rgba(79,135,255,0.48);
+        .l-container{
+          width: 100%;
+          height: auto;
+          margin: auto;
+          .l-container_img{
+            width: 108px;
+            height: 108px;
+            vertical-align: middle;
+          }
+        }
         .l-title{
+          margin: 20px 0 40px;
+          text-align: center;
           font-family: PingFangSC-Semibold;
-          font-size: 32px;
-          color: #0070FF;
-          letter-spacing: 2.67px;
-          line-height: 48px;
+          font-size: 28px;
+          color: #FFFFFF;
         }
       }
     }
-    .ty_copyright{
-      position: fixed;
-      width: 100%;
-      height: 60px;
-      line-height: 50px;
-      bottom: 0;
-      left: 0;
-      font-family: PingFangSC-Regular;
-      font-size: 16px;
-      color: #FFFFFF;
-    }
+  }
+
+  .login-code {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 0 0 10px;
+  }
+  .login-code-img {
+    margin-top: 2px;
+    width: 100px;
+    height: 32px;
+    background-color: #fdfdfd;
+    border: 1px solid #f0f0f0;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    line-height: 32px;
+    text-indent: 5px;
+    text-align: center;
   }
 </style>
