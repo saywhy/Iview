@@ -775,7 +775,7 @@
                   <el-checkbox label="message"
                                value="message">短信通知</el-checkbox>
                   <el-checkbox label="news"
-                             value="news">消息中心通知</el-checkbox>
+                               value="news">消息中心通知</el-checkbox>
                 </el-checkbox-group>
               </li>
             </div>
@@ -3113,11 +3113,9 @@ export default {
     handleClick (tab, event) {
       console.log(tab);
     },
-    //工单任务选择
+    // 工单任务选择
     change_task (command) {
       if (command == "1") {
-
-
         this.new_worksheets_list.name = ''
         this.new_worksheets_list.level = ''
         this.new_worksheets_list.operator = ''

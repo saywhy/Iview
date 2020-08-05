@@ -16,10 +16,10 @@ Vue.use(Router);
 
 //所有权限通用路由表，如首页和登录页和一些不用权限的公用页面
 export const constantRouterMap = [{
-  path: '/login',
-  name: 'login',
-  component: () => import('@/components/vendor/login/Login')
-},
+    path: '/login',
+    name: 'login',
+    component: () => import('@/components/vendor/login/Login')
+  },
   {
     path: '/',
     name: 'home',
@@ -49,7 +49,7 @@ export const constantRouterMap = [{
         parentAuth: ''
       },
       component: () => import('@/components/vendor/Message')
-    },]
+    }, ]
   },
   {
     path: '/detail',
@@ -59,17 +59,25 @@ export const constantRouterMap = [{
     },
     component: LayoutNot,
     children: [{
-      path: '/detail/network',
-      name: 'detail_network',
-      meta: {
-        title: '告警',
-        auth: '31',
-        icon: 'el-icon-picture-outline',
-        parentAuth: '58',
-        rootAuth: '58'
+        path: '/detail/network',
+        name: 'detail_network',
+        meta: {
+          title: '告警',
+          auth: '31',
+          icon: 'el-icon-picture-outline',
+          parentAuth: '58',
+          rootAuth: '58'
+        },
+        component: () => import('@/components/views/emerge/detail/detail-network')
       },
-      component: () => import('@/components/views/emerge/detail/detail-network')
-    },
+      {
+        path: '/detail_alert',
+        name: 'detail_alert',
+        meta: {
+          title: '告警详情'
+        },
+        component: () => import('@/components/views/emerge/detail/detail_alert')
+      },
       {
         path: '/detail/computer',
         name: 'detail_computer',
@@ -122,24 +130,23 @@ export const constantRouterMap = [{
   },
   {
     path: '/test',
-    name:'test',
+    name: 'test',
     component: () => import('@/components/vendor/screen/test')
   },
   {
     path: '/screen',
-    name:'screen',
+    name: 'screen',
     component: () => import('@/components/vendor/screen/Screen')
   },
   {
     path: '/screen/set',
-    name:'screen_set',
+    name: 'screen_set',
     redirect: '/screen/set/top',
     component: () => import('@/components/vendor/screen/screen-set/screen-set'),
-    children:[
-      {
+    children: [{
         path: '/screen/set/base',
         name: 'screen_set_base',
-        query:{
+        query: {
           num: '0'
         },
         meta: {
@@ -155,7 +162,7 @@ export const constantRouterMap = [{
       {
         path: '/screen/set_screen',
         name: 'screen_set_aside',
-        query:{
+        query: {
           num: '1'
         },
         meta: {
@@ -171,7 +178,7 @@ export const constantRouterMap = [{
       {
         path: '/screen/set_screen',
         name: 'screen_set_top',
-        query:{
+        query: {
           num: '2'
         },
         meta: {
@@ -224,18 +231,18 @@ export const asyncRouterMap = [
     },
     component: Layout,
     children: [{
-      path: '/home/overview',
-      name: 'overview',
-      meta: {
-        title: '总览',
-        auth: '2',
-        icon: 'e-aside-overview',
-        parentAuth: '1',
-        rootAuth: '1',
-        deep: 1
+        path: '/home/overview',
+        name: 'overview',
+        meta: {
+          title: '总览',
+          auth: '2',
+          icon: 'e-aside-overview',
+          parentAuth: '1',
+          rootAuth: '1',
+          deep: 1
+        },
+        component: () => import('@/components/views/home/Overview1')
       },
-      component: () => import('@/components/views/home/Overview1')
-     },
       {
         path: '/home/screen_index',
         name: 'screen_index',
@@ -248,7 +255,8 @@ export const asyncRouterMap = [
           deep: 1
         },
         redirect: '/screen'
-      }]
+      }
+    ]
   },
   /*处置*/
   {
@@ -261,20 +269,19 @@ export const asyncRouterMap = [
       role: ['admin']
     },
     component: Layout,
-    children: [
-      {
-      path: '/handle/assets',
-      name: 'assets',
-      meta: {
-        title: '资产维度',
-        auth: '14',
-        icon: 'e-aside-assets',
-        parentAuth: '13',
-        rootAuth: '13',
-        deep: 1
+    children: [{
+        path: '/handle/assets',
+        name: 'assets',
+        meta: {
+          title: '资产维度',
+          auth: '14',
+          icon: 'e-aside-assets',
+          parentAuth: '13',
+          rootAuth: '13',
+          deep: 1
+        },
+        component: () => import('@/components/views/handle/Assets')
       },
-      component: () => import('@/components/views/handle/Assets')
-    },
       {
         path: '/handle/risks',
         name: 'risks',
@@ -288,18 +295,18 @@ export const asyncRouterMap = [
         },
         component: () => import('@/components/views/handle/Risks'),
         children: [{
-          path: '/handle/risks/outside',
-          name: 'outside',
-          meta: {
-            title: '外部威胁',
-            auth: '24',
-            icon: 'e-aside-none',
-            parentAuth: '23',
-            rootAuth: '13',
-            deep: 2
+            path: '/handle/risks/outside',
+            name: 'outside',
+            meta: {
+              title: '外部威胁',
+              auth: '24',
+              icon: 'e-aside-none',
+              parentAuth: '23',
+              rootAuth: '13',
+              deep: 2
+            },
+            component: () => import('@/components/views/handle/risks/Outside')
           },
-          component: () => import('@/components/views/handle/risks/Outside')
-        },
           {
             path: '/handle/risks/lateral',
             name: 'lateral',
@@ -391,18 +398,18 @@ export const asyncRouterMap = [
     },
     component: Layout,
     children: [{
-      path: '/invest/dns',
-      name: 'dns',
-      meta: {
-        title: 'DNS追查',
-        auth: '77',
-        icon: 'e-aside-dns',
-        parentAuth: '76',
-        rootAuth: '76',
-        deep: 1
+        path: '/invest/dns',
+        name: 'dns',
+        meta: {
+          title: 'DNS追查',
+          auth: '77',
+          icon: 'e-aside-dns',
+          parentAuth: '76',
+          rootAuth: '76',
+          deep: 1
+        },
+        component: () => import('@/components/views/invest/Dns')
       },
-      component: () => import('@/components/views/invest/Dns')
-    },
       {
         path: '/invest/url',
         name: 'url',
@@ -520,18 +527,18 @@ export const asyncRouterMap = [
     },
     component: Layout,
     children: [{
-      path: '/report/create',
-      name: 'create',
-      meta: {
-        title: '报表生成',
-        auth: '124',
-        icon: 'e-aside-create',
-        parentAuth: '123',
-        rootAuth: '123',
-        deep: 1
+        path: '/report/create',
+        name: 'create',
+        meta: {
+          title: '报表生成',
+          auth: '124',
+          icon: 'e-aside-create',
+          parentAuth: '123',
+          rootAuth: '123',
+          deep: 1
+        },
+        component: () => import('@/components/views/report/Create')
       },
-      component: () => import('@/components/views/report/Create')
-    },
       {
         path: '/report/sending',
         name: 'sending',
@@ -557,8 +564,7 @@ export const asyncRouterMap = [
       auth: '132'
     },
     component: Layout,
-    children: [
-      {
+    children: [{
         path: '/system/control',
         name: 'control',
         meta: {
@@ -570,8 +576,7 @@ export const asyncRouterMap = [
           deep: 1
         },
         component: () => import('@/components/views/system/Control'),
-        children:[
-          {
+        children: [{
             path: '/system/control/move',
             name: 'move',
             meta: {
@@ -602,7 +607,7 @@ export const asyncRouterMap = [
       {
         path: '/system/setting',
         name: 'setting',
-        meta:{
+        meta: {
           title: '系统设置',
           auth: '62',
           icon: 'e-aside-control',
@@ -611,8 +616,7 @@ export const asyncRouterMap = [
           deep: 1
         },
         component: () => import('@/components/views/system/Setting'),
-        children: [
-          {
+        children: [{
             path: '/system/setting/wizard',
             name: 'wizard',
             meta: {
