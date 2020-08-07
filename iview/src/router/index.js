@@ -241,7 +241,7 @@ export const asyncRouterMap = [
           rootAuth: '1',
           deep: 1
         },
-        component: () => import('@/components/views/home/Overview1')
+        component: () => import('@/components/views/home/Overview')
       },
       {
         path: '/home/screen_index',
@@ -269,7 +269,8 @@ export const asyncRouterMap = [
       role: ['admin']
     },
     component: Layout,
-    children: [{
+    children: [
+      {
         path: '/handle/assets',
         name: 'assets',
         meta: {
@@ -294,7 +295,8 @@ export const asyncRouterMap = [
           deep: 1
         },
         component: () => import('@/components/views/handle/Risks'),
-        children: [{
+        children: [
+          {
             path: '/handle/risks/outside',
             name: 'outside',
             meta: {
@@ -306,6 +308,19 @@ export const asyncRouterMap = [
               deep: 2
             },
             component: () => import('@/components/views/handle/risks/Outside')
+          },
+          {
+            path: '/handle/risks/locality',
+            name: 'locality',
+            meta: {
+              title: '本机威胁',
+              auth: '44',
+              icon: 'e-aside-none',
+              parentAuth: '23',
+              rootAuth: '13',
+              deep: 2
+            },
+            component: () => import('@/components/views/handle/risks/Locality')
           },
           {
             path: '/handle/risks/lateral',
@@ -332,19 +347,6 @@ export const asyncRouterMap = [
               deep: 2
             },
             component: () => import('@/components/views/handle/risks/Outreath')
-          },
-          {
-            path: '/handle/risks/locality',
-            name: 'locality',
-            meta: {
-              title: '本机威胁',
-              auth: '44',
-              icon: 'e-aside-none',
-              parentAuth: '23',
-              rootAuth: '13',
-              deep: 2
-            },
-            component: () => import('@/components/views/handle/risks/Locality')
           }
         ]
       },

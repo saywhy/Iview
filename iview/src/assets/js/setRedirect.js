@@ -1,6 +1,8 @@
 
 export function setRedirect(per) {
 
+  console.log(per)
+
   let redirect = '/404';
   //首页
   if (per.includes('1')) {
@@ -27,6 +29,8 @@ export function setRedirect(per) {
         redirect = '/handle/risks/lateral';
       }else if(per.includes('40')){
         redirect = '/handle/risks/outreath';
+      }else if(per.includes('44')){
+        redirect = '/handle/risks/locality';
       }
     }else if(per.includes('48')){
       redirect = '/handle/works';

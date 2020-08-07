@@ -17,7 +17,7 @@
                        align="center"
                        label="IP"
                        show-overflow-tooltip></el-table-column>
-      <el-table-column min-width="120"
+      <el-table-column min-width="140"
                        align="center"
                        label="IP标签"
                        show-overflow-tooltip>
@@ -140,6 +140,7 @@
 <style lang="less" scoped>
   .vm-main-top5{
     margin-top: 60px;
+    padding: 0 20px!important;
     .btn_tag_box {
       .btn_tag {
         margin: 2px;
@@ -160,7 +161,7 @@
         .el-table__header {
           thead.has-gutter {
             th {
-              font-size: 12px;
+              font-size: 16px;
               color: #333;
               padding: 0;
               height: 36px;
@@ -178,13 +179,16 @@
         tbody {
           td {
             font-family: PingFangMedium;
-            font-size: 12px;
+            font-size: 16px;
             color: #666;
             padding: 0;
             height: 36px;
             line-height: 36px;
             border-bottom: 1px solid #ececec;
             .cell {
+              .btn_alert_background{
+                width: 56px;
+              }
               .fall_certainty {
                 width: 72px;
                 display: inline-block;

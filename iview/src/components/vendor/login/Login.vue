@@ -41,6 +41,8 @@
         this.$axios.post('/yiiapi/site/login')
           .then(resp => {
 
+            //console.log(resp)
+
             let {status, msg} = resp.data;
 
             if(status == 207){

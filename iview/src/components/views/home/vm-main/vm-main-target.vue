@@ -23,8 +23,9 @@
 </script>
 <style scoped lang="less">
   .vm-main-target{
-    height: 100%;
-    padding: 60px 0 10px;
+    height: 242px;
+    margin-top: 60px;
+    padding: 0 20px!important;
     text-align: left;
     .vm-tag{
       background-color: #0288D1;

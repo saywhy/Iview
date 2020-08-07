@@ -77,6 +77,8 @@ export default {
 
           let datas = resp.data;
 
+         // console.log(datas)
+
           let {
             status,
             msg,
@@ -117,10 +119,10 @@ export default {
       try {
         //真实数据
         let resp = await axios('/yiiapi/site/menu');
-        let roles = forRoleList(resp);
-        // console.log(roles);
-        roles.push('995');
 
+        let roles = forRoleList(resp);
+
+        roles = [...roles,['995','2']]
         //临时测试数据
         roles = [...roles,...['61','62','611','612','621','622','623','624','625',
           '626','627','628','629','6210','6211','6212','6213','44']];
@@ -132,6 +134,9 @@ export default {
           commit('SET_SANDBOX', true);
         }
         commit('SET_ROLES', roles);
+
+
+        console.log(roles)
 
         return roles;
 
