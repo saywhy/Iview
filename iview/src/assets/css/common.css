@@ -231,9 +231,9 @@ textarea {
   text-align: center;
 }
 
-.el-table th.is-leaf {
+/*.el-table th.is-leaf {
   border-width: 0!important;
-}
+}*/
 
 .el-table--border th {
   border-right: 1px solid #EBEEF5;
