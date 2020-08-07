@@ -101,7 +101,7 @@
           <div class="content_item">
             <span class="item_title">关联资产名：</span>
             <div class="item_right text_color">
-              <span>关联资产001,</span>
+              <span @click="open_assets_info">关联资产000,</span>
               <span>关联资产001,</span>
               <span>关联资产001,</span>
               <span>关联资产001,</span>
@@ -112,7 +112,7 @@
           <div class="content_item">
             <span class="item_title">用户：</span>
             <div class="item_right text_color">
-              <span>Test001</span>
+              <span @click="open_user_info">Test001</span>
               <span>Test001</span>
             </div>
           </div>
@@ -222,6 +222,100 @@
     </div>
     <!-- 攻击频率视图 -->
     <!-- 检测时间轴 -->
+    <detail-timeaxis></detail-timeaxis>
+    <!-- 用户信息弹窗 -->
+    <el-dialog class="pop_user_info pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="pop_user_info">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_user_info"
+           class="closed_img"
+           alt="">
+      <div class="title">
+        <div class="mask"></div>
+        <span class="title_name">用户信息</span>
+      </div>
+      <div class="user_content">
+        <el-table class="reset_table"
+                  ref="multipleTable"
+                  align="center"
+                  border
+                  :data="user_info"
+                  tooltip-effect="dark"
+                  style="width: 100%">
+          <el-table-column prop="name"
+                           label="用户"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="account"
+                           label="账号"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="department"
+                           label="部门"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
+    <!-- 资产信息弹窗 -->
+    <el-dialog class="pop_assets_info pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="pop_assets_info">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_assets_info"
+           class="closed_img"
+           alt="">
+      <div class="title">
+        <div class="mask"></div>
+        <span class="title_name">资产信息</span>
+      </div>
+      <div class="user_content">
+        <el-table class="reset_table"
+                  ref="multipleTable"
+                  align="center"
+                  border
+                  :data="assets_info"
+                  tooltip-effect="dark"
+                  style="width: 100%">
+          <el-table-column prop="ip_name"
+                           label="IP段名称"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="ip_addr"
+                           label="IP地址段"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="type"
+                           label="网段类型"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="tag"
+                           label="标签"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="responsible"
+                           label="责任人"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="time"
+                           label="更新时间"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -229,6 +323,8 @@
 import backTitle from "@/components/common/back-title";
 import detailStage from "@/components/views/emerge/detail/detail_stage";
 import detailRate from "@/components/views/emerge/detail/detail_rate";
+import detailTimeaxis from "@/components/views/emerge/detail/detail_timeaxis";
+
 export default {
   name: 'detail_network',
   data () {
@@ -267,14 +363,31 @@ export default {
         }]
       }],
       selectedOptions: '',
-
       more: false,
+      pop_user_info: false,
+      pop_assets_info: false,
+      user_info: [{
+        name: "11231223",
+        account: "123123123@126.com",
+        department: '312312312312'
+      }],
+      assets_info: [{
+        ip_name: "内网服务器",
+        ip_addr: "182.169.231.1",
+        type: "动态",
+        tag: "xx业务，网络设备",
+        tag: "xx业务，网络设备",
+        responsible: 'admin',
+        time: "2019.11.03 19:00:00",
+      }],
+
     }
   },
   components: {
     backTitle,
     detailStage,
-    detailRate
+    detailRate,
+    detailTimeaxis
   },
   methods: {
     // -----------------顶部数据--------------------
@@ -476,7 +589,21 @@ export default {
     show_more_active () {
       console.log('1111');
       this.more = !this.more
-    }
+    },
+    // 用户信息
+    open_user_info () {
+      this.pop_user_info = true;
+    },
+    closed_user_info () {
+      this.pop_user_info = false;
+    },
+    // 资产信息
+    open_assets_info () {
+      this.pop_assets_info = true;
+    },
+    closed_assets_info () {
+      this.pop_assets_info = false;
+    },
   },
   computed: {}
 }
@@ -554,6 +681,7 @@ export default {
         .text_color {
           font-size: 16px;
           color: #0070ff;
+          cursor: pointer;
         }
         .show_more_list {
           height: auto !important;
@@ -591,6 +719,66 @@ export default {
       .content_right {
         flex: 25%;
         // border: 1px solid red;
+      }
+    }
+  }
+  // 用户信息弹窗
+  /deep/ .pop_user_info {
+    .el-dialog {
+      width: 500px;
+      .el-dialog__body {
+        width: 500px;
+        .content {
+          padding-top: 24px;
+          // 修改radio 改成对号
+          height: 400px;
+          overflow-y: auto;
+          &::-webkit-scrollbar {
+            /*滚动条整体样式*/
+            width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+            border-radius: 6px;
+          }
+          &::-webkit-scrollbar-thumb {
+            /*滚动条里面小方块*/
+            border-radius: 6px;
+            background: #a8a8a8;
+          }
+          &::-webkit-scrollbar-track {
+            /*滚动条里面轨道*/
+            border-radius: 6px;
+            background: #f4f4f4;
+          }
+        }
+      }
+    }
+  }
+  // 资产信息弹窗
+  /deep/ .pop_assets_info {
+    .el-dialog {
+      width: 750px;
+      .el-dialog__body {
+        width: 750px;
+        .content {
+          padding-top: 24px;
+          // 修改radio 改成对号
+          height: 400px;
+          overflow-y: auto;
+          &::-webkit-scrollbar {
+            /*滚动条整体样式*/
+            width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+            border-radius: 6px;
+          }
+          &::-webkit-scrollbar-thumb {
+            /*滚动条里面小方块*/
+            border-radius: 6px;
+            background: #a8a8a8;
+          }
+          &::-webkit-scrollbar-track {
+            /*滚动条里面轨道*/
+            border-radius: 6px;
+            background: #f4f4f4;
+          }
+        }
       }
     }
   }
