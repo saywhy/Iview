@@ -5,8 +5,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-/*  import logo0 from 'static/image/f0.png';
-  import logo1 from 'static/image/f1.png';*/
   export default {
     name: "Ddos",
     data() {
@@ -14,17 +12,13 @@
         timers: null,
         myEcharts:null,
         loading:true,
-
         mapData:[{dest_ip:'202.106.40.115',dest_label:"[]",dest_location:[116.29845, 39.95933],
           dest_type:'remote',id:173,src_ip:'192.168.1.195',src_label:"['11234分支']",
-          src_location:[116.29845, 39.95933],src_type:'local'},
-          {dest_ip:'202.106.46.151',dest_label:"[]",dest_location:[39.907501220703,116.39723205566],
-            dest_type:'remote',id:66201,src_ip:'192.168.1.185',src_label:"['11234分支','小美女分支']",
-            src_location:null,src_type:'local'}]
+          src_location:[116.29845, 39.95933],src_type:'local'}]
       }
     },
     created(){
-      console.log('555')
+     // console.log('555')
       this.myEcharts = null;
       this.getData();
     },
@@ -35,14 +29,12 @@
     },
     destroyed(){
       clearInterval(this.timers);
+      this.$echarts.dispose(document.getElementById("screenMap"));
     },
     methods: {
       //获取数据
       getData(){
         this.loading = false;
-        /*this.$nextTick(() => {
-          this.drawGraph();
-        });*/
         this.$axios
           .get('/yiiapi/demonstration/external-distribution')
 
@@ -51,17 +43,14 @@
 
             let {status, data} = resp.data;
 
-            //clearInterval(this.timer);
-
             if(status == 0){
 
               this.mapData = data;
-
               setTimeout(() => {
                 this.$nextTick(() => {
                   this.drawGraph();
                 });
-              },1000);
+              },500);
 
             }
           })
@@ -80,6 +69,7 @@
         var symbolSize1 = [12,12],symbolSize2 = [12,12];
 
         let mapData = this.mapData;
+
 
         mapData.forEach(item => {
 
@@ -109,18 +99,32 @@
               //线上面的动态特效
               effect: {
                 show: true,
-                period: 3, //特效动画的时间，单位为 s。
-                //trailLength: .9,
+                period: 5, //特效动画的时间，单位为 s。
+                trailLength: .21,
                 color: "#00D7E9", //射线颜色
                 symbol:'triangle',
-                symbolSize: 2
+                symbolSize: 4
               },
               symbol: symbol,
               symbolSize: symbolSize,
-              lineStyle: {
+            /* lineStyle: {
                 normal: {
                   width: "",
                   curveness: 0.3
+                }
+              },*/
+              lineStyle: {
+                normal: {
+                  color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: '#58B3CC'
+                  }, {
+                    offset: 1,
+                    color: "#00D7E9",
+                  }], false),
+                  width: 1,
+                  opacity: 0.03,
+                  curveness: 0.1
                 }
               },
               label:{
@@ -134,6 +138,7 @@
             });
           }
         });
+
 
         series.push({
           type: "effectScatter",

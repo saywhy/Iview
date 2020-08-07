@@ -2,7 +2,7 @@
   <div class="home-screen" :class="{'active':!close}" v-cloak>
     <div class="home-top">
       <div class="home_l">
-        <!--<label class="e_label"></label>-->
+        <label class="e_label"></label>
       </div>
       <div class="home_c">{{baseInfo.ScreenName}}</div>
       <div class="home_r">
@@ -401,11 +401,11 @@
             }
             .t2{
               position: absolute;
-              left: 420px;
+              left: 350px;
             }
             .t3{
               position: absolute;
-              right: 80px;
+              right: 110px;
             }
           }
         }

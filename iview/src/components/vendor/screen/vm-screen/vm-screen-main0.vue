@@ -20,11 +20,7 @@
           return {
             timers:null,
             degree:[],
-            category:[],
-            degreeIndex:0,
-            categoryIndex:0,
-            timer:null,
-            timer1:null
+            category:[]
           }
       },
       created() {
@@ -33,6 +29,7 @@
       mounted() {
         this.timers = setInterval(()=>{
           this.getData();
+       // },10000);
         },10000 * 30);
       },
       destroyed(){
@@ -41,20 +38,15 @@
       methods:{
         //获取数据
         getData(){
+         // clearInterval(this.timers);
           this.$axios
             .get('/yiiapi/demonstration/threat-distribution')
-
             .then((resp) => {
 
               //console.log(resp)
 
               this.degree = [];
               this.category = [];
-              this.degreeIndex = 0;
-              this.categoryIndex = 0;
-
-              clearInterval(this.timer);
-              clearInterval(this.timer1);
 
               let {status, data} = resp.data;
 
@@ -67,6 +59,7 @@
                 this.$nextTick(function() {
                   this.drawRank();
                 });
+
                 this.$nextTick(function() {
                   this.drawScat();
                 });
@@ -74,12 +67,10 @@
               }
           })
             .catch((error) => {
-
             console.log(error);
-
           });
         },
-        drawRank(){
+        drawRank() {
           let degrees = this.degree;
           //degrees = [{degree: "medium", count: "2"}]
           let colorAttr = [];
@@ -106,6 +97,7 @@
             return false;
           }
           // 基于准备好的dom，初始化echarts实例
+          this.$echarts.dispose(document.getElementById("threat-rank"));
           let myEcharts = this.$echarts.init(document.getElementById("threat-rank"));
           myEcharts.showLoading({ text: '正在加载数据...' });
 
@@ -174,71 +166,17 @@
           myEcharts.setOption(option);
           myEcharts.hideLoading();
 
-          if(degrees.length > 1){
-            tools.loopShowTooltip(myEcharts, option, {loopSeries: true});
-          }else {
-            myEcharts.dispatchAction({
-              type: "highlight",
-              seriesIndex: 0,
-              dataIndex: 0
-            });
-          }
-
-
-          //tools.autoHover(myEcharts, option, 17, 3000); // 使用本插件
-
-          /*myEcharts.dispatchAction({
-            type: "highlight",
-            seriesIndex: 0,
-            dataIndex: 0
-          });*/
-
-          //自动轮播
-/*          let index = this.degreeIndex;
-          this.timer = setInterval(function () {
-            var dataLen = option.series[0].data.length;
-            // 取消之前高亮的图形
-            myEcharts.dispatchAction({
-              type: 'downplay',
-              seriesIndex: 0,
-              dataIndex: index
-            });
-            index = (index + 1) % dataLen;
-            // 高亮当前图形
-            myEcharts.dispatchAction({
-              type: 'highlight',
-              seriesIndex: 0,
-              dataIndex: index
-            });
-          }, 3000);*/
-
-          //设置默认选中高亮部分
-         /* myEcharts.on("mouseover", function(e) {
-            console.log('mouseover')
-            clearInterval(this.timer);
-            /!*if (e.dataIndex != index) {
-              myEcharts.dispatchAction({
-                type: "downplay",
-                seriesIndex: 0,
-                dataIndex: index
-              });
-            }*!/
-          });*/
-          /*myEcharts.on("mouseout", function(e) {
-            index = e.dataIndex;
-            myEcharts.dispatchAction({
-              type: "highlight",
-              seriesIndex: 0,
-              dataIndex: e.dataIndex
-            });
-          });*/
+          tools.loopShowTooltip(myEcharts, option, {loopSeries: true});
 
           window.addEventListener("resize", () => {
             myEcharts.resize();
           });
         },
+
         drawScat() {
+
           let categories = this.category;
+
           if(categories){
             categories.filter(item => {
               let name = ''; let value = 0;
@@ -246,18 +184,23 @@
               value = item.count;
               Object.assign(item,{value,name});
             });
-          }else {
+          } else {
             return false;
           }
 
           // 基于准备好的dom，初始化echarts实例
-          let myEcharts = this.$echarts.init(document.getElementById("threat-scat"));
 
-          myEcharts.showLoading({ text: '正在加载数据...' });
+          this.$echarts.dispose(document.getElementById("threat-scat"));
 
-          myEcharts.clear();
+          let myEcharts1 = this.$echarts.init(document.getElementById("threat-scat"));
+
+
+          myEcharts1.showLoading({ text: '正在加载数据...' });
+
+          myEcharts1.clear();
+
           // 绘制图表
-          let option1 = {
+          var option1 = {
             grid: {
               top: "20%",
               left: "5%",
@@ -272,8 +215,8 @@
                 type: "pie",
                 center: ['50%', '42%'],
                 radius: ["45%", "70%"],
-                avoidLabelOverlap: false,
-                legendHoverLink: false,
+                avoidLabelOverlap: true,
+                /*legendHoverLink: false,*/
                 hoverOffset: 3,
                 selectedOffset: 0,
                 label: {
@@ -306,21 +249,27 @@
                 data: categories
               }
             ]
-          }
-          myEcharts.setOption(option1);
+          };
 
-          myEcharts.hideLoading();
+          myEcharts1.setOption(option1,true);
 
-          if(categories.length > 1){
-            tools.loopShowTooltip(myEcharts, option1, {loopSeries: true});
+          myEcharts1.hideLoading();
+
+          tools.loopShowTooltip(myEcharts1, option1, {loopSeries: true});
+
+          /*if(categories.length > 1){
+
           }else {
-            myEcharts.dispatchAction({
+            myEcharts1.dispatchAction({
               type: "highlight",
               seriesIndex: 0,
               dataIndex: 0
             });
-          }
+          }*/
 
+          window.addEventListener("resize", () => {
+            myEcharts1.resize();
+          });
 
 
          /* myEcharts.dispatchAction({
@@ -373,9 +322,7 @@
             });
           }, 3000);*/
 
-          window.addEventListener("resize", () => {
-            myEcharts.resize();
-          });
+
         },
       }
     }

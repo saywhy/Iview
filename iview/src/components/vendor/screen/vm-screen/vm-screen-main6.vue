@@ -23,8 +23,6 @@
           <el-table-column prop="data0" align="center" :label="dataInfo[0].name | alarm" show-overflow-tooltip></el-table-column>
           <el-table-column prop="data1" align="center" :label="dataInfo[1].name | alarm" show-overflow-tooltip></el-table-column>
           <el-table-column prop="data2" align="center" :label="dataInfo[2].name | alarm" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="data2" align="center" :label="dataInfo[2].name | alarm" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="data2" align="center" :label="dataInfo[2].name | alarm" show-overflow-tooltip></el-table-column>
         </el-table>
       </div>
     </div>
@@ -73,6 +71,7 @@
                 Object.keys(data).forEach((key) => {
                   this.dataInfo.push({name:key,value:data[key]});
                 });
+
                 //console.log(this.dataInfo);
                 this.$nextTick(function() {
                   this.drawGraph();
