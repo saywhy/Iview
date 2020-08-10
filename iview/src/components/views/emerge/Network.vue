@@ -1550,7 +1550,8 @@ export default {
 
   /* 弹窗 */
   /* 状态变更 */
-  /deep/ .pop_state_box {
+  /deep/
+  .pop_state_box {
     .el-dialog {
       .el-dialog__header {
         display: none;

@@ -126,6 +126,18 @@ export const constantRouterMap = [{
         },
         component: () => import('@/components/views/handle/detail/detail-works')
       },
+      {
+        path: '/detail/safe',
+        name: 'detail_safe',
+        meta: {
+          title: '安全设备详情',
+          auth: '23',
+          icon: 'el-icon-picture-outline',
+          parentAuth: '612',
+          rootAuth: '132'
+        },
+        component: () => import('@/components/views/system/control/detail/detail-safe')
+      },
     ]
   },
   {

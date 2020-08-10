@@ -1,6 +1,9 @@
 <template>
-  <div id="system_control_safe" class="container">
+  <div id="system_control_safe" class="container" v-cloak>
     <div class="content_box">
+      <div class="monitor_name">
+        <h3 class="name">安全设备列表</h3>
+      </div>
       <div class="monitor_title">
         <el-button type="primary"
                    class="btn_i"
@@ -17,8 +20,11 @@
                   :data="monitor_data.data"
                   tooltip-effect="dark"
                   style="width: 100%"
-                  @selection-change="handleSelectionChange"
-                  @row-click="alert_detail">
+                  @row-click="detail_click"
+                  @header-click="header_click"
+                  @mousedown.native="mousedown"
+                  @mouseup.native="mouseup"
+                  @selection-change="handleSelectionChange">
           <el-table-column type="selection"
                            align="center"
                            width="50">
@@ -87,25 +93,80 @@
              alt="">
         <div class="title">
           <div class="mask"></div>
-          <span class="title_name">新增IP段</span>
+          <span class="title_name">添加设备</span>
         </div>
         <div class="content">
           <div class="content_item_box">
             <div class="content_item">
               <p>
-                <span class="title">IP段名称</span>
-                <span class="title_color">*</span>
+                <span class="title">工单名称</span>
+                <!--<span class="title_color">*</span>-->
               </p>
               <el-input class="select_box"
-                        placeholder="请输入IP段名称"
+                        placeholder="请输入工单名称"
                         v-model="monitor_add.name"
                         clearable>
               </el-input>
             </div>
             <div class="content_item">
               <p>
-                <span class="title">网段类型</span>
-                <span class="title_color">*</span>
+                <span class="title">IP地址</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入IP地址"
+                        v-model="monitor_add.address"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">端口</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入端口"
+                        v-model="monitor_add.port"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">CPU</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入CPU"
+                        v-model="monitor_add.cpu"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">Disk</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入Disk"
+                        v-model="monitor_add.disk"
+                        clearable>
+              </el-input>
+            </div>
+          </div>
+          <div class="content_item_space">
+          </div>
+          <div class="content_item_box">
+
+            <div class="content_item">
+              <p>
+                <span class="title">主机类型</span>
+                <!--<span class="title_color">*</span>-->
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入主机类型"
+                        v-model="monitor_add.type"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">snmp服务器</span>
               </p>
               <el-select class="select_box"
                          v-model="monitor_add.type"
@@ -119,82 +180,21 @@
             </div>
             <div class="content_item">
               <p>
-                <span class="title">标签</span>
-              </p>
-              <div class="item_addrs"
-                   v-for="(item,index) in monitor_add.tag_list">
-                <el-input class="select_box"
-                          placeholder="请输入标签"
-                          v-model="item.name"
-                          clearable>
-                </el-input>
-                <img src="@/assets/images/common/add.png"
-                     alt=""
-                     class="img_box"
-                     v-if="item.icon"
-                     @click="add_tag">
-                <img src="@/assets/images/common/del.png"
-                     alt=""
-                     class="img_box"
-                     @click="del_tag(item,index)"
-                     v-if="!item.icon">
-              </div>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">注: 标签属性有7个预留字段“**业务” “总部” “**分支” “**部门” “终端” “服务器” “网络设备”。</span>
-              </p>
-            </div>
-          </div>
-          <div class="content_item_space">
-          </div>
-          <div class="content_item_box">
-            <div class="content_item">
-              <p>
-                <span class="title">IP地址段</span>
-                <span class="title_color">*</span>
-              </p>
-              <div class="item_addrs"
-                   v-for="(item,index) in monitor_add.ip_segment_list">
-                <el-input class="select_box"
-                          placeholder="请输入IP网段（CIDR格式 )或者IP地址"
-                          v-model="item.name"
-                          clearable>
-                </el-input>
-                <img src="@/assets/images/common/add.png"
-                     alt=""
-                     class="img_box"
-                     v-if="item.icon"
-                     @click="add_ip">
-                <img src="@/assets/images/common/del.png"
-                     alt=""
-                     class="img_box"
-                     @click="del_ip(item,index)"
-                     v-if="!item.icon">
-              </div>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">地理位置</span>
-              </p>
-              <div class="select_box">
-                <el-cascader placeholder="请选择地理位置"
-                             ref="cascader_add"
-                             v-if="cascader_add_if"
-                             v-model="monitor_add.selected_cascader_add"
-                             @change="change_cascader_add"
-                             :options="area_array"
-                             filterable
-                             clearable></el-cascader>
-              </div>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">责任人</span>
+                <span class="title">字符串</span>
               </p>
               <el-input class="select_box"
-                        placeholder="请输入责任人"
-                        v-model="monitor_add.person"
+                        placeholder="请输入字符串"
+                        v-model="monitor_add.charStr"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">Memory</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入Memory"
+                        v-model="monitor_add.memory"
                         clearable>
               </el-input>
             </div>
@@ -219,31 +219,85 @@
              alt="">
         <div class="title">
           <div class="mask"></div>
-          <span class="title_name">编辑IP段</span>
+          <span class="title_name">编辑设备</span>
         </div>
         <div class="content">
           <div class="content_item_box">
             <div class="content_item">
               <p>
-                <span class="title">IP段名称</span>
-                <span class="title_color">*</span>
+                <span class="title">工单名称</span>
+                <!--<span class="title_color">*</span>-->
               </p>
               <el-input class="select_box"
-                        placeholder="请输入IP段名称"
-                        v-model="monitor_edit.name"
+                        placeholder="请输入工单名称"
+                        v-model="monitor_add.name"
                         clearable>
               </el-input>
             </div>
+            <div class="content_item">
+              <p>
+                <span class="title">IP地址</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入IP地址"
+                        v-model="monitor_add.address"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">端口</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入端口"
+                        v-model="monitor_add.port"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">CPU</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入CPU"
+                        v-model="monitor_add.cpu"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">Disk</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入Disk"
+                        v-model="monitor_add.disk"
+                        clearable>
+              </el-input>
+            </div>
+          </div>
+          <div class="content_item_space">
+          </div>
+          <div class="content_item_box">
 
             <div class="content_item">
               <p>
-                <span class="title">网段类型</span>
-                <span class="title_color">*</span>
+                <span class="title">主机类型</span>
+                <!--<span class="title_color">*</span>-->
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入主机类型"
+                        v-model="monitor_add.type"
+                        clearable>
+              </el-input>
+            </div>
+            <div class="content_item">
+              <p>
+                <span class="title">snmp服务器</span>
               </p>
               <el-select class="select_box"
-                         v-model="monitor_edit.network_type"
+                         v-model="monitor_add.type"
                          placeholder="请选择网段类型">
-                <el-option v-for="item in monitor_edit.type_list"
+                <el-option v-for="item in monitor_add.type_list"
                            :key="item"
                            :label="item"
                            :value="item">
@@ -252,83 +306,25 @@
             </div>
             <div class="content_item">
               <p>
-                <span class="title">标签</span>
-              </p>
-              <div class="item_addrs"
-                   v-for="(item,index) in monitor_edit.label_list">
-                <el-input class="select_box"
-                          placeholder="请输入标签"
-                          v-model="item.name"
-                          clearable>
-                </el-input>
-                <img src="@/assets/images/common/add.png"
-                     alt=""
-                     class="img_box"
-                     v-if="item.icon"
-                     @click="add_tag_edit">
-                <img src="@/assets/images/common/del.png"
-                     alt=""
-                     class="img_box"
-                     @click="del_tag_edit(item,index)"
-                     v-if="!item.icon">
-              </div>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">注: 标签属性有7个预留字段“**业务” “总部” “**分支” “**部门” “终端” “服务器” “网络设备”。</span>
-              </p>
-            </div>
-          </div>
-          <div class="content_item_space">
-          </div>
-          <div class="content_item_box">
-            <div class="content_item">
-              <p>
-                <span class="title">IP地址段</span>
-                <span class="title_color">*</span>
-              </p>
-              <div class="item_addrs"
-                   v-for="(item,index) in monitor_edit.ip_segment_list">
-                <el-input class="select_box"
-                          placeholder="请输入IP网段（CIDR格式 )或者IP地址"
-                          v-model="item.name"
-                          clearable>
-                </el-input>
-                <img src="@/assets/images/common/add.png"
-                     alt=""
-                     class="img_box"
-                     v-if="item.icon"
-                     @click="add_ip_edit">
-                <img src="@/assets/images/common/del.png"
-                     alt=""
-                     class="img_box"
-                     @click="del_ip_edit(item,index)"
-                     v-if="!item.icon">
-              </div>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">地理位置</span>
-              </p>
-              <div class="select_box">
-                <el-cascader placeholder="请选择地理位置"
-                             v-model="monitor_edit.selected_cascader_edit"
-                             v-if="cascader_edit_if"
-                             :options="area_array"
-                             filterable
-                             clearable></el-cascader>
-              </div>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">责任人</span>
+                <span class="title">字符串</span>
               </p>
               <el-input class="select_box"
-                        placeholder="请输入责任人"
-                        v-model="monitor_edit.person"
+                        placeholder="请输入字符串"
+                        v-model="monitor_add.charStr"
                         clearable>
               </el-input>
             </div>
+            <div class="content_item">
+              <p>
+                <span class="title">Memory</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入Memory"
+                        v-model="monitor_add.memory"
+                        clearable>
+              </el-input>
+            </div>
+
           </div>
         </div>
         <div class="btn_box">
@@ -336,6 +332,33 @@
                      class="cancel_btn">取消</el-button>
           <el-button class="ok_btn"
                      @click="edit_data">确定</el-button>
+        </div>
+      </el-dialog>
+      <!-- 删除 -->
+      <el-dialog class="pop_state_box"
+                 :close-on-click-modal="false"
+                 :modal-append-to-body="false"
+                 :visible.sync="monitor_state.remove">
+        <img src="@/assets/images/emerge/closed.png"
+             @click="closed_remove_box"
+             class="closed_img"
+             alt="">
+        <div class="title">
+          <div class="mask"></div>
+          <span class="title_name">删除</span>
+        </div>
+        <div class="content">
+          <p class="content_p">
+            <span>是否将已勾选的</span>
+            <span>{{select_list.length | capiUpper}}</span>
+            <span>项删除？</span>
+          </p>
+        </div>
+        <div class="btn_box">
+          <el-button  @click="closed_remove_box"
+                     class="cancel_btn">取消</el-button>
+          <el-button  @click="submit_remove_box"
+                     class="ok_btn">确定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -349,6 +372,16 @@
     name: "system_control_monitor",
     data () {
       return {
+        detail_click_val: {},
+        detail_click_column: {},
+        oldPositon: {
+          x: '',
+          y: ''
+        },
+        newPositon: {
+          x: '',
+          y: ''
+        },
         area_array: [],
         monitor_data: {},
         cascader_add_if: false,
@@ -360,6 +393,7 @@
         monitor_state: {
           add: false,
           edit: false,
+          remove:false,
           import: false,
           import_loading: false
         },
@@ -679,7 +713,6 @@
       del_ip_edit (item, index) {
         this.monitor_edit.ip_segment_list.splice(index, 1);
       },
-      alert_detail () { },
       //日志下载
       download_box(row){
 
@@ -870,16 +903,19 @@
       },
       // 删除
       del_monitor () {
+
         if (this.select_list.length == 0) {
           this.$message(
             {
-              message: '请选择需要删除的IP/IP段！',
+              message: '请选择需要删除的数据！',
               type: 'warning',
             }
           );
           return false
         }
-        this.$confirm('此操作删除信息, 是否继续?', '提示', {
+
+        this.monitor_state.remove = true;
+       /* this.$confirm('此操作删除信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -920,8 +956,9 @@
             type: 'info',
             message: '已取消删除'
           });
-        });
+        });*/
       },
+
       import_box () {
         this.monitor_state.import = true;
         this.$refs.uploadExcel.clearFiles();
@@ -929,7 +966,41 @@
       closed_add_box () {
         this.monitor_state.add = false;
         this.cascader_add_if = false;
-
+      },
+      //删除确定
+      submit_remove_box(){
+        this.$axios.delete('/yiiapi/ipsegment/del', {
+          data: {
+            id: 0
+          }
+        })
+          .then(response => {
+            console.log(response);
+            if (response.data.status == 0) {
+              this.get_data();
+              this.$message(
+                {
+                  message: '删除成功！',
+                  type: 'success',
+                }
+              );
+            } else {
+              this.$message(
+                {
+                  message: '删除失败！',
+                  type: 'error',
+                }
+              );
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      },
+      //删除取消
+      closed_remove_box () {
+        this.monitor_state.remove = false;
+        this.$refs.multipleTable.clearSelection();
       },
       closed_edit_box () {
         this.monitor_state.edit = false;
@@ -1040,11 +1111,94 @@
             console.log(error);
           })
       },
+
+      /************************************/
+      //进入详情页面
+      detail_click (val, column, cell) {
+        this.detail_click_val = val
+        this.detail_click_column = column
+      },
+      header_click (val) {
+        this.detail_click_val = {}
+      },
+      mousedown (event) {
+        this.oldPositon = {
+          x: '',
+          y: ''
+        }
+        this.newPositon = {
+          x: '',
+          y: ''
+        }
+        this.oldPositon.x = event.clientX;
+        this.oldPositon.y = event.clientY;
+      },
+      mouseup (event) {
+        this.newPositon.x = event.clientX;
+        this.newPositon.y = event.clientY;
+        if (this.oldPositon.x == this.newPositon.x) {
+          setTimeout(() => {
+            if (this.detail_click_val.id) {
+              console.log('点击详情');
+              if (Object.keys(this.detail_click_column).length != 0 && this.detail_click_column.type != 'selection') {
+                this.$router.push({
+                  path: '/detail/safe', name: 'detail_safe',
+                  query: { id: '0'}
+                });
+              }
+            } else {
+              console.log('点击头部');
+            }
+          }, 10);
+        } else {
+          console.log('复制');
+        }
+      },
     },
     filters: {
       formatDate: function (value) {
         return moment(value).format('YYYY-MM-DD HH:mm:ss')
+      },
+      capiUpper: function (value) {
+        let num = '';
+        switch (value) {
+          case 1:
+            num =  '一';
+            break;
+          case 2:
+            num =  '二';
+            break;
+          case 3:
+            num =  '三';
+            break;
+          case 4:
+            num =  '四';
+            break;
+          case 5:
+            num =  '五';
+            break;
+          case 6:
+            num =  '六';
+            break;
+          case 7:
+            num =  '七';
+            break;
+          case 8:
+            num =  '八';
+            break;
+          case 9:
+            num =  '九';
+            break;
+          case 10:
+            num = '十';
+            break;
+          default:
+            num = ''
+            break;
+        }
+        return num;
       }
+
     },
   };
 </script>
@@ -1060,7 +1214,7 @@
           .content {
             padding: 24px 10px;
             display: flex;
-            height: 400px;
+            height: 500px;
             overflow-y: auto;
             &::-webkit-scrollbar {
               /*滚动条整体样式*/
@@ -1120,35 +1274,21 @@
         }
       }
     }
-    .import_box {
-      .el-dialog {
-        width: 440px;
-        .el-upload-dragger {
-          border: 0;
-          height: 140px;
-          .upload_img {
-            margin-top: 20px;
-            width: 88px;
-          }
-        }
-        .tip_box {
-          font-size: 14px;
-          color: #999999;
-          margin: 24px 0;
-          .download {
-            color: #0070ff;
-            text-decoration: underline;
-            cursor: pointer;
-          }
-        }
-      }
-    }
   }
 </style>
 <style scoped lang='less'>
   @import '../../../../assets/css/less/system/setting/common_box.less';
   #system_control_safe {
     .content_box {
+      .monitor_name{
+        margin-bottom: 24px;
+        .name{
+          font-family: PingFangSC-Medium;
+          font-size: 18px;
+          color: #333333;
+          font-weight: 500;
+        }
+      }
       .monitor_title {
         margin-bottom: 24px;
         .btn_i {
@@ -1189,6 +1329,81 @@
           width: 72px;
           height: 30px;
           font-size: 14px;
+        }
+      }
+    }
+    /deep/
+    .pop_state_box {
+      .el-dialog {
+        height: 260px;
+        width: 480px;
+        .el-dialog__header {
+          display: none;
+        }
+        .el-dialog__body {
+          padding: 30px;
+          .closed_img {
+            position: absolute;
+            top: -18px;
+            right: -18px;
+            cursor: pointer;
+            width: 46px;
+            height: 46px;
+          }
+          .title {
+            height: 24px;
+            line-height: 24px;
+            text-align: left;
+
+            .title_name {
+              font-size: 20px;
+              color: #333333;
+              line-height: 24px;
+            }
+
+            .mask {
+              width: 24px;
+              height: 0px;
+              border-top: 0px;
+              border-right: 2px solid transparent;
+              border-bottom: 5px solid #0070ff;
+              border-left: 2px solid transparent;
+              transform: rotate3d(0, 0, 1, 90deg);
+              display: inline-block;
+              margin-right: -5px;
+              margin-bottom: 4px;
+              margin-left: -10px;
+            }
+          }
+          .content {
+            height: 128px;
+            padding-top: 48px;
+            font-size:0;
+            text-align: center;
+            span{
+              font-size: 14px;
+            }
+          }
+          .btn_box {
+            height: 42px;
+            text-align: center;
+            margin-bottom: 24px;
+
+            .ok_btn {
+              width: 136px;
+              height: 42px;
+              background: #0070ff;
+              color: #fff;
+            }
+
+            .cancel_btn {
+              width: 136px;
+              height: 42px;
+              border-color: #0070ff;
+              background: #fff;
+              color: #0070ff;
+            }
+          }
         }
       }
     }
