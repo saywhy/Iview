@@ -68,7 +68,7 @@
         <span :class="attack_stage_list[9].count>0?'count_color':''">凭证访问</span>
       </div>
       <div class="stage_img_box">
-        <img src="@/assets/images/emerge/detail_jiantou.png"
+        <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
       <div class="stage_item_box">
@@ -79,7 +79,7 @@
         <span :class="attack_stage_list[8].count>0?'count_color':''">信息发现</span>
       </div>
       <div class="stage_img_box">
-        <img src="@/assets/images/emerge/detail_jiantou.png"
+        <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
       <div class="stage_item_box">
@@ -90,7 +90,7 @@
         <span :class="attack_stage_list[7].count>0?'count_color':''">横向移动</span>
       </div>
       <div class="stage_img_box">
-        <img src="@/assets/images/emerge/detail_jiantou.png"
+        <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
       <div class="stage_item_box">
@@ -101,7 +101,7 @@
         <span :class="attack_stage_list[6].count>0?'count_color':''">信息收集</span>
       </div>
       <div class="stage_img_box">
-        <img src="@/assets/images/emerge/detail_jiantou.png"
+        <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
       <div class="stage_item_box">
