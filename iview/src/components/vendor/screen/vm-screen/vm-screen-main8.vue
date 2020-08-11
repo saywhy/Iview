@@ -119,9 +119,6 @@
             },
             yAxis: {
               type: 'value',
-              axisLabel: {
-                color: '#ffffff'
-              },
               axisLabel:{
                 color:'#ffffff'
               },

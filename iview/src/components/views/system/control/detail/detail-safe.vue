@@ -1,24 +1,87 @@
 <template>
   <div class="detail-safe" v-loading.fullscreen.lock="loading" v-cloak>
     <back-title :title-name="title_name"></back-title>
-    <div class="detail_base">
-      <div class="detail_base_top">
-        <div class="top_left">
-          <img src="@/assets/images/emerge/top1.png"
-               alt="">
-          <img src="@/assets/images/emerge/top2.png"
-               alt="">
-          <img src="@/assets/images/emerge/top3.png"
-               alt="">
-        </div>
+
+    <div class="detail_base_top">
+      <div class="bt">
+        <div class="gauge" id="gauge1"></div>
+        <h4 class="name">CPU 使用率</h4>
+        <div class="bline"></div>
       </div>
+      <div class="bt">
+        <div class="gauge" id="gauge2"></div>
+        <h4 class="name">内存占用率</h4>
+        <div class="bline"></div>
+      </div>
+      <div class="bt">
+        <div class="gauge" id="gauge3"></div>
+        <h4 class="name">磁盘占用率</h4>
+        <div class="bline"></div>
+      </div>
+    </div>
+    <div class="detail_base_mid">
+      <div class="detail_title">
+        <i class="dt_img"></i>
+        <h3 class="title">日志流量</h3>
+      </div>
+      <div class="safe_flow" id="safe_flow"></div>
 
     </div>
+
+    <div class="detail_base_bom">
+      <div class="detail_title">
+        <i class="dt_img"></i>
+        <h3 class="title">设备日志</h3>
+        <el-button class="s-download">下载</el-button>
+      </div>
+      <div class="role_table">
+        <el-table ref="multipleTable"
+                  class="reset_table"
+                  align="center"
+                  border
+                  :data="role_list.data"
+                  tooltip-effect="dark"
+                  @selection-change="handleSelectionChange"
+                  style="width: 100%">
+          <el-table-column prop="index"
+                           align="center"
+                           label="序号"
+                           width="50"
+                           show-overflow-tooltip>
+            <template slot-scope="scope">
+              {{(role_data.page-1)*(role_data.rows) + scope.row.index_cn}}
+            </template>
+          </el-table-column>
+          <el-table-column label="时间"
+                           align="center"
+                           width="300"
+                           show-overflow-tooltip>
+            <template slot-scope="scope">{{ scope.row.created_at*1000 |formatDate }}</template>
+          </el-table-column>
+          <el-table-column prop="description"
+                           align="center"
+                           label="描述"
+                           show-overflow-tooltip>
+          </el-table-column>
+        </el-table>
+        <el-pagination class="pagination_box"
+                       @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       :current-page="role_list.pageNow"
+                       :page-sizes="[10,20,50,100]"
+                       :page-size="10"
+                       layout="total, sizes, prev, pager, next"
+                       :total="role_list.count">
+        </el-pagination>
+      </div>
+    </div>
+
 
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import moment from 'moment'
   import backTitle from "@/components/common/back-title";
   export default {
     name: "detail-safe",
@@ -26,37 +89,331 @@
       return {
         loading: false,
         title_name: "设备详情",
+        role_list: {},
+        role_data: {
+          page: 1,
+          rows: 10
+        },
       };
     },
     components: {backTitle},
     mounted () {
       this.get_data();
-      
+
+      this.get_table();
     },
     methods: {
-      // ^[0-9]*$
-      // _-.@
-      get_rex (str) {
-        var pattern = (/[\u4e00-\u9fa5]| /)
-        return pattern.test(str)
-      },
       // 获取数据
       get_data () {
         this.loading = true
-        console.log(this.$route.query.detail);
         this.$axios.get('/yiiapi/asset/alert-details', {
           params: {
             id: this.$route.query.detail
           }
         })
-          .then(response => {
-            this.loading = false
+          .then(resp => {
+            this.loading = false;
+            this.drawGraphTop();
+            this.drawFlow();
 
           })
           .catch(error => {
             console.log(error);
           })
       },
+      get_table () {
+        this.loading = true
+        this.$axios.get('/yiiapi/user/role-list', {
+          params: {
+            page: this.role_data.page,
+            rows: this.role_data.rows
+          }
+        }).then(response => {
+            this.loading = false
+            this.role_list = response.data.data;
+            this.role_list.data.forEach((item, index) => {
+              item.index_cn = index + 1
+            });
+
+            console.log(this.role_list)
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      },
+      drawGraphTop(){
+
+        let gauge1 = this.$echarts.init(document.getElementById('gauge1'));
+        gauge1.showLoading({ text: '正在加载数据...' });
+        gauge1.clear();
+        let option1 = {
+          tooltip: {
+            show:false
+          },
+          series: [
+          {
+            type : "gauge",
+            center: ["50%", "42%"], // 默认全局居中
+            radius : "64%",
+            startAngle: 220,
+            endAngle: -40,
+            axisLine: {
+              show : true,
+              lineStyle : {
+                color: [ //表盘颜色
+                  [ 0.5,"#0288D1"],//0-50%处的颜色
+                  [ 1,"#EEF6FF"]//90%-100%处的颜色
+                ],
+                width : 15//表盘宽度
+              }
+            },
+            splitLine: { //分割线样式（及10、20等长线样式）
+              show:false,
+            },
+            axisTick: { //刻度线样式（及短线样式）
+              show:false
+            },
+            axisLabel : { //文字样式（及“10”、“20”等文字样式）
+              show:false
+            },
+            detail: {
+              show: false,
+            },
+            pointer: {
+              length: '50%',
+              width: 6
+            },
+            data: [{
+              value: 50,
+              label: {
+                textStyle: {
+                  fontSize: 12
+                }
+              }
+            }]
+          }]
+        };
+        gauge1.setOption(option1);
+        gauge1.hideLoading();
+        window.addEventListener("resize", () => {
+          gauge1.resize();
+        });
+
+
+        let gauge2 = this.$echarts.init(document.getElementById('gauge2'));
+        gauge2.showLoading({ text: '正在加载数据...' });
+        gauge2.clear();
+        let option2 = {
+          tooltip: {
+            show:false
+          },
+          series: [
+            {
+              type : "gauge",
+              center: ["50%", "42%"], // 默认全局居中
+              radius : "64%",
+              startAngle: 220,
+              endAngle: -40,
+              axisLine: {
+                show : true,
+                lineStyle : {
+                  color: [ //表盘颜色
+                    [ 0.6,"#CDDC39"],//0-50%处的颜色
+                    [ 1,"#EEF6FF"]//90%-100%处的颜色
+                  ],
+                  width : 15//表盘宽度
+                }
+              },
+              splitLine: { //分割线样式（及10、20等长线样式）
+                show:false,
+              },
+              axisTick: { //刻度线样式（及短线样式）
+                show:false
+              },
+              axisLabel : { //文字样式（及“10”、“20”等文字样式）
+                show:false
+              },
+              detail: {
+                show: false,
+              },
+              pointer: {
+                length: '50%',
+                width: 6
+              },
+              data: [{
+                value: 60,
+                label: {
+                  textStyle: {
+                    fontSize: 12
+                  }
+                }
+              }]
+            }]
+        };
+        gauge2.setOption(option2);
+        gauge2.hideLoading();
+        window.addEventListener("resize", () => {
+          gauge2.resize();
+        });
+
+
+        let gauge3 = this.$echarts.init(document.getElementById('gauge3'));
+        gauge3.showLoading({ text: '正在加载数据...' });
+        gauge3.clear();
+        let option3 = {
+          tooltip: {
+            show:false
+          },
+          series: [
+            {
+              type : "gauge",
+              center: ["50%", "42%"], // 默认全局居中
+              radius : "64%",
+              startAngle: 220,
+              endAngle: -40,
+              axisLine: {
+                show : true,
+                lineStyle : {
+                  color: [ //表盘颜色
+                    [ 0.7,"#4CAF50"],//0-50%处的颜色
+                    [ 1,"#EEF6FF"]//90%-100%处的颜色
+                  ],
+                  width : 15//表盘宽度
+                }
+              },
+              splitLine: { //分割线样式（及10、20等长线样式）
+                show:false,
+              },
+              axisTick: { //刻度线样式（及短线样式）
+                show:false
+              },
+              axisLabel : { //文字样式（及“10”、“20”等文字样式）
+                show:false
+              },
+              detail: {
+                show: false,
+              },
+              pointer: {
+                length: '50%',
+                width: 6
+              },
+              data: [{
+                value: 70,
+                label: {
+                  textStyle: {
+                    fontSize: 12
+                  }
+                }
+              }]
+            }]
+        };
+        gauge3.setOption(option3);
+        gauge3.hideLoading();
+        window.addEventListener("resize", () => {
+          gauge3.resize();
+        });
+
+      },
+      drawFlow(){
+
+        let safe_flow = this.$echarts.init(document.getElementById('safe_flow'));
+        safe_flow.showLoading({ text: '正在加载数据...' });
+        safe_flow.clear();
+        let option = {
+          legend: {
+            show: false
+          },
+          grid: {
+            top:'20%',
+            left: '1%',
+            right: '2%',
+            bottom: '10%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            axisLine:{
+              lineStyle:{
+                color:'#ececec',
+                width:2
+              }
+            },
+            axisTick:{
+              show: false
+            },
+            axisLabel:{
+              color:'#666666'
+            },
+            splitLine:{
+              show:true,
+              lineStyle:{
+                color:'#f4f4f4'
+              }
+            },
+            data: ['08:00','08:01','08:02','08:03','08:04','08:05','08:06','08:07','08:08','08:09']
+          },
+          yAxis: {
+            type: 'value',
+            name: '流量(M/s)',
+            nameLocation:'end',
+            nameTextStyle:{
+              color:'#999',
+             /* padding:[0,0,0,-10]*/
+            },
+            axisLine:{
+              lineStyle:{
+                color:'#ececec',
+                width:2
+              }
+            },
+            axisTick:{
+              show: false
+            },
+            axisLabel:{
+              color:'#666666'
+            },
+            splitLine:{
+              show:true,
+              lineStyle:{
+                color:'#f4f4f4'
+              }
+            }
+          },
+          series: [{
+            type: 'line',
+            smooth: true,
+            symbol: "none",
+            lineStyle:{
+              color:'#47CAD9',
+              width: 1
+            },
+            areaStyle: {
+              color:{
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(71,202,217,0.7)'
+                }, {
+                  offset: 1, color: 'rgba(255,255,255,0.1)'
+                }],
+                global: false
+              }
+            },
+            emphasis:{show:false},
+            data: [5,11,14,18,5,12,14,20,25,10]
+          }]
+        };
+        safe_flow.setOption(option);
+        safe_flow.hideLoading();
+        window.addEventListener("resize", () => {
+          safe_flow.resize();
+        });
+      },
+
       // 下载payload
       download (value, item) {
         if (value.value == "点击下载" && value.name == "PayLoad信息") {
@@ -130,503 +487,130 @@
 
     },
     filters: {
-
+      formatDate: function (value) {
+        return moment(value).format('YYYY-MM-DD HH:mm:ss')
+      }
     }
   };
 </script>
-<style lang="less">
-  /*@import '../../../../../assets/css/less/reset_css/reset_tab.less';
-  @import '../../../../../assets/css/less/reset_css/reset_pop.less';*/
-  .el-input__inner {
-    background: #f8f8f8;
-    border: 0;
-  }
-  .dropdown_ul_box_detail {
-    // width: 124px;
-    // top: 209px !important;
-    .el-dropdown-menu__item:hover {
-      color: #606266;
-    }
-  }
-  // tab栏
-  .emerge_table {
-    th {
-      .cell {
-        font-family: PingFangMedium;
-        font-size: 14px;
-        color: #333333;
-      }
-    }
-    td {
-      .cell {
-        font-family: PingFang;
-        font-size: 14px;
-        color: #666;
-      }
-    }
-  }
-  .detail-network {
-    .pagination_box {
-      margin: 24px 0;
-      text-align: center;
-    }
-
-    // 弹窗编辑标签
-    .add_tag {
-      .el-dialog {
-        width: 440px;
-        .el-dialog__body {
-          width: 440px;
-          .content {
-            padding: 24px 5px;
-            height: 120px;
-            overflow-y: auto;
-            &::-webkit-scrollbar {
-              /*滚动条整体样式*/
-              width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
-              border-radius: 6px;
-            }
-            &::-webkit-scrollbar-thumb {
-              /*滚动条里面小方块*/
-              border-radius: 6px;
-              background: #a8a8a8;
-            }
-            &::-webkit-scrollbar-track {
-              /*滚动条里面轨道*/
-              border-radius: 6px;
-              background: #f4f4f4;
-            }
-            .content_item {
-              margin-bottom: 24px;
-              .item_addrs {
-                margin-bottom: 12px;
-                display: flex;
-              }
-              .img_box {
-                width: 16px;
-                height: 16px;
-                margin-left: 10px;
-                margin-top: 14px;
-                cursor: pointer;
-              }
-              .title {
-                font-size: 12px;
-                color: #999999;
-              }
-              .title_color {
-                color: #ff5f5c;
-              }
-              .select_box {
-                width: 100%;
-                height: 38px;
-                margin-top: 6px;
-                .el-input__inner {
-                  background: #f8f8f8;
-                  border: 0;
-                }
-              }
-            }
-          }
+<style scoped lang="less">
+  .detail-safe{
+    .detail_base_top{
+      padding: 0 56px;
+      height: 220px;
+      background: #fff;
+      font-size: 0;
+      text-align: left;
+      .bt{
+        width: 220px;
+        height: 220px;
+        margin-right: 120px;
+        display: inline-block;
+        position: relative;
+        .gauge{
+          width: 220px;
+          height: 220px;
+        }
+        .name{
+          position: absolute;
+          bottom: 20px;
+          width: 220px;
+          text-align: center;
+          font-size: 16px;
+          z-index: 999;
+        }
+        .bline{
+          position: absolute;
+          width: 114px;
+          height: 4px;
+          background: #EEF6FF;
+          bottom: 56px;
+          left: 52px;
         }
       }
     }
-    //添加到工单
-    .pop_state_add {
-      .el-dialog {
-        width: 960px;
-        .el-dialog__body {
-          width: 960px;
-          .content {
-            padding-top: 24px;
-            // 修改radio 改成对号
-            height: 400px;
-            overflow-y: auto;
-            &::-webkit-scrollbar {
-              /*滚动条整体样式*/
-              width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
-              border-radius: 6px;
-            }
-            &::-webkit-scrollbar-thumb {
-              /*滚动条里面小方块*/
-              border-radius: 6px;
-              background: #a8a8a8;
-            }
-            &::-webkit-scrollbar-track {
-              /*滚动条里面轨道*/
-              border-radius: 6px;
-              background: #f4f4f4;
-            }
-
-            .el-radio__input.is-checked .el-radio__inner::after {
-              transform: rotate(45deg) scaleY(1);
-            }
-            .el-radio__inner::after {
-              -webkit-box-sizing: content-box;
-              box-sizing: content-box;
-              background-color: transparent;
-              content: '';
-              border: 1px solid #fff;
-              border-left: 0;
-              border-top: 0;
-              height: 0.4375rem;
-              left: 0.25rem;
-              position: absolute;
-              top: 1px;
-              -webkit-transform: rotate(45deg) scaleY(0);
-              transform: rotate(45deg) scaleY(0);
-              width: 0.1875rem;
-              -webkit-transition: -webkit-transform 0.15s ease-in 0.05s;
-              transition: -webkit-transform 0.15s ease-in 0.05s;
-              transition: transform 0.15s ease-in 0.05s;
-              transition: transform 0.15s ease-in 0.05s,
-              -webkit-transform 0.15s ease-in 0.05s;
-              transition: transform 0.15s ease-in 0.05s,
-              -webkit-transform 0.15s ease-in 0.05s;
-              -webkit-transform-origin: center;
-              transform-origin: center;
-            }
-            .el-radio__inner {
-              border-radius: 2px;
-            }
-          }
+    .detail_base_mid{
+      height: 340px;
+      background: #fff;
+      margin-bottom: 30px;
+      .detail_title{
+        padding: 0 56px;
+        height: 60px;
+        line-height: 60px;
+        font-size: 0;
+        text-align: left;
+        border-bottom: 1px solid #ececec;
+        .dt_img{
+          width: 16px;
+          height: 16px;
+          vertical-align: sub;
+          display: inline-block;
+          background-image: url("../../../../../assets/images/system/sys1.png");
+          background-size: 16px 16px;
+        }
+        .title{
+          display: inline-block;
+          font-family: PingFangSC-Medium;
+          font-size: 16px;
+          color: #333333;
+          text-align: center;
+          margin-left: 10px;
         }
       }
+      .safe_flow{
+        padding: 0 56px;
+        width: 100%;
+        height: 280px;
+      }
     }
-    //  新建工单
-    .task_new_box {
-      .el-dialog {
-        width: 960px;
-        .el-dialog__body {
-          width: 960px;
-          .closed_img {
-            position: absolute;
-            top: -18px;
-            right: -18px;
-            cursor: pointer;
-            width: 46px;
-            height: 46px;
-          }
-
-          .title {
-            height: 24px;
-            line-height: 24px;
-            text-align: left;
-
-            .title_name {
-              font-size: 20px;
-              color: #333333;
-              font-family: PingFangMedium;
-              line-height: 24px;
-            }
-
-            .mask {
-              width: 24px;
-              height: 0px;
-              border-top: 0px;
-              border-right: 2px solid transparent;
-              border-bottom: 5px solid #0070ff;
-              border-left: 2px solid transparent;
-              transform: rotate3d(0, 0, 1, 90deg);
-              display: inline-block;
-              margin-right: -5px;
-              margin-bottom: 4px;
-              margin-left: -10px;
-            }
-          }
-
-          .step_box {
-            height: 36px;
-            margin: 20px 0 24px 0;
-            .step_box1 {
-              background-image: url('../../../../../assets/images/emerge/step1.png');
-              background-repeat: no-repeat;
-              background-size: 100% 100%;
-              width: 120px;
-              height: 36px;
-              float: left;
-              position: relative;
-              line-height: 36px;
-              text-align: center;
-
-              .step1_span {
-                font-size: 14px;
-              }
-
-              .selected_img {
-                position: absolute;
-                left: 0;
-                top: 0;
-              }
-            }
-
-            .step_box2 {
-              width: 120px;
-              height: 36px;
-              background-image: url('../../../../../assets/images/emerge/step2.png');
-              background-repeat: no-repeat;
-              background-size: 100% 100%;
-              float: left;
-              position: relative;
-              line-height: 36px;
-              text-align: center;
-              margin-left: -10px;
-
-              .step2_span {
-                font-size: 14px;
-              }
-            }
-
-            .step_now {
-              color: #0070ff;
-            }
-
-            .step_past {
-              color: #999999;
-            }
-          }
-          .task_new_content {
-            /*height: 480px;*/
-
-            .content_top {
-              overflow: hidden;
-
-              .content_top_left {
-                float: left;
-                width: 45%;
-
-                .left_item {
-                  margin-bottom: 16px;
-                  display: flex;
-
-                  .title {
-                    width: 100px;
-                    line-height: 38px;
-
-                    .improtant_ico {
-                      color: #ff3a36;
-                    }
-                  }
-
-                  .task_new_input {
-                    flex: 1;
-
-                    .el-input__inner {
-                      height: 38px;
-                    }
-                  }
-                }
-              }
-
-              .content_top_right {
-                float: right;
-                width: 45%;
-
-                .right_item {
-                  margin-bottom: 16px;
-                  display: flex;
-
-                  .title {
-                    width: 100px;
-                    line-height: 38px;
-
-                    .improtant_ico {
-                      color: #ff3a36;
-                    }
-                  }
-
-                  .task_new_input {
-                    flex: 1;
-
-                    .el-input__inner {
-                      height: 38px;
-                    }
-                  }
-                }
-              }
-            }
-
-            .content_remarks {
-              .title {
-                font-size: 12px;
-                color: #999999;
-              }
-
-              /deep/ .el-textarea {
-                height: 92px;
-                textarea {
-                  resize: none;
-                  height: 92px;
-                  font-size: 14px;
-                  color: #333;
-                  font-family: PingFang;
-                }
-              }
-              .el-textarea__inner:hover {
-                border: none;
-              }
-
-              .el-textarea__inner {
-                border: none;
-                background: #f8f8f8;
-              }
-            }
-
-            .content_table {
-              margin-top: 16px;
-
-              /deep/ .el-table td {
-                padding: 0;
-                height: 32px;
-              }
-              /deep/ .el-table th {
-                padding: 0;
-                height: 36px;
-                background: #f8f8f8;
-                .cell {
-                }
-              }
-
-              /deep/ .el-pagination {
-                margin-top: 20px;
-                text-align: center;
-              }
-            }
-          }
-          .task_content_box {
-            height: 400px;
-            overflow-y: auto;
-            &::-webkit-scrollbar {
-              /*滚动条整体样式*/
-              width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
-              border-radius: 6px;
-            }
-            &::-webkit-scrollbar-thumb {
-              /*滚动条里面小方块*/
-              border-radius: 6px;
-              background: #a8a8a8;
-            }
-            &::-webkit-scrollbar-track {
-              /*滚动条里面轨道*/
-              border-radius: 6px;
-              background: #f4f4f4;
-            }
-          }
-          .btn_box {
-            margin-top: 36px;
-            margin-bottom: 24px;
-            height: 42px;
-            text-align: center;
-
-            .cancel_btn {
-              border: 1px solid #0070ff;
-              background: #fff;
-              color: #0070ff;
-              width: 136px;
-              height: 42px;
-              font-size: 16px;
-            }
-
-            .next_btn {
-              background-color: #0070ff;
-              color: #fff;
-              width: 136px;
-              height: 42px;
-              font-size: 16px;
-            }
-          }
-          .task_handle_content {
-            .handle_content_top {
-              height: 42px;
-              text-align: left;
-              .change_btn,
-              .ref {
-                background-color: #0070ff;
-                border-color: #0070ff;
-                width: 136px;
-                height: 42px;
-                color: #fff;
-              }
-
-              .cel {
-                border: 1px solid #0070ff;
-                background: #fff;
-                color: #0070ff;
-                width: 136px;
-                height: 42px;
-                margin-left: 0;
-              }
-            }
-
-            .table_box {
-              margin-top: 24px;
-
-              .table_box_title {
-                height: 38px;
-                li {
-                  height: 38px;
-                  width: 92px;
-                  float: left;
-                  font-size: 14px;
-                  line-height: 38px;
-                  color: #bbbbbb;
-                  text-align: center;
-                  border-top: 2px solid #fff;
-                }
-
-                li.active {
-                  cursor: pointer;
-                  background: #eef6ff;
-                  color: #0070ff;
-                  border-top: 2px solid #0070ff;
-                }
-              }
-              /deep/ .el-table {
-                font-size: 12px;
-                thead.has-gutter {
-                  th {
-                    color: #333333;
-                    background: #f8f8f8;
-                    .cell {
-                    }
-                  }
-                }
-                .cell {
-                  color: #333333;
-                }
-              }
-
-              /deep/ .el-pagination {
-                margin-top: 20px;
-                text-align: center;
-              }
-            }
-
-            .btn_box {
-              margin-top: 36px;
-              margin-bottom: 24px;
-              height: 42px;
-              text-align: center;
-
-              .cancel_btn {
-                border: 1px solid #0070ff;
-                background: #fff;
-                color: #0070ff;
-                width: 136px;
-                height: 42px;
-                font-size: 16px;
-              }
-
-              .prev_btn {
-                background-color: #0070ff;
-                color: #fff;
-                width: 136px;
-                height: 42px;
-                font-size: 16px;
-              }
-            }
-          }
+    .detail_base_bom{
+      min-height: 600px;
+      background: #fff;
+      margin-bottom: 30px;
+      .detail_title{
+        padding: 0 56px;
+        height: 60px;
+        line-height: 60px;
+        font-size: 0;
+        text-align: left;
+        border-bottom: 1px solid #ececec;
+        position: relative;
+        .dt_img{
+          width: 16px;
+          height: 16px;
+          vertical-align: sub;
+          display: inline-block;
+          background-image: url("../../../../../assets/images/system/sys1.png");
+          background-size: 16px 16px;
         }
+        .title{
+          display: inline-block;
+          font-family: PingFangSC-Medium;
+          font-size: 16px;
+          color: #333333;
+          text-align: center;
+          margin-left: 10px;
+        }
+        /deep/
+        .s-download{
+          position: absolute;
+          color: #fff;
+          top: 13px;
+          right: 56px;
+          width: 124px;
+          height: 34px;
+          line-height: 0;
+          border-width: 0;
+          background: #0070FF;
+        }
+      }
+      .role_table{
+        padding: 0 56px;
+        margin: 40px 0;
       }
     }
   }
+</style>
+<style  lang="less">
+  @import '../../../../../assets/css/less/reset_css/reset_table.less';
 </style>
