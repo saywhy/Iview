@@ -150,8 +150,7 @@
           tooltip: {
             show:false
           },
-          series: [
-          {
+          series: [{
             type : "gauge",
             center: ["50%", "42%"], // 默认全局居中
             radius : "64%",
@@ -161,8 +160,9 @@
               show : true,
               lineStyle : {
                 color: [ //表盘颜色
-                  [ 0.5,"#0288D1"],//0-50%处的颜色
-                  [ 1,"#EEF6FF"]//90%-100%处的颜色
+                  [ 0.5,"#0288D1"],
+                  [ 0.51,"#ffffff"],
+                  [ 1,"#EEF6FF"]
                 ],
                 width : 15//表盘宽度
               }
@@ -207,8 +207,7 @@
           tooltip: {
             show:false
           },
-          series: [
-            {
+          series: [{
               type : "gauge",
               center: ["50%", "42%"], // 默认全局居中
               radius : "64%",
@@ -219,6 +218,7 @@
                 lineStyle : {
                   color: [ //表盘颜色
                     [ 0.6,"#CDDC39"],//0-50%处的颜色
+                    [ 0.61,"#ffffff"],
                     [ 1,"#EEF6FF"]//90%-100%处的颜色
                   ],
                   width : 15//表盘宽度
@@ -276,6 +276,7 @@
                 lineStyle : {
                   color: [ //表盘颜色
                     [ 0.7,"#4CAF50"],//0-50%处的颜色
+                    [ 0.71,"#ffffff"],
                     [ 1,"#EEF6FF"]//90%-100%处的颜色
                   ],
                   width : 15//表盘宽度
@@ -483,8 +484,6 @@
           }
         })
       },
-
-
     },
     filters: {
       formatDate: function (value) {
@@ -541,12 +540,13 @@
         text-align: left;
         border-bottom: 1px solid #ececec;
         .dt_img{
-          width: 16px;
-          height: 16px;
-          vertical-align: sub;
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+          margin-top: -12px;
           display: inline-block;
           background-image: url("../../../../../assets/images/system/sys1.png");
-          background-size: 16px 16px;
+          background-size: 24px 24px;
         }
         .title{
           display: inline-block;
@@ -576,12 +576,13 @@
         border-bottom: 1px solid #ececec;
         position: relative;
         .dt_img{
-          width: 16px;
-          height: 16px;
-          vertical-align: sub;
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+          margin-top: -12px;
           display: inline-block;
-          background-image: url("../../../../../assets/images/system/sys1.png");
-          background-size: 16px 16px;
+          background-image: url("../../../../../assets/images/system/sys2.png");
+          background-size: 24px 24px;
         }
         .title{
           display: inline-block;

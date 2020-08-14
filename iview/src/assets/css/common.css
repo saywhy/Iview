@@ -247,11 +247,13 @@ textarea {
   height: 0;
 }
 
-
 .el-table--border {
   border-left: none;
 }
 
 .el-table--border::after {
   width: 0;
+}
+.el-popup-parent--hidden{
+  padding-right: 0!important;
 }
