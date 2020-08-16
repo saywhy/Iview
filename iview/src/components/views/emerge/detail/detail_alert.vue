@@ -254,8 +254,43 @@
                            align="center"
                            show-overflow-tooltip>
           </el-table-column>
-          <el-table-column prop="department"
+          <el-table-column prop="account"
+                           label="邮箱"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="account"
+                           label="电话"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="account"
+                           label="分支"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="account"
                            label="部门"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="account"
+                           label="岗位"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="account"
+                           label="上级主管"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="account"
+                           label="入职时间"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="department"
+                           label="离职时间"
                            align="center"
                            show-overflow-tooltip>
           </el-table-column>
@@ -284,20 +319,16 @@
                   tooltip-effect="dark"
                   style="width: 100%">
           <el-table-column prop="ip_name"
-                           label="IP段名称"
+                           label="资产名"
                            align="center"
                            show-overflow-tooltip>
           </el-table-column>
           <el-table-column prop="ip_addr"
-                           label="IP地址段"
+                           label="当前IP"
                            align="center"
                            show-overflow-tooltip>
           </el-table-column>
-          <el-table-column prop="type"
-                           label="网段类型"
-                           align="center"
-                           show-overflow-tooltip>
-          </el-table-column>
+
           <el-table-column prop="tag"
                            label="标签"
                            align="center"
@@ -305,6 +336,31 @@
           </el-table-column>
           <el-table-column prop="responsible"
                            label="责任人"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="type"
+                           label="邮箱"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="type"
+                           label="电话"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="type"
+                           label="所在经度"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="type"
+                           label="所在维度"
+                           align="center"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="type"
+                           label="地理位置"
                            align="center"
                            show-overflow-tooltip>
           </el-table-column>
@@ -611,12 +667,11 @@ export default {
 </script>
 <style scoped lang="less">
 .detail_box {
-  border: 1px solid red;
+  // border: 1px solid red;
   // 顶部基础信息
   .detail_top {
     background: #fff;
     padding-bottom: 48px;
-    // border: 1px solid red;
     .top_title {
       height: 62px;
       padding: 0 56px;
@@ -647,7 +702,6 @@ export default {
       }
     }
     .top_content {
-      // border: 1px solid red;
       margin-top: 16px;
       padding: 0 56px;
       min-height: 100px;
@@ -655,7 +709,6 @@ export default {
       .content_item {
         min-height: 38px;
         line-height: 38px;
-        // border: 1px solid red;
         display: flex;
         .item_title {
           width: 100px;
@@ -690,7 +743,6 @@ export default {
       }
       .content_left {
         flex: 45%;
-        // border: 1px solid red;
         .src_dropdown_box {
           text-align: left;
           float: left;
@@ -714,20 +766,18 @@ export default {
       }
       .content_mid {
         flex: 30%;
-        // border: 1px solid red;
       }
       .content_right {
         flex: 25%;
-        // border: 1px solid red;
       }
     }
   }
   // 用户信息弹窗
   /deep/ .pop_user_info {
     .el-dialog {
-      width: 500px;
+      width: 1200px;
       .el-dialog__body {
-        width: 500px;
+        width: 1200px;
         .content {
           padding-top: 24px;
           // 修改radio 改成对号
@@ -755,9 +805,9 @@ export default {
   // 资产信息弹窗
   /deep/ .pop_assets_info {
     .el-dialog {
-      width: 750px;
+      width: 1200px;
       .el-dialog__body {
-        width: 750px;
+        width: 1200px;
         .content {
           padding-top: 24px;
           // 修改radio 改成对号
@@ -784,14 +834,12 @@ export default {
   }
   .detail_mid {
     height: 344px;
-    border: 1px solid red;
     margin-top: 20px;
     display: flex;
     .mid_space {
       width: 24px;
     }
     .mid_item {
-      border: 1px solid red;
       flex: 50%;
     }
   }

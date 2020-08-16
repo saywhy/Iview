@@ -214,7 +214,6 @@ export default {
   .rate_box {
     height: 276px;
     padding: 24px;
-    border: 1px solid green;
     #emergeLine {
       height: 100%;
     }
