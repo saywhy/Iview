@@ -31,8 +31,9 @@
         <!-- 详细信息 -->
         <base-info></base-info>
         <!-- 日志 -->
-
+        <base-log></base-log>
         <!-- 告警资产 -->
+        <alert-assets></alert-assets>
       </div>
 
     </div>
@@ -42,6 +43,7 @@
 import baseInfo from "@/components/views/emerge/detail/base_info";
 import baseLog from "@/components/views/emerge/detail/base_log";
 import baseAssets from "@/components/views/emerge/detail/base_assets";
+import alertAssets from "@/components/views/emerge/detail/alert_assets";
 export default {
   name: 'time_axis',
   data () {
@@ -108,6 +110,8 @@ export default {
   },
   components: {
     baseInfo,
+    baseLog,
+    alertAssets
   },
   methods: {
     selected_time (item, index) {
@@ -195,6 +199,7 @@ export default {
           p {
             width: 100%;
             font-size: 14px;
+            padding: 0 10px;
             color: #999999;
             position: absolute;
             top: 50%;
@@ -203,6 +208,7 @@ export default {
           }
           .item_text {
             color: #fff;
+            padding: 0 10px;
           }
         }
       }
@@ -212,6 +218,7 @@ export default {
     }
     .content_right {
       flex: 1;
+      overflow: hidden;
       background: #fff;
     }
   }
