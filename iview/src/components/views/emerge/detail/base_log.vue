@@ -395,7 +395,28 @@ export default {
   },
   methods: {
     async login () {
-      // let user_list = await ALERTS({ page: 1, rows: 10, start_time: '', end_time: '', fall_certainty: '', category: '', degree: '', status: '' })
+      let user_list = await ALERTS({ page: 1, rows: 10, start_time: '', end_time: '', fall_certainty: '', category: '', degree: '', status: '' })
+
+      //  this.$axios.get('/yiiapi/alert/list', {
+      this.$axios.get('/yiiapi/alerts', {
+        params: {
+          start_time: '',
+          end_time: '',
+          key_word: '',
+          fall_certainty: '',
+          status: '',
+          degree: '',
+          page: '1',
+          rows: '10',
+        }
+      }).then(resp => {
+        console.log(resp);
+      })
+        .catch(error => {
+          console.log(error);
+        })
+
+
     },
     handleSelectionChange () {
 

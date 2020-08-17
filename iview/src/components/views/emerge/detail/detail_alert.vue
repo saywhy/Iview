@@ -92,9 +92,9 @@
             <span class="item_title">目的地址：</span>
             <div class="item_right">
               <div>
-                <el-cascader :options="options"
+                <!-- <el-cascader :options="options"
                              v-model="selectedOptions"
-                             :show-all-levels="false"></el-cascader>
+                             :show-all-levels="false"></el-cascader> -->
               </div>
             </div>
           </div>
