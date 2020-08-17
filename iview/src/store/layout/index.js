@@ -118,7 +118,11 @@ export default {
     }) {
       try {
         //真实数据
-        let resp = await axios('/yiiapi/site/menu');
+        //let resp = await axios('/yiiapi/site/menu');
+
+        let resp = await axios('../static/data/menu.json');
+
+        console.log(resp)
 
         let roles = forRoleList(resp);
 
@@ -134,8 +138,6 @@ export default {
           commit('SET_SANDBOX', true);
         }
         commit('SET_ROLES', roles);
-
-       // console.log(roles)
 
         return roles;
 

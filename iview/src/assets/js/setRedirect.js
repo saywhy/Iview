@@ -1,8 +1,6 @@
 
 export function setRedirect(per) {
 
-  console.log(per)
-
   let redirect = '/404';
   //首页
   if (per.includes('1')) {
