@@ -220,7 +220,7 @@ textarea {
 
 .el-table td {
   text-align: center;
-  border: none;
+  /*border: none;*/
 }
 
 .el-table__header {
@@ -231,17 +231,9 @@ textarea {
   text-align: center;
 }
 
-/*.el-table th.is-leaf {
-  border-width: 0!important;
-}*/
-
-.el-table--border th {
+/*.el-table--border th {
   border-right: 1px solid #EBEEF5;
-}
-
-/* .el-table--border th:nth-child(1) {
-  border-left: 1px solid #EBEEF5;
-} */
+}*/
 
 .el-table::before {
   height: 0;

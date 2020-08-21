@@ -2,56 +2,42 @@
  *此样式带(全选)的table公共样式
  *创建者ycl 时间2020-01-05
 **/
-/deep/ .common-table {
+/deep/
+.common-table {
   width: 100%;
   font-family: PingFangMedium;
-
-  thead {
-    tr {
-      th {
-        border-color: #EBEEF5 !important;
-        background: #f8f8f8 !important;
-      }
-    }
-  }
-  /deep/ .el-table__header-wrapper {
+  .el-table__header-wrapper {
     .el-table__header {
       thead.has-gutter {
         th {
-          background: #f8f8f8 !important;
-          padding: 8px 0;
+          height: 48px;
+          background: #f8f8f8;
           .cell {
             font-family: PingFangMedium;
             color: #333;
             font-size: 18px;
           }
         }
-
-        th:nth-child(1) {
-          .cell {
-            text-align: center;
-            padding: 0;
-          }
-        }
-
-        th:nth-child(2) {
+       /* th:nth-child(2) {
           .cell {
             font-family: PingFangMedium;
             .el-checkbox__input {
               vertical-align: baseline !important;
             }
           }
-        }
+        }*/
       }
     }
   }
-
   .el-table__body-wrapper {
     tbody {
       td {
         font-family: PingFangMedium;
         font-size: 16px;
         color: #666;
+        border-top-width: 0;
+        border-left-width: 0;
+        border-right-width: 0;
         border-bottom: 1px solid #ececec;
         .cell {
           .new_dot {
@@ -61,7 +47,6 @@
             background: #ff5f5c;
             float: right;
           }
-
           .fall_certainty {
             width: 72px;
             /*height: 30px;*/

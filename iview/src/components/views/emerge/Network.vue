@@ -2057,13 +2057,13 @@ export default {
 }
 </style>
 <style lang="less">
-  .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
+  /*.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
     background-color: #bbb;
     border-color: #bbb;
   }
   .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
     border-color: #fff;
-  }
+  }*/
   .s_btn_list{
     position: absolute;
     top: 30px;
