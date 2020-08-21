@@ -119,13 +119,13 @@
           <div class="content_item">
             <span class="item_title">账号：</span>
             <div class="item_right ">
-              <span>372742893748209</span>
+              <span>{{detail_main.account_number}}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">告警时间：</span>
             <div class="item_right ">
-              <span>2019.11.08 15:33:24</span>
+              <span>{{detail_main.alert_time | time }}</span>
             </div>
           </div>
 
@@ -134,25 +134,25 @@
           <div class="content_item">
             <span class="item_title">更新时间：</span>
             <div class="item_right ">
-              <span>2019.11.08 15:33:24</span>
+              <span>{{detail_main.updated_at }}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">安全域：</span>
             <div class="item_right ">
-              <span>网络</span>
+              <span>{{detail_main.security_domain }}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">日志来源：</span>
             <div class="item_right ">
-              <span>奇安信防火墙，启明星辰IDS，绿盟IPS</span>
+              <span>{{detail_main.log_source }}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">日志数量：</span>
             <div class="item_right ">
-              <span>24</span>
+              <span>{{detail_main.log_count }}</span>
             </div>
           </div>
           <div class="content_item">
@@ -164,7 +164,7 @@
           <div class="content_item">
             <span class="item_title">描述：</span>
             <div class="item_right ">
-              <span>China Unicom Shandong Province Network, China Unicom, China Unicom Shandong Province Network, China Unicom, China Unicom Shandong Province Network, China Unicom, China Unicom Shandong Province Network, China Unicom</span>
+              <span>{{detail_main.json_description}}</span>
             </div>
           </div>
         </div>
@@ -172,28 +172,26 @@
 
           <div class="content_item">
             <span class="item_title">标签：</span>
-            <div class="item_right ">
-              <span>恶意地址</span>
-              <span>恶意地址</span>
-              <span>恶意地址</span>
+            <div class="item_right">
+              <span v-for="item in detail_main.json_label">{{item}}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">威胁等级：</span>
             <div class="item_right ">
-              <span>高危</span>
+              <span> {{detail_main.degree | degree }}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">失陷确定性：</span>
             <div class="item_right ">
-              <span>已失陷</span>
+              <span> {{detail_main.fall_certainty | certainty }}</span>
             </div>
           </div>
           <div class="content_item">
-            <span class="item_title">险指数：</span>
+            <span class="item_title">风险指数：</span>
             <div class="item_right ">
-              <span>100</span>
+              <span>{{detail_main.risk_num}}</span>
             </div>
           </div>
           <div class="content_item">
@@ -222,7 +220,7 @@
     </div>
     <!-- 攻击频率视图 -->
     <!-- 检测时间轴 -->
-    <detail-timeaxis></detail-timeaxis>
+    <detail-timeaxis :detailArray="detailArray"></detail-timeaxis>
     <!-- 用户信息弹窗 -->
     <el-dialog class="pop_user_info pop_box"
                :close-on-click-modal="false"
@@ -380,7 +378,6 @@ import backTitle from "@/components/common/back-title";
 import detailStage from "@/components/views/emerge/detail/detail_stage";
 import detailRate from "@/components/views/emerge/detail/detail_rate";
 import detailTimeaxis from "@/components/views/emerge/detail/detail_timeaxis";
-
 export default {
   name: 'detail_network',
   data () {
@@ -436,7 +433,10 @@ export default {
         responsible: 'admin',
         time: "2019.11.03 19:00:00",
       }],
-
+      //---------------------
+      detail_list: [],
+      detail_main: {},
+      detailArray: []
     }
   },
   components: {
@@ -604,9 +604,6 @@ export default {
             default:
               break;
           }
-
-
-
           this.$axios.post(join, {
             addr: this.network_detail.src_ip,
             type: 1
@@ -660,8 +657,59 @@ export default {
     closed_assets_info () {
       this.pop_assets_info = false;
     },
+    alert () {
+      this.$axios.get('/yiiapi/alerts', {
+        params: {
+          start_time: '',
+          end_time: '',
+          key_word: '',
+          fall_certainty: '',
+          status: '',
+          degree: '',
+          page: '1',
+          rows: '10',
+        }
+      }).then(resp => {
+        console.log(resp);
+      })
+        .catch(error => {
+          console.log(error);
+        })
+    },
+    alert_detail () {
+      // "10009" 10024
+      this.$axios.get('/yiiapi/alerts/10003').then(resp => {
+        console.log(resp);
+        let { status, data } = resp.data;
+        // console.log(data);
+        // console.log(JSON.parse(data.alarm_merger));
+        this.detail_list.push(data)
+        this.detail_main = data
+        this.detail_main.json_description = JSON.parse(this.detail_main.description).join(',')
+        this.detail_main.json_label = JSON.parse(this.detail_main.label).join(',')
+        JSON.parse(data.alarm_merger).map(item => {
+          this.detail_list.push(item)
+        })
+        console.log(this.detail_list);
+        this.detail_list.map(item => {
+          item.selected = false
+
+        })
+        this.detail_list[0].selected = true
+        this.detailArray = this.detail_list
+      })
+        .catch(error => {
+          console.log(error);
+        })
+
+    }
   },
-  computed: {}
+  computed: {
+  },
+  mounted () {
+    // this.alert()
+    this.alert_detail()
+  }
 }
 
 </script>

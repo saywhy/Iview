@@ -199,7 +199,6 @@
                                      :max="24"
                                      :step='1'
                                      :min="0"
-                                     :placeholder="hh"
                                      label="小时"></el-input-number>
                     <span>hh</span>
                     <el-input-number v-model="num"

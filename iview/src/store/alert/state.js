@@ -1,5 +1,5 @@
 const state = {
-  dnsData: ['1111']
+  alert_detail: []
 };
 
 export default state;

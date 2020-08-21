@@ -10,7 +10,6 @@ Vue.filter('time', function (value) {
     }
     return moment(value).format('YYYY-MM-DD HH:mm:ss')
   }
-
 });
 
 Vue.filter('degree_sino', function (args) {
@@ -181,23 +180,23 @@ Vue.filter('stage', function (args) {
     str = '执行';
   } else if (args == 'Persistence') {
     str = '持久化';
-  }else if (args == 'Privilege Escalation') {
+  } else if (args == 'Privilege Escalation') {
     str = '提权';
-  }else if (args == 'Defense Evasion') {
+  } else if (args == 'Defense Evasion') {
     str = '防御逃逸';
-  }else if (args == 'Credential Access') {
+  } else if (args == 'Credential Access') {
     str = '凭证访问';
-  }else if (args == 'Discovery') {
+  } else if (args == 'Discovery') {
     str = '信息发现';
-  }else if (args == 'Lateral Movement') {
+  } else if (args == 'Lateral Movement') {
     str = '横向移动';
-  }else if (args == 'Collection') {
+  } else if (args == 'Collection') {
     str = '信息收集';
-  }else if (args == 'Command and Control') {
+  } else if (args == 'Command and Control') {
     str = '命令控制';
-  }else if (args == 'Exfiltration') {
+  } else if (args == 'Exfiltration') {
     str = '信息泄露';
-  }else if (args == 'Impact') {
+  } else if (args == 'Impact') {
     str = '毁坏';
   }
   return str;
@@ -215,5 +214,3 @@ Vue.filter('alarm', function (args) {
   }
   return str;
 });
-
-
