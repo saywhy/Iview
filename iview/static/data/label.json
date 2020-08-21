@@ -1,0 +1,155 @@
+[
+  {
+    name: "漏洞影响",
+    status: true,
+    label: [
+      {
+        category_id: "15",
+        category_name: "漏洞影响",
+        category_sort: "19",
+        detail: "",
+        id: "53",
+        label_name: "数据/隐私泄露",
+        label_sort: "178"
+      },
+      {
+        category_id: "15",
+        category_name: "漏洞影响",
+        category_sort: "19",
+        detail: "",
+        id: "117",
+        label_name: "欺骗",
+        label_sort: "117"
+      },
+      {
+        category_id: "15",
+        category_name: "漏洞影响",
+        category_sort: "19",
+        detail: "",
+        id: "94",
+        label_name: "服务/业务破坏",
+        label_sort: "94"
+      },
+      {
+        category_id: "15",
+        category_name: "漏洞影响",
+        category_sort: "19",
+        detail: "",
+        id: "178",
+        label_name: "你好&你好",
+        label_sort: "59"
+      },
+      {
+        category_id: "15",
+        category_name: "漏洞影响",
+        category_sort: "19",
+        detail: "",
+        id: "59",
+        label_name: "车辆/财物盗窃",
+        label_sort: "53"
+      },
+      {
+        category_id: "15",
+        category_name: "漏洞影响",
+        category_sort: "19",
+        detail: "",
+        id: "39",
+        label_name: "位置跟踪",
+        label_sort: "39"
+      },
+      {
+        category_id: "15",
+        category_name: "漏洞影响",
+        category_sort: "19",
+        detail: "",
+        id: "38",
+        label_name: "控制车辆系统",
+        label_sort: "38"
+      },
+      {
+        category_id: "15",
+        category_name: "攻击面",
+        category_sort: "17",
+        detail: "",
+        id: "114",
+        label_name: "移动App",
+        label_sort: "137"
+      },
+      {
+        category_id: "15",
+        category_name: "攻击面",
+        category_sort: "17",
+        detail: "",
+        id: "137",
+        label_name: "网关",
+        label_sort: "133"
+      },
+      {
+        category_id: "15",
+        category_name: "攻击面",
+        category_sort: "17",
+        detail: "",
+        id: "137",
+        label_name: "网关",
+        label_sort: "133"
+      }
+    ]
+  },
+  {
+    name: "攻击面",
+    status: true,
+    label: [
+      {
+        category_id: "17",
+        category_name: "攻击面",
+        category_sort: "17",
+        detail: "",
+        id: "114",
+        label_name: "移动App",
+        label_sort: "137"
+      },
+      {
+        category_id: "17",
+        category_name: "攻击面",
+        category_sort: "17",
+        detail: "",
+        id: "137",
+        label_name: "网关",
+        label_sort: "133"
+      }
+    ]
+  },
+  {
+    name: "",
+    status: true,
+    label: [
+      {
+        category_id: "0",
+        category_name: "未分类标签",
+        category_sort: "0",
+        detail: "",
+        id: "180",
+        label_name: "aa&bb",
+        label_sort: "180"
+      },
+      {
+        category_id: "0",
+        category_name: "未分类标签",
+        category_sort: "0",
+        detail: "",
+        id: "179",
+        label_name: "AA AA",
+        label_sort: "179"
+      },
+      {
+        category_id: "0",
+        category_name: "未分类标签",
+        category_sort: "0",
+        detail: "",
+        id: "176",
+        label_name: "sds ad",
+        label_sort: "173"
+      }
+    ]
+  }
+]

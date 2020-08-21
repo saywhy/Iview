@@ -316,7 +316,7 @@
         intel_state:{
           add:false,
           edit:false,
-          exp:false
+          exp:true
         },
         intel_add:{
           index:'',
@@ -607,22 +607,25 @@
           }
           .content_exp{
             display: flex;
-            height: 320px;
-            overflow-y: auto;
-            &::-webkit-scrollbar {
-              /*滚动条整体样式*/
-              width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
-              border-radius: 6px;
+            height: 400px;
+            overflow-y: hidden;
+          }
+          .btn_box{
+            .cancel_btn{
+              border: 1px solid #0070ff;
+              color: #0070ff;
+              border-radius: 4px;
+              width: 124px;
+              height: 40px;
+              margin-left: 16px;
             }
-            &::-webkit-scrollbar-thumb {
-              /*滚动条里面小方块*/
-              border-radius: 6px;
-              background: #a8a8a8;
-            }
-            &::-webkit-scrollbar-track {
-              /*滚动条里面轨道*/
-              border-radius: 6px;
-              background: #f4f4f4;
+            .ok_btn{
+              width: 124px;
+              height: 40px;
+              background: #0070ff;
+              border-radius: 4px;
+              color: #fff;
+              border: 1px solid #0070ff;
             }
           }
         }

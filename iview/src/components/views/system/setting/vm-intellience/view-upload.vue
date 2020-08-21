@@ -190,7 +190,23 @@
         }
       }
       .uploader-list {
-        overflow: auto;
+        height: 188px;
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+          /*滚动条整体样式*/
+          width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+          border-radius: 6px;
+        }
+        &::-webkit-scrollbar-thumb {
+          /*滚动条里面小方块*/
+          border-radius: 6px;
+          background: #a8a8a8;
+        }
+        &::-webkit-scrollbar-track {
+          /*滚动条里面轨道*/
+          border-radius: 6px;
+          background: #f4f4f4;
+        }
         .uploader-file {
           height: 30px;
           line-height: 30px;
