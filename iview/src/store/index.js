@@ -8,12 +8,14 @@ const debug = process.env.NODE_ENV !== 'production';
 import layout from './layout/index';
 import invest from './invest/index';
 import screen from './screen/index';
+import alert from './alert/index';
 
 const store = new Vuex.Store({
-  modules:{
+  modules: {
     layout,
     invest,
-    screen
+    screen,
+    alert
   },
   strict: debug, //是否开启严格模式
 })

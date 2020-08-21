@@ -7,7 +7,7 @@
         <div class="time_item"
              @click="selected_time(item,index)"
              :class="item.selected?'item_background':''"
-             v-for="(item,index) in time_list">
+             v-for="(item,index) in timeaxis">
           <div class="time_item_left">
             <img src="@/assets/images/emerge/time_i.png"
                  class="time_img"
@@ -22,14 +22,13 @@
             </div>
           </div>
           <div class="time_item_right">
-            <p :class="item.selected?'item_text':''">{{item.time}}</p>
+            <p :class="item.selected?'item_text':''">{{item.alert_time | time}}</p>
           </div>
         </div>
       </div>
-
       <div class="content_right">
         <!-- 详细信息 -->
-        <base-info></base-info>
+        <base-info :selectItem='select_item'></base-info>
         <!-- 日志 -->
         <base-log></base-log>
         <!-- 告警资产 -->
@@ -48,64 +47,14 @@ export default {
   name: 'time_axis',
   data () {
     return {
-      time_list: [
-        {
-          time: "2019-11-04 14:33:16",
-          selected: true
-        }, {
-          time: "2019-12-04 14:33:16",
-          selected: false
-        }, {
-          time: "2019-13-04 14:33:16",
-          selected: false
-        }, {
-          time: "2019-14-04 14:33:16",
-          selected: false
-        },
-        {
-          time: "2019-15-04 14:33:16",
-          selected: false
-        }, {
-          time: "2019-16-04 14:33:16",
-          selected: false
-        }, {
-          time: "2019-17-04 14:33:16",
-          selected: false
-        }, {
-          time: "2019-18-04 14:33:16",
-          selected: false
-        }, {
-          time: "2019-19-04 14:33:16",
-          selected: false
-        }, {
-          time: "2019-21-04 14:33:16",
-          selected: false
-        }, {
-          time: "2019-21-05 14:33:16",
-          selected: false
-        }, {
-          time: "2019-11-06 14:33:16",
-          selected: false
-        }, {
-          time: "2019-11-07 14:33:16",
-          selected: false
-        }, {
-          time: "2019-11-08 14:33:16",
-          selected: false
-        }, {
-          time: "2019-11-09 14:33:16",
-          selected: false
-        }, {
-          time: "2019-11-10 14:33:16",
-          selected: false
-        }, {
-          time: "2019-11-11 14:33:16",
-          selected: false
-        }, {
-          time: "2019-11-12 14:33:16",
-          selected: false
-        }
-      ]
+      timeaxis: [],
+      select_item: {}
+    }
+  },
+  props: {
+    detailArray: {
+      type: Array,
+      default: () => { }
     }
   },
   components: {
@@ -113,13 +62,26 @@ export default {
     baseLog,
     alertAssets
   },
+  mounted () {
+  },
+  watch: {
+    detailArray: function (val) {
+      console.log('val监听:', val)
+      console.log(this.detailArray);
+      this.timeaxis = JSON.parse(JSON.stringify(this.detailArray))
+      //  this.dataArray = this.dataArray.concat(this.data);
+      this.select_item = this.timeaxis[0]
+    }
+  },
   methods: {
     selected_time (item, index) {
       console.log(item);
-      this.time_list.map(x => {
+      console.log(index);
+      this.select_item = item
+      this.timeaxis.map(x => {
         x.selected = false
       })
-      this.time_list[index].selected = true
+      this.timeaxis[index].selected = true
     }
   },
   computed: {
