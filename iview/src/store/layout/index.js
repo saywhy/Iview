@@ -122,7 +122,7 @@ export default {
 
         let resp = await axios('../static/data/menu.json');
 
-        console.log(resp)
+        //console.log(resp)
 
         let roles = forRoleList(resp);
 

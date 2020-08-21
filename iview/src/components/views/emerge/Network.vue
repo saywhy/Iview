@@ -40,11 +40,11 @@
             </el-select>
             <!--失陷确定性-->
             <el-select class="s_key_network s_key_types_network_ok"
-                       v-model="params.threat"
+                       v-model="params.certainty"
                        clearable
                        placeholder="失陷确定性"
                        :popper-append-to-body="false">
-              <el-option v-for="item in options_threat"
+              <el-option v-for="item in options_certainty"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -605,12 +605,12 @@ export default {
       },
       params: {
         key: "",
-        threat: "",
-        status: "",
+        certainty: "",
         startTime: '',
         endTime: '',
         degree: '',
-        domain: ''
+        status: '',
+        domain:''
       },
       options_degrees: [
         {
@@ -626,7 +626,7 @@ export default {
           label: "高危"
         }
       ],
-      options_threat: [
+      options_certainty: [
         {
           value: "1",
           label: "已失陷"
@@ -863,24 +863,25 @@ export default {
       let params_alert = {
         threat: ''
       };
-      if (this.params.threat == 1) {
-        params_alert.threat = 1;
+      if(this.params.certainty == 1) {
+        params_alert.certainty = 1;
       }
-      this.$axios.get('/yiiapi/alert/list', {
+
+      this.$axios.get('/yiiapi/alerts', {
         params: {
           start_time: this.params.startTime,
           end_time: this.params.endTime,
           key_word: this.params.key,
-          fall_certainty: params_alert.threat,
+          fall_certainty: params_alert.certainty,
           status: this.params.status,
           degree: this.params.degree,
+          security_domain:this.params.domain,
           page: this.table.pageNow,
           rows: this.table.eachPage,
         }
       }).then(resp => {
-
         this.table.loading = false;
-
+        console.log(resp)
         let { status, data } = resp.data;
         let datas = data;
 
@@ -1016,6 +1017,7 @@ export default {
         setTimeout(() => {
           if (this.detail_click_val.id) {
             console.log('点击详情');
+            console.log(this.detail_click_val)
             if (Object.keys(this.detail_click_column).length != 0 && this.detail_click_column.type != 'selection') {
               this.$router.push({ path: "/detail/network", query: { detail: this.detail_click_val.id, type: 'alert' } });
             }
