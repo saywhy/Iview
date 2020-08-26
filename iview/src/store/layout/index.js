@@ -414,7 +414,6 @@ export default {
               }
             ]}}
 
-        console.log(resp);
 
         let roles = forRoleList(resp);
 

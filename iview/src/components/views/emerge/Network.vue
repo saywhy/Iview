@@ -5,9 +5,9 @@
     <div class="e_line"
          v-loading="e_line.loading">
       <p class="title">实时告警监测</p>
-      <!--<vm-emerge-line :data='echarts_data'
+      <vm-emerge-line :data='echarts_data'
                       v-if="e_line.data_show">
-      </vm-emerge-line>-->
+      </vm-emerge-line>
     </div>
     <!--告警-->
     <div class="alert_risk">
@@ -111,6 +111,7 @@
             </el-dropdown>
             <el-dropdown @command="change_task"
                          placement='bottom-start'
+                         @close.native="dddd"
                          trigger="click">
               <el-button type="primary"
                          class="change_btn">
@@ -125,7 +126,7 @@
             </el-dropdown>
 
             <!--配置列-->
-            <el-dropdown class="e_deplay" trigger="click">
+            <el-dropdown class="e_deplay" trigger="click" ref="messageDrop" >
               <span class="s_btn_train">
                   <i class="t_img"></i>
                   <span class="t_name">配置列</span>
@@ -140,8 +141,8 @@
                   </li>
                 </ul>
                 <div class="s_b_group">
-                  <el-button type="primary" class="s_bg s_bg_cancel">取消</el-button>
-                  <el-button type="primary" class="s_bg s_bg_submit">确认</el-button>
+                  <el-button type="primary" class="s_bg s_bg_cancel" @click.native="label_cancel_Click()">取消</el-button>
+                  <el-button type="primary" class="s_bg s_bg_submit" @click.native="label_submit_click()">确认</el-button>
                 </div>
               </el-dropdown-menu>
             </el-dropdown>
@@ -182,14 +183,16 @@
             </el-table-column>
             <!--:key="`col_${index}`"-->
             <template v-for="(item, index) in dropCol">
+
                 <!--告警时间-->
                 <el-table-column align="center" v-if="dropCol[index].prop == 'alert_time'"
                                  show-overflow-tooltip
                                  sortable="custom"
                                  :prop="dropCol[index].prop"
                                  :label="item.label">
-                  <template slot-scope="scope">{{index}}{{ scope.row.alert_time | time }}</template>
+                  <template slot-scope="scope">{{ scope.row.alert_time | time }}</template>
                 </el-table-column>
+
                 <!--威胁等级-->
                 <el-table-column align="center" v-else-if="dropCol[index].prop == 'degree'"
                                  show-overflow-tooltip
@@ -202,6 +205,7 @@
                     {{ scope.row.degree | degree_sino }}</span>
                   </template>
                 </el-table-column>
+
                 <!--失陷确定性-->
                 <el-table-column align="center" v-else-if="dropCol[index].prop == 'fall_certainty'"
                                  show-overflow-tooltip
@@ -218,6 +222,15 @@
                                  :prop="dropCol[index].prop"
                                  :label="item.label">
                   <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
+                </el-table-column>
+
+                <!--风险指数-->
+                <el-table-column align="center" v-else-if="dropCol[index].prop == 'risk_num'"
+                                 show-overflow-tooltip
+                                 sortable="custom"
+                                 :prop="dropCol[index].prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.risk_num  }}</template>
                 </el-table-column>
                 <!--其他-->
                 <el-table-column align="center" v-else
@@ -580,20 +593,20 @@ export default {
       dropCol:[],
       fieldFlag:false,
       fieldList:[{checked:true,disabled:true,name:"告警时间",alias:'alert_time'},
-        {checked:true,disabled:true,name:"告警类型",alias:'category'},
+        {checked:true,disabled:true,name:"告警类型",alias:'alert_type'},
         {checked:true,disabled:true,name:"威胁等级",alias:'degree'},
-        {checked:true,disabled:false,name:"描述",alias:'describute'},
-        {checked:true,disabled:false,name:"安全域",alias:'sec_domain'},
+        {checked:true,disabled:false,name:"描述",alias:'alert_description'},
+        {checked:true,disabled:false,name:"安全域",alias:'security_domain'},
         {checked:true,disabled:false,name:"源地址",alias:'src_ip'},
         {checked:true,disabled:false,name:"目的地址",alias:'dest_ip'},
-        {checked:false,disabled:false,name:"关联资产名",alias:'assets'},
+        {checked:false,disabled:false,name:"关联资产名",alias:'asset_name'},
         {checked:false,disabled:false,name:"用户",alias:'user'},
-        {checked:false,disabled:false,name:"标签",alias:'label'},
-        {checked:false,disabled:false,name:"失陷确定性",alias:'certainty'},
-        {checked:false,disabled:false,name:"风险指数",alias:'risk_index'},
-        {checked:true,disabled:false,name:"更新时间",alias:'update_time'},
-        {checked:false,disabled:false,name:"工单状态",alias:'order'},
-        {checked:false,disabled:false,name:"日志数量",alias:'num_log'},
+        {checked:false,disabled:false,name:"标签",alias:'labels'},
+        {checked:false,disabled:false,name:"失陷确定性",alias:'fall_certainty'},
+        {checked:false,disabled:false,name:"风险指数",alias:'risk_num'},
+        {checked:true,disabled:false,name:"更新时间",alias:'updated_at'},
+        {checked:false,disabled:false,name:"工单状态",alias:'workorder_status'},
+        {checked:false,disabled:false,name:"日志数量",alias:'log_count'},
         {checked:true,disabled:false,name:"状态",alias:'status'}],
       echarts_data: {},
       e_line: {
@@ -610,7 +623,9 @@ export default {
         endTime: '',
         degree: '',
         status: '',
-        domain:''
+        domain:'',
+        sort:'3',
+        order:'alert_time'
       },
       options_degrees: [
         {
@@ -634,19 +649,19 @@ export default {
       ],
       options_domains: [
         {
-          value: "net1",
+          value: "network",
           label: "网络"
         },
         {
-          value: "net2",
+          value: "terminal",
           label: "端点"
         },
         {
-          value: "net3",
+          value: "ueba",
           label: "UEBA"
         },
         {
-          value: "net4",
+          value: "audit",
           label: "审计"
         }
       ],
@@ -789,40 +804,95 @@ export default {
       },
     };
   },
+  created(){
+    var storage = window.sessionStorage;
+
+   //let dropCol = storage.getItem('dropCol');
+   //storage.setItem('name', name);
+  },
   mounted () {
-    this.check_passwd();
+   // this.check_passwd();
     this.get_echarts();
-
     this.get_list_risk();
-
-   this.getColumn();
+    this.column_deploy();
   },
   methods: {
-    getColumn(){
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
+    dddd(){
+      alert('54')
+    },
+    //配置到取消
+    label_cancel_Click(){
+      this.$refs.messageDrop.hide();
+      this.column_deploy();
+      this.get_list_risk();
+    },
+    //配置到确定
+    label_submit_click(){
+
+      let fieldAttr = [];
+
+      fieldAttr = this.dropCol.map(item => {
+        return item.prop;
+      });
+
+      this.$axios.put('/yiiapi/alert/FieldEdit',{
+        fields: fieldAttr
+        })
         .then((resp) => {
 
-          this.dropCol = [{label: '告警时间', prop: 'alert_time'},
-            { label: '告警类型', prop: 'category'},
-            {label: '描述', prop: 'describute'},
-            {label: '安全域', prop: 'sec_domain'},
-            {label: '源地址', prop: 'src_ip'},
-            {label: '目的地址', prop: 'dest_ip'},
-            {label: '威胁等级', prop: 'degree'},
-            {label: '更新时间', prop: 'update_time'},
-            {label: '状态', prop: 'status'}];
+          let { status, data } = resp.data;
 
-          this.columnDrop();
+          if(status == 0){
+            this.$refs.messageDrop.hide();
+
+            this.column_deploy();
+            this.get_list_risk();
+            this.columnDrop();
+          }
+        });
+    },
+
+    //配置到
+    column_deploy() {
+      this.$axios.get('/yiiapi/alert/FieldList')
+        .then((resp) => {
+
+          this.dropCol = [];
+          let { status, data } = resp.data;
+
+          if(status == 0){
+
+            let config = data.config;
+
+            for (var key of config){
+              this.fieldList.forEach(item => {
+                if(item.alias == key){
+                  this.dropCol.push({label: item.name, prop: item.alias})
+                }
+              });
+            }
+
+
+            this.fieldList.forEach(item => {
+              if(config.includes(item.alias)){
+                item.checked = true;
+              }else {
+                item.checked = false;
+              }
+            });
+
+            this.columnDrop();
+          }
 
         });
     },
+
     //下拉框勾选事件
-    fieldChange(alias,name){
+    fieldChange(alias,name) {
 
       let colAttr = this.dropCol.map((item) => {
         return item.prop;
       });
-      console.log(colAttr);
 
       if(colAttr.includes(alias)){
         var index = colAttr.findIndex((element)=>(element == alias));
@@ -830,9 +900,6 @@ export default {
       } else {
         this.dropCol.push({label: name, prop: alias});
       }
-
-      console.log(this.dropCol);
-
     },
     // 列拖拽
     columnDrop () {
@@ -848,11 +915,13 @@ export default {
           this.dropCol.splice(oldIndex, 1);
           this.dropCol.splice(newIndex, 0, oldItem);
 
+          this.label_submit_click();
+
           this.randomKey += 1;
 
           setTimeout(()=>{
              this.columnDrop();
-          },500)
+          },500);
         }
       });
     },
@@ -861,7 +930,7 @@ export default {
     get_list_risk () {
       this.table.loading = true;
       let params_alert = {
-        threat: ''
+        certainty: ''
       };
       if(this.params.certainty == 1) {
         params_alert.certainty = 1;
@@ -876,31 +945,32 @@ export default {
           status: this.params.status,
           degree: this.params.degree,
           security_domain:this.params.domain,
+          order:this.params.order,
+          sort:this.params.sort,
           page: this.table.pageNow,
-          rows: this.table.eachPage,
+          rows: this.table.eachPage
         }
+
       }).then(resp => {
         this.table.loading = false;
-        console.log(resp)
+
         let { status, data } = resp.data;
         let datas = data;
 
         if (status == 0) {
 
           let { data, count, maxPage, pageNow } = datas;
-         // console.log(data)
-
+          //console.log(data)
           this.table.tableData = data;
           this.table.count = count;
           this.table.maxPage = maxPage;
           this.table.pageNow = pageNow;
-
         }
-      })
-        .catch(error => {
+      }).catch(error => {
           console.log(error);
         })
     },
+
     // 测试密码过期
     check_passwd () {
       this.$axios.get('/yiiapi/site/check-passwd-reset')
@@ -923,8 +993,9 @@ export default {
     },
     // 获取折现图表
     get_echarts () {
-      this.$axios.get('/yiiapi/alert/alert-trend')
+      this.$axios.get('/yiiapi/alert/AlertTrend')
         .then(response => {
+
           this.e_line.loading = false;
           this.e_line.data_show = true;
 
@@ -956,14 +1027,13 @@ export default {
 
     //重置按鈕點擊事件
     resetClick () {
-      this.params = {
-        key: "",
-        threat: "",
-        status: "",
-        startTime: '',
-        endTime: '',
-        degree: ''
-      };
+      this.params.key = '';
+      this.params.startTime = '';
+      this.params.endTime = '';
+      this.params.domain = '';
+      this.params.certainty = '';
+      this.params.degree = '';
+      this.params.status = '';
       $(document.querySelector('.el-button--text')).trigger('click');
       this.get_list_risk();
     },
@@ -996,7 +1066,18 @@ export default {
     },
     //列排序
     header_cell(val){
-      console.log(val)
+      if(val.prop == 'alert_time'){
+        this.params.order = 'alert_time';
+      }else {
+        this.params.order = 'risk_num';
+      }
+
+      if(val.order == 'descending'){
+        this.params.sort = '4';
+      }else {
+        this.params.sort = '3';
+      }
+      this.get_list_risk();
     },
     mousedown (event) {
       this.oldPositon = {

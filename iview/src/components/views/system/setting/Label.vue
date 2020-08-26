@@ -55,11 +55,10 @@
                 </div>
                 <!-- 标签列表 -->
                 <div class="toggle_content" v-show="item.status">
-                  <!--<ul class="sortable">-->
                     <vuedraggable class="sortable" v-model="item.label" handle=".b_img_drag">
                       <transition-group>
                         <li class="sortable_list" v-if="it.label_name != null" :value="it.id"
-                            :key="$ix" v-for="(it,$ix) in item.label">
+                            :key="it.id" v-for="(it,$ix) in item.label">
                           <button class="btn_label">
                             <div class="b_label">
                               <span class="b_span" :title="it.label_name">{{it.label_name}}</span>
@@ -73,11 +72,10 @@
                         </li>
                       </transition-group>
                     </vuedraggable>
-                  <!--</ul>-->
-                  <button class="btn_label_add" @click="label_handle(item.name,'add');">
+                 <!-- <button class="btn_label_add" @click="label_handle(item.name,'add');">
                     <img class="ba_img" src="@/assets/images/system/set/label_add.png"/>
                     <span class="ba_span">新增标签</span>
-                  </button>
+                  </button>-->
                 </div>
               </li>
             </transition-group>
