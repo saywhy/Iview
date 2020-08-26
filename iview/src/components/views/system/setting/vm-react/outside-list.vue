@@ -181,7 +181,7 @@ export default {
     },
     // 获取当前IP
     get_ip () {
-      this.$axios.get('/yiiapi/linkage/get-hostip')
+      this.$axios.get('/yiiapi/linkage/GetHostip')
         .then(response => {
           console.log(response.data);
           this.hostip = response.data.data.url
@@ -194,7 +194,7 @@ export default {
     },
     // 获取列表
     get_list (type) {
-      this.$axios.get('/yiiapi/linkage/list', {
+      this.$axios.get('/yiiapi/linkages', {
         params: {
           type: type,
           page: 1,
@@ -257,9 +257,11 @@ export default {
         default:
           break;
       }
-      this.$axios.post('/yiiapi/linkage/add', {
-        addr: addr_params,
-        type: num,
+      this.$axios.post('/yiiapi/linkages', {
+        ExternalDynamics: {
+          addr: addr_params,
+          type: num,
+        }
       })
         .then(response => {
           console.log(response);
@@ -314,11 +316,7 @@ export default {
       }).then(() => {
         var id_list = []
         id_list.push(item.id)
-        this.$axios.delete('/yiiapi/linkage/del', {
-          data: {
-            id: id_list
-          }
-        })
+        this.$axios.delete('/yiiapi/linkages/' + id_list.join(','))
           .then(response => {
             console.log(response);
             if (response.data.status == 0) {

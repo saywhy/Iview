@@ -264,7 +264,7 @@ export default {
     // 获取列表
     get_data () {
       this.syslog_data.loading = true;
-      this.$axios.get('/yiiapi/syslog/list', {
+      this.$axios.get('/yiiapi/syslogs', {
         params: {
           page: this.syslog_data.page,
           rows: this.syslog_data.rows
@@ -291,11 +291,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.delete('/yiiapi/syslog/del-conf', {
-          data: {
-            id: item.id
-          }
-        })
+        this.$axios.delete('/yiiapi/syslogs/' + item.id)
           .then(response => {
             console.log(response);
             if (response.data.status == 0) {
@@ -343,18 +339,20 @@ export default {
       } else {
         this.syslog_pop.add.status = '0'
       }
-      this.$axios.post('/yiiapi/syslog/add-conf', {
-        server_ip: this.syslog_pop.add.server_ip,
-        server_port: this.syslog_pop.add.server_port,
-        protocol: this.syslog_pop.add.protocol,
-        status: this.syslog_pop.add.status,
+      this.$axios.post('/yiiapi/syslogs', {
+        SyslogConf: {
+          server_ip: this.syslog_pop.add.server_ip,
+          server_port: this.syslog_pop.add.server_port,
+          protocol: this.syslog_pop.add.protocol,
+          status: this.syslog_pop.add.status,
+        }
       })
         .then(response => {
           console.log(response);
           if (response.data.status == 1) {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -389,12 +387,13 @@ export default {
       } else {
         this.syslog_pop.edit.status = '0'
       }
-      this.$axios.put('/yiiapi/syslog/edit-conf', {
-        id: this.syslog_pop.edit.id,
-        server_ip: this.syslog_pop.edit.ip,
-        server_port: this.syslog_pop.edit.port,
-        protocol: this.syslog_pop.edit.radio,
-        status: this.syslog_pop.edit.status,
+      this.$axios.put('/yiiapi/syslogs/' + this.syslog_pop.edit.id, {
+        SyslogConf: {
+          server_ip: this.syslog_pop.edit.ip,
+          server_port: this.syslog_pop.edit.port,
+          protocol: this.syslog_pop.edit.radio,
+          status: this.syslog_pop.edit.status,
+        }
       })
         .then(response => {
           console.log(response);

@@ -230,7 +230,7 @@ export default {
     },
     // 获取列表
     get_list (type) {
-      this.$axios.get('/yiiapi/linkage/list', {
+      this.$axios.get('/yiiapi/linkages', {
         params: {
           type: type,
           page: 1,
@@ -252,7 +252,7 @@ export default {
     },
     // 获取开关状态
     get_switch () {
-      this.$axios.get('/yiiapi/externalaccess/get-status')
+      this.$axios.get('/yiiapi/externalaccess/GetStatus')
         .then(response => {
           console.log(response);
           if (response.data.data.status == '0') {
@@ -276,7 +276,7 @@ export default {
         switch_status = 0
       }
       console.log(switch_status);
-      this.$axios.put('/yiiapi/externalaccess/change-status', {
+      this.$axios.put('/yiiapi/externalaccess/ChangeStatus', {
         status: switch_status
       })
         .then(response => {
@@ -311,7 +311,6 @@ export default {
         .then(response => {
           console.log(response.data);
           this.hostip = response.data.data.url
-
         })
         .catch(error => {
           console.log(error);
@@ -320,7 +319,7 @@ export default {
     },
     // 获取用户列表
     get_user_list () {
-      this.$axios.get('/yiiapi/externalaccess/list', {
+      this.$axios.get('/yiiapi/externalusers', {
         params: {
           page: this.user_data.page,
           rows: this.user_data.rows
@@ -360,16 +359,18 @@ export default {
         );
         return false
       }
-      this.$axios.post('/yiiapi/externalaccess/add', {
-        uname: this.outside_pop.add.user,
-        passwd: this.outside_pop.add.pswd,
+      this.$axios.post('/yiiapi/externalusers', {
+        ExternalAccessUser: {
+          uname: this.outside_pop.add.user,
+          passwd: this.outside_pop.add.pswd,
+        }
       })
         .then(response => {
           console.log(response);
           if (response.data.status == 1) {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -410,16 +411,18 @@ export default {
         );
         return false
       }
-      this.$axios.post('/yiiapi/externalaccess/edit', {
-        "uname": this.outside_pop.edit.user,
-        "passwd": this.outside_pop.edit.pswd
+      this.$axios.put('/yiiapi/externalusers', {
+        ExternalAccessUser: {
+          passwd: this.outside_pop.edit.pswd
+        }
+        // "uname": this.outside_pop.edit.user,
       })
         .then(response => {
           console.log(response.data);
           if (response.data.status == 1) {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -466,11 +469,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.delete('/yiiapi/externalaccess/del', {
-          data: {
-            id: item.id
-          }
-        })
+        this.$axios.delete('/yiiapi/externalusers/' + item.id)
           .then(response => {
             console.log(response);
             if (response.data.status == 0) {

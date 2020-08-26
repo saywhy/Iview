@@ -67,7 +67,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        this.$axios.put('/yiiapi/seting/restore')
+        this.$axios.put('/yiiapi/system/Restore')
           .then(response => {
             this.loading = false
             let { status, data } = response.data;
@@ -99,7 +99,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        this.$axios.put('/yiiapi/seting/reboot')
+        this.$axios.put('/yiiapi/system/Reboot')
           .then(response => {
             this.loading = false
             let { status, data } = response.data;

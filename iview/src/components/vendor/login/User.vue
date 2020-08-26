@@ -48,13 +48,14 @@
                       v-model="loginForm.code"
                       auto-complete="off"
                       placeholder="请输入图形验证码">
-             <!-- <i slot="prefix"
+              <!-- <i slot="prefix"
                  class="icon-yanzhengma"></i>
               <div slot="prefix"
                    class="d-split"></div>-->
             </el-input>
             <!--验证码组件-->
-            <div class="code" @click="refreshCode">
+            <div class="code"
+                 @click="refreshCode">
               <s-identify :identifyCode="identifyCode"
                           :contentHeight="contentHeight">
               </s-identify>
@@ -126,6 +127,8 @@ export default {
   mounted () {
     this.identifyCode = "";
     this.makeCode(this.identifyCodes, 4);
+    console.log('111111');
+
   },
   methods: {
     setHeight () {
@@ -180,9 +183,9 @@ export default {
               if (resp[0]) {
                 this.$message.success('登录成功');
                 this.$router.push('/', () => { });//登录成功之后重定向到首页
-                setTimeout(()=>{
+                setTimeout(() => {
                   this.count = 0;
-                },1000)
+                }, 1000)
                 //失败
               } else {
                 this.$message.error(resp[1]);
@@ -203,8 +206,7 @@ export default {
 </script>
 <style scoped lang="less">
 #UserLogin {
-  /deep/
-  .el-form {
+  /deep/ .el-form {
     .el-form-item {
       margin-bottom: 30px;
       .el-form-item__content {
@@ -212,7 +214,7 @@ export default {
         .view-input {
           position: relative;
           .el-input__inner {
-            border: 2px solid rgba(255,255,255,.48);
+            border: 2px solid rgba(255, 255, 255, 0.48);
             background-color: transparent;
             color: #bbbbbb;
             height: 54px;
@@ -254,11 +256,10 @@ export default {
           display: flex;
           height: 54px;
           width: 360px;
-          /deep/
-          .view-code {
+          /deep/ .view-code {
             flex: 1;
             text-align: left;
-            .el-input__inner{
+            .el-input__inner {
               width: 210px;
               padding-left: 15px;
             }
@@ -287,8 +288,7 @@ export default {
         text-align: right;
         font-family: PingFang;
         font-size: 14px;
-        /deep/
-        .el-icon-warning {
+        /deep/ .el-icon-warning {
           color: #ff3a36;
         }
         .p3_error_title {

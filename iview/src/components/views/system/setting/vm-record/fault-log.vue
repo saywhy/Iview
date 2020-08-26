@@ -76,7 +76,7 @@ export default {
     // 获取列表
     get_data () {
       this.loading = true
-      this.$axios.get('/yiiapi/faultlog/list', {
+      this.$axios.get('/yiiapi/faultlogs', {
         params: {
           page: this.fault_data.page,
           rows: this.fault_data.rows
@@ -94,7 +94,7 @@ export default {
     // 故障检测
     faultlog_testing () {
       this.loading = true
-      this.$axios.get('/yiiapi/faultlog/testing')
+      this.$axios.get('/yiiapi/faultlogs')
         .then(response => {
           console.log(response);
           this.loading = false
@@ -190,11 +190,7 @@ export default {
           id_list.push(element.id)
         });
         console.log(id_list);
-        this.$axios.delete('/yiiapi/faultlog/del', {
-          data: {
-            id: id_list
-          }
-        })
+        this.$axios.delete('/yiiapi/faultlogs/' + id_list.join(','))
           .then(response => {
             console.log(response);
             if (response.data.status == 0) {

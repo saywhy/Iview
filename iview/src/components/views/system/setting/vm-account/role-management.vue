@@ -47,7 +47,7 @@
                          align="center"
                          width="220"
                          show-overflow-tooltip>
-          <template slot-scope="scope">{{ scope.row.created_at*1000 |formatDate }}</template>
+          <template slot-scope="scope">{{ scope.row.created_at }}</template>
         </el-table-column>
         <el-table-column prop="creatorname"
                          align="center"
@@ -447,7 +447,7 @@ export default {
     },
     get_data () {
       this.loading = true
-      this.$axios.get('/yiiapi/user/role-list', {
+      this.$axios.get('/yiiapi/roles', {
         params: {
           page: this.role_data.page,
           rows: this.role_data.rows
@@ -511,9 +511,6 @@ export default {
     // tree
     // 添加角色
     add_role () {
-
-
-
       if (this.role_add.name == '') {
         this.$message(
           {
@@ -540,10 +537,12 @@ export default {
         this.role_add.permissions_id.push(item.id)
       });
       this.loading = true
-      this.$axios.post('/yiiapi/user/add-role', {
-        name: this.role_add.name,
-        description: this.role_add.describe,
-        permissions_id: this.role_add.permissions_id,
+      this.$axios.post('/yiiapi/roles', {
+        Sysrole: {
+          name: this.role_add.name,
+          description: this.role_add.describe,
+          permissions_id: this.role_add.permissions_id,
+        }
       })
         .then(response => {
           this.loading = false
@@ -592,12 +591,13 @@ export default {
       this.$refs.tree_edit.getHalfCheckedNodes().forEach(item => {
         this.role_edit.permissions_id_edit.push(item.id)
       });
-      this.$axios.post('/yiiapi/user/edit-role', {
-        id: this.role_edit.id,
-        old_name: JSON.parse(this.old_role_edit).name,
-        name: this.role_edit.name,
-        description: this.role_edit.description,
-        permissions_id: this.role_edit.permissions_id_edit,
+      this.$axios.put('/yiiapi/roles/' + this.role_edit.id, {
+        Sysrole: {
+          old_name: JSON.parse(this.old_role_edit).name,
+          name: this.role_edit.name,
+          description: this.role_edit.description,
+          permissions_id: this.role_edit.permissions_id_edit,
+        }
       })
         .then(response => {
           console.log(response);
@@ -613,7 +613,7 @@ export default {
           } else if (response.data.status == 1) {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -645,7 +645,7 @@ export default {
         this.select_list.forEach(element => {
           id_list.push(element.name)
         });
-        this.$axios.delete('/yiiapi/user/del-role', {
+        this.$axios.delete('/yiiapi/roles/0', {
           data: {
             role_name: id_list
           }
@@ -663,7 +663,7 @@ export default {
             } else {
               this.$message(
                 {
-                  message: response.data.msg,
+                  message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                   type: 'error',
                 }
               );

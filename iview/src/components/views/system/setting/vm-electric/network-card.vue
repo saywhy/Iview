@@ -254,7 +254,7 @@ export default {
     // 获取网卡配置
     get_data () {
       this.network_loading = true
-      this.$axios.get('/yiiapi/seting/get-network')
+      this.$axios.get('/yiiapi/network/GetNetwork')
         .then(response => {
           this.network_loading = false
           this.network = response.data.data.data;
@@ -305,16 +305,18 @@ export default {
           break;
       }
       this.network_loading = true
-      this.$axios.put('/yiiapi/seting/set-network', {
-        NAME: this.network_model.name,
-        ONBOOT: ONBOOT,
-        BOOTPROTO: BOOTPROTO,
-        IPADDR: this.network_model.IPADDR,
-        MASK: this.network_model.MASK,
-        GATEWAY: this.network_model.GATEWAY,
-        DNS1: this.network_model.DNS1,
-        DNS2: this.network_model.DNS2,
-        PORT: PORT,
+      this.$axios.put('/yiiapi/network/SetNetwork', {
+        Network: {
+          NAME: this.network_model.name,
+          ONBOOT: ONBOOT,
+          BOOTPROTO: BOOTPROTO,
+          IPADDR: this.network_model.IPADDR,
+          MASK: this.network_model.MASK,
+          GATEWAY: this.network_model.GATEWAY,
+          DNS1: this.network_model.DNS1,
+          DNS2: this.network_model.DNS2,
+          PORT: PORT,
+        }
       })
         .then(response => {
           this.network_loading = false

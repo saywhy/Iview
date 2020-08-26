@@ -678,7 +678,11 @@ export default {
     },
     alert_detail () {
       // "10009" 10024
-      this.$axios.get('/yiiapi/alerts/10003').then(resp => {
+      this.$axios.get('/yiiapi/alerts', {
+        params: {
+          id: this.$route.query.detail
+        }
+      }).then(resp => {
         console.log(resp);
         let { status, data } = resp.data;
         // console.log(data);

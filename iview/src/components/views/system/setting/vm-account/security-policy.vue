@@ -145,7 +145,7 @@ export default {
     },
     get_data () {
       this.security_policy_status.loading = true
-      this.$axios.get('/yiiapi/securitypolicy/get-security-policy')
+      this.$axios.get('/yiiapi/userploys')
         .then(response => {
           console.log(response);
           this.security_policy = response.data.data;
@@ -167,15 +167,17 @@ export default {
         this.security_policy.status = '0'
       }
       console.log(this.security_policy);
-      this.$axios.put('/yiiapi/securitypolicy/set-security-policy', {
-        min_passwd_len: this.security_policy.min_passwd_len,
-        max_passwd_len: this.security_policy.max_passwd_len,
-        passwd_regular_edit_time: this.security_policy.passwd_regular_edit_time,
-        admin_faild_logon_time: this.security_policy.admin_faild_logon_time,
-        admin_logon_delay_time: this.security_policy.admin_logon_delay_time,
-        session_timeout: this.security_policy.session_timeout,
-        admin_online_count: this.security_policy.admin_online_count,
-        status: this.security_policy.status,
+      this.$axios.put('/yiiapi/userploys/0', {
+        Userploy: {
+          min_passwd_len: this.security_policy.min_passwd_len,
+          max_passwd_len: this.security_policy.max_passwd_len,
+          passwd_regular_edit_time: this.security_policy.passwd_regular_edit_time,
+          admin_faild_logon_time: this.security_policy.admin_faild_logon_time,
+          admin_logon_delay_time: this.security_policy.admin_logon_delay_time,
+          session_timeout: this.security_policy.session_timeout,
+          admin_online_count: this.security_policy.admin_online_count,
+          status: this.security_policy.status,
+        }
       })
         .then(response => {
           console.log(response);
@@ -188,7 +190,7 @@ export default {
           } else {
             this.$message.error(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );

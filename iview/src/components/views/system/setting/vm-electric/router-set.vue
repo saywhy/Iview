@@ -247,7 +247,7 @@ export default {
     // 获取列表
     get_data (name) {
       this.router_data.loading = true
-      this.$axios.get('/yiiapi/seting/route-list', {
+      this.$axios.get('/yiiapi/network/RouteList', {
         params: {
           page: this.router_data.page,
           rows: this.router_data.rows,
@@ -282,17 +282,19 @@ export default {
       this.router_add.next_step = '';
     },
     add_router () {
-      this.$axios.post('/yiiapi/seting/route-add', {
-        ip: this.router_add.ip,
-        net_mask: this.router_add.net_mask,
-        next_step: this.router_add.next_step
+      this.$axios.post('/yiiapi/network/RouteAdd', {
+        Route: {
+          ip: this.router_add.ip,
+          net_mask: this.router_add.net_mask,
+          next_step: this.router_add.next_step
+        }
       })
         .then(response => {
           console.log(response);
           if (response.data.status == 1) {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -323,11 +325,13 @@ export default {
     },
     // 编辑
     edit_router () {
-      this.$axios.put('/yiiapi//seting/route-edit', {
-        id: this.router_edit.id,
-        ip: this.router_edit.ip,
-        net_mask: this.router_edit.net_mask,
-        next_step: this.router_edit.next_step
+      this.$axios.put('/yiiapi/network/RouteEdit', {
+        Route: {
+          id: this.router_edit.id,
+          ip: this.router_edit.ip,
+          net_mask: this.router_edit.net_mask,
+          next_step: this.router_edit.next_step
+        }
       })
         .then(response => {
           if (response.data.status == 0) {
@@ -340,7 +344,7 @@ export default {
           } else {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -372,7 +376,7 @@ export default {
         this.select_list.forEach(element => {
           id_list.push(element.id)
         });
-        this.$axios.delete('/yiiapi/seting/del', {
+        this.$axios.delete('/yiiapi/network/RouteDel', {
           data: {
             id: id_list
           }

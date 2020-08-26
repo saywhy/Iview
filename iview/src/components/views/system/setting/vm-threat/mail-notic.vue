@@ -187,7 +187,7 @@ export default {
         })
     },
     get_data () {
-      this.$axios.get('/yiiapi/email/get')
+      this.$axios.get('/yiiapi/emails')
         .then(response => {
           let { status, data } = response.data;
           console.log(data);
@@ -296,16 +296,18 @@ export default {
             break;
         }
       });
-      this.$axios.post('/yiiapi/email/test', {
-        encryption: encryption,
-        host: this.mail.host,
-        port: this.mail.port,
-        username: this.mail.username,
-        password: this.mail.password,
-        send: this.mail.send,
-        content: this.mail.content,
-        alertEmail: alertEmail,
-        degree: degree_list
+      this.$axios.post('/yiiapi/emails', {
+        Email: {
+          encryption: encryption,
+          host: this.mail.host,
+          port: this.mail.port,
+          username: this.mail.username,
+          password: this.mail.password,
+          send: this.mail.send,
+          content: this.mail.content,
+          alertEmail: alertEmail,
+          degree: degree_list
+        }
       })
         .then(response => {
           let { status, data } = response.data;
@@ -322,7 +324,7 @@ export default {
           } else {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -393,16 +395,18 @@ export default {
             break;
         }
       });
-      this.$axios.post('/yiiapi/email/save', {
-        encryption: encryption,
-        host: this.mail.host,
-        port: this.mail.port,
-        username: this.mail.username,
-        password: this.mail.password,
-        send: this.mail.send,
-        content: this.mail.content,
-        alertEmail: alertEmail,
-        degree: degree_list
+      this.$axios.put('/yiiapi/emails/0', {
+        Email: {
+          encryption: encryption,
+          host: this.mail.host,
+          port: this.mail.port,
+          username: this.mail.username,
+          password: this.mail.password,
+          send: this.mail.send,
+          content: this.mail.content,
+          alertEmail: alertEmail,
+          degree: degree_list
+        }
       })
         .then(response => {
           let { status, data } = response.data;
@@ -414,6 +418,13 @@ export default {
               {
                 message: '设置邮件通知成功',
                 type: 'success',
+              }
+            );
+          } else {
+            this.$message(
+              {
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
+                type: 'error',
               }
             );
           }

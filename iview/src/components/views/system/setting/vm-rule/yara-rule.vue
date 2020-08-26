@@ -14,7 +14,7 @@
                  @click="download">下载</el-button>
       <el-upload class="upload-demo"
                  style="display: inline-block;"
-                 action="/yiiapi/yararule/upload"
+                 action="/yiiapi/yararules"
                  :on-preview="handlePreview"
                  :on-remove="handleRemove"
                  :before-remove="beforeRemove"
@@ -99,7 +99,7 @@ export default {
     },
     get_data () {
       this.loading = true
-      this.$axios.get('/yiiapi/yararule/get')
+      this.$axios.get('/yiiapi/yararules')
         .then(response => {
           console.log(response.data);
           if (response.data.status == 0) {
@@ -140,7 +140,7 @@ export default {
           console.log(response.data);
           if (response.data.status == 0) {
             var tt = new Date().getTime();
-            var url = '/yiiapi/yararule/download';
+            var url = '/yiiapi/yararule/Download';
             var form = $("<form>"); //定义一个form表单
             form.attr("style", "display:none");
             form.attr("target", "");
@@ -233,7 +233,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.get('/yiiapi/yararule/del')
+        this.$axios.delete('/yiiapi/yararules/0')
           .then(response => {
             console.log(response.data.data);
             if (response.data.data.status == 0) {

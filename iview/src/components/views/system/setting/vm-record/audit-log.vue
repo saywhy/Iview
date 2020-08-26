@@ -126,7 +126,7 @@ export default {
     },
     get_data () {
       this.loading = true;
-      this.$axios.get('/yiiapi/userlog/page', {
+      this.$axios.get('/yiiapi/userlogs', {
         params: {
           username: this.audit_data.key,
           start_time: this.audit_data.start_time,
@@ -197,13 +197,9 @@ export default {
             );
             eventBus.$emit('reset')
           } else {
-            this.$axios.get('/yiiapi/site/check-auth-exist', {
-              params: {
-                pathInfo: 'yararule/download',
-              }
-            })
+            this.$axios.get('/yiiapi/userlog/ExportTest')
               .then(response => {
-                var url2 = "/yiiapi/userlog/export?username=" + this.audit_data.key + "&start_time=" + this.audit_data.start_time + '&end_time=' + this.audit_data.end_time;
+                var url2 = "/yiiapi/userlog/Export?username=" + this.audit_data.key + "&start_time=" + this.audit_data.start_time + '&end_time=' + this.audit_data.end_time;
                 window.location.href = url2;
               })
               .catch(error => {

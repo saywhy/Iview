@@ -8,7 +8,7 @@
                  @click="download">下载模板</el-button>
       <el-upload class="upload-demo"
                  style="display: inline-block;"
-                 action="/yiiapi/whitelist/add-import"
+                 action="/yiiapi/whitelist/AddImport"
                  :on-preview="handlePreview"
                  :on-remove="handleRemove"
                  :before-remove="beforeRemove"
@@ -181,7 +181,7 @@ export default {
     },
     get_data () {
       this.loading = true;
-      this.$axios.get('/yiiapi/whitelist/list', {
+      this.$axios.get('/yiiapi/whitelists', {
         params: {
           page: this.white_data.page,
           rows: this.white_data.rows
@@ -215,16 +215,18 @@ export default {
         );
         return false
       }
-      this.$axios.post('/yiiapi/whitelist/add', {
-        indicator: this.white_add.indicator,
-        alert_type: this.white_add.type
+      this.$axios.post('/yiiapi/whitelists', {
+        Whitelist: {
+          indicator: this.white_add.indicator,
+          alert_type: this.white_add.type
+        }
       })
         .then(response => {
           console.log(response);
           if (response.data.status == 1) {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -274,13 +276,9 @@ export default {
             );
             eventBus.$emit('reset')
           } else {
-            this.$axios.get('/yiiapi/site/check-auth-exist', {
-              params: {
-                pathInfo: 'yararule/download',
-              }
-            })
+            this.$axios.get('/yiiapi/whitelist/DownloadWhitelistTemplateTest')
               .then(response => {
-                var url2 = "/yiiapi/whitelist/download-ioc-template";
+                var url2 = "/yiiapi/whitelist/DownloadWhitelistTemplate";
                 window.location.href = url2;
               })
               .catch(error => {
@@ -384,11 +382,8 @@ export default {
         this.select_list.forEach(element => {
           id_list.push(element.id)
         });
-        this.$axios.delete('/yiiapi/whitelist/del', {
-          data: {
-            id: id_list
-          }
-        })
+
+        this.$axios.delete('/yiiapi/yiiapi/whitelists/' + id_list.join(','))
           .then(response => {
             console.log(response.data);
             if (response.data.status == 0) {

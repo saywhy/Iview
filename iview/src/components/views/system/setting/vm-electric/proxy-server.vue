@@ -123,7 +123,7 @@ export default {
         })
     },
     get_data () {
-      this.$axios.get('/yiiapi/seting/get-proxy-server')
+      this.$axios.get('/yiiapi/network/GetProxyServer')
         .then(response => {
           let { status, data } = response.data;
           console.log(data.data[0].PROXYCONF);
@@ -160,7 +160,7 @@ export default {
       } else {
         verify_passwd = 'no'
       }
-      this.$axios.put('/yiiapi/seting/set-proxy-server', {
+      this.$axios.put('/yiiapi/network/SetProxyServer', {
         proxy_switch: proxy_switch,
         type: this.proxy.type,
         ip: this.proxy.ip,

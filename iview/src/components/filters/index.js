@@ -23,6 +23,22 @@ Vue.filter('degree_sino', function (args) {
   }
   return str;
 });
+// 安全域
+Vue.filter('securityDomain', function (args) {
+  let str = '';
+  // 安全域：terminal，ueba，audit，network
+  if (args == 'network') {
+    str = '网络';
+  } else if (args == 'ueba') {
+    str = 'UEBA';
+  } else if (args == 'audit') {
+    str = '审计';
+  } else if (args == 'terminal') {
+    str = '端点';
+  }
+  return str;
+});
+
 
 //威胁等级
 Vue.filter('degree', function (args) {

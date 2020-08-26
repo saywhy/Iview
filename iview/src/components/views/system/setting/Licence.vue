@@ -208,7 +208,7 @@ export default {
         })
     },
     get_data () {
-      this.$axios.get('/yiiapi/license/get', {
+      this.$axios.get('/yiiapi/licenses', {
         params: {
           page: this.license_data.page,
           rows: this.license_data.rows
@@ -241,7 +241,7 @@ export default {
           console.log(error);
         })
     },
-    // 获取license版本
+    // 获取版本
     get_version () {
       this.$axios.get('/yiiapi/site/license-version')
         .then(response => {
@@ -270,7 +270,7 @@ export default {
         return false
       }
       this.loading = true
-      this.$axios.post('/yiiapi/license/online', {
+      this.$axios.post('/yiiapi/licenses/0', {
         SN: this.licence_pop.cdk,
         key: this.licence_pop.key
       })
@@ -306,7 +306,7 @@ export default {
             }
           } else if (response.data.status == 'success') {
             console.log(response.data.bin);
-            this.$axios.post('/yiiapi/license/import', {
+            this.$axios.post('/yiiapi/licenses', {
               bin: response.data.bin
             })
               .then(response => {
@@ -343,7 +343,7 @@ export default {
     uploadSectionFile (params) {
       this.readData(params.file)
       setTimeout(() => {
-        this.$axios.post('/yiiapi/license/import', this.file_data)
+        this.$axios.post('/yiiapi/licenses', this.file_data)
           .then(response => {
             console.log(response);
             if (response.data.status == 1) {

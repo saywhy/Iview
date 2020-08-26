@@ -163,37 +163,8 @@ export default {
           }
         })
     },
-    // 定时更新
-    update_status () {
-      this.$axios.get('/yiiapi/rulebase/get-update-status')
-        .then(response => {
-          if (response.data.status == 0) {
-            this.rule = response.data.data
-            this.rule.forEach(item => {
-              switch (item.status) {
-                case '1':
-                  item.status_cn = '更新中'
-                  break;
-                case '2':
-                  item.status_cn = '成功'
-                  break;
-                case '3':
-                  item.status_cn = '失败'
-                  break;
-                default:
-                  break;
-              }
-            });
-          } else if (response.data.status == 1) {
-
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    },
     get_data () {
-      this.$axios.get('/yiiapi/rulebase/get-update-status')
+      this.$axios.get('/yiiapi/rulebases')
         .then(response => {
           if (response.data.status == 0) {
             this.rule = response.data.data
@@ -238,7 +209,7 @@ export default {
     },
     // 在线更新
     update_online () {
-      this.$axios.post('/yiiapi/rulebase/realtime-update')
+      this.$axios.put('/yiiapi/rulebases/0')
         .then(response => {
           let { status, data } = response.data;
           if (status == 0) {
@@ -285,7 +256,7 @@ export default {
       this.upload_btn = true;
       if (JSON.parse(response).status == 0) {
         console.log(file);
-        this.$axios.post('/yiiapi/rulebase/upload-success', {
+        this.$axios.post('/yiiapi/rulebases', {
           "file_name": file.name
         })
           .then(response => {

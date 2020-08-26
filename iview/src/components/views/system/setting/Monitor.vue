@@ -81,7 +81,7 @@
                            align="center"
                            width="180"
                            show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.updated_at*1000 |formatDate }}</template>
+            <template slot-scope="scope">{{ scope.row.updated_at }}</template>
           </el-table-column>
           <el-table-column label="操作"
                            align="center">
@@ -552,7 +552,7 @@ export default {
     },
     // 获取列表
     get_data () {
-      this.$axios.get('/yiiapi/ipsegment/list', {
+      this.$axios.get('/yiiapi/ipsegments', {
         params: {
           page: this.monitor_page.page,
           rows: this.monitor_page.rows,
@@ -683,13 +683,15 @@ export default {
           this.monitor_add.ip_segment.push(item.name)
         }
       });
-      this.$axios.post('/yiiapi/ipsegment/set-ip-segment', {
-        name: this.monitor_add.name,
-        ip_segment: this.monitor_add.ip_segment,
-        network_type: this.monitor_add.type,
-        person: this.monitor_add.person,
-        label: this.monitor_add.tag,
-        location: this.monitor_add.selected_cascader_add,
+      this.$axios.post('/yiiapi/ipsegments', {
+        IpSegment: {
+          name: this.monitor_add.name,
+          ip_segment: this.monitor_add.ip_segment,
+          network_type: this.monitor_add.type,
+          person: this.monitor_add.person,
+          label: this.monitor_add.tag,
+          location: this.monitor_add.selected_cascader_add,
+        }
       })
         .then(response => {
           console.log(response);
@@ -705,7 +707,7 @@ export default {
           } else {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -959,11 +961,7 @@ export default {
         this.select_list.forEach(element => {
           id_list.push(element.id)
         });
-        this.$axios.delete('/yiiapi/ipsegment/del', {
-          data: {
-            id: id_list
-          }
-        })
+        this.$axios.delete('/yiiapi/ipsegments/' + id_list.join(','))
           .then(response => {
             console.log(response);
             if (response.data.status == 0) {

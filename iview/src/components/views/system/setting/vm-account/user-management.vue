@@ -65,7 +65,7 @@
         <el-table-column label="创建时间"
                          width="180"
                          show-overflow-tooltip>
-          <template slot-scope="scope">{{ scope.row.updated_at*1000 |formatDate }}</template>
+          <template slot-scope="scope">{{ scope.row.created_at }}</template>
         </el-table-column>
         <el-table-column label="操作"
                          align="center"
@@ -411,7 +411,7 @@ export default {
     // 获取用户列表
     get_data () {
       this.loading = true
-      this.$axios.get('/yiiapi/user/page', {
+      this.$axios.get('/yiiapi/users', {
         params: {
           page: this.user_data.page,
           rows: this.user_data.rows,
@@ -431,7 +431,7 @@ export default {
     },
     // 获取角色列表
     role_list () {
-      this.$axios.get('/yiiapi/user/role-list', {
+      this.$axios.get('/yiiapi/roles', {
         params: {
           page: 1,
           rows: 999,
@@ -501,21 +501,23 @@ export default {
         );
         return false
       }
-      this.$axios.post('/yiiapi/user/user-add', {
-        username: this.user_add.username,
-        password: this.user_add.password,
-        role: this.user_add.role,
-        department: this.user_add.department,
-        allow_ip: this.user_add.allow_ip,
-        mobile: this.user_add.mobile,
-        email_addr: this.user_add.email_addr,
+      this.$axios.post('/yiiapi/users', {
+        User: {
+          username: this.user_add.username,
+          password: this.user_add.password,
+          role: this.user_add.role,
+          department: this.user_add.department,
+          allow_ip: this.user_add.allow_ip,
+          mobile: this.user_add.mobile,
+          email_addr: this.user_add.email_addr,
+        }
       })
         .then(response => {
           console.log(response);
           if (response.data.status == 1) {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -581,16 +583,12 @@ export default {
         );
         return false
       }
-      this.$axios.get('/yiiapi/user/get-password-reset-token', {
-        params: {
-          id: this.user_edit.id
-        }
-      })
+      this.$axios.get('/yiiapi/user/GetPasswordResetToken/' + this.user_edit.id)
         .then(response => {
           console.log(response.data);
           this.token_data = response.data.data
           localStorage.setItem("token", response.data.data.token);
-          this.$axios.put('/yiiapi/user/reset-password?token=' + localStorage.getItem("token"), {
+          this.$axios.put('/yiiapi/users/' + localStorage.getItem("token"), {
             ResetPasswordForm: {
               password: this.user_edit.password,
               allow_ip: this.user_edit.allow_ip,
@@ -611,7 +609,7 @@ export default {
               } else {
                 this.$message(
                   {
-                    message: response.data.msg,
+                    message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                     type: 'error',
                   }
                 );
@@ -646,7 +644,7 @@ export default {
         this.select_list.forEach(element => {
           id_list.push(element.id)
         });
-        this.$axios.delete('/yiiapi/user/user-del', {
+        this.$axios.delete('/yiiapi/users/0', {
           data: {
             id: id_list
           }
