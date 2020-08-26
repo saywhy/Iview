@@ -111,7 +111,6 @@
             </el-dropdown>
             <el-dropdown @command="change_task"
                          placement='bottom-start'
-                         @close.native="dddd"
                          trigger="click">
               <el-button type="primary"
                          class="change_btn">
@@ -804,12 +803,6 @@ export default {
       },
     };
   },
-  created(){
-    var storage = window.sessionStorage;
-
-   //let dropCol = storage.getItem('dropCol');
-   //storage.setItem('name', name);
-  },
   mounted () {
    // this.check_passwd();
     this.get_echarts();
@@ -817,9 +810,6 @@ export default {
     this.column_deploy();
   },
   methods: {
-    dddd(){
-      alert('54')
-    },
     //配置到取消
     label_cancel_Click(){
       this.$refs.messageDrop.hide();
@@ -871,8 +861,7 @@ export default {
                 }
               });
             }
-
-
+            
             this.fieldList.forEach(item => {
               if(config.includes(item.alias)){
                 item.checked = true;
