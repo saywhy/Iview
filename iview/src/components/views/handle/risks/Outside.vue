@@ -47,7 +47,7 @@ export default {
   },
   components: { VmHandleRisks },
   created () {
-    this.check_passwd();
+   // this.check_passwd();
   },
   methods: {
     // 测试密码过期

@@ -1253,14 +1253,15 @@ export default {
     //获取资产详情顶部
     get_assets_detail_top () {
       this.suggest_flag = false;
-      this.$axios.get('/yiiapi/asset/asset-details',
+      this.$axios.get('/yiiapi/riskasset/AlertDetails',
         {
           params: {
             id: this.detail.id
           }
         })
         .then((resp) => {
-          //console.log(resp)
+          console.log(resp)
+
           let { status, data, msg } = resp.data;
 
           if (status == 0) {
@@ -1341,7 +1342,7 @@ export default {
 
     //获取资产详情列表
     get_list_assets_detail () {
-      this.$axios.get('/yiiapi/asset/alert-list',
+      this.$axios.get('/yiiapi/riskasset/AlertList',
         {
           params: {
             asset_ip: this.detail.asset_ip,
@@ -1361,7 +1362,7 @@ export default {
             }
             this.table.count = count;
             this.table.maxPage = maxPage;
-            this.table.pageNow = pageNow;
+            this.table.pageNow = pageNow * 1;
 
           }
         });
@@ -1438,7 +1439,7 @@ export default {
         change_status = 5;
       }
 
-      this.$axios.put('/yiiapi/alert/change-asset-status', {
+      this.$axios.put('/yiiapi/riskassets/0', {
         asset_ip: Array.of(asset_ip_group),
         status: change_status
       })

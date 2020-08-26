@@ -186,7 +186,6 @@
                 <!--告警时间-->
                 <el-table-column align="center" v-if="dropCol[index].prop == 'alert_time'"
                                  show-overflow-tooltip
-                                 sortable="custom"
                                  :prop="dropCol[index].prop"
                                  :label="item.label">
                   <template slot-scope="scope">{{ scope.row.alert_time | time }}</template>
@@ -231,6 +230,16 @@
                                  :label="item.label">
                   <template slot-scope="scope">{{ scope.row.risk_num  }}</template>
                 </el-table-column>
+
+                <!--更新时间-->
+                <el-table-column align="center" v-else-if="dropCol[index].prop == 'updated_at'"
+                                 show-overflow-tooltip
+                                 sortable="custom"
+                                 :prop="dropCol[index].prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.risk_num  }}</template>
+                </el-table-column>
+
                 <!--其他-->
                 <el-table-column align="center" v-else
                                  show-overflow-tooltip
@@ -592,7 +601,7 @@ export default {
       dropCol:[],
       fieldFlag:false,
       fieldList:[{checked:true,disabled:true,name:"告警时间",alias:'alert_time'},
-        {checked:true,disabled:true,name:"告警类型",alias:'alert_type'},
+        {checked:true,disabled:true,name:"告警类型",alias:'category'},
         {checked:true,disabled:true,name:"威胁等级",alias:'degree'},
         {checked:true,disabled:false,name:"描述",alias:'alert_description'},
         {checked:true,disabled:false,name:"安全域",alias:'security_domain'},
@@ -861,7 +870,7 @@ export default {
                 }
               });
             }
-            
+
             this.fieldList.forEach(item => {
               if(config.includes(item.alias)){
                 item.checked = true;
@@ -949,7 +958,7 @@ export default {
         if (status == 0) {
 
           let { data, count, maxPage, pageNow } = datas;
-          //console.log(data)
+          console.log(data)
           this.table.tableData = data;
           this.table.count = count;
           this.table.maxPage = maxPage;
@@ -1698,7 +1707,8 @@ export default {
   }
 
   // 编辑工单
-  /deep/ .task_new_box {
+  /deep/
+  .task_new_box {
     .el-dialog {
       .el-dialog__header {
         display: none;
@@ -2040,7 +2050,8 @@ export default {
   }
 
   //添加到工单
-  /deep/ .pop_state_add {
+  /deep/
+  .pop_state_add {
     .el-dialog {
       .el-dialog__header {
         display: none;
@@ -2114,7 +2125,8 @@ export default {
     }
   }
 
-  /deep/ .pop_box {
+  /deep/
+  .pop_box {
     .el-dialog {
       background: #ffffff;
       border-radius: 4px;
@@ -2127,13 +2139,6 @@ export default {
 }
 </style>
 <style lang="less">
-  /*.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
-    background-color: #bbb;
-    border-color: #bbb;
-  }
-  .el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
-    border-color: #fff;
-  }*/
   .s_btn_list{
     position: absolute;
     top: 30px;

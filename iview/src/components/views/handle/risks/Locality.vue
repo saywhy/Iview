@@ -42,12 +42,12 @@ export default {
   name: 'handle-locality',
   data () {
     return {
-      threats: 'locality'
+      threats: 'nativethreat'
     };
   },
   components: { VmHandleRisks },
   created () {
-    this.check_passwd();
+    //this.check_passwd();
   },
   methods: {
     // 测试密码过期

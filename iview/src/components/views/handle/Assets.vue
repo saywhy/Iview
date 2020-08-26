@@ -593,7 +593,6 @@ export default {
   components: {
     VmHandleTabs
   },
-
   data () {
     return {
       //
@@ -755,7 +754,7 @@ export default {
     };
   },
   created () {
-    this.check_passwd();
+    //this.check_passwd();
     //頂部
     this.get_list_top();
 
@@ -789,8 +788,9 @@ export default {
     },
     //资产頂部
     get_list_top () {
-      this.$axios.get('/yiiapi/alert/risk-asset-top')
+      this.$axios.get('/yiiapi/riskasset/RiskAssetTop')
         .then((resp) => {
+          //console.log(resp);
           this.data_top_show = true;
           let data = resp.data.data;
           this.data_top = data;
@@ -800,7 +800,7 @@ export default {
 
     //全部資產列表
     get_list_all () {
-      this.$axios.get('/yiiapi/alert/all-asset-labels')
+      this.$axios.get('/yiiapi/riskasset/AllAssetLabels')
         .then((resp) => {
 
           let { status, data } = resp.data;
@@ -853,7 +853,7 @@ export default {
 
       params.label = JSON.stringify(params.label);
 
-      this.$axios.get('/yiiapi/alert/risk-asset',
+      this.$axios.get('/yiiapi/riskassets',
         {
           params: {
             label: params.label,
@@ -875,8 +875,8 @@ export default {
           if (status == 0) {
 
             let { data, count, maxPage, pageNow } = datas;
-            data.map(function (v, k) {
 
+            data.map(function (v, k) {
               let label_group = (Object.values(v.label)).join(',');
               let category_group = v.category.join(',');
               v.label_group = label_group;
@@ -886,7 +886,7 @@ export default {
             this.table.tableData = data;
             this.table.count = count;
             this.table.maxPage = maxPage;
-            this.table.pageNow = pageNow;
+            this.table.pageNow = pageNow * 1;
           }
         })
         .catch(error => {
