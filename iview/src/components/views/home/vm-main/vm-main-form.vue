@@ -1,5 +1,5 @@
 <template>
-  <div id="threatForm"></div>
+  <div id="threatForm" v-cloak></div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -7,9 +7,9 @@
   export default {
     name: 'threatForm',
     props: {
-      option: {
-        type: Object,
-        default: () => {}
+      options: {
+        type: Array,
+        default: () => []
       }
     },
     mounted(){
@@ -17,7 +17,16 @@
     },
     methods:{
       drawGraph(){
-        let index = 0;
+
+        let data = this.options;
+        //data = data.reverse();
+
+        let xAxis = data.map(item => {return item.alert_type});
+
+        data.forEach(item => {
+          Object.assign(item,{value:item.total_count,name:item.alert_type});
+        });
+
         // 基于准备好的dom，初始化echarts实例
         let myChart = this.$echarts.init(document.getElementById('threatForm'))
         // 绘制图表
@@ -36,7 +45,7 @@
             top: 60,
             left: 10,
             selectedMode:false,
-            data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+            data:xAxis
           },
           series: [
             {
@@ -72,30 +81,13 @@
                   show: false
                 }
               },
-              data:[
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:234, name:'联盟广告'},
-                {value:135, name:'视频广告'},
-                {value:1548, name:'搜索引擎'}
-              ]
+              data:data
             }
           ]
         }
         myChart.setOption(option);
 
         tools.loopShowTooltip(myChart, option, {loopSeries: true});
-
-        /*myChart.dispatchAction({type: 'highlight',seriesIndex: 0,dataIndex: 0});//设置默认选中高亮部分
-        myChart.on('mouseover',function(e){
-          if(e.dataIndex != index){
-            myChart.dispatchAction({type: 'downplay', seriesIndex: 0, dataIndex: index  });
-          }
-        });
-        myChart.on('mouseout',function(e){
-          index = e.dataIndex;
-          myChart.dispatchAction({type: 'highlight',seriesIndex: 0,dataIndex: e.dataIndex});
-        });*/
 
         window.addEventListener("resize", () => {
           myChart.resize();

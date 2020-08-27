@@ -1,7 +1,7 @@
 <template>
   <div class="vm-main-tabs" v-cloak>
     <el-row :gutter="20" type="flex" class="va-main-1" justify="space-between">
-      <el-col v-for="(item,index) in tabsData.data" class="va-tabs" :key="index"
+      <el-col v-for="(item,index) in dataInfo" class="va-tabs" :key="index"
               :class="{active:index == tabsData.activeIndex}">
         <div class="va-tabs-item" @click="tabsData.activeIndex = index">
           <i class="vat-img"></i>
@@ -16,6 +16,12 @@
 <script type="text/ecmascript-6">
   export default {
     name: 'vm-main-tabs',
+    props: {
+      mountain: {
+        type: Object,
+        default: () => {}
+      }
+    },
     data(){
       return {
         tabsData: {
@@ -23,13 +29,33 @@
           data: [
             {title: '综合评分', count: 88},
             {title: '告警总数', count: 167},
-            {title: '七天内新告警树', count: 8},
+            {title: '七天内新告警数', count: 8},
             {title: '风险资产总数', count: 136},
             {title: '七天内新风险资产数', count: 12}
           ]
         }
       }
-    }
+    },
+    computed: {
+      dataInfo () {
+        let datas = this.mountain;
+
+        for (let key in datas) {
+          if(key == 'safety_score'){
+            this.tabsData.data[0].count = datas[key];
+          }else if(key == 'untreated_alarm_count_total'){
+            this.tabsData.data[1].count = datas[key];
+          }else if(key == 'last7_alarm_count'){
+            this.tabsData.data[2].count = datas[key];
+          }else if(key == 'risk_dev_count'){
+            this.tabsData.data[3].count = datas[key];
+          }else if(key == 'last7_risk_dev_count'){
+            this.tabsData.data[4].count = datas[key];
+          }
+        }
+        return this.tabsData.data;
+      }
+    },
   }
 </script>
 

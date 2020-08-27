@@ -1,5 +1,5 @@
 <template>
-  <div class="vm-main-rank">
+  <div class="vm-main-rank" v-cloak>
     <!--第一行-->
     <el-row type="flex" class="vm_rank vm_rank1" justify="space-between">
       <el-col class="vm_col_btn">

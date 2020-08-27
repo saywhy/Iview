@@ -1,5 +1,5 @@
 <template>
-  <div id="dangerCapital"></div>
+  <div id="dangerCapital" v-cloak></div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -7,7 +7,7 @@
   export default {
     name: 'dangerCapital',
     props: {
-      option: {
+      options: {
         type: Object,
         default: () => {}
       }
@@ -17,7 +17,21 @@
     },
     methods:{
       drawGraph(){
-        let index = 0;
+
+        if(this.options){
+
+          var data = this.options.RiskAssetDegree;
+          data.forEach(item => {
+            if(item.degree == 'low'){
+              Object.assign(item,{value:item.count * 1,name:'低危'});
+            }else if(item.degree == 'medium'){
+              Object.assign(item,{value:item.count * 1,name:'中危'});
+            }else if(item.degree == 'high'){
+              Object.assign(item,{value:item.count * 1,name:'高危'});
+            }
+          });
+        }
+
         // 基于准备好的dom，初始化echarts实例
         let myChart = this.$echarts.init(document.getElementById('dangerCapital'));
         // 绘制图表
@@ -73,11 +87,7 @@
                   show: false
                 }
               },
-              data:[
-                {value:335, name:'低危'},
-                {value:310, name:'中危'},
-                {value:234, name:'高危'}
-              ]
+              data:data
             }
           ]
         }

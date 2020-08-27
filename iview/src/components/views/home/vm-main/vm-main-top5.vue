@@ -1,5 +1,5 @@
 <template>
-  <el-col class="vm-main-top5">
+  <el-col class="vm-main-top5" :class="claName" v-cloak>
     <el-table class="common-table-home"
               ref="multipleTable"
               align="center"
@@ -13,7 +13,7 @@
                        align="center"
                        label="序号"
                        width="60"></el-table-column>
-      <el-table-column prop="ip"
+      <el-table-column prop="asset_ip"
                        align="center"
                        label="IP"
                        show-overflow-tooltip></el-table-column>
@@ -54,39 +54,23 @@
 <script type="text/ecmascript-6">
   export default {
     name:'vm-main-top5',
+    props: {
+      options: {
+        type: Array,
+        default: () => []
+      },
+      split:{
+        type: Number,
+        default: () => 0
+      },
+      claName:{
+        type: String,
+        default: () => ''
+      }
+    },
     data() {
       return {
-        tableData: [{
-          id:'01',
-          ip: '192.163.2.2',
-          label: ['恶意地址','恶意地址'],
-          threat: '木马/Virut',
-          degree:'高'
-        }, {
-          id:'02',
-          ip: '192.163.2.2',
-          label: ['恶意地址','恶意地址'],
-          threat: '木马/Virut',
-          degree:'低'
-        }, {
-          id:'03',
-          ip: '192.163.2.2',
-          label: ['恶意地址','恶意地址','恶意软件1'],
-          threat: '木马/Virut',
-          degree:'高'
-        }, {
-          id:'04',
-          ip: '192.163.2.2',
-          label: ['恶意地址','恶意地址'],
-          threat: '木马/Virut',
-          degree:'中'
-        },{
-          id:'05',
-          ip: '192.163.2.2',
-          label: ['恶意地址','恶意地址'],
-          threat: '木马/Virut',
-          degree:'高'
-        }],
+        tableData: [],
         detail_click_val: {},
         oldPositon: {
           x: '',
@@ -97,6 +81,16 @@
           y: ''
         }
       }
+    },
+    created(){
+      let options = this.options;
+
+      if (this.split != 0){
+        options = options.slice(0,this.split);
+      }else {
+        options = options;
+      }
+      this.tableData = options;
     },
     methods: {
       //进入详情页面
@@ -227,6 +221,27 @@
                 background: #47cad9
               }
             }
+          }
+        }
+      }
+    }
+    &.vm-main-top5_more{
+      /deep/
+      .common-table-home{
+        .el-table__body-wrapper{
+          height: 475px;
+          overflow-y: auto;
+
+          &::-webkit-scrollbar {
+            width: 6px;
+          }
+          &::-webkit-scrollbar-thumb {
+            border-radius: 6px;
+            background: #0070FF;
+          }
+          &::-webkit-scrollbar-track {
+            border-radius: 6px;
+            background: #f4f4f4;
           }
         }
       }

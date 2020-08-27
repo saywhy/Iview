@@ -1470,7 +1470,7 @@ export default {
         let handle_data = this.table_assets.tableData.slice(0, eachPage);
         this.table_assets.tableData_new = handle_data;
         //获取用户列表(经办人使用)
-        this.$axios.get('/yiiapi/site/user-list')
+        this.$axios.get('/yiiapi/users')
           .then(resp => {
             let { status, data } = resp.data;
             if (status == 0) {

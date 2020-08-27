@@ -1,5 +1,5 @@
 <template>
-  <div class="vm-main-time">
+  <div class="vm-main-time" v-cloak>
     <el-date-picker
       v-model="threatDate"
       type="date"
@@ -13,12 +13,12 @@
     name:'vm-main-time',
     data() {
       return {
-        threatDate:'2019-10-19'
+        threatDate:''
       }
     }
   }
 </script>
-<style lang="less">
+<style scoped lang="less">
   .vm-main-time{
     position: absolute;
     z-index: 999;
@@ -26,6 +26,7 @@
     height: 28px;
     top: 16px;
     right: 20px;
+    /deep/
     .el-date-editor{
       width: 130px;
       .el-input__inner{

@@ -1,21 +1,19 @@
 <template>
-  <el-col class="vm-main-target">
-    <el-tag class="vm-tag tag1">1.23.4.156</el-tag>
-    <el-tag class="vm-tag tag2">202.106.195.68</el-tag>
-    <el-tag class="vm-tag tag3">www.rasn.com</el-tag>
-    <el-tag class="vm-tag tag4">/xpsl/verinwer.exe</el-tag>
-    <el-tag class="vm-tag tag5">555.org.xlc.icmp</el-tag>
-    <el-tag class="vm-tag tag1">1.23.4.156</el-tag>
-    <el-tag class="vm-tag tag2">202.106.195.68</el-tag>
-    <el-tag class="vm-tag tag3">www.rasn.com</el-tag>
-    <el-tag class="vm-tag tag4">/xpsl/verinwer.exe</el-tag>
-    <el-tag class="vm-tag tag5">555.org.xlc.icmp</el-tag>
+  <el-col class="vm-main-target" v-cloak>
+    <el-tag class="vm-tag tag1" v-for="(item,index) in options"
+    :class="{'tag1':index % 5 == 0,'tag2':index % 5 == 1,'tag3':index % 5 == 2,'tag4':index % 5 == 3,'tag5':index % 5 == 4}">{{item.indicator}}</el-tag>
   </el-col>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
     name:'vm-main-target',
+    props: {
+      options: {
+        type: Array,
+        default: () => []
+      }
+    },
     data() {
       return {}
     }
@@ -23,16 +21,35 @@
 </script>
 <style scoped lang="less">
   .vm-main-target{
-    height: 242px;
+    height: 226px;
     margin-top: 60px;
-    padding: 0 20px!important;
+    padding: 0 10px!important;
     text-align: left;
+    overflow-y: auto;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 6px;
+      /*高宽分别对应横竖滚动条的尺寸*/
+      /* border-radius: 6px;*/
+    }
+    &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+      border-radius: 6px;
+      background: #0070FF;
+      /*background: red;*/
+    }
+    &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+      border-radius: 6px;
+      background: #f4f4f4;
+    }
+    /deep/
     .vm-tag{
       background-color: #0288D1;
       display: inline-block;
       height: 38px;
       padding: 0 10px;
       margin-bottom: 8px;
+      margin-left: 10px;
       line-height: 36px;
       font-size: 14px;
       color: #fff;

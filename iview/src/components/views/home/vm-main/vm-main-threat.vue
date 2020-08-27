@@ -1,5 +1,5 @@
 <template>
-  <el-col class="vm-main-threat">
+  <el-col class="vm-main-threat" :class="claName" v-cloak>
     <el-table class="common-table-home"
               ref="multipleTable"
               align="center"
@@ -16,7 +16,7 @@
           {{scope.row.alert_time | time}}
         </template>
       </el-table-column>
-      <el-table-column prop="type"
+      <el-table-column prop="indicator"
                        align="center"
                        label="告警类型"
                        show-overflow-tooltip></el-table-column>
@@ -28,8 +28,12 @@
                        align="center"
                        label="风险资产"
                        show-overflow-tooltip></el-table-column>
-      <el-table-column label="威胁等级"
+      <el-table-column prop="capital"
                        align="center"
+                       label="攻击阶段"
+                       show-overflow-tooltip></el-table-column>
+      <el-table-column align="center"
+                       label="威胁等级"
                        show-overflow-tooltip>
         <template slot-scope="scope">
           <span class="btn_alert_background"
@@ -39,7 +43,6 @@
             {{ scope.row.degree | degree_sino }}</span>
         </template>
       </el-table-column>
-
     </el-table>
   </el-col>
 </template>
@@ -47,44 +50,23 @@
 <script type="text/ecmascript-6">
   export default {
     name:'vm-main-threat',
+    props: {
+      options: {
+        type: Array,
+        default: () => []
+      },
+      split:{
+        type: Number,
+        default: () => 0
+      },
+      claName:{
+        type: String,
+        default: () => ''
+      }
+    },
     data() {
       return {
-        tableData: [{
-          alert_time:'1596620491',
-          type: '钓鱼仿冒',
-          target: 'amazazonb.com',
-          capital: 'amazazonb.com',
-          stage: '垃圾邮件',
-          degree:'高'
-        }, {
-          alert_time:'1596610491',
-          type: '钓鱼仿冒',
-          target: 'amazazonb.com',
-          capital: '34534',
-          stage: '提权',
-          degree:'高'
-        }, {
-          alert_time:'1596620431',
-          type: '垃圾邮件',
-          target: 'werwer',
-          capital: 'amazazonb.com',
-          stage: '防御逃逸',
-          degree:'低'
-        }, {
-          alert_time:'1596621491',
-          type: '钓鱼仿冒',
-          target: 'amazazonb.com',
-          capital: '34534',
-          stage: '提权',
-          degree:'高'
-        },{
-          alert_time:'1596620291',
-          type: '钓鱼仿冒',
-          target: 'werwer',
-          capital: 'amazazonb.com',
-          stage: '防御逃逸',
-          degree:'中'
-        }],
+        tableData: [],
         detail_click_val: {},
         oldPositon: {
           x: '',
@@ -95,6 +77,16 @@
           y: ''
         }
       }
+    },
+    created(){
+      let options = this.options;
+
+      if (this.split != 0){
+         options = options.slice(0,this.split);
+      }else {
+        options = options;
+      }
+      this.tableData = options;
     },
     methods: {
       //进入详情页面
@@ -143,7 +135,6 @@
     .common-table-home {
       width: 100%;
       font-family: PingFangMedium;
-      /deep/
       .el-table__header-wrapper {
         .el-table__header {
           thead.has-gutter {
@@ -214,6 +205,27 @@
                 background: #47cad9
               }
             }
+          }
+        }
+      }
+    }
+    &.vm-main-threat_more{
+      /deep/
+      .common-table-home{
+        .el-table__body-wrapper{
+          height: 475px!important;
+          overflow-y: auto;
+
+          &::-webkit-scrollbar {
+            width: 6px;
+          }
+          &::-webkit-scrollbar-thumb {
+            border-radius: 6px;
+            background: #0070FF;
+          }
+          &::-webkit-scrollbar-track {
+            border-radius: 6px;
+            background: #f4f4f4;
           }
         }
       }

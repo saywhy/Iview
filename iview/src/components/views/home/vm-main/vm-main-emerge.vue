@@ -1,14 +1,14 @@
 <template>
-  <div id="threatWarn"></div>
+  <div id="threatWarn" v-cloak></div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
     name: 'vh-threatWarn',
     props: {
-      option: {
-        type: Object,
-        default: () => {}
+      options: {
+        type: Array,
+        default: () => [{ statistics_time: '2000-01-01 12:00', alert_count: 0 }]
       }
     },
     mounted(){
@@ -16,6 +16,15 @@
     },
     methods:{
       drawGraph(){
+
+        let data = this.options;
+        //data = data.reverse();
+
+        let xAxis = data.map(item => {return item.statistics_time});
+        let lowyAxis = data.map(item => {return item.alert_count_details.low});
+        let midyAxis = data.map(item => {return item.alert_count_details.medium})
+        let highyAxis = data.map(item => {return item.alert_count_details.high})
+
         // 基于准备好的dom，初始化echarts实例
         let myChart = this.$echarts.init(document.getElementById('threatWarn'));
         // 绘制图表
@@ -65,7 +74,7 @@
                 color: '#F4F4F4'
               }
             },
-            data: ["11-11","11-12","11-13","11-14","11-15","11-16"]
+            data: xAxis
           },
           yAxis: {
             axisLine:{
@@ -92,7 +101,7 @@
             type: 'line',
             symbol: "none",
             smooth: true,
-            data: [5, 20, 36, 10, 10, 30],
+            data: lowyAxis,
             lineStyle:{
               color: 'rgba(71,202,217,0.5)'
             },
@@ -115,7 +124,7 @@
             type: 'line',
             symbol: "none",
             smooth: true,
-            data: [22, 24, 26, 20, 20, 10],
+            data: midyAxis,
             lineStyle:{
               color: 'rgba(224,200,64,0.5)'
             },
@@ -138,7 +147,7 @@
             type: 'line',
             symbol: "none",
             smooth: true,
-            data: [32, 14, 16, 30, 35, 20],
+            data: highyAxis,
             lineStyle:{
               color: 'rgba(220,95,95,0.5)'
             },

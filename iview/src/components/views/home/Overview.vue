@@ -1,24 +1,28 @@
 <template>
  <div id="Overview" v-cloak>
-   <vm-main-tabs></vm-main-tabs>
+   <vm-main-tabs :mountain="mountain"
+                 v-if="mountain_show"></vm-main-tabs>
    <el-row :gutter="20" type="flex" class="va-main-2" justify="space-between">
      <el-col :span="12">
        <div class="vam-2">
          <div class="vam-title">威胁告警（7天）</div>
-         <vm-main-emerge></vm-main-emerge>
+         <vm-main-emerge :options="top_left"
+                         v-if="top_left_show"></vm-main-emerge>
        </div>
      </el-col>
      <el-col :span="6">
        <div class="vam-2">
          <div class="vam-title">威胁类型 TOP5（7天）</div>
-         <vm-main-form></vm-main-form>
+         <vm-main-form :options="top_mid"
+                       v-if="top_mid_show"></vm-main-form>
          <vm-main-time></vm-main-time>
        </div>
      </el-col>
      <el-col :span="6">
        <div class="vam-2">
          <div class="vam-title">高风险威胁指标（7天）</div>
-         <vm-main-target></vm-main-target>
+         <vm-main-target :options="top_right"
+                         v-if="top_right_show"></vm-main-target>
        </div>
      </el-col>
    </el-row>
@@ -26,17 +30,22 @@
      <el-col :span="12">
        <div class="vam-3">
          <div class="vam-title">风险资产</div>
-         <vm-main-capital></vm-main-capital>
+         <vm-main-capital :options="mid_left"
+                          v-if="mid_left_show"></vm-main-capital>
          <el-col :span="16" class="vam-progress">
-           <vm-main-progress></vm-main-progress>
+           <vm-main-progress :options="mid_left"
+                             v-if="mid_left_show"></vm-main-progress>
          </el-col>
        </div>
      </el-col>
      <el-col :span="12">
        <div class="vam-3">
          <div class="vam-title">风险资产 TOP5</div>
-         <div class="vam-more" v-more="more" @click="dialogTableVisible = true"></div>
-         <vm-main-top5></vm-main-top5>
+         <div class="vam-more" v-more="more" v-if="mid_right_show"
+              @click="more_visible.risk = true"></div>
+         <vm-main-top5 :options="mid_right" :split="5"
+                       v-if="mid_right_show">
+         </vm-main-top5>
        </div>
      </el-col>
    </el-row>
@@ -44,25 +53,61 @@
      <el-col :span="12">
        <div class="vam-4">
          <div class="vam-title">攻击阶段分布（30天）</div>
-         <vm-main-stage></vm-main-stage>
+         <vm-main-stage :options="bom_left"
+                        v-if="bom_left_show"></vm-main-stage>
        </div>
      </el-col>
      <el-col :span="12">
        <div class="vam-4">
          <div class="vam-title">最新告警</div>
-         <div class="vam-more" v-more="more" @click="dialogTableVisible = true"></div>
-         <vm-main-threat></vm-main-threat>
+         <div class="vam-more" v-more="more"
+              v-if="bom_right_show"
+              @click="more_visible.alarm = true"></div>
+         <vm-main-threat :options="bom_right" :split="5"
+                         v-if="bom_right_show">
+         </vm-main-threat>
        </div>
      </el-col>
    </el-row>
 
-   <!--更多弹出框-->
-   <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
-     <el-table :data="gridData">
-       <el-table-column property="date" label="日期" width="150"></el-table-column>
-       <el-table-column property="name" label="姓名" width="200"></el-table-column>
-       <el-table-column property="address" label="地址"></el-table-column>
-     </el-table>
+   <!--更多风险资产弹出框-->
+   <el-dialog class="pop_box"
+              :close-on-click-modal="false"
+              :modal-append-to-body="false"
+              :visible.sync="more_visible.risk">
+     <img src="@/assets/images/emerge/closed.png"
+          @click="more_visible.risk = false"
+          class="closed_img"
+          alt="">
+     <div class="title">
+       <div class="mask"></div>
+       <span class="title_name">风险资产</span>
+     </div>
+     <div class="content">
+       <vm-main-top5 :options="mid_right" :split="0"
+                       :claName="more_visible.risk_name">
+       </vm-main-top5>
+     </div>
+   </el-dialog>
+
+   <!--更多最新告警弹出框-->
+   <el-dialog class="pop_box"
+              :close-on-click-modal="false"
+              :modal-append-to-body="false"
+              :visible.sync="more_visible.alarm">
+     <img src="@/assets/images/emerge/closed.png"
+          @click="more_visible.alarm = false"
+          class="closed_img"
+          alt="">
+     <div class="title">
+       <div class="mask"></div>
+       <span class="title_name">最新告警</span>
+     </div>
+     <div class="content">
+       <vm-main-threat :options="bom_right" :split="0"
+                       :claName="more_visible.alarm_name">
+       </vm-main-threat>
+     </div>
    </el-dialog>
  </div>
 </template>
@@ -88,20 +133,42 @@
             date: '2016-05-02',
             name: '王小虎',
             address: '上海市普陀区金沙江路 1518 弄'
-          }, {
+          },{
             date: '2016-05-04',
             name: '王小虎',
             address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
           }],
-          dialogTableVisible: false,
+          more_visible:{
+            risk:false,
+            risk_name:'vm-main-top5_more',
+            alarm: false,
+            alarm_name:'vm-main-threat_more'
+          },
+          mountain:{},
+          mountain_show:false,
+
+          top_left: [],
+          top_left_show: false,
+
+          top_mid: [],
+          top_mid_show: false,
+
+          top_right: [],
+          top_right_show: false,
+
+          ///////////
+          mid_left:{},
+          mid_left_show: false,
+
+          mid_right: [],
+          mid_right_show: false,
+
+          ///////////
+          bom_left: [],
+          bom_left_show: false,
+
+          bom_right: [],
+          bom_right_show: false,
         }
       },
       components:{
@@ -116,6 +183,156 @@
         vmMainRank,
         vmMainStage,
         vmMainThreat
+      },
+      created () {
+        //顶部
+        this.init_mountain();
+
+        //第一排
+        this.init_top_left();
+        this.init_top_mid();
+        this.init_top_right();
+
+        //第二排
+        this.init_mid_left();
+        this.init_mid_right();
+
+        //第三排
+        this.init_bom_left();
+        this.init_bom_right();
+      },
+      methods:{
+        //顶部
+        init_mountain() {
+          this.$axios.get('/yiiapi/overview/tabs')
+            .then((resp) => {
+              // console.log(resp)
+              let {
+                status,
+                data
+              } = resp.data;
+
+             // console.log(resp);
+
+              if (status == 0) {
+                this.mountain = data;
+                this.mountain_show = true;
+              }
+            })
+        },
+
+        //第一排（左）
+        init_top_left () {
+          this.$axios.get('/yiiapi/overview/Last7DaysAlarm')
+            .then((resp) => {
+               //console.log(resp)
+              let {
+                status,
+                data
+              } = resp.data;
+              if (status == 0) {
+                this.top_left = data;
+                this.top_left_show = true;
+              }
+            })
+        },
+        //第一排（中）
+        init_top_mid () {
+          this.$axios.get('/yiiapi/overview/ThreatType')
+            .then((resp) => {
+              let {
+                status,
+                data
+              } = resp.data;
+
+              if (status == 0) {
+                this.top_mid = data;
+                this.top_mid_show = true;
+              }
+            })
+        },
+        //第一排（右）
+        init_top_right () {
+          this.$axios.get('/yiiapi/overview/HighRiskIndicators')
+            .then((resp) => {
+              let {
+                status,
+                data
+              } = resp.data;
+              //console.log(data)
+              if (status == 0) {
+                this.top_right = data;
+                this.top_right_show = true;
+              }
+            })
+        },
+
+        //第二排（左）
+        init_mid_left () {
+          this.$axios.get('/yiiapi/overview/RiskAsset')
+            .then((resp) => {
+              let {
+                status,
+                data
+              } = resp.data;
+              //console.log(data)
+              if (status == 0) {
+                this.mid_left = data;
+                this.mid_left_show = true;
+              }
+            })
+        },
+        //第二排（右）
+        init_mid_right () {
+          this.$axios.get('/yiiapi/overview/RiskAssetTop5')
+            .then((resp) => {
+              let {
+                status,
+                data
+              } = resp.data;
+
+              //console.log(data);
+
+              if (status == 0) {
+                this.mid_right = data;
+                this.mid_right_show = true;
+              }
+            })
+        },
+
+        //第三排（左）
+        init_bom_left () {
+          this.$axios.get('/yiiapi/overview/AttackStageDistribution')
+            .then((resp) => {
+              // /console.log(resp)
+              let {
+                status,
+                data
+              } = resp.data;
+
+              if (status == 0) {
+                this.bom_left = data;
+                this.bom_left_show = true;
+              }
+            })
+        },
+        //第三排（右）
+        init_bom_right () {
+          this.$axios.get('/yiiapi/overview/LatestAlarms')
+            .then((resp) => {
+              let {
+                status,
+                data
+              } = resp.data;
+
+              //console.log(data);
+
+              if (status == 0) {
+                this.bom_right = data;
+                this.bom_right_show = true;
+              }
+            })
+        }
       }
     }
 </script>
@@ -136,6 +353,7 @@
       position: absolute;
       top: 16px;
       right: 20px;
+      cursor: pointer;
     }
     .va-main-2{
       margin-top: 20px;
@@ -168,6 +386,63 @@
         border-radius: 4px;
         background-color: #fff;
         position: relative;
+      }
+    }
+    /deep/
+    .pop_box {
+      .el-dialog {
+        height: 640px;
+        width: 1280px;
+        .el-dialog__header {
+          display: none;
+        }
+        .el-dialog__body {
+          max-height: 640px;
+          padding: 30px;
+
+          .closed_img {
+            position: absolute;
+            top: -18px;
+            right: -18px;
+            cursor: pointer;
+            width: 46px;
+            height: 46px;
+          }
+
+          .title {
+            height: 24px;
+            line-height: 24px;
+            text-align: left;
+
+            .title_name {
+              font-size: 20px;
+              color: #333333;
+              line-height: 24px;
+            }
+            .mask {
+              width: 24px;
+              height: 0px;
+              border-top: 0px;
+              border-right: 2px solid transparent;
+              border-bottom: 5px solid #0070ff;
+              border-left: 2px solid transparent;
+              transform: rotate3d(0, 0, 1, 90deg);
+              display: inline-block;
+              margin-right: -5px;
+              margin-bottom: 4px;
+              margin-left: -10px;
+            }
+          }
+          .content {
+            padding-top: 20px;
+            .vm-main-top5{
+              margin-top: 0;
+            }
+            .vm-main-threat{
+              margin-top: 0;
+            }
+          }
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <el-col class="vm-main-stage">
+  <el-col class="vm-main-stage" v-cloak>
 
     <div class="attack_stage_bom">
 
@@ -144,13 +144,19 @@
 <script type="text/ecmascript-6">
     export default {
       name: "vm-main-stage",
+      props: {
+        options: {
+          type: Array,
+          default: () => []
+        }
+      },
       data(){
         return {
           attack_stage_list: [
             {
               name: "Initial Access",
               value: "初始访问",
-              count: 10
+              count: 0
             },
             {
               name: "Execution",
@@ -206,8 +212,26 @@
               name: "Impact",
               value: "毁坏",
               count: 0
-            },
+            }
           ],
+        }
+      },
+      created(){
+        this.init_stage();
+      },
+      methods:{
+        init_stage(){
+          let data = this.options;
+          //攻击阶段
+          this.attack_stage_list.forEach(function (v, k) {
+            if (data && data.length) {
+              data.forEach(function (v1, k1) {
+                if (v.name == v1.attack_stage) {
+                  v.count = v1.count;
+                }
+              })
+            }
+          });
         }
       }
     }
