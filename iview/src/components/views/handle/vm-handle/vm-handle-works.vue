@@ -986,7 +986,7 @@ export default {
     VmEmergePicker
   },
   created () {
-    /********************************************************替换**************************************************/
+    /**************************************替换***************************************/
     if (this.owned == 'distributed') {
       this.options_status = [
         {
@@ -1048,7 +1048,7 @@ export default {
   methods: {
     //获取全部资产列表
     get_list_assets_info () {
-      this.$axios.get('/yiiapi/workorder/asset-list', {
+      this.$axios.get('/yiiapi/workorder/AssetList', {
         params: {
           page: this.table_assets.pageNow,
           rows: this.table_assets.eachPage
@@ -1091,7 +1091,7 @@ export default {
 
     //获取全部告警列表
     get_list_alerts_info () {
-      this.$axios.get('/yiiapi/workorder/alert-list', {
+      this.$axios.get('/yiiapi/workorder/AlertList', {
         params: {
           page: this.table_alerts.pageNow,
           rows: this.table_alerts.eachPage
@@ -1129,7 +1129,7 @@ export default {
     //工单中心列表
     get_list_works () {
       this.table.loading = true;
-      console.log('************');
+      //console.log('************');
       let params_status = '';
 
       if (this.owned == 'created') {
@@ -1150,7 +1150,7 @@ export default {
         }
       }
 
-      this.$axios.get('/yiiapi/workorder/list',
+      this.$axios.get('/yiiapi/workorders',
         {
           params: {
             stime: this.params.startTime,
@@ -1176,6 +1176,7 @@ export default {
                 v.new_perator = v.perator.join(',')
               }
             });
+
             this.table.tableData = data;
             this.table.count = Number(count.count);
             this.table.maxPage = maxPage;
@@ -1246,7 +1247,7 @@ export default {
 
     // 新增工单
     add_new_task (command) {
-      console.log(command);
+      //console.log(command);
       switch (command) {
         case '告警工单':
           this.open_task_new('alert')
@@ -1300,7 +1301,7 @@ export default {
       } else if (process == '已取消') {
         change_status = 4;
       }
-      this.$axios.put('/yiiapi/workorder/change-status', {
+      this.$axios.put('/yiiapi/workorder/ChangeStatus', {
         id: worker_id_group,
         status: change_status
       })
@@ -1323,7 +1324,7 @@ export default {
         })
     },
 
-    /*******************下载**********************************替换******************************************************/
+    /*****************************************************替换******************************************************/
     worksdownload () {
       let selected = this.table.multipleSelection;
 
@@ -1341,21 +1342,17 @@ export default {
             }
           })
             .then(response => {
-              var url1 = "/yiiapi/site/download-test?id=" + (selected[0].id * 1);
+              var url1 = "/yiiapi/workorder/GetExists?id=" + (selected[0].id * 1);
               this.$axios.get(url1)
                 .then(resp => {
                   let { status, msg, data } = resp.data;
                   console.log(resp)
                   if (status == 0) {
-                    var url2 = "/yiiapi/workorder/download?id=" + (selected[0].id * 1);
+                    var url2 = "/yiiapi/workorder/Download?id=" + (selected[0].id * 1);
                     window.location.href = url2;
                   } else {
                     this.$message({ type: 'warning', message: msg });
                   }
-                  /*this.$axios.get('/workorder/download?id='+(selected[0].id * 1))
-                    .then(resp => {
-                    console.log(resp)
-                  })*/
                 })
             })
             .catch(error => {
@@ -1368,7 +1365,7 @@ export default {
       }
     },
 
-    /*******************删除***************************************替换*********************************************************************************/
+    /*******************删除***********************/
     worksDelete () {
       let that = this;
       let multiple = this.table.multipleSelection;
@@ -1382,8 +1379,8 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log(selected)
-          that.$axios.delete('/yiiapi/workorder/del', {
+          //console.log(selected)
+          that.$axios.delete('/yiiapi/workorders', {
             data: { id: selected }          })
             .then(resp => {
               let { status, msg, data } = resp.data;
@@ -1490,12 +1487,6 @@ export default {
         this.handle.active = 0;
 
         console.log('下一步')
-
-
-
-        // if(){
-
-        // }
         this.get_list_assets_info();
         this.get_list_alerts_info();
       }
@@ -1633,7 +1624,7 @@ export default {
     //分配参数具体请求
     get_distribution (all_params) {
       this.handle.save = true;
-      this.$axios.put('/yiiapi/workorder/distribution', all_params)
+      this.$axios.put('/yiiapi/workordes', all_params)
         .then((resp) => {
           this.handle.save = false;
           let { status, msg, data } = resp.data;
@@ -1695,7 +1686,7 @@ export default {
     //新建工单具体保存
     get_save (all_params) {
       this.handle.save = true;
-      this.$axios.post('/yiiapi/workorder/add', all_params)
+      this.$axios.post('/yiiapi/workorders', all_params)
         .then((resp) => {
           this.handle.save = false;
           let { status, msg, data } = resp.data;
@@ -1776,7 +1767,7 @@ export default {
       console.log(this.edit.data);
 
       // 获取工单 资产或者告警数组---------------------------------
-      this.$axios.get('/yiiapi/workorder/get-exists', {
+      this.$axios.get('/yiiapi/workorder/GetExists', {
         params: {
           id: this.edit.data.id
         }
@@ -1876,7 +1867,7 @@ export default {
     },
     //获取全部资产列表
     get_list_assets (name) {
-      this.$axios.get('/yiiapi/workorder/asset-list', {
+      this.$axios.get('/yiiapi/workorder/AssetList', {
         params: {
           page: this.edit.page,
           rows: this.edit.rows,
@@ -1912,7 +1903,7 @@ export default {
     },
     //获取全部告警列表
     get_list_alert () {
-      this.$axios.get('/yiiapi/workorder/alert-list', {
+      this.$axios.get('/yiiapi/workorder/AlertList', {
         params: {
           page: this.edit.page,
           rows: this.edit.rows,
@@ -2008,7 +1999,7 @@ export default {
       }
       console.log(all_params);
       this.handle.save = true
-      this.$axios.post('/yiiapi/workorder/add', all_params)
+      this.$axios.post('/yiiapi/workorders', all_params)
         .then((resp) => {
           this.handle.save = false
           let { status, msg, data } = resp.data;
@@ -2063,7 +2054,7 @@ export default {
       }
       console.log(all_params);
       this.handle.save = true
-      this.$axios.put('/yiiapi/workorder/distribution', all_params)
+      this.$axios.put('/yiiapi/workordes', all_params)
         .then((resp) => {
           this.handle.save = false
           let { status, msg, data } = resp.data;

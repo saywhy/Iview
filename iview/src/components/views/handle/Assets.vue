@@ -1,7 +1,6 @@
 <template>
   <div class="handle-assets"
-       v-loading.fullscreen.lock="handle.save"
-       v-cloak>
+       v-loading.fullscreen.lock="handle.save" v-cloak>
     <vm-handle-tabs :data_top="data_top"
                     v-if="data_top_show"></vm-handle-tabs>
     <!--全部资产-->
@@ -196,7 +195,7 @@
                              show-overflow-tooltip
                              min-width="120">
             </el-table-column>
-            <el-table-column min-width="140"
+            <el-table-column min-width="120"
                              align="center"
                              label="关联威胁">
               <template slot-scope="scope">
@@ -211,8 +210,7 @@
               </template>
             </el-table-column>
             <el-table-column label="威胁等级"
-                             align="center"
-                             width="120">
+                             align="center">
               <template slot-scope="scope">
                 <span class="btn_alert_background"
                       :class="{'high_background':scope.row.degree =='high','mid_background':scope.row.degree =='medium','low_background':scope.row.degree =='low'}">
@@ -220,8 +218,7 @@
               </template>
             </el-table-column>
             <el-table-column label="失陷确定性"
-                             align="center"
-                             width="120">
+                             align="center">
               <template slot-scope="scope">
                 <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
                   {{ scope.row.fall_certainty | certainty }}</span>
@@ -595,7 +592,6 @@ export default {
   },
   data () {
     return {
-      //
       search_flag: false,
       //頂部數據
       data_top: {},
@@ -803,6 +799,8 @@ export default {
       this.$axios.get('/yiiapi/riskasset/AllAssetLabels')
         .then((resp) => {
 
+          //console.log(resp)
+
           let { status, data } = resp.data;
 
           if (status == 0) {
@@ -867,7 +865,7 @@ export default {
         })
         .then((resp) => {
           this.table.loading = false;
-
+          //console.log(resp)
           let { status, data } = resp.data;
 
           let datas = data;
@@ -1100,7 +1098,7 @@ export default {
         change_status = 5;
       }
 
-      this.$axios.put('/yiiapi/alert/change-asset-status', {
+      this.$axios.put('/yiiapi/riskassets/0', {
         asset_ip: asset_ip_group,
         status: change_status
       })

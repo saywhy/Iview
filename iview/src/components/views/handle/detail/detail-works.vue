@@ -296,7 +296,7 @@ export default {
       var url = ''
       switch (this.$route.query.type) {
         case 'workorder':
-          url = '/yiiapi/workorder/details'
+          url = '/yiiapi/workorders/'+this.id
           break;
         case 'alert_detail':
           url = '/yiiapi/alert/workorder-details'
@@ -322,7 +322,6 @@ export default {
       this.$axios.get(url,
         {
           params: {
-            id: this.id,
             page: this.table.pageNow,
             rows: this.table.eachPage
           }
@@ -342,7 +341,7 @@ export default {
             //顶部数据参数
             this.data = data;
 
-            console.log(data)
+            //console.log(data)
 
             this.page_show = false;
 
@@ -380,22 +379,25 @@ export default {
       var url = ''
       switch (this.$route.query.type) {
         case 'workorder':
-          url = '/yiiapi/workorder/reply-list'
+          url = '/yiiapi/workorder/ReplyList'
           break;
         case 'alert_detail':
-          url = '/yiiapi/alert/reply-list'
+          url = '/yiiapi/alert/ReplyList'
           break;
         case 'asset':
-          url = '/yiiapi/asset/reply-list'
+          url = '/yiiapi/asset/ReplyList'
           break;
         case 'lateral':
-          url = '/yiiapi/horizontalthreat/reply-list'
+          url = '/yiiapi/horizontalthreat/ReplyList'
           break;
         case 'outside':
-          url = '/yiiapi/externalthreat/reply-list'
+          url = '/yiiapi/externalthreat/ReplyList'
           break;
         case 'outreath':
-          url = '/yiiapi/outreachthreat/reply-list'
+          url = '/yiiapi/outreachthreat/ReplyList'
+          break;
+        case 'locality':
+          url = '/yiiapi/nativethreat/ReplyList'
           break;
         default:
           break;
@@ -471,22 +473,25 @@ export default {
                   var url2 = ''
                   switch (this.$route.query.type) {
                     case 'workorder':
-                      url2 = "/yiiapi/workorder/download?id="
+                      url2 = "/yiiapi/workorder/Download?id="
                       break;
                     case 'alert_detail':
                       url2 = "/yiiapi/alert/download?id="
                       break;
                     case 'asset':
-                      url2 = "/yiiapi/asset/download?id="
+                      url2 = "/yiiapi/riskasset/download?id="
                       break;
                     case 'lateral':
                       url2 = "/yiiapi/horizontalthreat/download?id="
                       break;
                     case 'outside':
-                      url2 = "/yiiapi/externalthreat/download?id="
+                      url2 = "/yiiapi/externalthreat/Download?id="
                       break;
                     case 'outreath':
                       url2 = "/yiiapi/outreachthreat/download?id="
+
+                    case 'locality':
+                      url2 = "/yiiapi/nativethreat/Download?id="
                       break;
                     default:
                       break;
@@ -516,22 +521,25 @@ export default {
       var url2 = ''
       switch (this.$route.query.type) {
         case 'workorder':
-          url2 = '/yiiapi/workorder/reply'
+          url2 = '/yiiapi/workorder/Reply'
           break;
         case 'alert_detail':
-          url2 = '/yiiapi/alert/reply'
+          url2 = '/yiiapi/alert/Reply'
           break;
         case 'asset':
-          url2 = '/yiiapi/asset/reply'
+          url2 = '/yiiapi/riskasset/Reply'
           break;
         case 'lateral':
-          url2 = '/yiiapi/horizontalthreat/reply'
+          url2 = '/yiiapi/horizontalthreat/Reply'
           break;
         case 'outside':
-          url2 = '/yiiapi/externalthreat/reply'
+          url2 = '/yiiapi/externalthreat/Reply'
           break;
         case 'outreath':
-          url2 = '/yiiapi/outreachthreat/reply'
+          url2 = '/yiiapi/outreachthreat/Reply'
+
+        case 'locality':
+          url2 = '/yiiapi/nativethreat/Reply'
           break;
         default:
           break;

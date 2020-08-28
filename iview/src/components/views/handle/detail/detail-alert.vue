@@ -1425,7 +1425,7 @@ export default {
     get_data () {
       this.loading = true
       console.log(this.$route.query.detail);
-      this.$axios.get('/yiiapi/asset/alert-details', {
+      this.$axios.get('/yiiapi/externalthreats', {
         params: {
           id: this.$route.query.detail
         }

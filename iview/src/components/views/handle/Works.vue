@@ -63,7 +63,7 @@ export default {
     VmHandleWorks
   },
   created () {
-    this.check_passwd();
+    //this.check_passwd();
     this.init_tabs_info();
     this.get_top_num();
   },
@@ -124,7 +124,7 @@ export default {
     },
     //顶部数字列表
     get_top_num () {
-      this.$axios.get('/yiiapi/workorder/top')
+      this.$axios.get('/yiiapi/workorder/Top')
         .then(resp => {
           let { status, msg, data } = resp.data;
           if (status == 0) {

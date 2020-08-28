@@ -1347,7 +1347,7 @@ export default {
       console.log(this.task_params.multiple);
 
       this.handle.save = true;
-      this.$axios.put('/yiiapi/' + this.threats + '/distribution-workorder',
+      this.$axios.put('/yiiapi/' + this.threats + '/DistributionWorkorder',
         {
           name: this.task_params.name,
           priority: this.task_params.level,
@@ -1383,7 +1383,7 @@ export default {
       console.log(this.task_params.multiple);
 
       this.handle.save = true;
-      this.$axios.post('/yiiapi/' + this.threats + '/add-workorder',
+      this.$axios.post('/yiiapi/' + this.threats + '/AddWorkorder',
         {
           name: this.task_params.name,
           priority: this.task_params.level,
@@ -1526,7 +1526,7 @@ export default {
         console.log(this.add_params.multiple)
 
         this.handle.save = true;
-        this.$axios.post('/yiiapi/' + this.threats + '/add-workorder',
+        this.$axios.post('/yiiapi/' + this.threats + '/AddWorkorder',
           {
             id: this.add_params.id,
             name: this.add_params.name,

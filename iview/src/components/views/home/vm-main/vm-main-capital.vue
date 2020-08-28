@@ -18,7 +18,9 @@
     methods:{
       drawGraph(){
 
-        if(this.options){
+        console.log(this.options)
+
+        if(this.options && this.options.length != 0){
 
           var data = this.options.RiskAssetDegree;
           data.forEach(item => {
@@ -30,6 +32,8 @@
               Object.assign(item,{value:item.count * 1,name:'高危'});
             }
           });
+        }else {
+          return false;
         }
 
         // 基于准备好的dom，初始化echarts实例

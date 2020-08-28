@@ -127,7 +127,7 @@ export default {
   mounted () {
     this.identifyCode = "";
     this.makeCode(this.identifyCodes, 4);
-    console.log('111111');
+    //console.log('111111');
 
   },
   methods: {

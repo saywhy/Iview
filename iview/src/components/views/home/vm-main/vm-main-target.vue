@@ -1,6 +1,6 @@
 <template>
   <el-col class="vm-main-target" v-cloak>
-    <el-tag class="vm-tag tag1" v-for="(item,index) in options"
+    <el-tag class="vm-tag tag1" v-for="(item,index) in options" :key="index"
     :class="{'tag1':index % 5 == 0,'tag2':index % 5 == 1,'tag3':index % 5 == 2,'tag4':index % 5 == 3,'tag5':index % 5 == 4}">{{item.indicator}}</el-tag>
   </el-col>
 </template>
