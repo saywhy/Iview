@@ -10,23 +10,14 @@
     .el-table__header {
       thead.has-gutter {
         th {
-          /*height: 48px!important;*/
           background: #f8f8f8;
-          /*padding: 0.5rem 0!important;*/
+          padding: 0.48rem 0!important;
           .cell {
             font-family: PingFangMedium;
             color: #333;
             font-size: 18px;
           }
         }
-       /* th:nth-child(2) {
-          .cell {
-            font-family: PingFangMedium;
-            .el-checkbox__input {
-              vertical-align: baseline !important;
-            }
-          }
-        }*/
       }
     }
   }
@@ -39,7 +30,8 @@
         border-top-width: 0;
         border-left-width: 0;
         border-right-width: 0;
-        border-bottom: 1px solid #ececec;
+        border-bottom: 0;
+        /*border-bottom: 1px solid #ececec;*/
         .cell {
           .new_dot {
             width: 8px;
@@ -58,11 +50,9 @@
             line-height: normal;
             border-radius: 2px;
           }
-
           .el-checkbox {
             display: grid;
           }
-
           .a_label {
             padding: 0 2px;
             margin: 0 2px;
@@ -70,27 +60,21 @@
             background: #5389e0;
             border-radius: 2px;
           }
-
           .high {
             color: #dc5f5f;
           }
-
           .mid {
             color: #e0c840;
           }
-
           .low {
             color: #47cad9;
           }
-
           .high_background {
             background: #dc5f5f
           }
-
           .mid_background {
             background: #e0c840
           }
-
           .low_background {
             background: #47cad9
           }
@@ -98,9 +82,50 @@
       }
     }
   }
+  .el-table__fixed{
+    &:before{
+      height: 0;
+    }
+    .el-table__fixed-header-wrapper{
+      .el-table__header{
+        thead {
+          th {
+            background: #f8f8f8;
+            padding: 0.48rem 0!important;
+            &.el-table-column--selection{
+              border-right: 1px solid #EBEEF5;
+            }
+          }
+        }
+      }
+    }
+    .el-table__fixed-body-wrapper{
+      tbody {
+        td {
+          font-family: PingFangMedium;
+          color: #666;
+          border-top-width: 0;
+          border-left-width: 0;
+          border-right-width: 0;
+          border-bottom: 0;
+          /*border-bottom: 1px solid #ececec;*/
+          .cell {
+            .new_dot {
+              width: 8px;
+              height: 8px;
+              border-radius: 10px;
+              background: #ff5f5c;
+              float: right;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
-/deep/ .el-pagination {
+/deep/
+.el-pagination {
   text-align: center;
   margin: 20px 0;
 }

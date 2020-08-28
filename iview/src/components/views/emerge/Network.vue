@@ -173,7 +173,7 @@
                              align="center"
                              prop="type"
                              :resizable="false"
-                             width="20">
+                             width="30">
               <template slot-scope="scope">
                 <div class="new_dot" v-show="scope.row.new_alert=='1'"></div>
               </template>
@@ -1559,7 +1559,7 @@ export default {
         type: 'warning'
       }).then(() => {
 
-        this.$axios.get('/yiiapi/site/check-passwd-reset')
+       /* this.$axios.get('/yiiapi/site/check-passwd-reset')
           .then((resp) => {
             let {
               status,
@@ -1574,22 +1574,22 @@ export default {
                 }
               );
               eventBus.$emit('reset')
-            } else {
-              this.$axios.get('/yiiapi/site/check-auth-exist', {
+            } else {*/
+              this.$axios.get('/yiiapi/alert/ExportAlertsTest', {
                 params: {
-                  pathInfo: 'yararule/download',
+                 // pathInfo: 'yararule/download',
                 }
               })
                 .then(response => {
-                  var url1 = "/yiiapi/alert/export-alerts?status=" + this.params.status + '&start_time=' + this.params.startTime
-                    + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.threat + '&key_word=' + this.params.key;
+                  var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.params.status + '&degree=' + this.params.degree + '&start_time=' + this.params.startTime
+                    + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&category=' + this.params.domain;
                   window.location.href = url1;
                 })
                 .catch(error => {
                   console.log(error);
                 })
-            }
-          })
+         /*   }
+          })*/
       }).catch(() => {
         this.$message({ type: 'info', message: '已取消导出' });
 
@@ -2143,10 +2143,10 @@ export default {
     position: absolute;
     top: 30px;
     right: 0;
-    width: 288px!important;
-    height: 456px!important;
+    width: 308px!important;
+    height: 476px!important;
     background: #FFFFFF;
-    padding: 10px 10px;
+    padding: 20px 20px;
     box-shadow: 0 0 4px 0 rgba(0,0,0,0.24);
     .s_b_name{
       height: 30px;
