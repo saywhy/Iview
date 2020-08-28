@@ -316,7 +316,7 @@
         intel_state:{
           add:false,
           edit:false,
-          exp:true
+          exp:false
         },
         intel_add:{
           index:'',
@@ -342,7 +342,7 @@
     },
     methods: {
       get_data () {
-        this.loading = true;
+        //this.loading = true;
         this.$axios.get('/yiiapi/user/role-list', {
           params: {
             page: this.role_data.page,

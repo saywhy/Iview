@@ -23,7 +23,7 @@
           <vuedraggable class="label-lists" v-model="label_data" handle=".tog_edit_seat">
             <transition-group>
               <li class="item undraggable" v-for="(item,$idx) in label_data"
-                  :value="item.label[0].category_id" :key="item.label[0].category_id">
+                  :value="item.label[0].category_id" :key="$idx">
                 <!-- 名称和操作 -->
                 <div class="toggle_cate">
                   <div class="tog_cate">
@@ -31,7 +31,7 @@
                   </div>
                   <div class="tog_list">
                     <div class="tog_edit_seat">
-                      <img v-if="item.name != ''" class="tog_img tog_img_edit" src="@/assets/images/system/set/label_remove.png"
+                      <img v-if="item.name != ''" class="tog_img tog_img_edit tog_img_edit1" src="@/assets/images/system/set/label_remove.png"
                            title="删除标签类别" @click="category_remove(item);"/>
                     </div>
                     <div class="tog_edit_seat">
@@ -58,7 +58,7 @@
                     <vuedraggable class="sortable" v-model="item.label" handle=".b_img_drag">
                       <transition-group>
                         <li class="sortable_list" v-if="it.label_name != null" :value="it.id"
-                            :key="it.id" v-for="(it,$ix) in item.label">
+                            :key="$ix" v-for="(it,$ix) in item.label">
                           <button class="btn_label">
                             <div class="b_label">
                               <span class="b_span" :title="it.label_name">{{it.label_name}}</span>
@@ -72,11 +72,13 @@
                         </li>
                       </transition-group>
                     </vuedraggable>
-                 <!-- <button class="btn_label_add" @click="label_handle(item.name,'add');">
-                    <img class="ba_img" src="@/assets/images/system/set/label_add.png"/>
-                    <span class="ba_span">新增标签</span>
-                  </button>-->
+
+                    <button class="btn_label_add" @click="label_handle(item.name,'add');">
+                      <img class="ba_img" src="@/assets/images/system/set/label_add.png"/>
+                      <span class="ba_span">新增标签</span>
+                    </button>
                 </div>
+
               </li>
             </transition-group>
           </vuedraggable>
@@ -620,19 +622,23 @@
                   z-index: 1500;
                   display: inline-block;
                   .tog_img{
+                    width: 14px;
                     vertical-align: middle;
+                    &.tog_img_edit1{
+                      width: 18px;
+                    }
                   }
                 }
                 .tog_arrow{
                   text-decoration: none;
-                  background-size: 10px;
+                  background-size: 12px 12px;
                   vertical-align: middle;
                   margin-top: -3px;
                   display: inline-block;
                   width: 40px;
                   text-align: left;
                   background-repeat: no-repeat;
-                  background-position: 28px 3px;
+                  background-position: 30px 1px;
                   background-image: url("../../../../assets/images/system/set/label_right.png");
 
                   &:active{
@@ -695,6 +701,7 @@
                     border-left: 1px solid #fff;
                     .b_img{
                       z-index: 999;
+                      width: 16px;
                       vertical-align: text-top;
                       &.b_img_drag{
                         margin-left: 7px;

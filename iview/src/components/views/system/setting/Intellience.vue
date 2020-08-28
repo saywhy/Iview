@@ -33,15 +33,15 @@
       name: "system_setting_intellience",
       data () {
         return {
-          activeName: "second",
+          activeName: "first",
           tab_show: {
-            first: false,
-            second: true
+            first: true,
+            second: false
           }
         };
       },
       mounted () {
-        this.check_passwd()
+        //this.check_passwd()
       },
       methods: {
         // 测试密码过期

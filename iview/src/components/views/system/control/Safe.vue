@@ -426,7 +426,7 @@
     },
     mounted () {
       this.get_data()
-      this.check_passwd()
+     // this.check_passwd()
       var options = []
       // 遍历省级
       Object.keys(pca[86]).forEach(function (key) {
@@ -510,7 +510,7 @@
       },
       // 获取列表
       get_data () {
-        this.$axios.get('/yiiapi/ipsegment/list', {
+        this.$axios.get('/yiiapi/safetyequipments', {
           params: {
             page: this.monitor_page.page,
             rows: this.monitor_page.rows,
@@ -518,10 +518,11 @@
         })
           .then(response => {
             console.log(response);
-            this.monitor_data = response.data.data;
+
+            /*this.monitor_data = response.data.data;
             this.monitor_data.data.forEach((item, index) => {
               item.index_cn = index + 1
-            });
+            });*/
           })
           .catch(error => {
             console.log(error);
@@ -542,7 +543,6 @@
         this.monitor_add.tag_list = [{ name: '', icon: true }]
         this.monitor_add.ip_segment_list = [{ name: '', icon: true }]
         this.cascader_add_if = true;
-        console.log(this.monitor_add.selected_cascader_add);
       },
       add_data () {
         this.monitor_add.tag = [];
@@ -629,8 +629,6 @@
           );
           return false
         }
-        console.log(isRepeat_tag);
-        console.log(isRepeat_ip_segment);
         this.monitor_add.tag_list.forEach(item => {
           if (item.name != '') {
             this.monitor_add.tag.push(item.name)
@@ -642,12 +640,11 @@
           }
         });
         this.$axios.post('/yiiapi/ipsegment/set-ip-segment', {
-          name: this.monitor_add.name,
-          ip_segment: this.monitor_add.ip_segment,
-          network_type: this.monitor_add.type,
-          person: this.monitor_add.person,
-          label: this.monitor_add.tag,
-          location: this.monitor_add.selected_cascader_add,
+          Dev: {
+            name: "123123",
+            type: "4",
+            ip: "45.6.6.6"
+          }
         })
           .then(response => {
             console.log(response);
@@ -915,16 +912,16 @@
         }
 
         this.monitor_state.remove = true;
-       /* this.$confirm('此操作删除信息, 是否继续?', '提示', {
+        this.$confirm('此操作删除信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           var id_list = []
           this.select_list.forEach(element => {
-            id_list.push(element.id)
+            id_list.push(element.id);
           });
-          this.$axios.delete('/yiiapi/ipsegment/del', {
+          this.$axios.delete('/yiiapi/safetyequipments', {
             data: {
               id: id_list
             }
@@ -956,13 +953,9 @@
             type: 'info',
             message: '已取消删除'
           });
-        });*/
+        });
       },
 
-      import_box () {
-        this.monitor_state.import = true;
-        this.$refs.uploadExcel.clearFiles();
-      },
       closed_add_box () {
         this.monitor_state.add = false;
         this.cascader_add_if = false;
@@ -1002,6 +995,7 @@
         this.monitor_state.remove = false;
         this.$refs.multipleTable.clearSelection();
       },
+
       closed_edit_box () {
         this.monitor_state.edit = false;
         this.cascader_edit_if = false;

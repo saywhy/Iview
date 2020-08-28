@@ -130,8 +130,9 @@
       name: "system_setting_wizard",
       data () {
         return {
+          loading:false,
           wizard: {
-            switch:true
+            switch:false
           },
           role_list: {},
           role_data: {
@@ -145,7 +146,7 @@
       },
       methods:{
         get_data () {
-          this.loading = true
+          //this.loading = true;
           this.$axios.get('/yiiapi/user/role-list', {
             params: {
               page: this.role_data.page,
