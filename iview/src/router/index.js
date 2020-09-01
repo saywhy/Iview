@@ -255,7 +255,7 @@ export const asyncRouterMap = [
         },
         component: () => import('@/components/views/home/Overview')
       },
-      {
+      /*{
         path: '/home/screen_index',
         name: 'screen_index',
         meta: {
@@ -267,7 +267,7 @@ export const asyncRouterMap = [
           deep: 1
         },
         redirect: '/screen'
-      }
+      }*/
     ]
   },
   /*处置*/

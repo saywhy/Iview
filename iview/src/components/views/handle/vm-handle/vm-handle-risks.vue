@@ -6,8 +6,9 @@
       <div class="ost ost-1">
         <div class="ost-title">
           <slot name="name"></slot>威胁资产 Top5</div>
-        <div class="ost-progress" v-if="threats =='locality'">
-          <vm-handle-local></vm-handle-local>
+        <div class="ost-progress" v-if="threats == 'nativethreat'">
+          <vm-handle-local :progress_data="progress_data_source5"
+                           v-if="progress_data_source5_show"></vm-handle-local>
         </div>
         <div class="ost-progress" v-else>
           <vm-handle-progress :progress_data="progress_data_source5"
@@ -851,7 +852,7 @@ export default {
     label_cancel_Click(){
       this.$refs.messageDrop.hide();
       this.column_deploy();
-      this.get_list_risk();
+      this.get_list_threat();
     },
     //配置到确定
     label_submit_click(){
@@ -862,7 +863,7 @@ export default {
         return item.prop;
       });
 
-      this.$axios.put('/yiiapi/alert/FieldEdit',{
+      this.$axios.put('/yiiapi/' + this.threats + '/FieldEdit',{
         fields: fieldAttr
       })
         .then((resp) => {
@@ -873,7 +874,7 @@ export default {
             this.$refs.messageDrop.hide();
 
             this.column_deploy();
-            this.get_list_risk();
+            this.get_list_threat();
             this.columnDrop();
           }
         });
@@ -956,6 +957,7 @@ export default {
       this.$axios.get('/yiiapi/' + this.threats + '/SourceTop5')
         .then((resp) => {
           let { status, data } = resp.data;
+
           if (status == 0) {
             this.progress_data_source5 = data;
             this.progress_data_source5_show = true;
@@ -982,7 +984,7 @@ export default {
       if (this.params.threat == 1) {
         params_alert.threat = 1;
       }
-      this.$axios.get('/yiiapi/' + this.threats, {
+      this.$axios.get('/yiiapi/' + this.threats + 's', {
         params: {
           start_time: this.params.startTime,
           end_time: this.params.endTime,
@@ -999,8 +1001,6 @@ export default {
       }).then((resp) => {
 
         this.table.loading = false;
-
-        console.log(resp)
 
         let { status, data } = resp.data;
 
@@ -1042,7 +1042,7 @@ export default {
       }else {
         this.params.sort = '3';
       }
-      this.get_list_risk();
+      this.get_list_threat();
     },
     //時間切換
     changeTime (data) {
@@ -1479,8 +1479,8 @@ export default {
 
     //新加工单列表勾选某一条记录
     handle_sel_table_add_works (row) {
-      console.log('**');
-      console.log(row);
+      //console.log('**');
+      //console.log(row);
       this.table_add_works.multipleSelection = row;
     },
 
@@ -1540,7 +1540,7 @@ export default {
             this.handle.save = false;
             let { status, msg, data } = resp.data;
 
-            console.log(resp)
+           // console.log(resp)
             if (status == 0) {
               this.$message.success('添加成功');
               //清空状态

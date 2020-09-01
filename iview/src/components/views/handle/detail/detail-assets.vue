@@ -1594,7 +1594,7 @@ export default {
       }
       console.log(this.task_params.multiple);
       this.handle.save = true;
-      this.$axios.put('/yiiapi/asset/distribution-workorder',
+      this.$axios.put('/yiiapi/riskasset/DistributionWorkorder',
         {
           name: this.task_params.name,
           priority: this.task_params.level,
@@ -1629,7 +1629,7 @@ export default {
       }
       console.log(this.task_params.multiple);
       this.handle.save = true;
-      this.$axios.post('/yiiapi/asset/add-workorder',
+      this.$axios.post('/yiiapi/riskasset/AddWorkorder',
         {
           name: this.task_params.name,
           priority: this.task_params.level,
@@ -1676,7 +1676,7 @@ export default {
 
     //获取列表
     get_table_works_list () {
-      this.$axios.get('/yiiapi/asset/workorder-list', {
+      this.$axios.get('/yiiapi/riskasset/WorkorderList', {
         params: {
           page: this.table_add_works.pageNow,
           rows: this.table_add_works.eachPage,
@@ -1766,7 +1766,7 @@ export default {
 
         console.log(this.add_params.multiple);
         this.handle.save = true;
-        this.$axios.post('/yiiapi/asset/add-workorder',
+        this.$axios.post('/yiiapi/riskasset/AddWorkorder',
           {
             id: this.add_params.id,
             name: this.add_params.name,

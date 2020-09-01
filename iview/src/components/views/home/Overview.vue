@@ -275,7 +275,7 @@
                 status,
                 data
               } = resp.data;
-              //console.log(data)
+              console.log(data)
               if (status == 0) {
                 this.mid_left = data;
                 this.mid_left_show = true;

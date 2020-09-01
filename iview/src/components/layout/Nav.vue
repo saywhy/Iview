@@ -164,7 +164,7 @@ export default {
   name: 'Nav',
   data () {
     return {
-      logoSrc: require('@/assets/images/layout/nav/logo.png'),
+      logoSrc: require('@/assets/images/layout/nav/logo1.png'),
       messageSrc: require('@/assets/images/layout/nav/message.png'),
       avatarSrc: require('@/assets/images/layout/nav/avatar.png'),
       pass_state: false,
@@ -431,7 +431,7 @@ export default {
     .header-logo {
       .e-image {
         margin: 9px 0;
-        width: 152px;
+        width: 56px;
         height: 42px;
         cursor: pointer;
       }

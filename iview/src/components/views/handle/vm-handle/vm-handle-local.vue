@@ -1,5 +1,5 @@
 <template>
-  <div class="vm-handle-local">
+  <div class="vm-handle-local" v-cloak>
     <div id="locality"></div>
   </div>
 </template>
@@ -7,11 +7,19 @@
 <script type="text/ecmascript-6">
     export default {
       name: "vm-handle-local",
+      props:{
+        progress_data:{
+          type:Array,
+          default: []
+        }
+      },
       mounted() {
         this.drawGraph();
       },
       methods:{
         drawGraph(){
+
+          //console.log('111111')
 
           let xData = ['7bf2exe1.exe','kzreport2.exe','kzreport3.exe','kreport4.exe','krepor5.exe',
             'kreport6.exe','kreport7.exe','kreport8.exe','kreport9.exe','kreport10.exe'];

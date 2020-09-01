@@ -1324,7 +1324,7 @@ export default {
         })
     },
 
-    /*****************************************************替换******************************************************/
+    /*******************下载***********************/
     worksdownload () {
       let selected = this.table.multipleSelection;
 
@@ -1379,9 +1379,10 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          //console.log(selected)
           that.$axios.delete('/yiiapi/workorders', {
-            data: { id: selected }          })
+            data: { id: selected }
+          })
+         // that.$axios.delete('/yiiapi/workorders/'+selected)
             .then(resp => {
               let { status, msg, data } = resp.data;
               if (status == 0) {
@@ -1406,7 +1407,7 @@ export default {
       }
     },
 
-    /************************************************新增*****************************************************/
+    /*******************新增***********************/
 
     //新增
     open_task_new (type) {
@@ -1725,7 +1726,7 @@ export default {
               this.edit.table_operator = []
             }
 
-            console.log(this.edit.operator_list);
+            //console.log(this.edit.operator_list);
 
             this.edit.pop = true
             this.edit.task.frist = true;
@@ -1763,8 +1764,8 @@ export default {
         return false;
       }
       this.edit.data = sel_table_data[0]
-      this.edit.notice = JSON.parse(this.edit.data.remind)
-      console.log(this.edit.data);
+      this.edit.notice = JSON.parse(this.edit.data.remind);
+      //console.log(this.edit.data);
 
       // 获取工单 资产或者告警数组---------------------------------
       this.$axios.get('/yiiapi/workorder/GetExists', {
@@ -1775,7 +1776,7 @@ export default {
         .then(resp => {
           this.selected_list = []
           let { status, data } = resp.data;
-          console.log(data);
+          //console.log(data);
           // 储存资产数组
           this.edit.data.risk_asset_cn = []
           if (data.risk_asset && data.risk_asset.length != 0) {

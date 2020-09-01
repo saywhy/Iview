@@ -7,7 +7,7 @@
       <div class="monitor_title">
         <el-button type="primary"
                    class="btn_i"
-                   @click="add_box">添加设备</el-button>
+                   @click="add_monitor">添加设备</el-button>
         <el-button type="primary"
                    class="btn_o"
                    @click="del_monitor">删除</el-button>
@@ -16,7 +16,6 @@
         <el-table ref="multipleTable"
                   class="reset_table"
                   align="center"
-                  border
                   :data="monitor_data.data"
                   tooltip-effect="dark"
                   style="width: 100%"
@@ -34,17 +33,12 @@
                            label="设备名称"
                            show-overflow-tooltip>
           </el-table-column>
-          <el-table-column label="IP"
+          <el-table-column prop="ip"
                            align="center"
+                           label="IP"
                            show-overflow-tooltip>
-            <template slot-scope="scope">
-              <li v-for="item in scope.row.ip_segment"
-                  class="btn_tag_box">
-                <p>{{item}}</p>
-              </li>
-            </template>
           </el-table-column>
-          <el-table-column prop="network_type"
+          <el-table-column prop="type"
                            align="center"
                            label="主机类别"
                            show-overflow-tooltip>
@@ -53,9 +47,9 @@
                            align="center"
                            width="180"
                            show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.updated_at*1000 |formatDate }}</template>
+            <template slot-scope="scope">{{ scope.row.updated_at }}</template>
           </el-table-column>
-          <el-table-column prop="degree"
+          <el-table-column prop="status"
                            align="center"
                            label="状态"
                            show-overflow-tooltip>
@@ -77,10 +71,10 @@
                        @current-change="handleCurrentChange"
                        :current-page="monitor_data.pageNow"
                        :page-sizes="[10,20,50,100]"
-                       :page-size="10"
+                       :page-size="monitor_data.rows"
                        layout="total, sizes, prev, pager, next"
                        :total="monitor_data.count">
-        </el-pagination>
+        </el-pagination >
       </div>
       <!-- 添加 -->
       <el-dialog class="add_box pop_box"
@@ -205,7 +199,7 @@
           <el-button @click="closed_add_box"
                      class="cancel_btn">取消</el-button>
           <el-button class="ok_btn"
-                     @click="add_data">确定</el-button>
+                     @click="submit_add_box">确定</el-button>
         </div>
       </el-dialog>
       <!-- 编辑 -->
@@ -335,7 +329,7 @@
         </div>
       </el-dialog>
       <!-- 删除 -->
-      <el-dialog class="pop_state_box"
+      <!--<el-dialog class="pop_state_box"
                  :close-on-click-modal="false"
                  :modal-append-to-body="false"
                  :visible.sync="monitor_state.remove">
@@ -350,7 +344,7 @@
         <div class="content">
           <p class="content_p">
             <span>是否将已勾选的</span>
-            <span>{{select_list.length | capiUpper}}</span>
+            <span>{{select_list.length | upper}}</span>
             <span>项删除？</span>
           </p>
         </div>
@@ -360,7 +354,7 @@
           <el-button  @click="submit_remove_box"
                      class="ok_btn">确定</el-button>
         </div>
-      </el-dialog>
+      </el-dialog>-->
     </div>
   </div>
 </template>
@@ -382,10 +376,7 @@
           x: '',
           y: ''
         },
-        area_array: [],
         monitor_data: {},
-        cascader_add_if: false,
-        cascader_edit_if: false,
         monitor_page: {
           page: 1,
           rows: 10,
@@ -399,14 +390,15 @@
         },
         monitor_add: {
           name: "",
-          ip_segment: [],
-          ip_segment_list: [{ name: '', icon: true }],
-          type: "static",
-          type_list: ["static", 'dhcp', 'public'],
-          person: "",
-          tag: [],
-          selected_cascader_add: [],
-          tag_list: [{ name: '', icon: true }]
+          local_type: "",
+          ip_address: "",
+          type: "V1",
+          type_list: ["V1", 'V2', 'V3'],
+          port: "",
+          character: "",
+          cpu: "",
+          memory:"",
+          disk:""
         },
         monitor_edit: {
           id: '',
@@ -421,36 +413,12 @@
           selected_cascader_edit: [],
         },
         select_list: [],
-        fileList: []
       };
     },
     mounted () {
-      this.get_data()
+      this.get_data();
      // this.check_passwd()
-      var options = []
-      // 遍历省级
-      Object.keys(pca[86]).forEach(function (key) {
-        var obj = {}
-        obj.id = key
-        obj.value = pca[86][key]
-        obj.label = pca[86][key]
-        obj.children = []
-        options.push(obj)
-      });
-      // 添加市级
-      options.forEach(element => {
-        Object.keys(pca).forEach(function (key) {
-          if (element.id == key) {
-            Object.keys(pca[key]).forEach(function (item) {
-              var obj = {}
-              obj.value = pca[key][item]
-              obj.label = pca[key][item]
-              element.children.push(obj)
-            })
-          }
-        });
-      });
-      this.area_array = options
+
     },
     methods: {
       // 测试密码过期
@@ -473,41 +441,7 @@
             }
           })
       },
-      init () {
-        var options = []
-        // 遍历省级
-        Object.keys(pca[86]).forEach(function (key) {
-          var obj = {}
-          obj.id = key
-          obj.value = pca[86][key]
-          obj.label = pca[86][key]
-          obj.children = []
-          options.push(obj)
-        });
-        // 添加市级
-        options.forEach(element => {
-          Object.keys(pca).forEach(function (key) {
-            if (element.id == key) {
-              Object.keys(pca[key]).forEach(function (item) {
-                var obj = {}
-                obj.value = pca[key][item]
-                obj.label = pca[key][item]
-                element.children.push(obj)
-              })
-            }
-          });
-        });
-        return options
-      },
-      isRepeat (arr) {
-        var hash = {};
-        for (var i in arr) {
-          if (hash[arr[i]]) //hash 哈希
-            return true;
-          hash[arr[i]] = true;
-        }
-        return false;
-      },
+
       // 获取列表
       get_data () {
         this.$axios.get('/yiiapi/safetyequipments', {
@@ -516,35 +450,120 @@
             rows: this.monitor_page.rows,
           }
         })
-          .then(response => {
-            console.log(response);
+          .then(resp => {
+            let {status,data} = resp.data;
 
-            /*this.monitor_data = response.data.data;
-            this.monitor_data.data.forEach((item, index) => {
-              item.index_cn = index + 1
-            });*/
+            if(status == 0){
+              let datas = {
+                count:data.count,
+                data:data.data,
+                pageNow:data.pageNow * 1,
+                rows:data.rows * 1
+              }
+              console.log(data.data)
+              this.monitor_data = datas;
+            }
+
           })
           .catch(error => {
             console.log(error);
           })
       },
-      change_cascader_add (value) {
-        console.log(value);
+
+      // 分页
+      handleSizeChange (val) {
+        this.monitor_page.rows = val;
+        this.monitor_page.page = 1
+        this.get_data();
       },
-      //添加IP
-      add_box () {
+      handleCurrentChange (val) {
+        this.monitor_page.page = val;
+        this.get_data();
+      },
+      // 全选择
+      handleSelectionChange (val) {
+        this.select_list = val;
+      },
+
+      // 删除
+      del_monitor () {
+        if (this.select_list.length == 0) {
+          this.$message(
+            {
+              message: '请选择需要删除的数据！',
+              type: 'warning',
+            }
+          );
+          return false
+        }
+        this.$confirm(`是否将已勾选的 ${this.select_list.length}项删除, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          var id_list = []
+          this.select_list.forEach(element => {
+            id_list.push(element.id);
+          });
+          /*this.$axios.delete('/yiiapi/safetyequipments', {
+            data: {
+              id: id_list
+            }
+          })*/
+          this.$axios.delete('/yiiapi/safetyequipments/'+ id_list)
+            .then(resp => {
+              console.log(resp);
+              let {status,data} = resp.data;
+              if (status == 0) {
+                this.get_data();
+                this.$message(
+                  {
+                    message: '删除成功！',
+                    type: 'success',
+                  }
+                );
+              } else {
+                this.$message(
+                  {
+                    message: '删除失败！',
+                    type: 'error',
+                  }
+                );
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+          this.$refs.multipleTable.clearSelection();
+        });
+      },
+
+      // 添加设备
+      add_monitor() {
         this.monitor_state.add = true;
         this.monitor_add.name = '';
-        this.monitor_add.type = 'static';
-        this.monitor_add.person = '';
-        this.monitor_add.tag = [];
-        this.monitor_add.ip_segment = [];
-        this.monitor_add.selected_cascader_add = [];
-        this.monitor_add.tag_list = [{ name: '', icon: true }]
-        this.monitor_add.ip_segment_list = [{ name: '', icon: true }]
-        this.cascader_add_if = true;
+        this.monitor_add.local_type = '';
+        this.monitor_add.ip_address = '';
+        this.monitor_add.type = 'V1';
+        this.monitor_add.port = '';
+        this.monitor_add.character = '';
+        this.monitor_add.cpu = '';
+        this.monitor_add.memory = '';
+        this.monitor_add.disk = '';
       },
-      add_data () {
+
+      //添加取消
+      closed_add_box () {
+        this.monitor_state.add = false;
+      },
+
+      //
+      submit_add_box () {
         this.monitor_add.tag = [];
         var isRepeat_ip_segment = []
         this.monitor_add.ip_segment = [];
@@ -884,82 +903,8 @@
             console.log(error);
           })
       },
-      // 分页
-      handleSizeChange (val) {
-        this.monitor_page.rows = val;
-        this.monitor_page.page = 1
-        this.get_data();
-      },
-      handleCurrentChange (val) {
-        this.monitor_page.page = val
-        this.get_data();
-      },
-      // 全选择
-      handleSelectionChange (val) {
-        this.select_list = val
-      },
-      // 删除
-      del_monitor () {
 
-        if (this.select_list.length == 0) {
-          this.$message(
-            {
-              message: '请选择需要删除的数据！',
-              type: 'warning',
-            }
-          );
-          return false
-        }
 
-        this.monitor_state.remove = true;
-        this.$confirm('此操作删除信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          var id_list = []
-          this.select_list.forEach(element => {
-            id_list.push(element.id);
-          });
-          this.$axios.delete('/yiiapi/safetyequipments', {
-            data: {
-              id: id_list
-            }
-          })
-            .then(response => {
-              console.log(response);
-              if (response.data.status == 0) {
-                this.get_data();
-                this.$message(
-                  {
-                    message: '删除成功！',
-                    type: 'success',
-                  }
-                );
-              } else {
-                this.$message(
-                  {
-                    message: '删除失败！',
-                    type: 'error',
-                  }
-                );
-              }
-            })
-            .catch(error => {
-              console.log(error);
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
-
-      closed_add_box () {
-        this.monitor_state.add = false;
-        this.cascader_add_if = false;
-      },
       //删除确定
       submit_remove_box(){
         this.$axios.delete('/yiiapi/ipsegment/del', {
@@ -1038,73 +983,7 @@
             }
           })
       },
-      // 导入
-      onExceed (files, fileList) {
-        this.$message.warning('请选择单文件上传!');
-        console.log(files)
-        // console.log(file.raw)
-        console.log(fileList)
-      },
-      // 文件状态改变时的钩子
-      fileChange (file, fileList) {
 
-      },
-      // 上传文件之前的钩子, 参数为上传的文件,若返回 false 或者返回 Promise 且被 reject，则停止上传
-      beforeUploadFile (file) {
-        console.log(file);
-        let extension = file.name.substring(file.name.lastIndexOf('.') + 1)
-        let size = file.size / 1024 / 1024 < 10
-        if (!size) {
-          this.$message.warning('上传文件大小不能超过 10MB!');
-        }
-        return size
-
-      },
-      // 文件上传成功时的钩子
-      handleSuccess (res, file, fileList) {
-        console.log(res);
-        if (res.status == 1) {
-          this.$message(
-            {
-              message: res.msg,
-              type: 'error',
-            }
-          );
-        } else if (res.status == 0) {
-          this.get_data();
-          this.monitor_state.import = false;
-          this.$message(
-            {
-              message: '上传成功！',
-              type: 'success',
-            }
-          );
-        }
-        this.$refs.uploadExcel.clearFiles();
-      },
-      // 文件上传失败时的钩子
-      handleError (err, file, fileList) {
-        this.$message(
-          {
-            message: err,
-            type: 'error',
-          }
-        );
-        this.$refs.uploadExcel.clearFiles();
-      },
-      uploadFile () {
-        this.$axios.get('/yiiapi/site/check-auth-exist', {
-          params: {
-            pathInfo: 'yararule/download',
-          }
-        })
-          .then(response => {
-            this.$refs.uploadExcel.submit()
-          })
-          .catch(error => {
-            console.log(error);
-          })
-      },
 
       /************************************/
       //进入详情页面
@@ -1153,7 +1032,7 @@
       formatDate: function (value) {
         return moment(value).format('YYYY-MM-DD HH:mm:ss')
       },
-      capiUpper: function (value) {
+      upper: function (value) {
         let num = '';
         switch (value) {
           case 1:

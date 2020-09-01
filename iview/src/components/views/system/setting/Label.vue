@@ -23,7 +23,7 @@
           <vuedraggable class="label-lists" v-model="label_data" handle=".tog_edit_seat">
             <transition-group>
               <li class="item undraggable" v-for="(item,$idx) in label_data"
-                  :value="item.label[0].category_id" :key="$idx">
+                  :value="item.label[0].category_id" :key="item.label[0].category_id">
                 <!-- 名称和操作 -->
                 <div class="toggle_cate">
                   <div class="tog_cate">
@@ -58,7 +58,7 @@
                     <vuedraggable class="sortable" v-model="item.label" handle=".b_img_drag">
                       <transition-group>
                         <li class="sortable_list" v-if="it.label_name != null" :value="it.id"
-                            :key="$ix" v-for="(it,$ix) in item.label">
+                            :key="it.id+'-only'" v-for="(it,$ix) in item.label">
                           <button class="btn_label">
                             <div class="b_label">
                               <span class="b_span" :title="it.label_name">{{it.label_name}}</span>
@@ -78,7 +78,6 @@
                       <span class="ba_span">新增标签</span>
                     </button>
                 </div>
-
               </li>
             </transition-group>
           </vuedraggable>
@@ -303,7 +302,7 @@
                   category_name: "攻击面",
                   category_sort: "17",
                   detail: "",
-                  id: "137",
+                  id: "139",
                   label_name: "网关",
                   label_sort: "133"
                 }
@@ -633,15 +632,13 @@
                   text-decoration: none;
                   background-size: 12px 12px;
                   vertical-align: middle;
-                  margin-top: -3px;
                   display: inline-block;
-                  width: 40px;
+                  width: 60px;
                   text-align: left;
                   background-repeat: no-repeat;
-                  background-position: 30px 1px;
+                  background-position: 40px 1px;
                   background-image: url("../../../../assets/images/system/set/label_right.png");
-
-                  &:active{
+                  &.active{
                     background-image: url("../../../../assets/images/system/set/label_down.png");
                   }
                   .name{
@@ -649,6 +646,7 @@
                     font-size: 12px;
                     color: #0070FF;
                     line-height: 14px;
+                    margin-right: 10px;
                   }
                 }
               }

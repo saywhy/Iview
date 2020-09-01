@@ -276,21 +276,14 @@ export default {
     let newId = this.$route.query.id;
     this.id = newId;
     this.loadlinks += newId;
-
     this.get_list_works_detail();
     this.get_reply_works_detail();
   },
-
-
   methods: {
-
     // alert_detail
     // workorder
 
     // this.$route.query.id
-
-
-
     //获取工单详情列表
     get_list_works_detail () {
       var url = ''
@@ -298,22 +291,24 @@ export default {
         case 'workorder':
           url = '/yiiapi/workorders/'+this.id
           break;
-        case 'alert_detail':
-          url = '/yiiapi/alert/workorder-details'
+        /*case 'alert_detail':
+          url = '/yiiapi/alerts/'+this.id
           break;
         case 'asset':
-          url = '/yiiapi/asset/workorder-details'
+          url = '/yiiapi/riskassets/'+this.id
           break;
         case 'lateral':
-          url = '/yiiapi/horizontalthreat/workorder-details'
+          url = '/yiiapi/horizontalthreat'+this.id
           break;
         case 'outside':
-          url = '/yiiapi/externalthreat/workorder-details'
+          url = '/yiiapi/externalthreat/'+this.id
           break;
         case 'outreath':
-          url = '/yiiapi/outreachthreat//workorder-details'
+          url = '/yiiapi/outreachthreat/'+this.id
           break;
-
+        case 'locality':
+          url = '/yiiapi/nativethreat/'+this.id
+          break;*/
         default:
           break;
       }
@@ -381,7 +376,7 @@ export default {
         case 'workorder':
           url = '/yiiapi/workorder/ReplyList'
           break;
-        case 'alert_detail':
+        /*case 'alert_detail':
           url = '/yiiapi/alert/ReplyList'
           break;
         case 'asset':
@@ -398,7 +393,7 @@ export default {
           break;
         case 'locality':
           url = '/yiiapi/nativethreat/ReplyList'
-          break;
+          break;*/
         default:
           break;
       }
@@ -465,7 +460,7 @@ export default {
         })
           .then(response => {
 
-            var url1 = " /yiiapi/site/download-test?id=" + this.id * 1;
+            var url1 = "/yiiapi/site/download-test?id=" + this.id * 1;
             this.$axios.get(url1)
               .then(resp => {
                 let { status, msg, data } = resp.data;
@@ -489,7 +484,7 @@ export default {
                       break;
                     case 'outreath':
                       url2 = "/yiiapi/outreachthreat/download?id="
-
+                      break;
                     case 'locality':
                       url2 = "/yiiapi/nativethreat/Download?id="
                       break;
@@ -523,7 +518,7 @@ export default {
         case 'workorder':
           url2 = '/yiiapi/workorder/Reply'
           break;
-        case 'alert_detail':
+      /*  case 'alert_detail':
           url2 = '/yiiapi/alert/Reply'
           break;
         case 'asset':
@@ -537,10 +532,10 @@ export default {
           break;
         case 'outreath':
           url2 = '/yiiapi/outreachthreat/Reply'
-
+          break;
         case 'locality':
           url2 = '/yiiapi/nativethreat/Reply'
-          break;
+          break;*/
         default:
           break;
       }
