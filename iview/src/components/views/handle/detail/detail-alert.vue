@@ -2609,7 +2609,7 @@ export default {
     },
     //获取用户列表(经办人使用)
     get_user_list () {
-      this.$axios.get('/yiiapi/site/user-list')
+      this.$axios.get('/yiiapi/site/UserList')
         .then(resp => {
           let { status, data } = resp.data;
           if (status == 0) {

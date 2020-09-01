@@ -1140,7 +1140,7 @@ export default {
           this.table_assets.tableData_new = handle_data;
 
           //获取用户列表(经办人使用)
-          this.$axios.get('/yiiapi/site/user-list')
+          this.$axios.get('/yiiapi/site/UserList')
             .then(resp => {
               let { status, data } = resp.data;
               if (status == 0) {

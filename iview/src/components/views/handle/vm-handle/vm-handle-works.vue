@@ -1432,7 +1432,7 @@ export default {
     //打开工单新增编辑弹窗
     open_task () {
       //获取用户列表(经办人使用)
-      this.$axios.get('/yiiapi/site/user-list')
+      this.$axios.get('/yiiapi/site/UserList')
         .then(resp => {
           let { status, data } = resp.data;
           if (status == 0) {
@@ -1708,7 +1708,7 @@ export default {
     //打开工单新增编辑弹窗
     //获取用户列表(经办人使用)
     open_task_edit () {
-      this.$axios.get('/yiiapi/site/user-list')
+      this.$axios.get('/yiiapi/site/UserList')
         .then(resp => {
           let { status, data } = resp.data;
           if (status == 0) {

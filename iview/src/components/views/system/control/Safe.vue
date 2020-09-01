@@ -1,5 +1,6 @@
 <template>
-  <div id="system_control_safe" class="container" v-cloak>
+  <div id="system_control_safe" class="container" v-cloak
+       v-loading.fullscreen.lock="loading">
     <div class="content_box">
       <div class="monitor_name">
         <h3 class="name">安全设备列表</h3>
@@ -62,7 +63,7 @@
                          @click.stop='download_box(scope.row)'>日志下载</el-button>
               <el-button type="primary"
                          class="btn_edit"
-                         @click.stop='edit_box(scope.row)'>编辑</el-button>
+                         @click.stop='edit_monitor(scope.row)'>编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -108,7 +109,7 @@
               </p>
               <el-input class="select_box"
                         placeholder="请输入IP地址"
-                        v-model="monitor_add.address"
+                        v-model="monitor_add.ip"
                         clearable>
               </el-input>
             </div>
@@ -127,7 +128,7 @@
                 <span class="title">CPU</span>
               </p>
               <el-input class="select_box"
-                        placeholder="请输入CPU"
+                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
                         v-model="monitor_add.cpu"
                         clearable>
               </el-input>
@@ -137,16 +138,14 @@
                 <span class="title">Disk</span>
               </p>
               <el-input class="select_box"
-                        placeholder="请输入Disk"
+                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
                         v-model="monitor_add.disk"
                         clearable>
               </el-input>
             </div>
           </div>
-          <div class="content_item_space">
-          </div>
+          <div class="content_item_space"></div>
           <div class="content_item_box">
-
             <div class="content_item">
               <p>
                 <span class="title">主机类型</span>
@@ -154,7 +153,7 @@
               </p>
               <el-input class="select_box"
                         placeholder="请输入主机类型"
-                        v-model="monitor_add.type"
+                        v-model="monitor_add.host"
                         clearable>
               </el-input>
             </div>
@@ -164,11 +163,11 @@
               </p>
               <el-select class="select_box"
                          v-model="monitor_add.type"
-                         placeholder="请选择网段类型">
+                         placeholder="请选择snmp服务器类型">
                 <el-option v-for="item in monitor_add.type_list"
-                           :key="item"
-                           :label="item"
-                           :value="item">
+                           :key="item.value"
+                           :label="item.label"
+                           :value="item.value">
                 </el-option>
               </el-select>
             </div>
@@ -178,7 +177,7 @@
               </p>
               <el-input class="select_box"
                         placeholder="请输入字符串"
-                        v-model="monitor_add.charStr"
+                        v-model="monitor_add.character"
                         clearable>
               </el-input>
             </div>
@@ -187,12 +186,11 @@
                 <span class="title">Memory</span>
               </p>
               <el-input class="select_box"
-                        placeholder="请输入Memory"
+                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
                         v-model="monitor_add.memory"
                         clearable>
               </el-input>
             </div>
-
           </div>
         </div>
         <div class="btn_box">
@@ -234,7 +232,7 @@
               </p>
               <el-input class="select_box"
                         placeholder="请输入IP地址"
-                        v-model="monitor_add.address"
+                        v-model="monitor_add.ip"
                         clearable>
               </el-input>
             </div>
@@ -253,7 +251,7 @@
                 <span class="title">CPU</span>
               </p>
               <el-input class="select_box"
-                        placeholder="请输入CPU"
+                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
                         v-model="monitor_add.cpu"
                         clearable>
               </el-input>
@@ -263,16 +261,14 @@
                 <span class="title">Disk</span>
               </p>
               <el-input class="select_box"
-                        placeholder="请输入Disk"
+                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
                         v-model="monitor_add.disk"
                         clearable>
               </el-input>
             </div>
           </div>
-          <div class="content_item_space">
-          </div>
+          <div class="content_item_space"></div>
           <div class="content_item_box">
-
             <div class="content_item">
               <p>
                 <span class="title">主机类型</span>
@@ -280,7 +276,7 @@
               </p>
               <el-input class="select_box"
                         placeholder="请输入主机类型"
-                        v-model="monitor_add.type"
+                        v-model="monitor_add.host"
                         clearable>
               </el-input>
             </div>
@@ -290,11 +286,11 @@
               </p>
               <el-select class="select_box"
                          v-model="monitor_add.type"
-                         placeholder="请选择网段类型">
+                         placeholder="请选择snmp服务器类型">
                 <el-option v-for="item in monitor_add.type_list"
-                           :key="item"
-                           :label="item"
-                           :value="item">
+                           :key="item.value"
+                           :label="item.label"
+                           :value="item.value">
                 </el-option>
               </el-select>
             </div>
@@ -304,7 +300,7 @@
               </p>
               <el-input class="select_box"
                         placeholder="请输入字符串"
-                        v-model="monitor_add.charStr"
+                        v-model="monitor_add.character"
                         clearable>
               </el-input>
             </div>
@@ -313,19 +309,18 @@
                 <span class="title">Memory</span>
               </p>
               <el-input class="select_box"
-                        placeholder="请输入Memory"
+                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
                         v-model="monitor_add.memory"
                         clearable>
               </el-input>
             </div>
-
           </div>
         </div>
         <div class="btn_box">
           <el-button @click="closed_edit_box"
                      class="cancel_btn">取消</el-button>
           <el-button class="ok_btn"
-                     @click="edit_data">确定</el-button>
+                     @click="submit_edit_box">确定</el-button>
         </div>
       </el-dialog>
       <!-- 删除 -->
@@ -366,6 +361,7 @@
     name: "system_control_monitor",
     data () {
       return {
+        loading:false,
         detail_click_val: {},
         detail_click_column: {},
         oldPositon: {
@@ -389,35 +385,24 @@
           import_loading: false
         },
         monitor_add: {
+          id:'',
           name: "",
-          local_type: "",
-          ip_address: "",
-          type: "V1",
-          type_list: ["V1", 'V2', 'V3'],
+          host: "",
+          ip: "",
+          type: "",
+          type_list: [{value:2,label:"V1"}, {value:3,label:"V2"}, {value:4,label:"V3"}],
           port: "",
           character: "",
           cpu: "",
           memory:"",
           disk:""
         },
-        monitor_edit: {
-          id: '',
-          name: '',
-          network_type: '',
-          person: '',
-          label_list: [],
-          tag: [],
-          type_list: ["static", 'dhcp', 'public'],
-          ip_segment: [],
-          ip_segment_list: [],
-          selected_cascader_edit: [],
-        },
         select_list: [],
       };
     },
     mounted () {
       this.get_data();
-     // this.check_passwd()
+     //this.check_passwd()
 
     },
     methods: {
@@ -444,6 +429,7 @@
 
       // 获取列表
       get_data () {
+        this.loading = true;
         this.$axios.get('/yiiapi/safetyequipments', {
           params: {
             page: this.monitor_page.page,
@@ -451,6 +437,7 @@
           }
         })
           .then(resp => {
+            this.loading = false;
             let {status,data} = resp.data;
 
             if(status == 0){
@@ -484,8 +471,12 @@
       handleSelectionChange (val) {
         this.select_list = val;
       },
-
-      // 删除
+      //删除取消
+      cancel_del_monitor () {
+        this.monitor_state.remove = false;
+        this.$refs.multipleTable.clearSelection();
+      },
+      //删除确定
       del_monitor () {
         if (this.select_list.length == 0) {
           this.$message(
@@ -542,132 +533,67 @@
           this.$refs.multipleTable.clearSelection();
         });
       },
-
-      // 添加设备
+      //添加设备
       add_monitor() {
         this.monitor_state.add = true;
+        this.monitor_add.id = '';
         this.monitor_add.name = '';
-        this.monitor_add.local_type = '';
-        this.monitor_add.ip_address = '';
-        this.monitor_add.type = 'V1';
+        this.monitor_add.host = '';
+        this.monitor_add.ip = '';
+        this.monitor_add.type = '';
         this.monitor_add.port = '';
         this.monitor_add.character = '';
         this.monitor_add.cpu = '';
         this.monitor_add.memory = '';
         this.monitor_add.disk = '';
       },
-
       //添加取消
       closed_add_box () {
         this.monitor_state.add = false;
       },
-
-      //
+      //添加确定
       submit_add_box () {
-        this.monitor_add.tag = [];
-        var isRepeat_ip_segment = []
-        this.monitor_add.ip_segment = [];
-        this.monitor_add.ip_segment = [];
-        var isRepeat_tag = []
-        var tag_test = []
-        var tag_test_str = ''
-        this.monitor_add.ip_segment_list.forEach(item => {
-          if (item.name != '') {
-            isRepeat_ip_segment.push(item.name)
-          }
-        });
-        if (isRepeat_ip_segment.length == 0) {
+        if (this.monitor_add.name == '') {
           this.$message(
             {
-              message: 'IP地址段不能为空！',
+              message: '工单名称不能为空！',
               type: 'warning',
             }
           );
           return false
         }
-        if (this.isRepeat(isRepeat_ip_segment)) {
+        if (this.monitor_add.type == '') {
           this.$message(
             {
-              message: 'IP地址或地址段有重复项,请重新输入！',
+              message: '请选择snmp服务器类型！',
               type: 'warning',
             }
           );
           return false
         }
-        // 标签处理
-        this.monitor_add.tag_list.forEach(item => {
-          if (item.name != '') {
-            tag_test.push(item.name)
-          }
-        });
-        if (this.isRepeat(tag_test)) {
+        if (this.monitor_add.ip == '') {
           this.$message(
             {
-              message: '标签有重复项,请重新输入。',
-              type: 'warning',
-            }
-          );
-          return false
-        }
-        tag_test_str = JSON.stringify(tag_test)
-        console.log(tag_test_str.indexOf("终端") != -1);
-        if (tag_test_str.indexOf("总部") != -1 && (tag_test_str.indexOf("分支") != -1)) {
-          this.$message(
-            {
-              message: '“总部”和“分支”标签只能设置其中的一种，请重新设置！',
+              message: 'IP地址不能为空。',
               type: 'warning',
             }
           );
           return false
         }
 
-        if (tag_test_str.indexOf("终端") != -1 && (tag_test_str.indexOf("服务器") != -1 || tag_test_str.indexOf("网络设备") != -1)) {
-          this.$message(
-            {
-              message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-              type: 'warning',
-            }
-          );
-          return false
-        }
-        if (tag_test_str.indexOf("服务器") != -1 && (tag_test_str.indexOf("终端") != -1 || tag_test_str.indexOf("网络设备") != -1)) {
-          this.$message(
-            {
-              message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-              type: 'warning',
-            }
-          );
-          return false
-        }
-        if (tag_test_str.indexOf("网络设备") != -1 && (tag_test_str.indexOf("服务器") != -1 || tag_test_str.indexOf("终端") != -1)) {
-          this.$message(
-            {
-              message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-              type: 'warning',
-            }
-          );
-          return false
-        }
-        this.monitor_add.tag_list.forEach(item => {
-          if (item.name != '') {
-            this.monitor_add.tag.push(item.name)
-          }
-        });
-        this.monitor_add.ip_segment_list.forEach(item => {
-          if (item.name != '') {
-            this.monitor_add.ip_segment.push(item.name)
-          }
-        });
-        this.$axios.post('/yiiapi/ipsegment/set-ip-segment', {
-          Dev: {
-            name: "123123",
-            type: "4",
-            ip: "45.6.6.6"
+        this.$axios.post('/yiiapi/safetyequipments', {
+          SafetyEquipment: {
+            name: this.monitor_add.name,
+            type: this.monitor_add.type,
+            ip: this.monitor_add.ip
           }
         })
-          .then(response => {
-            console.log(response);
-            if (response.data.status == 0) {
+          .then(resp => {
+            console.log(resp);
+
+            let {status,msg,data} = resp.data;
+
+            if (status == 0) {
               this.monitor_state.add = false;
               this.get_data();
               this.$message(
@@ -679,7 +605,7 @@
             } else {
               this.$message(
                 {
-                  message: response.data.msg,
+                  message: msg,
                   type: 'error',
                 }
               );
@@ -689,211 +615,80 @@
             console.log(error);
           })
       },
-      //添加标签
-      add_tag () {
-        this.monitor_add.tag_list.forEach(item => {
-          item.icon = false;
-        });
-        this.monitor_add.tag_list.push({ name: '', icon: true })
-      },
-      del_tag (item, index) {
-        this.monitor_add.tag_list.splice(index, 1);
-      },
-      //  添加ip地址段
-      add_ip () {
-        this.monitor_add.ip_segment_list.forEach(item => {
-          item.icon = false;
-        });
-        this.monitor_add.ip_segment_list.push({ name: '', icon: true })
-      },
-      del_ip (item, index) {
-        this.monitor_add.ip_segment_list.splice(index, 1);
-      },
-      // 编辑标签
-      add_tag_edit () {
-        this.monitor_edit.label_list.forEach(item => {
-          item.icon = false;
-        });
-        this.monitor_edit.label_list.push({ name: '', icon: true })
-      },
-      del_tag_edit (item, index) {
-        this.monitor_edit.label_list.splice(index, 1);
-      },
-      // 编辑ip
-      add_ip_edit () {
-        this.monitor_edit.ip_segment_list.forEach(item => {
-          item.icon = false;
-        });
-        this.monitor_edit.ip_segment_list.push({ name: '', icon: true })
-      },
-      del_ip_edit (item, index) {
-        this.monitor_edit.ip_segment_list.splice(index, 1);
-      },
-      //日志下载
-      download_box(row){
 
-      },
-      //编辑
-      edit_box (row) {
-        this.monitor_state.edit = true;
-        this.cascader_edit_if = true;
+      //编辑设备
+      edit_monitor(row) {
         console.log(row);
-        var item_str = JSON.stringify(row);
-        var obj_edit = JSON.parse(item_str);
-        this.monitor_edit.id = obj_edit.id
-        this.monitor_edit.name = obj_edit.name
-        this.monitor_edit.network_type = obj_edit.network_type
-        this.monitor_edit.person = obj_edit.person
-        this.monitor_edit.label_list = [];
-        this.monitor_edit.tag = [];
-        this.monitor_edit.ip_segment = [];
-        this.monitor_edit.ip_segment_list = [];
-        this.monitor_edit.selected_cascader_edit = obj_edit.location
-        if (obj_edit.label.length == 0) {
-          this.monitor_edit.label_list.push({
-            name: '',
-            icon: true
-          })
-        } else {
-          obj_edit.label.forEach(item => {
-            this.monitor_edit.label_list.push({
-              name: item,
-              icon: false
-            })
-          });
-          this.monitor_edit.label_list[this.monitor_edit.label_list.length - 1].icon = true
-        }
-        if (obj_edit.ip_segment.length == 0) {
-          this.monitor_edit.ip_segment_list.push({
-            name: '',
-            icon: true
-          })
-        } else {
-          obj_edit.ip_segment.forEach(item => {
-            this.monitor_edit.ip_segment_list.push({
-              name: item,
-              icon: false
-            })
-          });
-          this.monitor_edit.ip_segment_list[this.monitor_edit.ip_segment_list.length - 1].icon = true
-        }
+        this.monitor_state.edit = true;
+        this.monitor_add.id = row.id;
+        this.monitor_add.name = row.name;
+        this.monitor_add.host = '';
+        this.monitor_add.ip = row.ip;
+        this.monitor_add.type = row.type;
+        this.monitor_add.port = '';
+        this.monitor_add.character = '';
+        this.monitor_add.cpu = '';
+        this.monitor_add.memory = '';
+        this.monitor_add.disk = '';
       },
-      edit_data () {
-        console.log(this.monitor_edit.ip_segment_list);
-        console.log(this.monitor_edit.label_list);
-
-        var isRepeat_ip_segment_edit = []
-        var isRepeat_tag_edit = []
-        this.monitor_edit.ip_segment = []
-        this.monitor_edit.tag = []
-        var tag_test = []
-        var tag_test_str = ''
-
-        this.monitor_edit.ip_segment_list.forEach(item => {
-          if (item.name != '') {
-            isRepeat_ip_segment_edit.push(item.name)
-          }
-        });
-        this.monitor_edit.label_list.forEach(item => {
-          if (item.name != '') {
-            tag_test.push(item.name)
-          }
-        });
-        tag_test_str = JSON.stringify(tag_test)
-        console.log(tag_test_str.indexOf("终端") != -1);
-        if (tag_test_str.indexOf("总部") != -1 && (tag_test_str.indexOf("分支") != -1)) {
+      //编辑取消
+      closed_edit_box () {
+        this.monitor_state.edit = false;
+      },
+      //编辑确定
+      submit_edit_box () {
+        if (this.monitor_add.name == '') {
           this.$message(
             {
-              message: '“总部”和“分支”标签只能设置其中的一种，请重新设置！',
+              message: '工单名称不能为空！',
               type: 'warning',
             }
           );
           return false
         }
-        if (tag_test_str.indexOf("终端") != -1 && (tag_test_str.indexOf("服务器") != -1 || tag_test_str.indexOf("网络设备") != -1)) {
+        if (this.monitor_add.type == '') {
           this.$message(
             {
-              message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-              type: 'error',
+              message: '请选择snmp服务器类型！',
+              type: 'warning',
             }
           );
           return false
         }
-        if (tag_test_str.indexOf("服务器") != -1 && (tag_test_str.indexOf("终端") != -1 || tag_test_str.indexOf("网络设备") != -1)) {
+        if (this.monitor_add.ip == '') {
           this.$message(
             {
-              message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-              type: 'error',
+              message: 'IP地址不能为空。',
+              type: 'warning',
             }
           );
           return false
         }
-        if (tag_test_str.indexOf("网络设备") != -1 && (tag_test_str.indexOf("服务器") != -1 || tag_test_str.indexOf("终端") != -1)) {
-          this.$message(
-            {
-              message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-              type: 'error',
-            }
-          );
-          return false
-        }
-        this.monitor_edit.label_list.forEach(item => {
-          if (item.name != '') {
-            isRepeat_tag_edit.push(item.name)
+        this.$axios.put('/yiiapi/safetyequipments/'+this.monitor_add.id, {
+          SafetyEquipment: {
+            name: this.monitor_add.name,
+            type: this.monitor_add.type,
+            ip: this.monitor_add.ip
           }
-        });
-        if (this.isRepeat(isRepeat_ip_segment_edit)) {
-          this.$message(
-            {
-              message: 'IP地址或地址段有重复项,请重新输入。',
-              type: 'error',
-            }
-          );
-          return false
-        }
-        if (this.isRepeat(isRepeat_tag_edit)) {
-          this.$message(
-            {
-              message: '标签有重复项,请重新输入。',
-              type: 'error',
-            }
-          );
-          return false
-        }
-        this.monitor_edit.ip_segment_list.forEach(item => {
-          if (item.name != '') {
-            this.monitor_edit.ip_segment.push(item.name)
-          }
-        });
-        this.monitor_edit.label_list.forEach(item => {
-          if (item.name != '') {
-            this.monitor_edit.tag.push(item.name)
-          }
-        });
-        this.$axios.put('/yiiapi/ipsegment/edit-ip-segment', {
-          id: this.monitor_edit.id,
-          name: this.monitor_edit.name,
-          ip_segment: this.monitor_edit.ip_segment,
-          network_type: this.monitor_edit.network_type,
-          person: this.monitor_edit.person,
-          label: this.monitor_edit.tag,
-          location: this.monitor_edit.selected_cascader_edit,
         })
-          .then(response => {
-            console.log(response);
-            if (response.data.status == 0) {
+          .then(resp => {
+            console.log(resp);
+
+            let {status,msg,data} = resp.data;
+
+            if (status == 0) {
               this.monitor_state.edit = false;
               this.get_data();
               this.$message(
                 {
-                  message: '修改成功',
+                  message: '编辑成功',
                   type: 'success',
                 }
               );
             } else {
               this.$message(
                 {
-                  message: response.data.msg,
+                  message: msg,
                   type: 'error',
                 }
               );
@@ -904,54 +699,11 @@
           })
       },
 
-
-      //删除确定
-      submit_remove_box(){
-        this.$axios.delete('/yiiapi/ipsegment/del', {
-          data: {
-            id: 0
-          }
-        })
-          .then(response => {
-            console.log(response);
-            if (response.data.status == 0) {
-              this.get_data();
-              this.$message(
-                {
-                  message: '删除成功！',
-                  type: 'success',
-                }
-              );
-            } else {
-              this.$message(
-                {
-                  message: '删除失败！',
-                  type: 'error',
-                }
-              );
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          })
-      },
-      //删除取消
-      closed_remove_box () {
-        this.monitor_state.remove = false;
-        this.$refs.multipleTable.clearSelection();
-      },
-
-      closed_edit_box () {
-        this.monitor_state.edit = false;
-        this.cascader_edit_if = false;
-      },
-      closed_import_box () {
-        this.monitor_state.import = false;
-      },
-      // 下载模板
-      download_template () {
-
-        this.$axios.get('/yiiapi/site/check-passwd-reset')
+      //日志下载
+      download_box(row){
+        var url = '/yiiapi/safetyequipment/DownloadLog?id='+row.id;
+        window.location.href = url;
+       /* this.$axios.get('/yiiapi/site/check-passwd-reset')
           .then((resp) => {
             let {
               status,
@@ -981,10 +733,8 @@
                   console.log(error);
                 })
             }
-          })
+          })*/
       },
-
-
       /************************************/
       //进入详情页面
       detail_click (val, column, cell) {
@@ -1267,10 +1017,11 @@
               height: 42px;
               background: #0070ff;
               color: #fff;
+              border: 1px solid #0070ff;
             }
 
             .cancel_btn {
-              width: 136px;
+              width: 134px;
               height: 42px;
               border-color: #0070ff;
               background: #fff;
