@@ -1368,7 +1368,6 @@ export default {
         });
     },
 
-
     //每頁多少條切換
     handleSizeChange (val) {
       this.table.eachPage = val;
@@ -1470,7 +1469,7 @@ export default {
         let handle_data = this.table_assets.tableData.slice(0, eachPage);
         this.table_assets.tableData_new = handle_data;
         //获取用户列表(经办人使用)
-        this.$axios.get('/yiiapi/users')
+        this.$axios.get('/yiiapi/site/UserList')
           .then(resp => {
             let { status, data } = resp.data;
             if (status == 0) {

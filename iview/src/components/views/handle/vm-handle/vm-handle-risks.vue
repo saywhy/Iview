@@ -1454,7 +1454,7 @@ export default {
 
     //获取列表
     get_table_works_list () {
-      this.$axios.get('/yiiapi/' + this.threats + '/workorder-list', {
+      this.$axios.get('/yiiapi/' + this.threats + '/WorkorderList', {
         params: {
           page: this.table_add_works.pageNow,
           rows: this.table_add_works.eachPage
@@ -1497,8 +1497,6 @@ export default {
 
       let multipe = this.table_add_works.multipleSelection;
 
-      console.log('******************')
-      console.log(multipe)
 
       if (multipe.length == 0) {
         this.$message({ message: '请选择需要添加的工单！', type: 'warning' });

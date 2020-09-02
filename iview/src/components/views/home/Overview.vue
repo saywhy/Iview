@@ -15,7 +15,7 @@
          <div class="vam-title">威胁类型 TOP5（7天）</div>
          <vm-main-form :options="top_mid"
                        v-if="top_mid_show"></vm-main-form>
-         <vm-main-time></vm-main-time>
+        <!-- <vm-main-time></vm-main-time>-->
        </div>
      </el-col>
      <el-col :span="6">
@@ -275,7 +275,7 @@
                 status,
                 data
               } = resp.data;
-              console.log(data)
+              //console.log(data)
               if (status == 0) {
                 this.mid_left = data;
                 this.mid_left_show = true;
@@ -325,7 +325,7 @@
                 data
               } = resp.data;
 
-              //console.log(data);
+              console.log(data);
 
               if (status == 0) {
                 this.bom_right = data;

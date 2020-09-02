@@ -58,7 +58,7 @@
           {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:false,switchFlag:false}],
         loading: false,
         intel_name:'',
-        intel_attr:[{name:'ss'},{name:'cc'},{name:'dd'}]
+        intel_attr:[{name:'商业情报'},{name:'开源情报'}]
       };
     },
     props: {
@@ -75,9 +75,14 @@
       // 获取网卡配置
       get_data () {
         this.loading = true;
-        this.$axios.get('/yiiapi/seting/get-network')
+        this.$axios.get('/yiiapi/intelligence/Prototype')
           .then(resp => {
             this.loading = false;
+            let {status,data} = resp.data
+
+            console.log(data)
+
+
           })
           .catch(error => {
             console.log(error);

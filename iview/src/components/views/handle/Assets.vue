@@ -782,6 +782,7 @@ export default {
           }
         })
     },
+
     //资产頂部
     get_list_top () {
       this.$axios.get('/yiiapi/riskasset/RiskAssetTop')

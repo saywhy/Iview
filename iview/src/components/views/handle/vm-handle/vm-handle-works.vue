@@ -1237,8 +1237,7 @@ export default {
       this.$router.push({ path: "/detail/works", query: { id: row.id, type: 'workorder' } });
     },
 
-    /***********************************以下是弹窗部分***********/
-    /***********************************以下是弹窗部分***********/
+    /**********以下是弹窗部分***********/
     // 状态变更选择
     change_state (command) {
       this.process_state = command;
@@ -1336,27 +1335,17 @@ export default {
 
         let stu = selected[0].status;
         if (stu == 1 || stu == 2) {
-          this.$axios.get('/yiiapi/site/check-auth-exist', {
-            params: {
-              pathInfo: 'yararule/download',
-            }
-          })
-            .then(response => {
-              var url1 = "/yiiapi/workorder/GetExists?id=" + (selected[0].id * 1);
-              this.$axios.get(url1)
-                .then(resp => {
-                  let { status, msg, data } = resp.data;
-                  console.log(resp)
-                  if (status == 0) {
-                    var url2 = "/yiiapi/workorder/Download?id=" + (selected[0].id * 1);
-                    window.location.href = url2;
-                  } else {
-                    this.$message({ type: 'warning', message: msg });
-                  }
-                })
-            })
-            .catch(error => {
-              console.log(error);
+          var url1 = "/yiiapi/workorder/GetExists?id=" + (selected[0].id * 1);
+          this.$axios.get(url1)
+            .then(resp => {
+              let { status, msg, data } = resp.data;
+              console.log(resp)
+              if (status == 0) {
+                var url2 = "/yiiapi/workorder/Download?id=" + (selected[0].id * 1);
+                window.location.href = url2;
+              } else {
+                this.$message({ type: 'warning', message: msg });
+              }
             })
         } else {
           this.$message({ message: '当前状态下不允许下载工单！', type: 'warning' });
@@ -1379,10 +1368,10 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          that.$axios.delete('/yiiapi/workorders', {
+          /*that.$axios.delete('/yiiapi/workorders', {
             data: { id: selected }
-          })
-         // that.$axios.delete('/yiiapi/workorders/'+selected)
+          })*/
+          that.$axios.delete('/yiiapi/workorders/'+selected)
             .then(resp => {
               let { status, msg, data } = resp.data;
               if (status == 0) {
