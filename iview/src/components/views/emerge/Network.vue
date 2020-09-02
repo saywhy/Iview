@@ -948,7 +948,6 @@ export default {
           page: this.table.pageNow,
           rows: this.table.eachPage
         }
-
       }).then(resp => {
         this.table.loading = false;
 
@@ -969,26 +968,6 @@ export default {
         })
     },
 
-    // 测试密码过期
-    check_passwd () {
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
-        .then((resp) => {
-          let {
-            status,
-            msg,
-            data
-          } = resp.data;
-          if (status == '602') {
-            this.$message(
-              {
-                message: msg,
-                type: 'warning',
-              }
-            );
-            eventBus.$emit('reset')
-          }
-        })
-    },
     // 获取折现图表
     get_echarts () {
       this.$axios.get('/yiiapi/alert/AlertTrend')
@@ -1338,7 +1317,7 @@ export default {
       console.log(this.task_params.multiple);
 
       this.handle.save = true;
-      this.$axios.put('/yiiapi/alert/distribution-workorder',
+      this.$axios.put('/yiiapi/alert/DistributionWorkorder',
         {
           name: this.task_params.name,
           priority: this.task_params.level,
@@ -1373,7 +1352,7 @@ export default {
       }
       //console.log(this.task_params);
       this.handle.save = true;
-      this.$axios.post('/yiiapi/alert/add-workorder',
+      this.$axios.post('/yiiapi/alert/AddWorkorder',
         {
           name: this.task_params.name,
           priority: this.task_params.level,
@@ -1441,7 +1420,7 @@ export default {
     },
     //获取列表
     get_table_works_list () {
-      this.$axios.get('/yiiapi/alert/workorder-list', {
+      this.$axios.get('/yiiapi/alert/WorkorderList', {
         params: {
           page: this.table_add_works.pageNow,
           rows: this.table_add_works.eachPage
@@ -1509,7 +1488,7 @@ export default {
         console.log(this.add_params.remind)
         console.log(this.add_params.perator);
         this.handle.save = true;
-        this.$axios.post('/yiiapi/alert/add-workorder',
+        this.$axios.post('/yiiapi/alert/AddWorkorder',
           {
             id: this.add_params.id,
             type: "alert",
@@ -1559,37 +1538,15 @@ export default {
         type: 'warning'
       }).then(() => {
 
-       /* this.$axios.get('/yiiapi/site/check-passwd-reset')
-          .then((resp) => {
-            let {
-              status,
-              msg,
-              data
-            } = resp.data;
-            if (status == '602') {
-              this.$message(
-                {
-                  message: msg,
-                  type: 'warning',
-                }
-              );
-              eventBus.$emit('reset')
-            } else {*/
-              this.$axios.get('/yiiapi/alert/ExportAlertsTest', {
-                params: {
-                 // pathInfo: 'yararule/download',
-                }
-              })
-                .then(response => {
-                  var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.params.status + '&degree=' + this.params.degree + '&start_time=' + this.params.startTime
-                    + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&category=' + this.params.domain;
-                  window.location.href = url1;
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-         /*   }
-          })*/
+        this.$axios.get('/yiiapi/alert/ExportAlertsTest')
+          .then(response => {
+            var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.params.status + '&degree=' + this.params.degree + '&start_time=' + this.params.startTime
+              + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&category=' + this.params.domain;
+            window.location.href = url1;
+          })
+          .catch(error => {
+            console.log(error);
+          })
       }).catch(() => {
         this.$message({ type: 'info', message: '已取消导出' });
 

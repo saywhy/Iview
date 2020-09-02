@@ -291,24 +291,24 @@ export default {
         case 'workorder':
           url = '/yiiapi/workorders/'+this.id
           break;
-        /*case 'alert_detail':
+        case 'alert_detail':
           url = '/yiiapi/alerts/'+this.id
           break;
         case 'asset':
           url = '/yiiapi/riskassets/'+this.id
           break;
         case 'lateral':
-          url = '/yiiapi/horizontalthreat'+this.id
+          url = '/yiiapi/horizontalthreats/'+this.id
           break;
         case 'outside':
-          url = '/yiiapi/externalthreat/'+this.id
+          url = '/yiiapi/externalthreats/'+this.id
           break;
         case 'outreath':
-          url = '/yiiapi/outreachthreat/'+this.id
+          url = '/yiiapi/outreachthreats/'+this.id
           break;
         case 'locality':
           url = '/yiiapi/nativethreat/'+this.id
-          break;*/
+          break;
         default:
           break;
       }
@@ -376,11 +376,11 @@ export default {
         case 'workorder':
           url = '/yiiapi/workorder/ReplyList'
           break;
-        /*case 'alert_detail':
+        case 'alert_detail':
           url = '/yiiapi/alert/ReplyList'
           break;
         case 'asset':
-          url = '/yiiapi/asset/ReplyList'
+          url = '/yiiapi/riskasset/ReplyList'
           break;
         case 'lateral':
           url = '/yiiapi/horizontalthreat/ReplyList'
@@ -392,8 +392,8 @@ export default {
           url = '/yiiapi/outreachthreat/ReplyList'
           break;
         case 'locality':
-          url = '/yiiapi/nativethreat/ReplyList'
-          break;*/
+          url = '/yiiapi/nativethreats/ReplyList'
+          break;
         default:
           break;
       }
@@ -453,53 +453,42 @@ export default {
       let stu = this.data.status;
       if (stu == 1 || stu == 2) {
 
-        this.$axios.get('/yiiapi/site/check-auth-exist', {
-          params: {
-            pathInfo: 'yararule/download',
-          }
-        })
-          .then(response => {
-
-            var url1 = "/yiiapi/site/download-test?id=" + this.id * 1;
-            this.$axios.get(url1)
-              .then(resp => {
-                let { status, msg, data } = resp.data;
-                if (status == 0) {
-                  var url2 = ''
-                  switch (this.$route.query.type) {
-                    case 'workorder':
-                      url2 = "/yiiapi/workorder/Download?id="
-                      break;
-                    case 'alert_detail':
-                      url2 = "/yiiapi/alert/download?id="
-                      break;
-                    case 'asset':
-                      url2 = "/yiiapi/riskasset/download?id="
-                      break;
-                    case 'lateral':
-                      url2 = "/yiiapi/horizontalthreat/download?id="
-                      break;
-                    case 'outside':
-                      url2 = "/yiiapi/externalthreat/Download?id="
-                      break;
-                    case 'outreath':
-                      url2 = "/yiiapi/outreachthreat/download?id="
-                      break;
-                    case 'locality':
-                      url2 = "/yiiapi/nativethreat/Download?id="
-                      break;
-                    default:
-                      break;
-                  }
-                  var url3 = url2 + this.id * 1;
-                  window.location.href = url3;
-                } else {
-                  this.$message({ type: 'warning', message: msg });
-                }
-              })
-              .catch(error => {
-                console.log(error);
-              })
+        var url1 = "/yiiapi/workorder/GetExists?id=" + this.id * 1;
+        this.$axios.get(url1)
+          .then(resp => {
+            let { status, msg, data } = resp.data;
+            if (status == 0) {
+              var url2 = ''
+              switch (this.$route.query.type) {
+                case 'workorder':
+                  url2 = "/yiiapi/workorder/Download?id="
+                  break;
+                case 'alert_detail':
+                  url2 = "/yiiapi/alert/Download?id="
+                  break;
+                case 'asset':
+                  url2 = "/yiiapi/riskasset/Download?id="
+                  break;
+                case 'lateral':
+                  url2 = "/yiiapi/horizontalthreat/Download?id="
+                  break;
+                case 'outside':
+                  url2 = "/yiiapi/externalthreat/Download?id="
+                  break;
+                case 'outreath':
+                  url2 = "/yiiapi/outreachthreat/download?id="
+                  break;
+                case 'locality':
+                  url2 = "/yiiapi/nativethreat/Download?id="
+                  break;
+                default:
+                  break;
+              }
+              var url3 = url2 + this.id * 1;
+              window.location.href = url3;
+            } else {
+              this.$message({ type: 'warning', message: msg });
+            }
           })
           .catch(error => {
             console.log(error);
@@ -518,7 +507,7 @@ export default {
         case 'workorder':
           url2 = '/yiiapi/workorder/Reply'
           break;
-      /*  case 'alert_detail':
+        case 'alert_detail':
           url2 = '/yiiapi/alert/Reply'
           break;
         case 'asset':
@@ -535,7 +524,7 @@ export default {
           break;
         case 'locality':
           url2 = '/yiiapi/nativethreat/Reply'
-          break;*/
+          break;
         default:
           break;
       }
