@@ -221,7 +221,7 @@ export default {
     },
     // 获取密码长度
     getPwdLength () {
-      this.$axios.get('/yiiapi/site/get-passwd-length')
+      this.$axios.get('/yiiapi/site/GetPasswdLength')
         .then(response => {
           this.user_data.password = response.data.data
           this.user_data.placeholder = '请输入包含大写、小写、数字和特殊字符其中三项,' + response.data.data.min_passwd_len + '-' + response.data.data.max_passwd_len + '位密码'

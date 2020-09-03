@@ -448,7 +448,7 @@ export default {
     },
     // 获取密码长度
     getPwdLength () {
-      this.$axios.get('/yiiapi/site/get-passwd-length')
+      this.$axios.get('/yiiapi/site/GetPasswdLength')
         .then(response => {
           console.log(response);
           this.user_data.password = response.data.data
