@@ -111,15 +111,13 @@ export default {
       table_old: {
         pageNow: '1',
         rows: '10',
-        count: '0'
+        count: '0',
       },
       table_new: {
         pageNow: '1',
         rows: '10',
-        count: '0'
+        count: '0',
       },
-
-
     }
   },
   props: {

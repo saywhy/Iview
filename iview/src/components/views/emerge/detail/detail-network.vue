@@ -1,5 +1,6 @@
 <template>
-  <div class="detail_box">
+  <div class="detail_box"
+       v-loading.fullscreen.lock="loading">
     <back-title :title-name="title_name"></back-title>
     <!-- 顶部基础 -->
     <div class="detail_top">
@@ -70,9 +71,12 @@
                   <el-submenu :index="index+'0'"
                               :key="index"
                               v-for="(item,index) in detail_main.src_ip_list">
-                    <template slot="title">{{item}}</template>
+                    <template slot="title">{{item}}
+                    </template>
                     <el-submenu :index="index+'1-1'">
-                      <template slot="title">威胁追查</template>
+                      <template slot="title">
+                        威胁追查
+                      </template>
                       <el-menu-item :index="index+'1'"
                                     @click="select_src_name(item)">网络视角</el-menu-item>
                       <el-menu-item :index="index+'2'"
@@ -101,9 +105,13 @@
                   <el-submenu :index="index+'0'"
                               :key="index"
                               v-for="(item,index) in detail_main.dest_ip_list">
-                    <template slot="title">{{item}}</template>
+                    <template slot="title">
+                      {{item}}
+                    </template>
                     <el-submenu :index="index+'1-1'">
-                      <template slot="title">威胁追查</template>
+                      <template slot="title">
+                        威胁追查
+                      </template>
                       <el-menu-item :index="index+'1'"
                                     @click="select_des_name(item)">网络视角</el-menu-item>
                       <el-menu-item :index="index+'2'"
@@ -465,12 +473,12 @@
           <el-table-column label="IP地址段"
                            align="center"
                            show-overflow-tooltip>
-            <template slot-scope="scope">
-              <li v-for="item in scope.row.ip_segment"
-                  class="btn_tag_box">
-                <p>{{item}}</p>
-              </li>
-            </template>
+<template slot-scope="scope">
+  <li v-for="item in scope.row.ip_segment"
+      class="btn_tag_box">
+    <p>{{item}}</p>
+  </li>
+</template>
           </el-table-column>
           <el-table-column prop="network_type"
                            align="center"
@@ -480,15 +488,15 @@
           <el-table-column label="标签"
                            align="center"
                            width="300">
-            <template slot-scope="scope">
-              <span class="btn_tag_box"
-                    v-for="item in scope.row.label">
-                <el-button type="primary"
-                           class="btn_tag">
-                  {{item}}
-                </el-button>
-              </span>
-            </template>
+<template slot-scope="scope">
+  <span class="btn_tag_box"
+        v-for="item in scope.row.label">
+    <el-button type="primary"
+               class="btn_tag">
+      {{item}}
+    </el-button>
+  </span>
+</template>
           </el-table-column>
           <el-table-column prop="person"
                            align="center"
@@ -500,14 +508,328 @@
                            align="center"
                            width="180"
                            show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.updated_at }}</template>
+<template slot-scope="scope">
+  {{ scope.row.updated_at }}
+</template>
           </el-table-column>
         </el-table>
       </div>
     </el-dialog>
+    <!-- 弹窗 -->
+    <!-- 添加到工单 -->
+    <!--:visible.sync="worksheets_data.pop" class="pop_state_add pop_box"-->
+    <el-dialog class="pop_state_add pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="add_state_change">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="add_closed_state1"
+           class="closed_img"
+           alt="">
+      <div class="title">
+        <div class="mask"></div>
+        <span class="title_name">添加到工单</span>
+      </div>
+      <div class="content">
+        <div class="add_works">
+          <el-table ref="multipleTable"
+                    class="reset_table"
+                    align="center"
+                    border
+                    :data="table_add_works.tableData"
+                    tooltip-effect="dark"
+                    @selection-change="handle_sel_table_add_works"
+                    style="width: 100%">
+            <!--<el-table-column label="选择"
+                             width="55">
+<template slot-scope="scope">
+  <el-radio v-model="worksheets_data.tableRadio" :label="scope.row">
+    <i></i>
+  </el-radio>
+</template>
 
+            </el-table-column>-->
+            <el-table-column label="选择"
+                             align="center"
+                             width="50"></el-table-column>
+            <el-table-column type="selection"
+                             align="center"
+                             width="50"></el-table-column>
+            <el-table-column prop="name"
+                             label="工单名称"
+                             align="center"
+                             show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="creator"
+                             align="center"
+                             label="创建人"
+                             show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column label="优先级"
+                             align="center"
+                             width="120">
+<template slot-scope="scope">
+  {{ scope.row.priority | priority}}
+</template>
+            </el-table-column>
+            <!--<el-table-column prop="perator_cn"
+                             label="经办人"
+                             show-overflow-tooltip>
+            </el-table-column>-->
+            <el-table-column prop="new_perator"
+                             align="center"
+                             label="经办人"
+                             show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column label="状态"
+                             align="center"
+                             width="80"
+                             show-overflow-tooltip>
+<template slot-scope="scope">
+  {{ scope.row.status | work_status }}
+</template>
+            </el-table-column>
+          </el-table>
+          <el-pagination class="pagination_box"
+                         @size-change="sc_table_add_works"
+                         @current-change="hcc_table_add_works"
+                         :current-page="table_add_works.pageNow"
+                         :page-sizes="[10,20,50,100]"
+                         :page-size="table_add_works.eachPage"
+                         layout="total, sizes, prev, pager, next"
+                         :total="table_add_works.count">
+          </el-pagination>
+        </div>
+      </div>
+      <div class="btn_box">
+        <el-button @click="add_closed_state1"
+                   class="cancel_btn">取消</el-button>
+        <el-button @click="add_ok_state"
+                   class="ok_btn">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 弹窗 -->
+    <!-- 新建工单任务 -->
+    <el-dialog class="task_new_box pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="new_worksheets_data.pop">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_task_new"
+           class="closed_img"
+           alt="">
+      <div class="title">
+        <div class="mask"></div>
+        <span class="title_name">编辑工单</span>
+      </div>
+      <div class="step_box">
+        <div class="step_box1">
+          <span class="step1_span"
+                :class="new_worksheets_data.new_contet?'step_now':'step_past'">基本信息</span>
+          <img src="@/assets/images/emerge/selected01.png"
+               class="selected_img"
+               alt="">
+        </div>
+        <div class="step_box2">
+          <span class="step2_span"
+                :class="!new_worksheets_data.new_contet?'step_now':'step_past'">处置内容</span>
+        </div>
+      </div>
+      <!-- 基本信息 -->
+      <div class="task_new_content"
+           v-if="new_worksheets_data.new_contet">
+        <div class="task_content_box">
+          <div class="content_top">
+            <div class="content_top_left">
+              <li class="left_item">
+                <div class="title">
+                  <span>工单名称</span>
+                  <span class="improtant_ico">*</span>
+                </div>
+                <el-input class="task_new_input"
+                          placeholder="请输入工单名称"
+                          v-model="new_worksheets_list.name"
+                          show-word-limit
+                          maxlength="32"
+                          clearable>
+                </el-input>
+              </li>
+              <li class="left_item">
+                <div class="title">
+                  <span>经办人</span>
+                  <span class="improtant_ico">*</span>
+                </div>
+                <el-select class="task_new_input"
+                           v-model="new_worksheets_list.operator"
+                           clearable
+                           placeholder="请选择经办人">
+                  <el-option v-for="item in new_worksheets_data.operator_list"
+                             @click.native="select_changced(item)"
+                             :key="item.id"
+                             :label="item.username"
+                             :value="item.username">
+                  </el-option>
+                </el-select>
+              </li>
+            </div>
+            <div class="content_top_right">
+              <li class="right_item">
+                <div class="title">
+                  <span>优先级</span>
+                  <span class="improtant_ico">*</span>
+                </div>
+                <el-select class="task_new_input"
+                           v-model="new_worksheets_list.level"
+                           clearable
+                           placeholder="请选择优先级">
+                  <el-option v-for="item in new_worksheets_data.level_list"
+                             :key="item.value"
+                             :label="item.label"
+                             :value="item.value">
+                  </el-option>
+                </el-select>
+              </li>
+              <li class="right_item">
+                <el-checkbox-group v-model="new_worksheets_list.notice">
+                  <el-checkbox label="email"
+                               value="email">邮件通知</el-checkbox>
+                  <el-checkbox label="message"
+                               value="message">短信通知</el-checkbox>
+                  <el-checkbox label="news"
+                               value="news">消息中心通知</el-checkbox>
+                </el-checkbox-group>
+              </li>
+            </div>
+          </div>
+          <div class="content_remarks">
+            <p class="title">备注</p>
+            <el-input type="textarea"
+                      :rows="4"
+                      placeholder="请输入内容"
+                      maxlength="500"
+                      show-word-limit
+                      v-model="new_worksheets_list.textarea">
+            </el-input>
+          </div>
+          <div class="content_table">
+            <el-table :data="new_worksheets_data.table_operator.tableData"
+                      class="reset_table"
+                      align="center"
+                      border
+                      style="width: 100%">
+              <el-table-column prop="username"
+                               align="center"
+                               label="经办人"></el-table-column>
+              <el-table-column prop="department"
+                               align="center"
+                               label="部门"></el-table-column>
+              <el-table-column prop="email_addr"
+                               align="center"
+                               label="邮箱"></el-table-column>
+            </el-table>
+          </div>
+        </div>
+
+        <div class="btn_box">
+          <el-button @click="closed_task_new"
+                     class="cancel_btn">取消</el-button>
+          <el-button @click="next_task"
+                     class="next_btn">下一步</el-button>
+        </div>
+      </div>
+
+      <!-- 处置内容 -->
+      <div class="task_handle_content"
+           v-if="!new_worksheets_data.new_contet">
+        <div class="task_content_box">
+          <div class='table_box'>
+            <div>
+              <div>
+                <el-table align="center"
+                          class="reset_table"
+                          border
+                          :data="new_worksheets_data.network_detail"
+                          @selection-change="select_alert_new"
+                          tooltip-effect="dark"
+                          style="width: 100%">
+                  <el-table-column prop="category"
+                                   align="center"
+                                   label="告警类型"
+                                   show-overflow-tooltip>
+                  </el-table-column>
+                  <el-table-column prop="indicator"
+                                   align="center"
+                                   label="威胁指标"
+                                   show-overflow-tooltip>
+                  </el-table-column>
+                  <el-table-column align="center"
+                                   label="源地址"
+                                   show-overflow-tooltip>
+<template slot-scope="scope">
+  <p v-for="item in JSON.parse(scope.row.src_ip)">
+    {{item }}</p>
+</template>
+                  </el-table-column>
+                  <el-table-column align="center"
+                                   label="目的地址"
+                                   show-overflow-tooltip>
+<template slot-scope="scope">
+  <p v-for="item in JSON.parse(scope.row.dest_ip)">
+    {{item }}</p>
+</template>
+                  </el-table-column>
+                  <el-table-column prop="application"
+                                   align="center"
+                                   label="应用"
+                                   show-overflow-tooltip>
+                  </el-table-column>
+                  <el-table-column label="威胁等级"
+                                   align="center"
+                                   width="100"
+                                   show-overflow-tooltip>
+<template slot-scope="scope">
+  <span class="btn_alert_background"
+        :class="{'high_background':scope.row.degree =='high','mid_background':scope.row.degree =='medium','low_background':scope.row.degree =='low'}">
+    {{ scope.row.degree | degree }}</span>
+</template>
+                  </el-table-column>
+                  <el-table-column label="失陷确定性"
+                                   align="center"
+                                   width="100"
+                                   show-overflow-tooltip>
+<template slot-scope="scope">
+  <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
+    {{ scope.row.fall_certainty | certainty }}</span>
+</template>
+                  </el-table-column>
+                  <el-table-column label="状态"
+                                   align="center"
+                                   width="80">
+<template slot-scope="scope">
+  {{ scope.row.status | work_status }}
+</template>
+                  </el-table-column>
+                </el-table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btn_box">
+          <el-button @click="closed_task_new"
+                     class="cancel_btn">取消</el-button>
+          <el-button @click="prev_task_handle"
+                     class="prev_btn">上一步</el-button>
+          <el-button @click="prev_task_handle_assign"
+                     class="prev_btn">分配</el-button>
+          <el-button @click="prev_task_handle_save"
+                     class="prev_btn">保存</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
+
 <script>
 import backTitle from "@/components/common/back-title";
 import detailStage from "@/components/views/emerge/detail/detail_stage";
@@ -517,6 +839,7 @@ export default {
   name: 'detail_network',
   data () {
     return {
+      loading: false,
       title_name: "告警详情",
       options: [{
         value: 'zhinan',
@@ -555,14 +878,117 @@ export default {
       detailArray: [],
       // 编辑标签
       edit_tag: {
-        tag_list: [
-        ],
+        tag_list: [],
         pop: false
       },
       // ip段详情
       ipDes: {
         pop: false,
         data: []
+      },
+
+      //添加到工单
+      worksheets_data: {
+        page: 1,
+        rows: 10,
+        pop: false,
+        tableRadio: {},
+        level_list: [{
+          value: "highest",
+          label: "极高"
+        },
+        {
+          value: "high",
+          label: "高"
+        },
+        {
+          value: "medium",
+          label: "中"
+        },
+        {
+          value: "low",
+          label: "低"
+        }
+        ],
+        status_type: [
+          '无', '待分配', '已分配', '处置中', '已取消', '已处置'
+        ]
+      },
+      worksheets_list: {},
+      // 新建工单
+      new_worksheets_list: {
+        name: "",
+        level: "",
+        operator: "",
+        new_operator: [],
+        notice: ['email'],
+        textarea: "",
+        multiple: [],
+        select_list: []
+      },
+      new_worksheets_data: {
+        pop: false,
+        new_contet: true,
+        operator_list: [],
+        level_list: [{
+          value: "highest",
+          label: "最高"
+        },
+        {
+          value: "high",
+          label: "高"
+        },
+        {
+          value: "medium",
+          label: "中"
+        },
+        {
+          value: "low",
+          label: "低"
+        }
+        ],
+        //经办人数组
+        table_operator: {
+          tableData: [],
+          tableData_new: [],
+          count: 0,
+          pageNow: 1,
+          maxPage: 1,
+          eachPage: 5
+        },
+        // 告警数组
+        network_detail: []
+      },
+
+      //
+      table_alerts: {
+        tableData: [],
+        count: 0,
+        pageNow: 1,
+        maxPage: 1,
+        eachPage: 10,
+        loading: true,
+        multipleSelection: []
+      },
+      //添加到工单
+      add_state_change: false,
+      table_add_works: {
+        tableData: [],
+        count: 0,
+        pageNow: 1,
+        maxPage: 1,
+        eachPage: 10,
+        loading: true,
+        multipleSelection: []
+      },
+      add_params: {
+        name: "",
+        level: "",
+        operator: [],
+        notice: ['email'],
+        remarks: "",
+        multiple: [],
+        old_as: [],
       }
     }
   },
@@ -575,6 +1001,79 @@ export default {
   methods: {
 
     activeIndex (item) {
+
+    },
+    alert_detail () {
+      this.loading = true
+      this.$axios.get('/yiiapi/alerts/' + this.$route.query.detail).then(resp => {
+        this.loading = false;
+        let {
+          status,
+          data,
+          msg
+        } = resp.data;
+        if (status == 1) {
+          this.$message({
+            message: msg,
+            type: 'error',
+          });
+          return false
+        }
+        let attr = [];
+        attr.push(resp.data.data);
+        this.table_alerts.tableData = attr;
+        this.detail_list.push(data)
+        console.log(this.table_alerts);
+        this.detail_main = data
+        this.detail_main.label_obj = JSON.parse(this.detail_main.label)
+        this.detail_main.json_description = JSON.parse(this.detail_main.description).join(',')
+        this.detail_main.json_label = JSON.parse(this.detail_main.label).join(',')
+        this.detail_main.src_ip_list = JSON.parse(this.detail_main.src_ip)
+        // this.detail_main.src_ip_list = ['192.168.1.1', '192.12.23.123', '192.168.1.1', '192.12.23.123', '192.168.1.1', '192.12.23.123']
+        this.detail_main.dest_ip_list = JSON.parse(this.detail_main.dest_ip)
+        this.detail_main.user_list = JSON.parse(this.detail_main.user)
+        this.detail_main.asset_name_list = JSON.parse(this.detail_main.asset_name)
+        console.log(this.detail_main);
+        JSON.parse(data.alarm_merger).map(item => {
+          this.detail_list.push(item)
+        })
+        console.log(this.detail_list);
+        this.detail_list.map(item => {
+          item.selected = false
+
+        })
+        this.detail_list[0].selected = true
+        this.detailArray = this.detail_list
+        if (this.detail_main.workorder_id == '0') {
+          this.detail_main.work_order_status = '未关联工单'
+          this.detail_main.work_name = ''
+        } else {
+          switch (this.detail_main.workorder_status + '') {
+            case '0':
+              this.detail_main.work_order_status = '待分配'
+              break;
+            case '1':
+              this.detail_main.work_order_status = '已分配';
+              break;
+            case '2':
+              this.detail_main.work_order_status = '处置中';
+              break;
+            case '3':
+              this.detail_main.work_order_status = '已处置';
+              break;
+            case '4':
+              this.detail_main.work_order_status = '已取消';
+              break;
+            default:
+              break;
+          }
+          this.detail_main.work_name = this.detail_main.workorder_name
+        }
+
+      })
+        .catch(error => {
+          console.log(error);
+        })
 
     },
 
@@ -632,27 +1131,28 @@ export default {
           default:
             break;
         }
+        this.loading = true
         this.$axios.post(join, {
           addr: ip_addr,
           type: 1
         })
           .then(response => {
-            let { status, data } = response.data;
+            this.loading = false
+            let {
+              status,
+              data
+            } = response.data;
             console.log(data);
             if (status == 0) {
-              this.$message(
-                {
-                  message: '加入外部动态列表成功!',
-                  type: 'success',
-                }
-              );
+              this.$message({
+                message: '加入外部动态列表成功!',
+                type: 'success',
+              });
             } else {
-              this.$message(
-                {
-                  message: data.msg,
-                  type: 'error',
-                }
-              );
+              this.$message({
+                message: data.msg,
+                type: 'error',
+              });
             }
           })
           .catch(error => {
@@ -734,33 +1234,38 @@ export default {
         default:
           break;
       }
+      this.loading = true
       this.$axios.put(alarm + id_list.join(','), {
         status: item
       })
         .then(response => {
-          let { status, data } = response.data;
+          this.loading = false
+          let {
+            status,
+            data
+          } = response.data;
           console.log(data);
           console.log(response);
           if (status == 0) {
             this.alert_detail();
-            this.$message(
-              {
-                message: '修改状态成功!',
-                type: 'success',
-              }
-            );
+            this.$message({
+              message: '修改状态成功!',
+              type: 'success',
+            });
           } else {
-            this.$message(
-              {
-                message: response.data.msg,
-                type: 'error',
-              }
-            );
+            this.$message({
+              message: response.data.msg,
+              type: 'error',
+            });
           }
         })
         .catch(error => {
           console.log(error);
         })
+    },
+
+    closed_task_new () {
+      this.new_worksheets_data.pop = false
     },
     //工单任务选择
     change_task (command) {
@@ -784,11 +1289,14 @@ export default {
         this.new_worksheets_data.table_operator.eachPage = 5
         this.new_worksheets_data.network_detail = []
         // 存在被创建工单的告警
-        console.log(this.network_detail.status);
+        console.log(this.detail_main.status);
 
         // this.table_alerts.tableData[0].status
-        if (this.network_detail.status == '3' || this.network_detail.status == '4' || this.network_detail.status == '5') {
-          this.$message({ message: '告警状态为已处置、已忽略、误报的不能新建工单。', type: 'warning' });
+        if (this.detail_main.status == '3' || this.detail_main.status == '4' || this.detail_main.status == '5') {
+          this.$message({
+            message: '告警状态为已处置、已忽略、误报的不能新建工单。',
+            type: 'warning'
+          });
           return false
         }
         this.get_user_list();
@@ -804,7 +1312,10 @@ export default {
       this.edit_tag.tag_list = [];
       console.log(this.detail_main.label_obj);
       if (this.detail_main.label_obj.length == 0) {
-        this.edit_tag.tag_list.push({ name: '', icon: true })
+        this.edit_tag.tag_list.push({
+          name: '',
+          icon: true
+        })
       } else {
         this.detail_main.label_obj.forEach(element => {
           var obj = {
@@ -849,29 +1360,30 @@ export default {
         default:
           break;
       }
+      this.loading = true
       this.$axios.put(label, {
         id: this.$route.query.detail,
         label: label_list
       })
         .then(response => {
-          let { status, data } = response.data;
+          this.loading = false
+          let {
+            status,
+            data
+          } = response.data;
           console.log(data);
           if (status == 0) {
-            this.$message(
-              {
-                message: '修改标签成功!',
-                type: 'success',
-              }
-            );
+            this.$message({
+              message: '修改标签成功!',
+              type: 'success',
+            });
             this.edit_tag.pop = false;
             this.alert_detail()
           } else {
-            this.$message(
-              {
-                message: data.msg,
-                type: 'error',
-              }
-            );
+            this.$message({
+              message: data.msg,
+              type: 'error',
+            });
           }
         })
         .catch(error => {
@@ -887,13 +1399,15 @@ export default {
         this.edit_tag.tag_list.forEach(item => {
           item.icon = false;
         });
-        this.edit_tag.tag_list.push({ name: '', icon: true })
+        this.edit_tag.tag_list.push({
+          name: '',
+          icon: true
+        })
       } else {
-        this.$message.warning(
-          {
-            message: '最多可以设置5个标签。',
-            offset: 50
-          })
+        this.$message.warning({
+          message: '最多可以设置5个标签。',
+          offset: 50
+        })
       }
     },
     del_tag (item, index) {
@@ -914,7 +1428,13 @@ export default {
         // } else if (this.$route.query.type == 'risks') {
         //   label = '/yiiapi/outreachthreat/label-edit'
         // }
-        this.$router.push({ path: "/invest/url", query: { src_ip: this.network_detail.src_ip, dest_ip: '' } });
+        this.$router.push({
+          path: "/invest/url",
+          query: {
+            src_ip: this.detail_main.src_ip,
+            dest_ip: ''
+          }
+        });
 
       }
 
@@ -935,96 +1455,670 @@ export default {
     closed_assets_info () {
       this.pop_assets_info = false;
     },
-    alert_detail () {
-      // "10009" 10024
-      this.$axios.get('/yiiapi/alerts/' + this.$route.query.detail).then(resp => {
-        let { status, data } = resp.data;
-        this.detail_list.push(data)
-        this.detail_main = data
-        this.detail_main.label_obj = JSON.parse(this.detail_main.label)
-        this.detail_main.json_description = JSON.parse(this.detail_main.description).join(',')
-        this.detail_main.json_label = JSON.parse(this.detail_main.label).join(',')
-        this.detail_main.src_ip_list = JSON.parse(this.detail_main.src_ip)
-        // this.detail_main.src_ip_list = ['192.168.1.1', '192.12.23.123', '192.168.1.1', '192.12.23.123', '192.168.1.1', '192.12.23.123']
-        this.detail_main.dest_ip_list = JSON.parse(this.detail_main.dest_ip)
-        this.detail_main.user_list = JSON.parse(this.detail_main.user)
-        this.detail_main.asset_name_list = JSON.parse(this.detail_main.asset_name)
-        console.log(this.detail_main);
-        JSON.parse(data.alarm_merger).map(item => {
-          this.detail_list.push(item)
-        })
-        console.log(this.detail_list);
-        this.detail_list.map(item => {
-          item.selected = false
 
-        })
-        this.detail_list[0].selected = true
-        this.detailArray = this.detail_list
-        if (this.detail_main.workorder_id == '0') {
-          this.detail_main.work_order_status = '未关联工单'
-          this.detail_main.work_name = ''
-        } else {
-          switch (this.detail_main.workorder_status + '') {
-            case '0':
-              this.detail_main.work_order_status = '待分配'
-              break;
-            case '1':
-              this.detail_main.work_order_status = '已分配';
-              break;
-            case '2':
-              this.detail_main.work_order_status = '处置中';
-              break;
-            case '3':
-              this.detail_main.work_order_status = '已处置';
-              break;
-            case '4':
-              this.detail_main.work_order_status = '已取消';
-              break;
-            default:
-              break;
-          }
-          this.detail_main.work_name = this.detail_main.workorder_name
-        }
-
-      })
-        .catch(error => {
-          console.log(error);
-        })
-
-    },
     // 跳转到工单详情
     Goto_workorder () {
       switch (this.$route.query.type) {
         case 'alert':
-          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'alert_detail' } });
+          this.$router.push({
+            path: "/detail/works",
+            query: {
+              id: this.detail_main.workorder_id,
+              type: 'alert_detail'
+            }
+          });
           break;
         case 'asset':
-          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'asset' } });
+          this.$router.push({
+            path: "/detail/works",
+            query: {
+              id: this.detail_main.workorder_id,
+              type: 'asset'
+            }
+          });
           break;
         case 'lateral':
-          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'lateral' } });
+          this.$router.push({
+            path: "/detail/works",
+            query: {
+              id: this.detail_main.workorder_id,
+              type: 'lateral'
+            }
+          });
           break;
         case 'outside':
-          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'outside' } });
+          this.$router.push({
+            path: "/detail/works",
+            query: {
+              id: this.detail_main.workorder_id,
+              type: 'outside'
+            }
+          });
           break;
         case 'outreath':
-          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'outreath' } });
+          this.$router.push({
+            path: "/detail/works",
+            query: {
+              id: this.detail_main.workorder_id,
+              type: 'outreath'
+            }
+          });
           break;
         default:
           break;
       }
 
     },
+
+    // 添加到工单
+    //获取工单列表
+    get_worksheets_list () {
+      var workorder_list = ''
+      var workorder_type = ''
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      switch (this.$route.query.type) {
+        case 'alert':
+          workorder_list = '/yiiapi/alert/workorder-list'
+          workorder_type = 'alert'
+          break;
+        case 'asset':
+          workorder_list = '/yiiapi/asset/workorder-list'
+          workorder_type = 'asset'
+          break;
+        case 'lateral':
+          workorder_list = '/yiiapi/horizontalthreat/workorder-list'
+          workorder_type = 'alert'
+          break;
+        case 'outside':
+          workorder_list = '/yiiapi/externalthreat/workorder-list'
+          workorder_type = 'alert'
+          break;
+        case 'outreath':
+          workorder_list = '/yiiapi/outreachthreat/workorder-list'
+          workorder_type = 'alert'
+          break;
+        default:
+          break;
+      }
+
+      this.$axios.get(workorder_list, {
+        params: {
+          page: this.worksheets_data.page,
+          rows: this.worksheets_data.rows,
+          type: workorder_type
+        }
+      }).then((resp) => {
+        let {
+          status,
+          data
+        } = resp.data;
+        console.log(data);
+        console.log(status);
+        if (status == 0) {
+          console.log(data);
+          this.worksheets_list = data
+          this.worksheets_list.pageNow = data.pageNow * 1
+          this.worksheets_data.pop = true;
+          this.worksheets_list.data.forEach(element => {
+            element.perator_cn = JSON.parse(element.perator).join(',')
+            this.worksheets_data.level_list.forEach(item => {
+              if (element.priority == item.value) {
+                element.priority_cn = item.label
+              }
+            });
+            this.worksheets_data.status_type.forEach((ele, index) => {
+              if (element.status == index) {
+                element.status_cn = this.worksheets_data.status_type[index]
+              }
+            });
+          });
+        }
+      })
+    },
+    handleSizeChange_add (val) {
+      this.worksheets_data.rows = val;
+      this.worksheets_data.page = 1;
+      this.worksheets_data.tableRadio = {}
+      this.get_worksheets_list();
+    },
+    handleCurrentChange_add (val) {
+      this.worksheets_data.page = val;
+      this.worksheets_data.tableRadio = {}
+      this.get_worksheets_list();
+    },
+
+    // -新加到工单取消状态
+    add_closed_state () {
+      this.worksheets_data.pop = false;
+    },
+
+
+    //新加到工单确定
+    add_ok_worksheets () {
+      console.log(this.worksheets_data.tableRadio);
+      if (Object.keys(this.worksheets_data.tableRadio).length == 0) {
+        this.$message({
+          message: '请选择工单！',
+          type: 'warning',
+        });
+        return false
+      }
+      // this.worksheets_data.tableRadio
+      var te_alert = []
+      JSON.parse(this.worksheets_data.tableRadio.te_alert).forEach(element => {
+        if (element != '') {
+          te_alert.push(element * 1)
+        }
+      });
+      te_alert.push(this.$route.query.detail * 1)
+      console.log(te_alert);
+      var add_workorder = ''
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      switch (this.$route.query.type) {
+        case 'alert':
+          add_workorder = '/yiiapi/alert/AddWorkorder'
+          break;
+        case 'asset':
+          add_workorder = '/yiiapi/asset/AddWorkorder'
+          break;
+        case 'lateral':
+          add_workorder = '/yiiapi/horizontalthreat/AddWorkorder'
+          break;
+        case 'outside':
+          add_workorder = '/yiiapi/externalthreat/AddWorkorder'
+          break;
+        case 'outreath':
+          add_workorder = '/yiiapi/outreachthreat/AddWorkorder'
+          break;
+        default:
+          break;
+      }
+      this.loading = true
+      this.$axios.post(add_workorder, {
+        id: this.worksheets_data.tableRadio.id,
+        type: "alert",
+        name: this.worksheets_data.tableRadio.name,
+        perator: JSON.parse(this.worksheets_data.tableRadio.perator),
+        priority: this.worksheets_data.tableRadio.priority,
+        remind: JSON.parse(this.worksheets_data.tableRadio.remind),
+        remarks: this.worksheets_data.tableRadio.remarks,
+        te_alert: te_alert,
+      })
+        .then((resp) => {
+          this.loading = false
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          console.log(data);
+          if (status == 0) {
+            this.$message.success('添加成功');
+            this.alert_detail()
+          } else if (status == 1) {
+            this.$message.error(msg);
+          }
+          this.add_closed_state();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    ///----------------------------------------------新建工单
+    /***************新加到工单*****************/
+
+    //添加到工单打开
+    open_add_new () {
+      this.add_open_state();
+    },
+
+    //新加到工单打开状态
+    add_open_state () {
+
+      let status = this.table_alerts.tableData[0].status;
+
+      if (status == '3' || status == '4' || status == '5') {
+        this.$message({
+          message: '告警状态为已处置、已忽略、误报的不能添加到工单。',
+          type: 'warning'
+        });
+      } else {
+        this.add_state_change = true;
+        this.get_table_works_list();
+      }
+    },
+    //新加到工单取消状态
+    add_closed_state1 () {
+      this.add_state_change = false;
+      this.add_params = {
+        name: "",
+        level: "",
+        operator: "",
+        new_operator: [],
+        notice: ['email'],
+        textarea: "",
+        multiple: [],
+        old_as: []
+      };
+    },
+    //获取列表
+    get_table_works_list () {
+      let workorder_list = '';
+      let workorder_type = '';
+      switch (this.$route.query.type) {
+        case 'alert':
+          workorder_list = '/yiiapi/alert/WorkorderList'
+          workorder_type = 'alert'
+          break;
+        case 'asset':
+          workorder_list = '/yiiapi/asset/WorkorderList'
+          workorder_type = 'asset'
+          break;
+        case 'lateral':
+          workorder_list = '/yiiapi/horizontalthreat/WorkorderList'
+          workorder_type = 'alert'
+          break;
+        case 'outside':
+          workorder_list = '/yiiapi/externalthreat/WorkorderList'
+          workorder_type = 'alert'
+          break;
+        case 'outreath':
+          workorder_list = '/yiiapi/outreachthreat/WorkorderList'
+          workorder_type = 'alert'
+          break;
+        default:
+          break;
+      }
+
+      this.$axios.get(workorder_list, {
+        params: {
+          page: this.table_add_works.pageNow,
+          rows: this.table_add_works.eachPage,
+          type: workorder_type
+        }
+      }).then((resp) => {
+        console.log('*************8')
+        console.log(resp)
+        this.table_add_works.loading = false;
+        let {
+          status,
+          data
+        } = resp.data;
+        let datas = data;
+        if (status == 0) {
+          let {
+            data,
+            count,
+            maxPage,
+            pageNow
+          } = datas;
+          data.map(function (v, k) {
+            v.new_perator = (JSON.parse(v.perator)).join(',');
+            v.checked = false;
+          });
+          this.table_add_works.tableData = data;
+          this.table_add_works.count = count;
+          this.table_add_works.maxPage = maxPage;
+          this.table_add_works.pageNow = Number(pageNow);
+        }
+      })
+    },
+
+    //新加工单列表勾选某一条记录
+    handle_sel_table_add_works (row) {
+      // el-radio单选框,不需要这一步
+      console.log('&&&&&3434')
+      console.log(row)
+      this.table_add_works.multipleSelection = row;
+    },
+
+    //新加到工单确定
+    add_ok_state () {
+      let selected_attr = this.table_alerts.tableData
+        .map(x => {
+          return x.id * 1
+        });
+      this.add_params.multiple = selected_attr;
+
+      //判断工单列表长度
+      let multipe = this.table_add_works.multipleSelection;
+
+      if (multipe.length == 0) {
+        this.$message({
+          message: '请选择需要添加的工单！',
+          type: 'warning'
+        });
+      } else if (multipe.length > 1) {
+        this.$message({
+          message: '资产/告警不能添加到多个工单，请重新选择！',
+          type: 'warning'
+        });
+      } else {
+        console.log('******************')
+        this.add_params.id = multipe[0].id;
+        this.add_params.name = multipe[0].name;
+        this.add_params.level = multipe[0].priority;
+        this.add_params.perator = JSON.parse(multipe[0].perator);
+        this.add_params.remarks = multipe[0].remarks;
+        this.add_params.remind = JSON.parse(multipe[0].remind);
+
+        this.add_params.old_as = JSON.parse(multipe[0].te_alert);
+        //console.log(this.add_params);
+        this.add_params.multiple = [...this.add_params.multiple, ...this.add_params.old_as];
+
+        console.log(this.add_params.multiple);
+        this.add_params.multiple = [...new Set(this.add_params.multiple)];
+
+        var newArr = this.add_params.multiple.filter(item => item)
+
+        this.add_params.multiple = newArr;
+
+        console.log(this.add_params)
+        console.log(this.add_params.perator);
+        this.loading = true;
+
+
+        var add_workorder = ''
+        // horizontalthreat  横向威胁告警  lateral
+        // externalthreat  外部威胁告警  outside
+        // outreachthreat  外联威胁告警  outreath
+        switch (this.$route.query.type) {
+          case 'alert':
+            add_workorder = '/yiiapi/alert/AddWorkorder'
+            break;
+          case 'asset':
+            add_workorder = '/yiiapi/asset/AddWorkorder'
+            break;
+          case 'lateral':
+            add_workorder = '/yiiapi/horizontalthreat/AddWorkorder'
+            break;
+          case 'outside':
+            add_workorder = '/yiiapi/externalthreat/AddWorkorder'
+            break;
+          case 'outreath':
+            add_workorder = '/yiiapi/outreachthreat/AddWorkorder'
+            break;
+          default:
+            break;
+        }
+        this.loading = true
+        this.$axios.post(add_workorder, {
+          id: this.add_params.id,
+          type: "alert",
+          name: this.add_params.name,
+          priority: this.add_params.level,
+          perator: this.add_params.perator,
+          remind: this.add_params.remind,
+          remarks: this.add_params.remarks,
+          te_alert: this.add_params.multiple
+        }).then((resp) => {
+          this.loading = false
+          this.loading = false;
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == 0) {
+            this.$message.success('添加成功');
+            //清空状态
+            this.add_closed_state1();
+            this.alert_detail();
+          } else if (status == 1) {
+            this.$message.error(msg);
+          }
+        })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    },
+
+    //每页显示多少条
+    sc_table_add_works (val) {
+      this.table_add_works.eachPage = val;
+      this.table_add_works.pageNow = 1;
+      this.get_table_works_list();
+    },
+
+    //新加工单列表分页页面切换
+    hcc_table_add_works (val) {
+      this.table_add_works.pageNow = val;
+      this.get_table_works_list();
+    },
+
+    //获取用户列表(经办人使用)
+    get_user_list () {
+      this.$axios.get('/yiiapi/site/UserList')
+        .then(resp => {
+          let {
+            status,
+            data
+          } = resp.data;
+          if (status == 0) {
+            this.new_worksheets_data.operator_list = data;
+          } else {
+            this.new_worksheets_data.operator_list = [];
+          }
+          this.new_worksheets_data.pop = true
+          this.new_worksheets_data.new_contet = true;
+        })
+        .catch(err => {
+          console.log('用户列表错误');
+          console.log(err);
+        })
+    },
+
+    //经办人change处理
+    select_changced (item) {
+      console.log(item);
+      // this.new_worksheets_data.table_operator.tableData.push(item)
+      let level_list = this.new_worksheets_data.table_operator.tableData;
+      let selected_id_attr = level_list.map(x => {
+        return x.id
+      });
+      if (selected_id_attr.includes(item.id)) {
+        this.$message.error('已存在');
+      } else {
+        this.new_worksheets_data.table_operator.tableData.unshift(item);
+      }
+      let pageNow = this.new_worksheets_data.table_operator.pageNow;
+      let handle_data_operator = this.new_worksheets_data.table_operator.tableData.slice((pageNow - 1) * 5, pageNow * 5);
+      this.new_worksheets_data.table_operator.tableData_new = handle_data_operator;
+      let selected_name_attr = this.new_worksheets_data.table_operator.tableData.map(x => {
+        return x.username
+      });
+      console.log(selected_name_attr);
+      console.log(this.new_worksheets_data.table_operator.tableData);
+      // this.task_params.new_operator = selected_name_attr;
+    },
+    //经办人页数点击
+    hcc_table_operator (val) {
+      this.new_worksheets_data.table_operator.pageNow = val;
+    },
+    //下一步时候验证工单名称，优先级、经办人等参数
+    next_task () {
+      var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
+      if (this.new_worksheets_list.name == '') {
+        this.$message.error('工单名称不能为空');
+        return false
+      }
+      if (pattern.test(this.new_worksheets_list.name)) {
+        console.log(true);
+        this.$message.error('工单名称不能包含特殊字符');
+        return false
+      }
+      if (this.new_worksheets_list.level == '') {
+        this.$message.error('优先级未选择');
+        return false
+      }
+      if (this.new_worksheets_list.level == '') {
+        this.$message.error('优先级未选择');
+        return false
+      }
+      if (this.new_worksheets_list.operator == '') {
+        this.$message.error('经办人未选择');
+        return false
+      }
+      this.new_worksheets_data.new_contet = false;
+      // this.handle.active = 0;
+      this.new_worksheets_data.network_detail.push(this.detail_main)
+      console.log(this.detail_main);
+    },
+    // 上一步
+    prev_task_handle () {
+      this.new_worksheets_data.network_detail = [];
+      this.new_worksheets_data.new_contet = true;
+    },
+    // 添加工单 选择告警列表
+    select_alert_new (val) {
+      this.new_worksheets_list.select_list = val
+      console.log(val);
+    },
+    // 分配
+    prev_task_handle_assign () {
+      var te_alert = []
+      var perator_list = []
+      te_alert.push(this.detail_main.id * 1)
+      this.new_worksheets_data.table_operator.tableData.forEach(element => {
+        perator_list.push(element.username)
+      });
+      console.log(te_alert);
+      console.log(perator_list);
+      console.log(this.new_worksheets_list);
+      var distribution_workorder = ''
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      switch (this.$route.query.type) {
+        case 'alert':
+          distribution_workorder = '/yiiapi/alert/DistributionWorkorder'
+          break;
+        case 'asset':
+          distribution_workorder = '/yiiapi/asset/DistributionWorkorder'
+          break;
+        case 'lateral':
+          distribution_workorder = '/yiiapi/horizontalthreat/DistributionWorkorder'
+          break;
+        case 'outside':
+          distribution_workorder = '/yiiapi/externalthreat/DistributionWorkorder'
+          break;
+        case 'outreath':
+          distribution_workorder = '/yiiapi/outreachthreat/DistributionWorkorder'
+          break;
+        default:
+          break;
+      }
+      this.loading = true
+      this.$axios.put(distribution_workorder, {
+        name: this.new_worksheets_list.name,
+        priority: this.new_worksheets_list.level,
+        perator: perator_list,
+        remarks: this.new_worksheets_list.textarea,
+        te_alert: te_alert,
+        remind: this.new_worksheets_list.notice
+      })
+        .then((resp) => {
+          this.loading = false
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          console.log(data);
+          if (status == 0) {
+            this.alert_detail();
+            this.new_worksheets_data.pop = false
+            this.$message.success('分配成功');
+          } else if (status == 1) {
+            this.$message.error(msg);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 保存
+    prev_task_handle_save () {
+      var te_alert = []
+      var perator_list = []
+      this.new_worksheets_data.table_operator.tableData.forEach(element => {
+        perator_list.push(element.username)
+      });
+      te_alert.push(this.detail_main.id * 1)
+      console.log(te_alert);
+      console.log(this.new_worksheets_list);
+
+      var add_workorder = ''
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      switch (this.$route.query.type) {
+        case 'alert':
+          add_workorder = '/yiiapi/alert/AddWorkorder'
+          break;
+        case 'asset':
+          add_workorder = '/yiiapi/asset/AddWorkorder'
+          break;
+        case 'lateral':
+          add_workorder = '/yiiapi/horizontalthreat/AddWorkorder'
+          break;
+        case 'outside':
+          add_workorder = '/yiiapi/externalthreat/AddWorkorder'
+          break;
+        case 'outreath':
+          add_workorder = '/yiiapi/outreachthreat/AddWorkorder'
+          break;
+        default:
+          break;
+      }
+      this.loading = true
+      this.$axios.post(add_workorder, {
+        type: "alert",
+        name: this.new_worksheets_list.name,
+        perator: perator_list,
+        priority: this.new_worksheets_list.level,
+        remind: this.new_worksheets_list.notice,
+        remarks: this.new_worksheets_list.textarea,
+        te_alert: te_alert,
+      })
+        .then((resp) => {
+          this.loading = false
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          console.log(data);
+          if (status == 0) {
+            this.new_worksheets_data.pop = false
+            this.$message.success('添加成功');
+            this.alert_detail()
+          } else if (status == 1) {
+            this.$message.error(msg);
+          }
+          this.add_closed_state();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+
+
+    },
   },
-  computed: {
-  },
+  computed: {},
   mounted () {
     // this.alert()
     this.alert_detail()
   }
 }
-
 </script>
+
 <style scoped lang="less">
 .detail_box {
   // border: 1px solid red;
@@ -1109,7 +2203,6 @@ export default {
             border: 0;
             border-color: #f8f8f8;
           }
-
           .tag_btn_box {
             margin: 0 2px;
             display: inline-block;
@@ -1189,7 +2282,8 @@ export default {
           overflow-y: auto;
           &::-webkit-scrollbar {
             /*滚动条整体样式*/
-            width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+            width: 6px;
+            /*高宽分别对应横竖滚动条的尺寸*/
             border-radius: 6px;
           }
           &::-webkit-scrollbar-thumb {
@@ -1219,7 +2313,8 @@ export default {
           overflow-y: auto;
           &::-webkit-scrollbar {
             /*滚动条整体样式*/
-            width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+            width: 6px;
+            /*高宽分别对应横竖滚动条的尺寸*/
             border-radius: 6px;
           }
           &::-webkit-scrollbar-thumb {
@@ -1259,7 +2354,8 @@ export default {
           overflow-y: auto;
           &::-webkit-scrollbar {
             /*滚动条整体样式*/
-            width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+            width: 6px;
+            /*高宽分别对应横竖滚动条的尺寸*/
             border-radius: 6px;
           }
           &::-webkit-scrollbar-thumb {
@@ -1300,6 +2396,366 @@ export default {
                 background: #f8f8f8;
                 border: 0;
               }
+            }
+          }
+        }
+      }
+    }
+  }
+  //添加到工单
+  .pop_state_add {
+    .el-dialog {
+      width: 960px;
+      .el-dialog__body {
+        width: 960px;
+        .content {
+          padding-top: 24px;
+          // 修改radio 改成对号
+          height: 400px;
+          overflow-y: auto;
+          &::-webkit-scrollbar {
+            /*滚动条整体样式*/
+            width: 6px;
+            /*高宽分别对应横竖滚动条的尺寸*/
+            border-radius: 6px;
+          }
+          &::-webkit-scrollbar-thumb {
+            /*滚动条里面小方块*/
+            border-radius: 6px;
+            background: #a8a8a8;
+          }
+          &::-webkit-scrollbar-track {
+            /*滚动条里面轨道*/
+            border-radius: 6px;
+            background: #f4f4f4;
+          }
+          .el-radio__input.is-checked .el-radio__inner::after {
+            transform: rotate(45deg) scaleY(1);
+          }
+          .el-radio__inner::after {
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
+            background-color: transparent;
+            content: '';
+            border: 1px solid #fff;
+            border-left: 0;
+            border-top: 0;
+            height: 0.4375rem;
+            left: 0.25rem;
+            position: absolute;
+            top: 1px;
+            -webkit-transform: rotate(45deg) scaleY(0);
+            transform: rotate(45deg) scaleY(0);
+            width: 0.1875rem;
+            -webkit-transition: -webkit-transform 0.15s ease-in 0.05s;
+            transition: -webkit-transform 0.15s ease-in 0.05s;
+            transition: transform 0.15s ease-in 0.05s;
+            transition: transform 0.15s ease-in 0.05s,
+              -webkit-transform 0.15s ease-in 0.05s;
+            transition: transform 0.15s ease-in 0.05s,
+              -webkit-transform 0.15s ease-in 0.05s;
+            -webkit-transform-origin: center;
+            transform-origin: center;
+          }
+          .el-radio__inner {
+            border-radius: 2px;
+          }
+        }
+      }
+    }
+  }
+  //  新建工单
+  .task_new_box {
+    .el-dialog {
+      width: 960px;
+      .el-dialog__body {
+        width: 960px;
+        .closed_img {
+          position: absolute;
+          top: -18px;
+          right: -18px;
+          cursor: pointer;
+          width: 46px;
+          height: 46px;
+        }
+        .title {
+          height: 24px;
+          line-height: 24px;
+          text-align: left;
+          .title_name {
+            font-size: 20px;
+            color: #333333;
+            font-family: PingFangMedium;
+            line-height: 24px;
+          }
+          .mask {
+            width: 24px;
+            height: 0px;
+            border-top: 0px;
+            border-right: 2px solid transparent;
+            border-bottom: 5px solid #0070ff;
+            border-left: 2px solid transparent;
+            transform: rotate3d(0, 0, 1, 90deg);
+            display: inline-block;
+            margin-right: -5px;
+            margin-bottom: 4px;
+            margin-left: -10px;
+          }
+        }
+        .step_box {
+          height: 36px;
+          margin: 20px 0 24px 0;
+          .step_box1 {
+            background-image: url('../../../../assets/images/emerge/step1.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            width: 120px;
+            height: 36px;
+            float: left;
+            position: relative;
+            line-height: 36px;
+            text-align: center;
+            .step1_span {
+              font-size: 14px;
+            }
+            .selected_img {
+              position: absolute;
+              left: 0;
+              top: 0;
+            }
+          }
+          .step_box2 {
+            width: 120px;
+            height: 36px;
+            background-image: url('../../../../assets/images/emerge/step2.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            float: left;
+            position: relative;
+            line-height: 36px;
+            text-align: center;
+            margin-left: -10px;
+            .step2_span {
+              font-size: 14px;
+            }
+          }
+          .step_now {
+            color: #0070ff;
+          }
+          .step_past {
+            color: #999999;
+          }
+        }
+        .task_new_content {
+          /*height: 480px;*/
+          .content_top {
+            overflow: hidden;
+            .content_top_left {
+              float: left;
+              width: 45%;
+              .left_item {
+                margin-bottom: 16px;
+                display: flex;
+                .title {
+                  width: 100px;
+                  line-height: 38px;
+                  .improtant_ico {
+                    color: #ff3a36;
+                  }
+                }
+                .task_new_input {
+                  flex: 1;
+                  .el-input__inner {
+                    height: 38px;
+                  }
+                }
+              }
+            }
+            .content_top_right {
+              float: right;
+              width: 45%;
+              .right_item {
+                margin-bottom: 16px;
+                display: flex;
+                .title {
+                  width: 100px;
+                  line-height: 38px;
+                  .improtant_ico {
+                    color: #ff3a36;
+                  }
+                }
+                .task_new_input {
+                  flex: 1;
+                  .el-input__inner {
+                    height: 38px;
+                  }
+                }
+              }
+            }
+          }
+          .content_remarks {
+            .title {
+              font-size: 12px;
+              color: #999999;
+            }
+            /deep/ .el-textarea {
+              height: 92px;
+              textarea {
+                resize: none;
+                height: 92px;
+                font-size: 14px;
+                color: #333;
+                font-family: PingFang;
+              }
+            }
+            .el-textarea__inner:hover {
+              border: none;
+            }
+            .el-textarea__inner {
+              border: none;
+              background: #f8f8f8;
+            }
+          }
+          .content_table {
+            margin-top: 16px;
+            /deep/ .el-table td {
+              padding: 0;
+              height: 32px;
+            }
+            /deep/ .el-table th {
+              padding: 0;
+              height: 36px;
+              background: #f8f8f8;
+              .cell {
+              }
+            }
+            /deep/ .el-pagination {
+              margin-top: 20px;
+              text-align: center;
+            }
+          }
+        }
+        .task_content_box {
+          height: 400px;
+          overflow-y: auto;
+          &::-webkit-scrollbar {
+            /*滚动条整体样式*/
+            width: 6px;
+            /*高宽分别对应横竖滚动条的尺寸*/
+            border-radius: 6px;
+          }
+          &::-webkit-scrollbar-thumb {
+            /*滚动条里面小方块*/
+            border-radius: 6px;
+            background: #a8a8a8;
+          }
+          &::-webkit-scrollbar-track {
+            /*滚动条里面轨道*/
+            border-radius: 6px;
+            background: #f4f4f4;
+          }
+        }
+        .btn_box {
+          margin-top: 36px;
+          margin-bottom: 24px;
+          height: 42px;
+          text-align: center;
+          .cancel_btn {
+            border: 1px solid #0070ff;
+            background: #fff;
+            color: #0070ff;
+            width: 136px;
+            height: 42px;
+            font-size: 16px;
+          }
+          .next_btn {
+            background-color: #0070ff;
+            color: #fff;
+            width: 136px;
+            height: 42px;
+            font-size: 16px;
+          }
+        }
+        .task_handle_content {
+          .handle_content_top {
+            height: 42px;
+            text-align: left;
+            .change_btn,
+            .ref {
+              background-color: #0070ff;
+              border-color: #0070ff;
+              width: 136px;
+              height: 42px;
+              color: #fff;
+            }
+            .cel {
+              border: 1px solid #0070ff;
+              background: #fff;
+              color: #0070ff;
+              width: 136px;
+              height: 42px;
+              margin-left: 0;
+            }
+          }
+          .table_box {
+            margin-top: 24px;
+            .table_box_title {
+              height: 38px;
+              li {
+                height: 38px;
+                width: 92px;
+                float: left;
+                font-size: 14px;
+                line-height: 38px;
+                color: #bbbbbb;
+                text-align: center;
+                border-top: 2px solid #fff;
+              }
+              li.active {
+                cursor: pointer;
+                background: #eef6ff;
+                color: #0070ff;
+                border-top: 2px solid #0070ff;
+              }
+            }
+            /deep/ .el-table {
+              font-size: 12px;
+              thead.has-gutter {
+                th {
+                  color: #333333;
+                  background: #f8f8f8;
+                  .cell {
+                  }
+                }
+              }
+              .cell {
+                color: #333333;
+              }
+            }
+            /deep/ .el-pagination {
+              margin-top: 20px;
+              text-align: center;
+            }
+          }
+          .btn_box {
+            margin-top: 36px;
+            margin-bottom: 24px;
+            height: 42px;
+            text-align: center;
+            .cancel_btn {
+              border: 1px solid #0070ff;
+              background: #fff;
+              color: #0070ff;
+              width: 136px;
+              height: 42px;
+              font-size: 16px;
+            }
+            .prev_btn {
+              background-color: #0070ff;
+              color: #fff;
+              width: 136px;
+              height: 42px;
+              font-size: 16px;
             }
           }
         }
