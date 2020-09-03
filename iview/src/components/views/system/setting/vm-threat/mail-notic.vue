@@ -1,5 +1,6 @@
 <template>
-  <div id="mail_notic">
+  <div id="mail_notic"
+       v-loading.fullscreen.lock="loading">
     <div class="left">
       <p class="title">邮件服务器设置</p>
       <div class="left_item">
@@ -136,6 +137,7 @@ export default {
   name: "mail-notic",
   data () {
     return {
+      loading: false,
       checkList: ['高危'],
       mail: {
         alertEmail_list: [{
@@ -239,6 +241,7 @@ export default {
     },
     // 发送测试
     send_test () {
+      this.loading = true
       console.log(this.checkList);
       if (this.checkList.length == 0) {
         this.$message(
@@ -310,6 +313,7 @@ export default {
         }
       })
         .then(response => {
+          this.loading = false
           let { status, data } = response.data;
           console.log(status);
           console.log(data);
@@ -324,7 +328,7 @@ export default {
           } else {
             this.$message(
               {
-                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
+                message: response.data.msg,
                 type: 'error',
               }
             );

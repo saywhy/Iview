@@ -316,7 +316,7 @@ export default {
     },
     // 获取数据
     get_data () {
-      this.$axios.get('/yiiapi/seting/time-synchronization')
+      this.$axios.get('/yiiapi/dates')
         .then(response => {
           let { status, data } = response.data;
           console.log(data.data[0]);
@@ -378,21 +378,21 @@ export default {
         case 1:
           set_data.time = this.option.time
           set_data.zone = this.option.zone
-          url = 'manual-time-synchronization'
+          url = 'dates/0'
           break;
         case 2:
           set_data.zone = this.option.zone
-          url = 'local-time-synchronization'
+          url = 'date/LocalTimeSynchronization'
           break;
         case 3:
           set_data.server = this.option.ntp
-          url = 'ntp-time-synchronization'
+          url = 'date/NtpTimeSynchronization'
           break;
         default:
           break;
       }
       console.log(this.option);
-      this.$axios.put('/yiiapi/seting/' + url, set_data)
+      this.$axios.put('/yiiapi/' + url, set_data)
         .then(response => {
           let { status, data } = response.data;
           console.log(status);
@@ -422,7 +422,7 @@ export default {
     },
     // 获取登录ip
     get_login_ip () {
-      this.$axios.get('/yiiapi/seting/get-allow-ip')
+      this.$axios.get('/yiiapi/allowips')
         .then(response => {
           let { status, data } = response.data;
           console.log(data);
@@ -464,8 +464,10 @@ export default {
           ip_list.push(item.ip)
         }
       });
-      this.$axios.put('/yiiapi/seting/set-allow-ip', {
-        ip: ip_list
+      this.$axios.put('/yiiapi/allowips/0', {
+        Allowip: {
+          ip: ip_list
+        }
       })
         .then(response => {
           let { status, data } = response.data;

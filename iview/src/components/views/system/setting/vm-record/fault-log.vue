@@ -94,7 +94,7 @@ export default {
     // 故障检测
     faultlog_testing () {
       this.loading = true
-      this.$axios.get('/yiiapi/faultlogs')
+      this.$axios.post('/yiiapi/faultlogs')
         .then(response => {
           console.log(response);
           this.loading = false
