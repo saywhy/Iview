@@ -20,10 +20,10 @@
         </div>
 
         <div class="custom-bom">
-          <vuedraggable class="label-lists" v-model="label_data" handle=".tog_edit_seat">
+          <vuedraggable class="label-lists" v-model="label_data" @end="endCategory()" handle=".tog_edit_seat">
             <transition-group>
               <li class="item undraggable" v-for="(item,$idx) in label_data"
-                  :value="item.label[0].category_id" :key="item.label[0].category_id">
+                   :key="item.name+'_label'">
                 <!-- 名称和操作 -->
                 <div class="toggle_cate">
                   <div class="tog_cate">
@@ -40,7 +40,7 @@
                     </div>
                     <div class="tog_edit_seat">
                       <img v-if="item.name != ''" class="tog_img tog_img_top"  src="@/assets/images/system/set/is_top.png"
-                           title="置顶" :value="$idx"/>
+                           title="置顶" @click="category_top($idx);"/>
                     </div>
                     <div class="tog_edit_seat" style="cursor: move;">
                       <img v-if="item.name != ''" class="tog_img tog_img_drag" src="@/assets/images/system/set/label_drag_h.png"
@@ -55,10 +55,10 @@
                 </div>
                 <!-- 标签列表 -->
                 <div class="toggle_content" v-show="item.status">
-                    <vuedraggable class="sortable" v-model="item.label" handle=".b_img_drag">
+                    <vuedraggable class="sortable" v-model="item.label" @end="endLabel(item)" handle=".b_img_drag">
                       <transition-group>
                         <li class="sortable_list" v-if="it.label_name != null" :value="it.id"
-                            :key="it.id+'-only'" v-for="(it,$ix) in item.label">
+                            :key="it.id+'_only'" v-for="(it,$ix) in item.label">
                           <button class="btn_label">
                             <div class="b_label">
                               <span class="b_span" :title="it.label_name">{{it.label_name}}</span>
@@ -101,22 +101,11 @@
         <div class="content">
           <div class="lab_top">
             <p class="lab_name">标签类别</p>
-            <!--<div class="lab_item">
-              <img class="lab_item_icon" src="@/assets/images/system/set/label_triangle_down.png" alt="">
-              <input type="text" class="lab_mid_name"  placeholder="下拉选择或直接输入"  ng-model="label.category_name"
-                     ng-keyup="lab_key_func($event);" ng-click="lab_click_open();" ng-change="lab_change_func();"
-                     ng-blur="label.status = false">
-            </div>
-            <ul class="lab_top_list" id="lab_top_list" v-show="label.status">
-              <li class="item" :class="{'active':label.active_index == $index}"
-                  v-for="(item,$index) in label.lists" :key="item.category_name"
-                  ng-mousedown="lab_down_func(item.category_name,$index);">{{item.category_name}}</li>
-            </ul>-->
             <div class="lab_item">
               <img class="lab_item_icon" alt=""
                    src="@/assets/images/system/set/label_triangle_down.png">
               <el-autocomplete
-                v-model="label.name"
+                v-model="label.category_name"
                 :fetch-suggestions="querySearchAsync"
                 @select="handleSelect"
                 placeholder="下拉选择或直接输入">
@@ -130,14 +119,14 @@
              <!-- <input type="text" class="lab_mid_name" input-limit="25"
                      placeholder="请输入标签名称(长度限制为25个字),不允许输入特殊字符"
                      ng-model="label.label_name" required>-->
-              <el-input v-model="label.label_name" placeholder="请输入标签名称(长度限制为25个字),不允许输入特殊字符"
-                        maxlength="25" required></el-input>
+              <el-input  placeholder="请输入标签名称(长度限制为25个字),不允许输入特殊字符"
+                         v-model="label.name" maxlength="25" required></el-input>
             </div>
           </div>
           <div class="lab_bom">
             <p class="lab_name">标签描述</p>
-            <textarea class="token_bom_content"
-                      placeholder="请输入标签描述内容" ng-model="label.detail"></textarea>
+            <textarea class="token_bom_content" placeholder="请输入标签描述内容"
+                       v-model="label.detail"></textarea>
           </div>
         </div>
         <div class="btn_box">
@@ -185,6 +174,7 @@
         </div>
       </el-dialog>
     </div>
+
 </template>
 
 <script type="text/ecmascript-6">
@@ -195,210 +185,176 @@
       data () {
         return {
           loading: false,
-          key: "",
           name: '',
           label_pop: {
             lab:false,
             cat:false
           },
           label:{
-            active_index: 0,
             name:'',
+            category_name:'',
+            detail:'',
             types:'add',
-            intelligence:10,
-            lists:[{category_name:'李奥林'},{category_name:'李林'}]
+            lists:[],
+            id:'',
+            intelligence:10
           },
           label_category:{
-            name:''
+            name:'',
+            id:''
           },
-          label_data: [
-            {
-              name: "漏洞影响",
-              status: true,
-              label: [
-                {
-                  category_id: "15",
-                  category_name: "漏洞影响",
-                  category_sort: "19",
-                  detail: "",
-                  id: "53",
-                  label_name: "数据/隐私泄露",
-                  label_sort: "178"
-                },
-                {
-                  category_id: "15",
-                  category_name: "漏洞影响",
-                  category_sort: "19",
-                  detail: "",
-                  id: "117",
-                  label_name: "欺骗",
-                  label_sort: "117"
-                },
-                {
-                  category_id: "15",
-                  category_name: "漏洞影响",
-                  category_sort: "19",
-                  detail: "",
-                  id: "94",
-                  label_name: "服务/业务破坏",
-                  label_sort: "94"
-                },
-                {
-                  category_id: "15",
-                  category_name: "漏洞影响",
-                  category_sort: "19",
-                  detail: "",
-                  id: "178",
-                  label_name: "你好&你好",
-                  label_sort: "59"
-                },
-                {
-                  category_id: "15",
-                  category_name: "漏洞影响",
-                  category_sort: "19",
-                  detail: "",
-                  id: "59",
-                  label_name: "车辆/财物盗窃",
-                  label_sort: "53"
-                },
-                {
-                  category_id: "15",
-                  category_name: "漏洞影响",
-                  category_sort: "19",
-                  detail: "",
-                  id: "39",
-                  label_name: "位置跟踪",
-                  label_sort: "39"
-                },
-                {
-                  category_id: "15",
-                  category_name: "漏洞影响",
-                  category_sort: "19",
-                  detail: "",
-                  id: "38",
-                  label_name: "控制车辆系统",
-                  label_sort: "38"
-                },
-                {
-                  category_id: "15",
-                  category_name: "攻击面",
-                  category_sort: "17",
-                  detail: "",
-                  id: "114",
-                  label_name: "移动App",
-                  label_sort: "137"
-                },
-                {
-                  category_id: "15",
-                  category_name: "攻击面",
-                  category_sort: "17",
-                  detail: "",
-                  id: "137",
-                  label_name: "网关",
-                  label_sort: "133"
-                },
-                {
-                  category_id: "15",
-                  category_name: "攻击面",
-                  category_sort: "17",
-                  detail: "",
-                  id: "139",
-                  label_name: "网关",
-                  label_sort: "133"
-                }
-              ]
-            },
-            {
-              name: "攻击面",
-              status: true,
-              label: [
-                {
-                  category_id: "17",
-                  category_name: "攻击面",
-                  category_sort: "17",
-                  detail: "",
-                  id: "114",
-                  label_name: "移动App",
-                  label_sort: "137"
-                },
-                {
-                  category_id: "17",
-                  category_name: "攻击面",
-                  category_sort: "17",
-                  detail: "",
-                  id: "137",
-                  label_name: "网关",
-                  label_sort: "133"
-                }
-              ]
-            },
-            {
-              name: "",
-              status: true,
-              label: [
-                {
-                  category_id: "0",
-                  category_name: "未分类标签",
-                  category_sort: "0",
-                  detail: "",
-                  id: "180",
-                  label_name: "aa&bb",
-                  label_sort: "180"
-                },
-                {
-                  category_id: "0",
-                  category_name: "未分类标签",
-                  category_sort: "0",
-                  detail: "",
-                  id: "179",
-                  label_name: "AA AA",
-                  label_sort: "179"
-                },
-                {
-                  category_id: "0",
-                  category_name: "未分类标签",
-                  category_sort: "0",
-                  detail: "",
-                  id: "176",
-                  label_name: "sds ad",
-                  label_sort: "173"
-                }
-              ]
-            }
-          ]
+          label_data: []
         }
       },
+      created(){
+        this.get_data();
+      },
+     /* updated(){
+        console.log(this.label_data);
+      },*/
       methods:{
+        //获取数据
+        get_data () {
+          this.loading = true;
+          this.$axios.get('/yiiapi/labels',{
+            params:{
+              label_name:this.name
+            }
+          })
+            .then(resp => {
+              this.loading = false;
+              let {status,data} = resp.data;
+
+              //console.log(data)
+
+              if(status == 0){
+
+                let category_id_attr = [];
+                let labelAttr = [];
+
+                for (let i in data) {
+
+                  let value = i;
+                  let key = data[i];
+
+                  if (value != '') {
+                    labelAttr.push({
+                      name: value.substring(0, value.length - 10),
+                      label: key,
+                      status: true
+                    });
+                  } else {
+                    labelAttr.push({
+                      name: value,
+                      label: key,
+                      status: true
+                    });
+                  }
+                  if (key.length > 0) {
+                    category_id_attr.push(key[0].category_id);
+                  }
+                }
+
+                this.label_data = labelAttr;
+
+                console.log(labelAttr)
+
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        },
         //新增、编辑标签
         label_handle(item,type){
           this.label_pop.lab = true;
+          if(type == 'add'){
+            if(item){
+              this.label.category_name = item;
+            }
+          }else {
+            if(item){
+              this.label.name =item.label_name;
+              this.label.category_name = item.category_name;
+              this.label.detail = item.detail;
+              this.label.id = item.id;
+            }
+          }
           this.label.types = type;
         },
+        //新增编辑确定
         closed_submit_box(){
+          if(this.label.name == ''){
+            this.$message({
+                message: '标签名不能为空！',
+                type: 'warning',
+              });
+            return false;
+          }
+          this.$axios.post('/yiiapi/labels',{
+            Label: {
+              category_name: this.label.category_name,
+              label_name: this.label.name,
+              detail: this.label.detail
+            }
+          }).then(resp => {
+              let {status,msg,data} = resp.data;
+              if(status == 0){
+                this.label_pop.lab = false;
+                this.get_data();
+                if(this.label.types == 'add'){
+                  this.$message({
+                    message: '添加成功！',
+                    type: 'success',
+                  });
+                }else {
+                  this.$message({
+                    message: '编辑成功！',
+                    type: 'success',
+                  });
+                }
+              }else {
+                this.$message({
+                  message: msg,
+                  type: 'error',
+                });
 
-          this.$confirm(`该标签已经存在，请确认是否合并?`, '提示', {
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+
+        },
+        //新增确定取消
+        closed_cancel_box(){
+          this.label_pop.lab = false;
+        },
+        //新增编辑删除
+        closed_remove_box(){
+          console.log(this.label.id)
+          this.$confirm(`确认是否删除?`, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.delete('/yiiapi/ipsegment/del', {
-              data: {
-                id: ''
-              }
-            }).then(response => {
-              this.label_pop.lab = false;
+            this.$axios.delete('/yiiapi/labels/'+this.label.id)
+              .then(resp => {
 
-              if (response.data.status == 0) {
+             let {status,data} = resp.data;
+
+              if (status == 0) {
+                this.get_data();
                 this.$message(
                   {
-                    message: '合并成功！',
+                    message: '删除成功！',
                     type: 'success',
                   }
                 );
               } else {
                 this.$message(
                   {
-                    message: '合并失败！',
+                    message: '删除失败！',
                     type: 'error',
                   }
                 );
@@ -408,34 +364,90 @@
                 console.log(error);
               })
           }).catch(() => {
-            this.$message({
+            /*this.$message({
               type: 'info',
-              message: '已取消合并'
-            });
+              message: '已取消删除'
+            });*/
           });
 
+         /* this.$axios.get('/site/GetEffectedIntelligence',{
+            params: {
+              label_id: this.label.id,
+            }
+          }).then(resp => {
+            this.loading = false;
+            let {status,msg,data} = resp.data;
+
+            console.log(resp)
+
+            if(status == 0){
+
+
+
+            }else {
+              this.$message({
+                message: msg,
+                type: 'error',
+              });
+            }
+          })
+            .catch(error => {
+              console.log(error);
+            })*/
         },
-        closed_cancel_box(){
-          this.label_pop.lab = false;
-        },
-        //类型
+        //类别
         category_edit(item){
+          this.label_category.id = item.label[0].category_id;
+          this.label_category.name = item.label[0].category_name;
           this.label_pop.cat = true;
         },
-        category_remove(){
-          this.$confirm(`该标签类别下还存在标签，请处理后再删除本分类。`, '提示', {
+        //编辑类别确定
+        closed_sub_box(){
+          if(this.label_category.name == ''){
+            this.$message({
+              message: '标签类型名不能为空！',
+              type: 'warning',
+            });
+            return false;
+          }
+          this.$axios.get('/yiiapi/labelcates/'+this.label_category.id,{
+            params:{
+              LabelCategory:{
+                category_name:this.label_category.name
+              }
+            }
+          })
+            .then(resp => {
+              let {status,data} = resp;
+              //console.log(resp)
+              if(status == 200){
+                this.label_pop.cat = false;
+                this.get_data();
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        },
+        //编辑类别删除
+        closed_cate_box(){
+          this.label_pop.cat = false;
+        },
+        //删除类别
+        category_remove(item){
+          this.label_category.id = item.label[0].category_id;
+          this.$confirm(`确定删除标签类别？`, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$axios.delete('/yiiapi/ipsegment/del', {
-              data: {
-                id: ''
-              }
-            }).then(response => {
-              this.label_pop.lab = false;
+            this.$axios.delete('/yiiapi/labelcates/'+this.label_category.id)
+              .then(resp => {
 
-              if (response.data.status == 0) {
+              let {status,data} = resp.data;
+
+              if (status == 0) {
+                this.get_data();
                 this.$message(
                   {
                     message: '删除成功！',
@@ -461,68 +473,113 @@
             });
           });
         },
-        closed_sub_box(){
-          this.label_pop.cat = false;
-        },
-        closed_cate_box(){
-          this.label_pop.cat = false;
-        },
-        closed_remove_box(){
-          this.$confirm(`有${this.label.intelligence}条情报在使用这个标签，删除这个标签，
-          原有情报将不再使用此标签。请确认是否删除?`, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.$axios.delete('/yiiapi/ipsegment/del', {
-              data: {
-                id: ''
+        //标签拖拽
+        endLabel(item){
+          let label_id_attr = item.label.map(item => {return item.id});
+          this.$axios.put('/yiiapi/label/ChangeLabelSort',{
+            label: label_id_attr.reverse()
+          }).then(resp => {
+              let {status,msg,data} = resp.data;
+              if(status == 0){
+                this.get_data();
+                this.$message({
+                  message: '标签拖拽成功！',
+                  type: 'success',
+                });
+              }else{
+                this.$message({
+                  message: msg,
+                  type: 'error',
+                });
               }
-            }).then(response => {
-                if (response.data.status == 0) {
-                  this.$message(
-                    {
-                      message: '删除成功！',
-                      type: 'success',
-                    }
-                  );
-                } else {
-                  this.$message(
-                    {
-                      message: '删除失败！',
-                      type: 'error',
-                    }
-                  );
-                }
-              })
-              .catch(error => {
-                console.log(error);
-              })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
-            });
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        },
+        //列表拖拽
+        endCategory(){
+          let category_id_attr = [];
+          this.label_data.map(item => {
+            if(item.label.length > 0){
+              category_id_attr.push(item.label[0].category_id);
+            }
           });
-        },
-        querySearchAsync(queryString, callback) {
-          console.log(queryString);
-          var that = this;
 
-          this.$axios.get('/yiiapi/site/license-version')
-            .then(response => {
-              let lists = that.label.lists;
-              for(let i of lists){
-                i.value = i.category_name;
+          this.$axios.put('/yiiapi/labelcate/ChangeCategorySort',{
+            category: category_id_attr.reverse()
+          }).then(resp => {
+            let {status,msg,data} = resp.data;
+            if(status == 0){
+              this.get_data();
+              this.$message({
+                message: '标签类别拖拽成功！',
+                type: 'success',
+              });
+            }else{
+              this.$message({
+                message: msg,
+                type: 'error',
+              });
+            }
+          })
+            .catch(error => {
+              console.log(error);
+            })
+        },
+        //置顶
+        category_top(index){
+          let category_id_attr = [];
+          this.label_data.map(item => {
+            if(item.label.length > 0){
+              category_id_attr.push(item.label[0].category_id);
+            }
+          });
+          category_id_attr.unshift(category_id_attr.splice(index, 1)[0]);
+
+          this.$axios.put('/yiiapi/labelcate/ChangeCategorySort',{
+            category: category_id_attr.reverse()
+          }).then(resp => {
+            let {status,msg,data} = resp.data;
+            if(status == 0){
+              this.get_data();
+              this.$message({
+                message: '置顶成功！',
+                type: 'success',
+              });
+            }else{
+              this.$message({
+                message: msg,
+                type: 'error',
+              });
+            }
+          })
+            .catch(error => {
+              console.log(error);
+            })
+        },
+
+        querySearchAsync(queryString, callback) {
+          this.$axios.get('/yiiapi/labelcates',{
+            params:{
+              category_name:this.label.category_name
+            }
+          })
+            .then(resp => {
+              let {status,data} = resp.data;
+              if(status == 0){
+                for(let i of data){
+                  i.value = i.category_name;
+                }
               }
-              callback(lists);
+              callback(data);
             })
             .catch(error => {
               console.log(error);
             })
         },
         handleSelect(item){
-          this.label.name = item.value;
+          this.label.category_name = item.value;
         }
       },
       filters:{
@@ -868,10 +925,11 @@
             width: 100%;
             height: 120px;
             margin: 10px 0;
-            padding: 5px 0;
+            padding: 5px 10px;
             font-size: 14px;
             color: #333;
             border: 1px solid #ddd;
+            outline: none;
             resize:none;
             &::placeholder{
               color: #bbb;

@@ -2,15 +2,23 @@
   <div id="intellience-custom" v-cloak
        v-loading.fullscreen.lock="loading">
     <div class="custom-top">
-      <el-select class="select_box"
+      <!--<el-select class="select_box"
                  v-model="intel_name"
-                 placeholder="请选择情报源管理设备">
+                 placeholder="选择指标">
         <el-option v-for="item in intel_attr"
                    :key="item.name"
                    :label="item.name"
                    :value="item.name">
         </el-option>
-      </el-select>
+      </el-select>-->
+      <!--搜索关键词-->
+      <el-input class="select_box"
+                placeholder="搜索指标"
+                v-model="intel_name"
+                clearable>
+        <i slot="prefix"
+           class="el-input__icon el-icon-search"></i>
+      </el-input>
       <el-button class="c_search">搜索</el-button>
       <div class="c_btn_group">
         <el-button class="c_add" @click="add_box">添加情报</el-button>
@@ -307,7 +315,6 @@
         intel_lists: [],
         loading: false,
         intel_name:'',
-        intel_attr:[{name:'ss'},{name:'cc'},{name:'dd'}],
         role_list: {},
         role_data: {
           page: 1,
@@ -342,16 +349,21 @@
     },
     methods: {
       get_data () {
-        //this.loading = true;
-        this.$axios.get('/yiiapi/user/role-list', {
+        this.loading = true;
+        this.$axios.get('/yiiapi/intelligences', {
           params: {
             page: this.role_data.page,
-            rows: this.role_data.rows
+            rows: this.role_data.rows,
+            filter:this.intel_name
           }
         })
-          .then(response => {
+          .then(resp => {
             this.loading = false;
-            this.role_list = response.data.data;
+            this.role_list = resp.data.data;
+
+            let {status,msg,data} = resp.data;
+
+            console.log(data)
           })
           .catch(error => {
             console.log(error);

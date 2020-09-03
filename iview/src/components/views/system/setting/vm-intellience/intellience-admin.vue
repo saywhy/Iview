@@ -75,12 +75,12 @@
       // 获取网卡配置
       get_data () {
         this.loading = true;
-        this.$axios.get('/yiiapi/intelligence/Prototype')
+        this.$axios.get('/yiiapi/intelligence/Config')
           .then(resp => {
             this.loading = false;
             let {status,data} = resp.data
 
-            console.log(data)
+            console.log(resp)
 
 
           })
