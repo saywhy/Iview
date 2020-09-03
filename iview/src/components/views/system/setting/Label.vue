@@ -9,11 +9,12 @@
           <el-input class="search_key"
                     placeholder="搜索关键词"
                     v-model="name"
+                    @keyup.enter.native="search()"
                     clearable>
             <i slot="prefix"
                class="el-input__icon el-icon-search"></i>
           </el-input>
-          <el-button class="c_search">搜索</el-button>
+          <el-button class="c_search" @click="search()">搜索</el-button>
           <div class="c_btn_group">
             <el-button class="c_exp" @click="label_handle('','add')">新增标签</el-button>
           </div>
@@ -264,6 +265,10 @@
             .catch(error => {
               console.log(error);
             })
+        },
+        //搜索
+        search(){
+          this.get_data();
         },
         //新增、编辑标签
         label_handle(item,type){

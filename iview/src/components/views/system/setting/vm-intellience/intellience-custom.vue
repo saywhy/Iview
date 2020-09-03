@@ -6,13 +6,14 @@
       <el-input class="select_box"
                 placeholder="搜索指标"
                 v-model="intel_name"
+                @keyup.enter.native="search()"
                 clearable>
         <i slot="prefix"
            class="el-input__icon el-icon-search"></i>
       </el-input>
       <el-button class="c_search"  @click="search()">搜索</el-button>
       <div class="c_btn_group">
-        <el-button class="c_add" @click="add_box">添加情报</el-button>
+        <el-button class="c_add" @click="add_box('','add')">添加情报</el-button>
         <el-button class="c_exp" @click="exp_box">批量导入/导出</el-button>
       </div>
     </div>
@@ -68,7 +69,7 @@
           <template slot-scope="scope">
             <el-button type="primary"
                        class="btn_edit"
-                       @click.stop='edit_box(scope.row)'>编辑</el-button>
+                       @click.stop="add_box(scope.row,'edit')">编辑</el-button>
             <el-button type="primary"
                        class="btn_edit"
                        @click.stop='remove_box(scope.row)'>删除</el-button>
@@ -86,18 +87,19 @@
       </el-pagination>
     </div>
 
-    <!-- 添加 -->
+    <!-- 添加/编辑 -->
     <el-dialog class="add_box pop_box"
                :close-on-click-modal="false"
                :modal-append-to-body="false"
-               :visible.sync="intel_state.add">
+               :visible.sync="intel_state.tab">
       <img src="@/assets/images/emerge/closed.png"
-           @click="closed_add_box"
+           @click="closed_cancel_box"
            class="closed_img"
            alt="">
       <div class="title">
         <div class="mask"></div>
-        <span class="title_name">添加情报</span>
+        <span class="title_name" v-if="intel_state.type == 'add'">添加情报</span>
+        <span class="title_name" v-if="intel_state.type == 'edit'">编辑情报</span>
       </div>
       <div class="content">
         <div class="content_item_box">
@@ -107,7 +109,7 @@
             </p>
             <el-input class="select_box"
                       placeholder="请输入指标"
-                      v-model="intel_add.index"
+                      v-model="intel_tab.indicator"
                       clearable>
             </el-input>
           </div>
@@ -116,12 +118,12 @@
               <span class="title">威胁度</span>
             </p>
             <el-select class="select_box"
-                       v-model="intel_add.threat"
+                       v-model="intel_tab.degree"
                        placeholder="请选择威胁度">
-              <el-option v-for="item in intel_list.threats"
-                         :key="item"
-                         :label="item"
-                         :value="item">
+              <el-option v-for="item in intel_list.degrees"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
               </el-option>
             </el-select>
           </div>
@@ -134,7 +136,7 @@
               <span class="title">指标类型</span>
             </p>
             <el-select class="select_box"
-                       v-model="intel_add.type"
+                       v-model="intel_tab.type"
                        placeholder="请选择指标类型">
               <el-option v-for="item in intel_list.types"
                          :key="item"
@@ -148,8 +150,9 @@
               <span class="title">置信度</span>
             </p>
             <el-input class="select_box"
+                      type="number"
                       placeholder="请输入置信度"
-                      v-model="intel_add.degree"
+                      v-model="intel_tab.score"
                       clearable>
             </el-input>
           </div>
@@ -164,108 +167,23 @@
                     type="textarea"
                     :rows="4"
                     placeholder="请输入描述"
-                    v-model="intel_add.describe"
+                    v-model="intel_tab.description"
                     clearable>
           </el-input>
         </div>
       </div>
       <div class="btn_box">
-        <el-button @click="closed_add_box"
+        <el-button @click="closed_cancel_box"
                    class="cancel_btn">取消</el-button>
-        <el-button class="ok_btn"
+        <el-button class="ok_btn" v-if="intel_state.type == 'add'"
                    @click="submit_add_box">确定</el-button>
-      </div>
-    </el-dialog>
-    <!-- 编辑 -->
-    <el-dialog class="add_box pop_box"
-               :close-on-click-modal="false"
-               :modal-append-to-body="false"
-               :visible.sync="intel_state.edit">
-      <img src="@/assets/images/emerge/closed.png"
-           @click="closed_edit_box"
-           class="closed_img"
-           alt="">
-      <div class="title">
-        <div class="mask"></div>
-        <span class="title_name">编辑情报</span>
-      </div>
-      <div class="content">
-        <div class="content_item_box">
-          <div class="content_item">
-            <p>
-              <span class="title">指标</span>
-            </p>
-            <el-input class="select_box"
-                      placeholder="请输入指标"
-                      v-model="intel_add.index"
-                      clearable>
-            </el-input>
-          </div>
-          <div class="content_item">
-            <p>
-              <span class="title">威胁度</span>
-            </p>
-            <el-select class="select_box"
-                       v-model="intel_add.threat"
-                       placeholder="请选择威胁度">
-              <el-option v-for="item in intel_list.threats"
-                         :key="item"
-                         :label="item"
-                         :value="item">
-              </el-option>
-            </el-select>
-          </div>
-        </div>
-        <div class="content_item_space">
-        </div>
-        <div class="content_item_box">
-          <div class="content_item">
-            <p>
-              <span class="title">指标类型</span>
-            </p>
-            <el-select class="select_box"
-                       v-model="intel_add.type"
-                       placeholder="请选择指标类型">
-              <el-option v-for="item in intel_list.types"
-                         :key="item"
-                         :label="item"
-                         :value="item">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="content_item">
-            <p>
-              <span class="title">置信度</span>
-            </p>
-            <el-input class="select_box"
-                      placeholder="请输入置信度"
-                      v-model="intel_add.degree"
-                      clearable>
-            </el-input>
-          </div>
-        </div>
-      </div>
-      <div class="content_sec">
-        <div class="content_item">
-          <p>
-            <span class="title">描述</span>
-          </p>
-          <el-input class="select_box_textarea"
-                    type="textarea"
-                    :rows="4"
-                    placeholder="请输入描述"
-                    v-model="intel_add.describe"
-                    clearable>
-          </el-input>
-        </div>
-      </div>
-      <div class="btn_box">
-        <el-button @click="closed_edit_box"
-                   class="cancel_btn">取消</el-button>
-        <el-button class="ok_btn"
+        <el-button class="ok_btn" v-if="intel_state.type == 'edit'"
                    @click="submit_edit_box">确定</el-button>
       </div>
     </el-dialog>
+
+
+
     <!-- 批量导入 -->
     <el-dialog class="add_box pop_box"
                :close-on-click-modal="false"
@@ -318,30 +236,31 @@
           rows: 10
         },
         intel_state:{
-          add:false,
-          edit:false,
-          exp:false
+          tab:false,
+          exp:false,
+          type:'add'
         },
-        intel_add:{
-          index:'',
-          threat:'',
-          degree:'',
+
+        intel_tab:{
+          indicator:'',
           type:'',
-          describe:''
+          degree:'',
+          score:'',
+          description:'',
+          id:''
         },
         intel_list:{
-          threats:['高危','中危','低危'],
+          degrees:[{value:'high',label:'高危'},{value:'medium',label:'中危'},{value:'low',label:'低危'}],
           types:['指标类型','指标类型1']
         },
       };
     },
     mounted () {
-      this.get_data()
+      this.get_data();
     },
     methods: {
       get_data () {
         this.loading = true;
-
         this.$axios.get('/yiiapi/intelligences', {
           params: {
             page: this.role_data.page,
@@ -351,8 +270,6 @@
         })
           .then(resp => {
             this.loading = false;
-            this.role_list = resp.data.data;
-
             let {status,msg,data} = resp.data;
 
             if(status == 0){
@@ -360,8 +277,8 @@
                 count:data.count,
                 data:data.data,
                 pageNow:data.pageNow * 1,
+                maxPage:data.maxPage
               }
-              console.log(data.data)
               this.role_list = datas;
             }
           })
@@ -387,25 +304,137 @@
         this.get_data();
       },
       ////////////////////////////////////////////////
-      add_box() {
-        this.intel_state.add = true;
+      add_box(item,type) {
+        this.intel_state.tab = true;
+        this.intel_state.type = type;
+        console.log(item)
+        if(item){
+          this.intel_tab.indicator = item.indicator;
+          this.intel_tab.type = item.type;
+          this.intel_tab.degree = item.degree;
+          this.intel_tab.score = item.score;
+          this.intel_tab.description = item.description;
+          this.intel_tab.id = item.id;
+        }
       },
-      closed_add_box () {
-        this.intel_state.add = false;
-      },
+      //情报添加确定
       submit_add_box() {
-
+        if(this.intel_tab.indicator == ''){
+          this.$message({
+            message: '指标名不能为空！',
+            type: 'warning',
+          });
+          return false;
+        }
+        this.$axios.post('/yiiapi/intelligences',{
+          CustomIntelligence: {
+            indicator:this.intel_tab.indicator,
+            type:this.intel_tab.type,
+            degree:this.intel_tab.degree,
+            score:this.intel_tab.score,
+            description:this.intel_tab.description
+          }
+        }).then(resp => {
+          let {status,msg,data} = resp.data;
+          if(status == 0){
+            this.intel_state.tab = false;
+            this.get_data();
+            this.$message({
+              message: '添加成功！',
+              type: 'success',
+            });
+          }else {
+            this.$message({
+              message: msg,
+              type: 'error',
+            });
+          }
+        })
+          .catch(error => {
+            console.log(error);
+          })
       },
-      //编辑
-      edit_box() {
-        this.intel_state.edit = true;
-      },
-      closed_edit_box () {
-        this.intel_state.edit = false;
-      },
+      //情报编辑确定
       submit_edit_box() {
-
+        if(this.intel_tab.indicator == ''){
+          this.$message({
+            message: '指标名不能为空！',
+            type: 'warning',
+          });
+          return false;
+        }
+        this.$axios.put('/yiiapi/intelligences/'+this.intel_tab.id,{
+          CustomIntelligence: {
+            indicator:this.intel_tab.indicator,
+            type:this.intel_tab.type,
+            degree:this.intel_tab.degree,
+            score:this.intel_tab.score,
+            description:this.intel_tab.description
+          }
+        }).then(resp => {
+          let {status,msg,data} = resp.data;
+          if(status == 0){
+            this.intel_state.tab = false;
+            this.get_data();
+            this.$message({
+              message: '编辑成功！',
+              type: 'success',
+            });
+          }else {
+            this.$message({
+              message: msg,
+              type: 'error',
+            });
+          }
+        })
+          .catch(error => {
+            console.log(error);
+          })
       },
+      //添加、编辑情报取消
+      closed_cancel_box () {
+        this.intel_state.tab = false;
+      },
+      //删除情报
+      remove_box(item){
+        this.intel_tab.id = item.id;
+        this.$confirm('此操作将删除此条情报信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.delete('/yiiapi/intelligences/'+this.intel_tab.id)
+            .then(resp => {
+              let {status,msg,data} = resp.data;
+              if (status == 0) {
+                this.get_data();
+                this.$message(
+                  {
+                    message: '删除成功！',
+                    type: 'success',
+                  }
+                );
+              } else {
+                this.$message(
+                  {
+                    message: '删除失败！',
+                    type: 'error',
+                  }
+                );
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+
+      /* **************************以上已完成********************* */
       //批量导入
       exp_box() {
         this.intel_state.exp = true;
@@ -416,51 +445,7 @@
       submit_exp_box(){
         this.intel_state.exp = false;
       },
-      //删除
-      remove_box(){
 
-         this.$confirm('此操作删除信息, 是否继续?', '提示', {
-           confirmButtonText: '确定',
-           cancelButtonText: '取消',
-           type: 'warning'
-         }).then(() => {
-           var id_list = []
-           this.select_list.forEach(element => {
-             id_list.push(element.id)
-           });
-           this.$axios.delete('/yiiapi/ipsegment/del', {
-             data: {
-               id: '11'
-             }
-           })
-             .then(response => {
-               if (response.data.status == 0) {
-                 this.get_data();
-                 this.$message(
-                   {
-                     message: '删除成功！',
-                     type: 'success',
-                   }
-                 );
-               } else {
-                 this.$message(
-                   {
-                     message: '删除失败！',
-                     type: 'error',
-                   }
-                 );
-               }
-             })
-             .catch(error => {
-               console.log(error);
-             })
-         }).catch(() => {
-           this.$message({
-             type: 'info',
-             message: '已取消删除'
-           });
-         });
-      },
     },
     filters: {
       formatDate: function (value) {
