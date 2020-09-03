@@ -243,7 +243,7 @@ export default {
     },
     // 获取版本
     get_version () {
-      this.$axios.get('/yiiapi/site/license-version')
+      this.$axios.get('/yiiapi/site/LicenseVersion')
         .then(response => {
           let { status, data } = response.data;
           console.log(data);
