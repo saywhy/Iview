@@ -267,7 +267,7 @@
             })
         },
         //搜索
-        search(){
+        search() {
           this.get_data();
         },
         //新增、编辑标签

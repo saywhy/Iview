@@ -8,7 +8,7 @@
       <div class="monitor_title">
         <el-button type="primary"
                    class="btn_i"
-                   @click="add_monitor">添加设备</el-button>
+                   @click="add_monitor('','add')">添加设备</el-button>
         <el-button type="primary"
                    class="btn_o"
                    @click="del_monitor">删除</el-button>
@@ -20,6 +20,7 @@
                   :data="monitor_data.data"
                   tooltip-effect="dark"
                   style="width: 100%"
+                  border
                   @row-click="detail_click"
                   @header-click="header_click"
                   @mousedown.native="mousedown"
@@ -50,10 +51,10 @@
                            show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.updated_at }}</template>
           </el-table-column>
-          <el-table-column prop="status"
-                           align="center"
+          <el-table-column align="center"
                            label="状态"
                            show-overflow-tooltip>
+            <template slot-scope="scope">{{ scope.row.status | statusSafe }}</template>
           </el-table-column>
           <el-table-column label="操作"
                            align="center">
@@ -63,7 +64,7 @@
                          @click.stop='download_box(scope.row)'>日志下载</el-button>
               <el-button type="primary"
                          class="btn_edit"
-                         @click.stop='edit_monitor(scope.row)'>编辑</el-button>
+                         @click.stop="add_monitor(scope.row,'edit')">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -77,18 +78,20 @@
                        :total="monitor_data.count">
         </el-pagination >
       </div>
-      <!-- 添加 -->
+
+      <!-- 添加/编辑 -->
       <el-dialog class="add_box pop_box"
                  :close-on-click-modal="false"
                  :modal-append-to-body="false"
-                 :visible.sync="monitor_state.add">
+                 :visible.sync="monitor_state.tab">
         <img src="@/assets/images/emerge/closed.png"
-             @click="closed_add_box"
+             @click="closed_cancel_box"
              class="closed_img"
              alt="">
         <div class="title">
           <div class="mask"></div>
-          <span class="title_name">添加设备</span>
+          <span class="title_name" v-if="monitor_state.type == 'add'">添加设备</span>
+          <span class="title_name" v-if="monitor_state.type == 'edit'">编辑设备</span>
         </div>
         <div class="content">
           <div class="content_item_box">
@@ -153,7 +156,7 @@
               </p>
               <el-input class="select_box"
                         placeholder="请输入主机类型"
-                        v-model="monitor_add.host"
+                        v-model="monitor_add.type"
                         clearable>
               </el-input>
             </div>
@@ -162,12 +165,12 @@
                 <span class="title">snmp服务器</span>
               </p>
               <el-select class="select_box"
-                         v-model="monitor_add.type"
+                         v-model="monitor_add.snmp"
                          placeholder="请选择snmp服务器类型">
-                <el-option v-for="item in monitor_add.type_list"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
+                <el-option v-for="item in monitor_add.snmp_list"
+                           :key="item"
+                           :label="item"
+                           :value="item">
                 </el-option>
               </el-select>
             </div>
@@ -194,162 +197,14 @@
           </div>
         </div>
         <div class="btn_box">
-          <el-button @click="closed_add_box"
+          <el-button @click="closed_cancel_box"
                      class="cancel_btn">取消</el-button>
-          <el-button class="ok_btn"
+          <el-button class="ok_btn" v-if="monitor_state.type == 'add'"
                      @click="submit_add_box">确定</el-button>
-        </div>
-      </el-dialog>
-      <!-- 编辑 -->
-      <el-dialog class="add_box pop_box"
-                 :close-on-click-modal="false"
-                 :modal-append-to-body="false"
-                 :visible.sync="monitor_state.edit">
-        <img src="@/assets/images/emerge/closed.png"
-             @click="closed_edit_box"
-             class="closed_img"
-             alt="">
-        <div class="title">
-          <div class="mask"></div>
-          <span class="title_name">编辑设备</span>
-        </div>
-        <div class="content">
-          <div class="content_item_box">
-            <div class="content_item">
-              <p>
-                <span class="title">工单名称</span>
-                <!--<span class="title_color">*</span>-->
-              </p>
-              <el-input class="select_box"
-                        placeholder="请输入工单名称"
-                        v-model="monitor_add.name"
-                        clearable>
-              </el-input>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">IP地址</span>
-              </p>
-              <el-input class="select_box"
-                        placeholder="请输入IP地址"
-                        v-model="monitor_add.ip"
-                        clearable>
-              </el-input>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">端口</span>
-              </p>
-              <el-input class="select_box"
-                        placeholder="请输入端口"
-                        v-model="monitor_add.port"
-                        clearable>
-              </el-input>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">CPU</span>
-              </p>
-              <el-input class="select_box"
-                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
-                        v-model="monitor_add.cpu"
-                        clearable>
-              </el-input>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">Disk</span>
-              </p>
-              <el-input class="select_box"
-                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
-                        v-model="monitor_add.disk"
-                        clearable>
-              </el-input>
-            </div>
-          </div>
-          <div class="content_item_space"></div>
-          <div class="content_item_box">
-            <div class="content_item">
-              <p>
-                <span class="title">主机类型</span>
-                <!--<span class="title_color">*</span>-->
-              </p>
-              <el-input class="select_box"
-                        placeholder="请输入主机类型"
-                        v-model="monitor_add.host"
-                        clearable>
-              </el-input>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">snmp服务器</span>
-              </p>
-              <el-select class="select_box"
-                         v-model="monitor_add.type"
-                         placeholder="请选择snmp服务器类型">
-                <el-option v-for="item in monitor_add.type_list"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">字符串</span>
-              </p>
-              <el-input class="select_box"
-                        placeholder="请输入字符串"
-                        v-model="monitor_add.character"
-                        clearable>
-              </el-input>
-            </div>
-            <div class="content_item">
-              <p>
-                <span class="title">Memory</span>
-              </p>
-              <el-input class="select_box"
-                        placeholder="1.2.3.1.4.1.2011.1.1.1.10.11111"
-                        v-model="monitor_add.memory"
-                        clearable>
-              </el-input>
-            </div>
-          </div>
-        </div>
-        <div class="btn_box">
-          <el-button @click="closed_edit_box"
-                     class="cancel_btn">取消</el-button>
-          <el-button class="ok_btn"
+          <el-button class="ok_btn" v-if="monitor_state.type == 'edit'"
                      @click="submit_edit_box">确定</el-button>
         </div>
       </el-dialog>
-      <!-- 删除 -->
-      <!--<el-dialog class="pop_state_box"
-                 :close-on-click-modal="false"
-                 :modal-append-to-body="false"
-                 :visible.sync="monitor_state.remove">
-        <img src="@/assets/images/emerge/closed.png"
-             @click="closed_remove_box"
-             class="closed_img"
-             alt="">
-        <div class="title">
-          <div class="mask"></div>
-          <span class="title_name">删除</span>
-        </div>
-        <div class="content">
-          <p class="content_p">
-            <span>是否将已勾选的</span>
-            <span>{{select_list.length | upper}}</span>
-            <span>项删除？</span>
-          </p>
-        </div>
-        <div class="btn_box">
-          <el-button  @click="closed_remove_box"
-                     class="cancel_btn">取消</el-button>
-          <el-button  @click="submit_remove_box"
-                     class="ok_btn">确定</el-button>
-        </div>
-      </el-dialog>-->
     </div>
   </div>
 </template>
@@ -378,19 +233,18 @@
           rows: 10,
         },
         monitor_state: {
-          add: false,
-          edit: false,
-          remove:false,
+          tab: false,
+          type: 'add',
           import: false,
           import_loading: false
         },
         monitor_add: {
           id:'',
           name: "",
-          host: "",
-          ip: "",
           type: "",
-          type_list: [{value:2,label:"V1"}, {value:3,label:"V2"}, {value:4,label:"V3"}],
+          ip: "",
+          snmp: "",
+          snmp_list: ['V1','V2','V3'],
           port: "",
           character: "",
           cpu: "",
@@ -402,11 +256,8 @@
     },
     mounted () {
       this.get_data();
-
     },
     methods: {
-
-
       // 获取列表
       get_data () {
         this.loading = true;
@@ -436,25 +287,19 @@
             console.log(error);
           })
       },
-
       // 分页
       handleSizeChange (val) {
         this.monitor_page.rows = val;
-        this.monitor_page.page = 1
+        this.monitor_page.page = 1;
         this.get_data();
       },
       handleCurrentChange (val) {
         this.monitor_page.page = val;
         this.get_data();
       },
-      // 全选择
+      //全选择
       handleSelectionChange (val) {
         this.select_list = val;
-      },
-      //删除取消
-      cancel_del_monitor () {
-        this.monitor_state.remove = false;
-        this.$refs.multipleTable.clearSelection();
       },
       //删除确定
       del_monitor () {
@@ -476,11 +321,6 @@
           this.select_list.forEach(element => {
             id_list.push(element.id);
           });
-          /*this.$axios.delete('/yiiapi/safetyequipments', {
-            data: {
-              id: id_list
-            }
-          })*/
           this.$axios.delete('/yiiapi/safetyequipments/'+ id_list)
             .then(resp => {
               console.log(resp);
@@ -514,23 +354,30 @@
         });
       },
       //添加设备
-      add_monitor() {
-        this.monitor_state.add = true;
-        this.monitor_add.id = '';
-        this.monitor_add.name = '';
-        this.monitor_add.host = '';
-        this.monitor_add.ip = '';
-        this.monitor_add.type = '';
-        this.monitor_add.port = '';
-        this.monitor_add.character = '';
-        this.monitor_add.cpu = '';
-        this.monitor_add.memory = '';
-        this.monitor_add.disk = '';
+      add_monitor(row,type) {
+        this.monitor_state.tab = true;
+        this.monitor_state.type = type;
+        console.log(row)
+        if(row){
+          this.monitor_add.id = row.id;
+          this.monitor_add.name = row.name;
+          this.monitor_add.type = row.type;
+          this.monitor_add.ip = row.ip;
+
+          this.monitor_add.snmp = row.snmp;
+          this.monitor_add.port = row.port;
+          this.monitor_add.character = row.string;
+          this.monitor_add.cpu = row.cpu;
+          this.monitor_add.memory = row.memory;
+          this.monitor_add.disk = row.disk;
+        }
       },
-      //添加取消
-      closed_add_box () {
-        this.monitor_state.add = false;
+
+      //取消
+      closed_cancel_box () {
+        this.monitor_state.tab = false;
       },
+
       //添加确定
       submit_add_box () {
         if (this.monitor_add.name == '') {
@@ -560,12 +407,17 @@
           );
           return false
         }
-
         this.$axios.post('/yiiapi/safetyequipments', {
           SafetyEquipment: {
             name: this.monitor_add.name,
             type: this.monitor_add.type,
-            ip: this.monitor_add.ip
+            ip: this.monitor_add.ip,
+            string:this.monitor_add.character,
+            cpu:this.monitor_add.cpu,
+            memory:this.monitor_add.memory,
+            disk:this.monitor_add.disk,
+            port:this.monitor_add.port,
+            snmp:this.monitor_add.snmp
           }
         })
           .then(resp => {
@@ -574,7 +426,7 @@
             let {status,msg,data} = resp.data;
 
             if (status == 0) {
-              this.monitor_state.add = false;
+              this.monitor_state.tab = false;
               this.get_data();
               this.$message(
                 {
@@ -596,25 +448,6 @@
           })
       },
 
-      //编辑设备
-      edit_monitor(row) {
-        console.log(row);
-        this.monitor_state.edit = true;
-        this.monitor_add.id = row.id;
-        this.monitor_add.name = row.name;
-        this.monitor_add.host = '';
-        this.monitor_add.ip = row.ip;
-        this.monitor_add.type = row.type;
-        this.monitor_add.port = '';
-        this.monitor_add.character = '';
-        this.monitor_add.cpu = '';
-        this.monitor_add.memory = '';
-        this.monitor_add.disk = '';
-      },
-      //编辑取消
-      closed_edit_box () {
-        this.monitor_state.edit = false;
-      },
       //编辑确定
       submit_edit_box () {
         if (this.monitor_add.name == '') {
@@ -648,16 +481,20 @@
           SafetyEquipment: {
             name: this.monitor_add.name,
             type: this.monitor_add.type,
-            ip: this.monitor_add.ip
+            ip: this.monitor_add.ip,
+            string:this.monitor_add.character,
+            cpu:this.monitor_add.cpu,
+            memory:this.monitor_add.memory,
+            disk:this.monitor_add.disk,
+            port:this.monitor_add.port,
+            snmp:this.monitor_add.snmp
           }
         })
           .then(resp => {
-            console.log(resp);
-
             let {status,msg,data} = resp.data;
 
             if (status == 0) {
-              this.monitor_state.edit = false;
+              this.monitor_state.tab = false;
               this.get_data();
               this.$message(
                 {
@@ -683,37 +520,6 @@
       download_box(row){
         var url = '/yiiapi/safetyequipment/DownloadLog?id='+row.id;
         window.location.href = url;
-       /* this.$axios.get('/yiiapi/site/CheckPasswdReset')
-          .then((resp) => {
-            let {
-              status,
-              msg,
-              data
-            } = resp.data;
-            if (status == '602') {
-              this.monitor_state.import = false;
-              this.$message(
-                {
-                  message: msg,
-                  type: 'warning',
-                }
-              );
-              eventBus.$emit('reset')
-            } else {
-              this.$axios.get('/yiiapi/site/check-auth-exist', {
-                params: {
-                  pathInfo: 'yararule/download',
-                }
-              })
-                .then(response => {
-                  var url1 = '/yiiapi/ipsegment/template-download';
-                  window.location.href = url1;
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            }
-          })*/
       },
       /************************************/
       //进入详情页面
@@ -759,6 +565,15 @@
       },
     },
     filters: {
+      statusSafe:function(value){
+        let attr = '';
+        if(value == 0){
+          attr = '正常';
+        }else if(value == 1) {
+          attr = '告警';
+        }
+        return attr;
+      },
       formatDate: function (value) {
         return moment(value).format('YYYY-MM-DD HH:mm:ss')
       },
@@ -806,8 +621,6 @@
   };
 </script>
 <style lang='less'>
-  @import '../../../../assets/css/less/reset_css/reset_table.less';
-  @import '../../../../assets/css/less/reset_css/reset_pop.less';
   #system_control_safe {
     .add_box {
       .el-dialog {
@@ -1012,4 +825,9 @@
       }
     }
   }
+</style>
+
+<style lang="less">
+  @import '../../../../assets/css/less/reset_css/reset_table.less';
+  @import '../../../../assets/css/less/reset_css/reset_pop.less';
 </style>

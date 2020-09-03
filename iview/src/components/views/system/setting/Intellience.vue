@@ -35,37 +35,17 @@ export default {
   name: "system_setting_intellience",
   data () {
     return {
-      activeName: "second",
+      activeName: "first",
       tab_show: {
-        first: false,
-        second: true
+        first: true,
+        second: false
       }
     };
   },
   mounted () {
-    //this.check_passwd()
+
   },
   methods: {
-    // 测试密码过期
-    check_passwd () {
-      this.$axios.get('/yiiapi/site/CheckPasswdReset')
-        .then((resp) => {
-          let {
-            status,
-            msg,
-            data
-          } = resp.data;
-          if (status == '602') {
-            this.$message(
-              {
-                message: msg,
-                type: 'warning',
-              }
-            );
-            eventBus.$emit('reset')
-          }
-        })
-    },
     handleClick (tab, event) {
       console.log(tab);
       switch (tab.name) {

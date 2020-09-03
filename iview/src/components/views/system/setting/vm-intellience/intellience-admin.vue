@@ -13,26 +13,26 @@
       </el-select>
     </div>
     <div class="admin-bom">
-      <div class="item" v-for="(item,$index) in intel_lists" >
+      <div class="item" v-for="(item,$index) in source_data.green" >
         <span class="sw">
           <el-switch v-model="item.switchFlag"></el-switch>
-          <span class="name" v-show="item.switchFlag">启用</span>
-          <span class="name" v-show="!item.switchFlag">禁用</span>
+          <span class="name" v-show="item.choose">启用</span>
+          <span class="name" v-show="!item.choose">禁用</span>
         </span>
         <h3 class="num">85</h3>
-        <h5 class="cop1">Hoohoolab</h5>
-        <h5 class="cop2">BotnetCAndCURL</h5>
+        <h5 class="cop1">{{item.key}}</h5>
+        <h5 class="cop2">{{item.name}}</h5>
         <h4 class="ad1">
           <span class="t1">上次更新时间：</span>
-          <span class="t2">2019-01-12</span>
+          <span class="t2">{{item.last_run}}</span>
         </h4>
         <h4 class="ad1">
           <span class="t1">上次成功更新时间：</span>
-          <span class="t2">2019-01-13</span>
+          <span class="t2">{{item.last_successful_run}}</span>
         </h4>
         <h4 class="ad2">
           <span class="tm1">结果：</span>
-          <span class="tm2">成功</span>
+          <span class="tm2">{{item.sub_state_cn}}</span>
         </h4>
       </div>
     </div>
@@ -58,7 +58,13 @@
           {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:false,switchFlag:false}],
         loading: false,
         intel_name:'',
-        intel_attr:[{name:'商业情报'},{name:'开源情报'}]
+        intel_attr:[{name:'商业情报'},{name:'开源情报'}],
+        full_data:[],
+        full_cyberhunt_data:[],
+        source_data:{
+          red: [],
+          green: []
+        }
       };
     },
     props: {
@@ -78,10 +84,87 @@
         this.$axios.get('/yiiapi/intelligence/Config')
           .then(resp => {
             this.loading = false;
-            let {status,data} = resp.data
+            let {status,data} = resp.data;
+            if (status == 0) {
+              let {changed, fabric, mgmtbus, next_node_id, nodes, version} = data.result;
 
-            console.log(resp)
+              let full_version = version;
 
+              this.full_data = nodes;
+
+              this.full_data.forEach((item, index) => {
+                if (item != null) {
+                  item.id = index;
+                  if (item.properties.inputs.length == 0) {
+                    item.choose = true;
+                  } else {
+                    item.choose = false;
+                  }
+                }
+              });
+
+              //第二个接口
+              this.$axios.get('/yiiapi/intelligence/Prototype')
+                .then(resp => {
+
+                  let {status,data} = resp.data;
+
+                  if (status == 0) {
+
+                    let cyberhunt_data = data.result;
+                    //console.log(cyberhunt_data);
+                    this.full_data.forEach((item) => {
+                      if (item != null) {
+
+                        Object.keys(cyberhunt_data).forEach(ele => {
+                          var obj = {};
+                          if (item.name == ele.name) {
+                            obj.name = item.name;
+                            obj.prototype = item.properties.prototype;
+                            obj.prototype_name = item.properties.prototype.split(
+                              "."
+                            )[1];
+                            if (ele.last_successful_run) {
+                              obj.last_successful_run = parseInt(ele.last_successful_run / 1000);
+                            } else {
+                              obj.last_successful_run = "";
+                            }
+                            if (ele.last_run) {
+                              obj.last_run = parseInt(ele.last_run / 1000);
+                            } else {
+                              obj.last_run = "";
+                            }
+                            if (ele.sub_state) {
+                              obj.sub_state = ele.sub_state;
+                            } else {
+                              obj.sub_state = "";
+                            }
+                            if (ele.inputs.length == 0) {
+                              obj.choose = true;
+                            } else {
+                              obj.choose = false;
+                            }
+                            this.full_cyberhunt_data.push(obj);
+                          }
+                        })
+
+                      }
+                    });
+
+                    console.log(this.full_cyberhunt_data);
+                    this.get_prototype();
+
+                  }
+
+                })
+                .catch(error => {
+                  console.log(error);
+                })
+
+
+              ///////////////
+
+            }
 
           })
           .catch(error => {
@@ -89,6 +172,173 @@
           })
       },
 
+
+      get_prototype(){
+
+        this.$axios.get('/yiiapi/intelligence/Prototype')
+          .then(resp => {
+          let {status,msg,data} = resp.data;
+
+
+          if(status == 0){
+
+            //zeroModal.close($scope.loading);
+            let prototype_data = data.result;
+
+            for (var k in prototype_data) {
+              for (var item in prototype_data[k].prototypes) {
+                var obj = {};
+                obj.key = k;
+                obj.name = item;
+                obj.class = prototype_data[k].prototypes[item].class;
+                obj.tags = prototype_data[k].prototypes[item].tags;
+                obj.config = prototype_data[k].prototypes[item].config;
+                obj.node_type = prototype_data[k].prototypes[item].node_type;
+                obj.nodeType = prototype_data[k].prototypes[item].node_type;
+                obj.indicator_types = prototype_data[k].prototypes[item].indicator_types;
+                obj.indicatorTypes = prototype_data[k].prototypes[item].indicator_types;
+                obj.description = prototype_data[k].prototypes[item].description;
+                obj.author = prototype_data[k].prototypes[item].author;
+                if (prototype_data[k].prototypes[item].tags) {
+                  if (
+                    prototype_data[k].prototypes[item].tags.length == 0
+                  ) {
+                    obj.type = "green";
+                  } else {
+                    Object.keys(prototype_data[k].prototypes[item].tags)
+                      .forEach(ele => {
+                      if (ele == "ShareLevelGreen") {
+                        obj.type = "green";
+                      }
+                      if (ele == "ShareLevelRed") {
+                        obj.type = "red";
+                      }
+                    })
+                  }
+                } else {
+                  obj.type = "green";
+                }
+                if (prototype_data[k].prototypes[item].config.attributes) {
+                  if (prototype_data[k].prototypes[item].config.attributes.confidence) {
+                    obj.confidence =
+                      prototype_data[k].prototypes[item].config.attributes.confidence;
+                  } else {
+                    obj.confidence = 0;
+                  }
+                } else {
+                  obj.confidence = 0;
+                }
+                if (obj.type == "green") {
+                  this.source_data.green.push(obj);
+                }
+                if (obj.type == "red") {
+                  this.source_data.red.push(obj);
+                }
+                //   $scope.prototype_list.push(obj);
+              }
+            }
+            this.source_data.red.forEach(item => {
+              item.choose = false;
+              item.last_successful_run = "";
+              item.last_run = "";
+              item.sub_state = "";
+            });
+            this.source_data.green.forEach(item => {
+              item.choose = false;
+              item.last_successful_run = "";
+              item.last_run = "";
+              item.sub_state = "";
+            });
+            //   判断开启状态
+            this.source_data.red.forEach(item => {
+              this.full_data.forEach(ele => {
+                if (item.name == ele.properties.prototype.split(".")[1]) {
+                  if (ele.choose) {
+                    item.choose = ele.choose;
+                  }
+                  item.id = ele.id;
+                  item.version = ele.version;
+                }
+              })
+            });
+
+            this.source_data.green.forEach(item => {
+              this.full_data.forEach(ele => {
+                if (ele != null) {
+                  if (item.name == ele.properties.prototype.split(".")[1]) {
+                    if (ele.choose) {
+                      item.choose = ele.choose;
+                    }
+                    item.id = ele.id;
+                    item.version = ele.version;
+                  }
+                }
+              })
+            });
+
+            //更新时间和状态
+            this.source_data.red.forEach(item => {
+              this.full_cyberhunt_data.forEach(ele => {
+                if (item.key + '.' + item.name == ele.prototype) {
+                  item.last_successful_run = ele.last_successful_run;
+                  item.last_run = ele.last_run;
+                  item.sub_state = ele.sub_state;
+                  if (item.sub_state == "SUCCESS") {
+                    item.sub_state_cn = "成功";
+                  } else if (item.sub_state == "ERROR") {
+                    item.sub_state_cn = "失败";
+                  } else {
+                    item.sub_state_cn = item.sub_state;
+                  }
+                }
+              })
+            });
+
+            this.source_data.green.forEach(item => {
+              this.full_cyberhunt_data.forEach(ele => {
+                if (item.key + '.' + item.name == ele.prototype) {
+                  item.last_successful_run = ele.last_successful_run;
+                  item.last_run = ele.last_run;
+                  item.sub_state = ele.sub_state;
+                  if (item.sub_state == "SUCCESS") {
+                    item.sub_state_cn = "成功";
+                  } else if (item.sub_state == "ERROR") {
+                    item.sub_state_cn = "失败";
+                  } else {
+                    item.sub_state_cn = item.sub_state;
+                  }
+                }
+              })
+            });
+
+            console.log(this.source_data);
+
+          }
+        })
+          .catch(error => {
+            console.log(error);
+          })
+      }
+
+    },
+
+    filters:{
+      source_filter_red:function (list) {
+        var array = [];
+        list.forEach(item => {
+          switch (item.key) {
+            case 'hoohoolab':
+              array.push(item);
+              break;
+            case 'knownsec':
+              array.push(item);
+              break;
+            default:
+              break;
+          }
+        })
+        return array;
+      }
     }
   };
 </script>
