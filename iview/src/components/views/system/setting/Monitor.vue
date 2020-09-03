@@ -38,6 +38,7 @@
               {{(monitor_page.page-1)*(monitor_page.rows) + scope.row.index_cn}}
             </template>
           </el-table-column>
+
           <el-table-column prop="name"
                            align="center"
                            label="IP段名称"
@@ -497,7 +498,7 @@ export default {
   methods: {
     // 测试密码过期
     check_passwd () {
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
         .then((resp) => {
           let {
             status,
@@ -1010,7 +1011,7 @@ export default {
     // 下载模板
     download_template () {
 
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
         .then((resp) => {
           let {
             status,
@@ -1112,7 +1113,7 @@ export default {
     },
     // 导出
     download () {
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
         .then((resp) => {
           let {
             status,

@@ -33,9 +33,12 @@
           <span class="info_top_item_content">{{selectItem.indicator}}</span>
         </li>
         <!-- v-if="selectItem.detect_engine=='LOGDF'" -->
-        <li class="info_top_item">
+        <li class="info_top_item"
+            v-if="selectItem.detect_engine == 'LOGDF'">
           <span class="info_top_item_title">情报来源</span>
-          <span class="info_top_item_content">日志来源时候有字段</span>
+          <span class="info_top_item_content">
+            {{selectItem.alert_description.sources.join(',')}}
+          </span>
         </li>
         <li class="info_top_item"
             v-for="value in selectItem.info_list"
@@ -47,7 +50,7 @@
           <span class="info_top_item_content"
                 v-if="value.name!='文件大小'"
                 :class="value.value=='点击下载'?'download_text':''">
-            <span @click="download(value,item)">{{value.value}}</span>
+            <span @click="download(value,selectItem)">{{value.value}}</span>
           </span>
         </li>
         <!-- 沙箱检测下载 -->
@@ -72,7 +75,8 @@
         </div>
       </div>
       <!-- 网络事件 -->
-      <div class="info_base_mid">
+      <div class="info_base_mid"
+           v-if="selectItem.detect_engine != 'LOGDF'">
         <p class="title">网络事件</p>
         <div class="time_right_net">
           <div class="time_right_net_item"
@@ -92,70 +96,74 @@
                          class="tabs-item"
                          name="1">
               <div class="base_box">
-                <div class="base_left_item">
-                  <p class="left_item_title">
-                    <img src="@/assets/images/emerge/base/base1.png"
-                         alt="">
-                    <span>地理位置</span>
-                  </p>
-                  <p class="left_item_content">
-                    <!-- 中国 · 上海 -->
-                  </p>
-                </div>
-                <div class="base_left_item">
-                  <p class="left_item_title">
-                    <img src="@/assets/images/emerge/base/base2.png"
-                         alt="">
-                    <span>情报来源</span>
-                  </p>
-                  <p class="left_item_content">
-                    <!-- Saic_IPReputation -->
-                  </p>
+                <div v-if="selectItem.detect_engine == 'LOGDF'">
+                  <div class="base_left_item">
+                    <p class="left_item_title">
+                      <img src="@/assets/images/emerge/base/base1.png"
+                           alt="">
+                      <span>地理位置</span>
+                    </p>
+                    <p class="left_item_content">
+                      <!-- 中国 · 上海 -->
+                      {{selectItem.alert_description.geo}}
+                    </p>
+                  </div>
+                  <div class="base_left_item">
+                    <p class="left_item_title">
+                      <img src="@/assets/images/emerge/base/base2.png"
+                           alt="">
+                      <span>情报来源</span>
+                    </p>
+                    <p class="left_item_content">
+                      {{selectItem.alert_description.sources.join(',')}}
+                    </p>
+                  </div>
+                  <div class="base_left_item">
+                    <p class="left_item_title">
+                      <img src="@/assets/images/emerge/base/base3.png"
+                           alt="">
+                      <span>威胁类型</span>
+                    </p>
+                    <p class="left_item_content">
+                      <!-- 恶意IP -->
+                      {{selectItem.alert_description.category}}
+                    </p>
+                  </div>
+                  <div class="base_left_item">
+                    <p class="left_item_title">
+                      <img src="@/assets/images/emerge/base/base4.png"
+                           alt="">
+                      <span>置信度</span>
+                    </p>
+                    <p class="left_item_content">
+                      <!-- 85 -->
+                      {{selectItem.alert_description.confidence}}
+                    </p>
+                  </div>
+                  <div class="base_left_item">
+                    <p class="left_item_title">
+                      <img src="@/assets/images/emerge/base/base5.png"
+                           alt="">
+                      <span>首次发现时间</span>
+                    </p>
+                    <p class="left_item_content">
+                      <!-- 2017-03-23 -->
+                      {{selectItem.alert_description.first_seen | time}}
+                    </p>
+                  </div>
+                  <div class="base_left_item">
+                    <p class="left_item_title">
+                      <img src="@/assets/images/emerge/base/base6.png"
+                           alt="">
+                      <span>最近发现时间</span>
+                    </p>
+                    <p class="left_item_content">
+                      {{selectItem.alert_description.last_seen | time}}
+                      <!-- 2019-04-16 -->
+                    </p>
+                  </div>
                 </div>
 
-                <div class="base_left_item">
-                  <p class="left_item_title">
-                    <img src="@/assets/images/emerge/base/base3.png"
-                         alt="">
-                    <span>威胁类型</span>
-                  </p>
-                  <p class="left_item_content">
-                    <!-- 恶意IP -->
-                  </p>
-                </div>
-
-                <div class="base_left_item">
-                  <p class="left_item_title">
-                    <img src="@/assets/images/emerge/base/base4.png"
-                         alt="">
-                    <span>置信度</span>
-                  </p>
-                  <p class="left_item_content">
-                    <!-- 85 -->
-                  </p>
-                </div>
-
-                <div class="base_left_item">
-                  <p class="left_item_title">
-                    <img src="@/assets/images/emerge/base/base5.png"
-                         alt="">
-                    <span>首次发现时间</span>
-                  </p>
-                  <p class="left_item_content">
-                    <!-- 2017-03-23 -->
-                  </p>
-                </div>
-
-                <div class="base_left_item">
-                  <p class="left_item_title">
-                    <img src="@/assets/images/emerge/base/base6.png"
-                         alt="">
-                    <span>最近发现时间</span>
-                  </p>
-                  <p class="left_item_content">
-                    <!-- 2019-04-16 -->
-                  </p>
-                </div>
               </div>
             </el-tab-pane>
             <el-tab-pane label="IP_whois信息"
@@ -177,14 +185,22 @@
                          class="tabs-item"
                          name="3">
               <div class="base_box">
-                关联域名
+                <p class="left_item_content"
+                   v-for="item in selectItem.info_list"
+                   v-if="item.name =='相关联域名'">
+                  {{selectItem.alert_description.domains}}
+                </p>
               </div>
             </el-tab-pane>
             <el-tab-pane label="关联文件"
                          class="tabs-item"
                          name="4">
               <div class="base_box">
-                关联文件
+                <p class="left_item_content"
+                   v-for="item in selectItem.sample_list"
+                   v-if="item.name=='相关联恶意文件'">
+                  {{item.value}}
+                </p>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -273,112 +289,84 @@ export default {
     },
     // 下载payload
     download (value, item) {
+      console.log(item);
+      console.log(value);
       if (value.value == "点击下载" && value.name == "PayLoad信息") {
-        this.$axios.get('/yiiapi/site/check-auth-exist', {
-          params: {
-            pathInfo: 'yararule/download',
-          }
-        })
-          .then(response => {
-            var funDownload = function (content, filename) {
-              // 创建隐藏的可下载链接
-              var eleLink = document.createElement("a");
-              eleLink.download = filename;
-              eleLink.style.display = "none";
-              // 字符内容转变成blob地址
-              var blob = new Blob([content]);
-              eleLink.href = URL.createObjectURL(blob);
-              // 触发点击
-              document.body.appendChild(eleLink);
-              eleLink.click();
-              // 然后移除
-              document.body.removeChild(eleLink);
-            };
-            funDownload(item.network_event.payload, "payload.dat");
-          })
-          .catch(error => {
-            console.log(error);
-          })
+        var funDownload = function (content, filename) {
+          // 创建隐藏的可下载链接
+          var eleLink = document.createElement("a");
+          eleLink.download = filename;
+          eleLink.style.display = "none";
+          // 字符内容转变成blob地址
+          var blob = new Blob([content]);
+          eleLink.href = URL.createObjectURL(blob);
+          // 触发点击
+          document.body.appendChild(eleLink);
+          eleLink.click();
+          // 然后移除
+          document.body.removeChild(eleLink);
+        };
+        funDownload(item.network_event.payload, "payload.dat");
 
       }
       if (value.value == "点击下载" && value.name == '文件下载') {
-        this.$axios.get('/yiiapi/site/check-auth-exist', {
-          params: {
-            pathInfo: 'yararule/download',
-          }
-        })
-          .then(response => {
-            var window_open = ''
-            console.log(item);
-            console.log(value);
-            // horizontalthreat  横向威胁告警  lateral
-            // externalthreat  外部威胁告警  outside
-            // outreachthreat  外联威胁告警  outreath
-            switch (this.$route.query.type) {
-              case 'alert':
-                window_open = '/yiiapi/alert/get-file?md5='
-                break;
-              case 'asset':
-                window_open = '/yiiapi/asset/get-file?md5='
-                break;
-              case 'lateral':
-                window_open = '/yiiapi/horizontalthreat/get-file?md5='
-                break;
-              case 'outside':
-                window_open = '/yiiapi/externalthreat/get-file?md5='
-                break;
-              case 'outreath':
-                window_open = '/yiiapi/outreachthreat/get-file?md5='
-                break;
-              default:
-                break;
-            }
-            window.open(window_open + value.md5);
-          })
-          .catch(error => {
-            console.log(error);
-          })
+        var window_open = ''
+        console.log(item);
+        console.log(value);
+        // horizontalthreat  横向威胁告警  lateral
+        // externalthreat  外部威胁告警  outside
+        // outreachthreat  外联威胁告警  outreath
+        switch (this.$route.query.type) {
+          case 'alert':
+            window_open = '/yiiapi/alert/get-file?md5='
+            break;
+          case 'asset':
+            window_open = '/yiiapi/asset/get-file?md5='
+            break;
+          case 'lateral':
+            window_open = '/yiiapi/horizontalthreat/get-file?md5='
+            break;
+          case 'outside':
+            window_open = '/yiiapi/externalthreat/get-file?md5='
+            break;
+          case 'outreath':
+            window_open = '/yiiapi/outreachthreat/get-file?md5='
+            break;
+          default:
+            break;
+        }
+        window.open(window_open + value.md5);
       }
     },
     download_sandbox (value, item) {
       console.log(value);
       console.log(item);
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
-        params: {
-          pathInfo: 'yararule/download',
-        }
-      })
-        .then(response => {
-          var window_open = ''
-          console.log(item);
-          console.log(value);
-          // horizontalthreat  横向威胁告警  lateral
-          // externalthreat  外部威胁告警  outside
-          // outreachthreat  外联威胁告警  outreath
-          switch (this.$route.query.type) {
-            case 'alert':
-              window_open = '/yiiapi/alert/get-signature?md5='
-              break;
-            case 'asset':
-              window_open = '/yiiapi/asset/get-signature?md5='
-              break;
-            case 'lateral':
-              window_open = '/yiiapi/horizontalthreat/get-signature?md5='
-              break;
-            case 'outside':
-              window_open = '/yiiapi/externalthreat/get-signature?md5='
-              break;
-            case 'outreath':
-              window_open = '/yiiapi/outreachthreat/get-signature?md5='
-              break;
-            default:
-              break;
-          }
-          window.open(window_open + value.MD5 + '&id=' + value.taskID);
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      var window_open = ''
+      console.log(item);
+      console.log(value);
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      switch (this.$route.query.type) {
+        case 'alert':
+          window_open = '/yiiapi/alert/GetSignature?md5='
+          break;
+        case 'asset':
+          window_open = '/yiiapi/asset/GetSignature?md5='
+          break;
+        case 'lateral':
+          window_open = '/yiiapi/horizontalthreat/GetSignature?md5='
+          break;
+        case 'outside':
+          window_open = '/yiiapi/externalthreat/GetSignature?md5='
+          break;
+        case 'outreath':
+          window_open = '/yiiapi/outreachthreat/GetSignature?md5='
+          break;
+        default:
+          break;
+      }
+      window.open(window_open + value.MD5 + '&id=' + value.taskID);
     },
 
 
@@ -386,7 +374,7 @@ export default {
   watch: {
     selectItem: function (val) {
       console.log('val监听1111:', val)
-      if (typeof (val.network_event) == 'string') {
+      if (typeof (val.network_event) == 'string' && val.network_event != '') {
         this.selectItem.network_event = JSON.parse(val.network_event)
       }
       if (typeof (val.alert_description) == 'string') {
@@ -830,593 +818,594 @@ export default {
       }
 
 
-      // 网络事件匹配
-      switch (this.selectItem.network_event.event_type) {
-        case 'fileinfo':
-          switch (this.selectItem.network_event.app_proto) {
-            case 'smtp':
-              if (this.selectItem.network_event.email.to.length > 1) {
-                this.selectItem.network_event.email_to = this.selectItem.network_event.email.to.join(
-                  ","
-                );
-              }
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'Mail_from',
-                value: this.selectItem.network_event.email.from
-              },
-              {
-                name: 'Recpt_to',
-                value: this.selectItem.network_event.email_to
-              },
-              {
-                name: 'Traffic',
-                value: 'smtp'
-              },
-              ]
-              break;
-            case 'http':
-              this.selectItem.event_list = [{
-                name: 'Method',
-                value: this.selectItem.network_event.http.http_method
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'URL',
-                value: this.selectItem.network_event.http.url
-              },
-              {
-                name: 'User Agent',
-                value: this.selectItem.network_event.http.http_user_agent
-              },
-              {
-                name: 'Referrer',
-                value: this.selectItem.network_event.http.http_refer
-              },
-              {
-                name: 'Traffic',
-                value: 'http'
-              },
-              ]
-              break;
-            case 'ftp-data':
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'User',
-                value: '-'
-              },
-              {
-                name: 'Traffic',
-                value: 'FTP'
-              },
-              ]
-              break;
-            case 'imap':
-              if (this.selectItem.network_event.email.to.length > 1) {
-                this.selectItem.network_event.email_to = this.selectItem.network_event.email.to.join(
-                  ","
-                );
-              }
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'Mail_from',
-                value: this.selectItem.network_event.email.from
-              },
-              {
-                name: 'Recpt_to',
-                value: this.selectItem.network_event.email_to
-              },
-              {
-                name: 'Traffic',
-                value: 'imap'
-              },
-              ]
-              break;
-            case 'pop3':
-              if (this.selectItem.network_event.email.to.length > 1) {
-                this.selectItem.network_event.email_to = this.selectItem.network_event.email.to.join(
-                  ","
-                );
-              }
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'Mail_from',
-                value: this.selectItem.network_event.email.from
-              },
-              {
-                name: 'Recpt_to',
-                value: this.selectItem.network_event.email_to
-              },
-              {
-                name: 'Traffic',
-                value: 'pop3'
-              },
-              ]
-              break;
-            case 'smb':
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'Domain',
-                value: '-'
-              },
-              {
-                name: 'User',
-                value: '-'
-              },
-              {
-                name: 'Traffic',
-                value: 'smb'
-              },
-              ]
-              break;
-            default:
-              if (!this.selectItem.network_event.app_proto) {
-                this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
-              } else if (this.selectItem.network_event.app_proto == 'failed') {
-                this.selectItem.network_event.app_proto = ''
-              }
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'Traffic',
-                value: this.selectItem.network_event.app_proto
-              },
-              ]
-              break;
-          }
-          break;
-        case 'flow':
-          switch (this.selectItem.network_event.app_proto) {
-            case 'ftp':
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'User',
-                value: this.selectItem.network_event.user
-              },
-              {
-                name: 'Traffic',
-                value: this.selectItem.network_event.app_proto
-              },
-              ]
-              break;
-            default:
-              if (!this.selectItem.network_event.app_proto) {
-                this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
-              } else if (this.selectItem.network_event.app_proto == 'failed') {
-                this.selectItem.network_event.app_proto = ''
-              }
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'Traffic',
-                value: this.selectItem.network_event.app_proto
-              },
-              ]
-              break;
-          }
-          break
-        case 'smb':
-          this.selectItem.event_list = [{
-            name: 'Time',
-            value: this.selectItem.network_event.timestamp
-          },
-          {
-            name: 'Source IP',
-            value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-          },
-          {
-            name: 'Destination IP',
-            value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-          },
-          {
-            name: 'Domain',
-            value: '-'
-          },
-          {
-            name: 'User',
-            value: '-'
-          },
-          {
-            name: 'Traffic',
-            value: this.selectItem.network_event.event_type
-          },
-          ]
-          break
-        case 'ssh':
-          this.selectItem.event_list = [{
-            name: 'Time',
-            value: this.selectItem.network_event.timestamp
-          },
-          {
-            name: 'Source IP',
-            value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-          },
-          {
-            name: 'Destination IP',
-            value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-          },
-          {
-            name: 'Tool',
-            value: this.selectItem.network_event.ssh.client.software_version
-          },
-          {
-            name: 'User',
-            value: '-'
-          },
-          {
-            name: 'Traffic',
-            value: this.selectItem.network_event.event_type
-          },
-          ]
-          break
-        case 'tls':
-          if (this.selectItem.network_event.tls.subject) {
-            this.selectItem.network_event.tls.Authorizing = this.selectItem.network_event.tls.subject.substring(
-              this.selectItem.network_event.tls.subject.indexOf("CN=") + 3
-            );
-          }
-          this.selectItem.event_list = [{
-            name: 'Time',
-            value: this.selectItem.network_event.timestamp
-          },
-          {
-            name: 'Source IP',
-            value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-          },
-          {
-            name: 'Destination IP',
-            value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-          },
-          {
-            name: 'URL',
-            value: this.selectItem.network_event.tls.sni
-          },
-          {
-            name: 'Issuerdn',
-            value: this.selectItem.network_event.tls.issuerdn
-          },
-          {
-            name: 'Authorizing',
-            value: this.selectItem.network_event.tls.Authorizing
-          },
-          {
-            name: 'Notafter',
-            value: this.selectItem.network_event.tls.notafter
-          },
-          {
-            name: 'Traffic',
-            value: 'https'
-          },
-          ]
-          break
-        case 'dns':
-          if (this.selectItem.network_event.dns.grouped) {
-            this.selectItem.network_event.dns.HostAddr = this.selectItem.network_event.dns.grouped.join(
-              ","
-            );
-          }
-          if (this.selectItem.network_event.dns.answers) {
-            this.selectItem.network_event.dns.answers.forEach(element => {
-              if (this.selectItem.network_event.dns.rrname == element.rrname) {
-                this.selectItem.network_event.dns.ttl = element.ttl;
-                this.selectItem.network_event.dns.rrtype = element.rrtype;
-              }
-            });
-          }
-          this.selectItem.event_list = [{
-            name: 'Time',
-            value: this.selectItem.network_event.timestamp
-          },
-          {
-            name: 'Source IP',
-            value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-          },
-          {
-            name: 'Destination IP',
-            value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-          },
-          {
-            name: 'SectianType',
-            value: this.selectItem.network_event.dns.rrtype
-          },
-          {
-            name: 'Domain',
-            value: this.selectItem.network_event.dns.rrname
-          },
-          {
-            name: 'TTL',
-            value: this.selectItem.network_event.dns.HostAddr
-          },
-          {
-            name: 'Traffic',
-            value: 'dns'
-          },
-          ]
-          break
-        case 'krb5':
-          this.selectItem.event_list = [{
-            name: 'Time',
-            value: this.selectItem.network_event.timestamp
-          },
-          {
-            name: 'Source IP',
-            value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-          },
-          {
-            name: 'Destination IP',
-            value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-          },
-          {
-            name: 'Msg_type',
-            value: this.selectItem.network_event.krb5.msg_type
-          },
-          {
-            name: 'Cname',
-            value: this.selectItem.network_event.krb5.cname
-          },
-          {
-            name: 'Realm',
-            value: this.selectItem.network_event.krb5.realm
-          },
-          {
-            name: 'Sname',
-            value: this.selectItem.network_event.krb5.sname
-          },
-          {
-            name: 'Traffic',
-            value: 'krb5'
-          },
-          ]
-          break
-        case 'http':
-          this.selectItem.event_list = [{
-            name: 'Method',
-            value: this.selectItem.network_event.http.http_method
-          },
-          {
-            name: 'Source IP',
-            value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-          },
-          {
-            name: 'Destination IP',
-            value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-          },
-          {
-            name: 'URL',
-            value: this.selectItem.network_event.http.url
-          },
-          {
-            name: 'User Agent',
-            value: this.selectItem.network_event.http.http_user_agent
-          },
-          {
-            name: 'Referrer',
-            value: this.selectItem.network_event.http.http_refer
-          },
-          {
-            name: 'Traffic',
-            value: 'http'
-          },
-          ]
-          break
-        case 'alert':
-          switch (this.selectItem.network_event.app_proto) {
-            case 'tls':
-              if (this.selectItem.network_event.tls.subject) {
-                this.selectItem.network_event.tls.Authorizing = this.selectItem.network_event.tls.subject.substring(
-                  this.selectItem.network_event.tls.subject.indexOf("CN=") + 3
-                );
-              }
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'URL',
-                value: this.selectItem.network_event.tls.sni
-              },
-              {
-                name: 'Issuerdn',
-                value: this.selectItem.network_event.tls.issuerdn
-              },
-              {
-                name: 'Authorizing',
-                value: this.selectItem.network_event.tls.Authorizing
-              },
-              {
-                name: 'Notafter',
-                value: this.selectItem.network_event.tls.notafter
-              },
-              {
-                name: 'Traffic',
-                value: 'https'
-              },
-              ]
-              break;
-            case 'http':
-              this.selectItem.event_list = [{
-                name: 'Method',
-                value: this.selectItem.network_event.http.http_method
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'URL',
-                value: this.selectItem.network_event.http.url
-              },
-              {
-                name: 'User Agent',
-                value: this.selectItem.network_event.http.http_user_agent
-              },
-              {
-                name: 'Referrer',
-                value: this.selectItem.network_event.http.http_refer
-              },
-              {
-                name: 'Traffic',
-                value: 'http'
-              },
-              ]
-              break;
-            default:
-              if (!this.selectItem.network_event.app_proto) {
-                this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
-              } else if (this.selectItem.network_event.app_proto == 'failed') {
-                this.selectItem.network_event.app_proto = ''
-              }
-              this.selectItem.event_list = [{
-                name: 'Time',
-                value: this.selectItem.network_event.timestamp
-              },
-              {
-                name: 'Source IP',
-                value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-              },
-              {
-                name: 'Destination IP',
-                value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-              },
-              {
-                name: 'Traffic',
-                value: this.selectItem.network_event.app_proto
-              },
-              ]
-              break;
-          }
-        default:
-          if (!this.selectItem.network_event.app_proto) {
-            this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
-          } else if (this.selectItem.network_event.app_proto == 'failed') {
-            this.selectItem.network_event.app_proto = ''
-          }
-          this.selectItem.event_list = [{
-            name: 'Time',
-            value: this.selectItem.network_event.timestamp
-          },
-          {
-            name: 'Source IP',
-            value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-          },
-          {
-            name: 'Destination IP',
-            value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-          },
-          {
-            name: 'Traffic',
-            value: this.selectItem.network_event.app_proto
-          },
-          ]
-          break;
-          break;
+      if (this.selectItem.detect_engine != "LOGDF") {
+        // 网络事件匹配
+        switch (this.selectItem.network_event.event_type) {
+          case 'fileinfo':
+            switch (this.selectItem.network_event.app_proto) {
+              case 'smtp':
+                if (this.selectItem.network_event.email.to.length > 1) {
+                  this.selectItem.network_event.email_to = this.selectItem.network_event.email.to.join(
+                    ","
+                  );
+                }
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'Mail_from',
+                  value: this.selectItem.network_event.email.from
+                },
+                {
+                  name: 'Recpt_to',
+                  value: this.selectItem.network_event.email_to
+                },
+                {
+                  name: 'Traffic',
+                  value: 'smtp'
+                },
+                ]
+                break;
+              case 'http':
+                this.selectItem.event_list = [{
+                  name: 'Method',
+                  value: this.selectItem.network_event.http.http_method
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'URL',
+                  value: this.selectItem.network_event.http.url
+                },
+                {
+                  name: 'User Agent',
+                  value: this.selectItem.network_event.http.http_user_agent
+                },
+                {
+                  name: 'Referrer',
+                  value: this.selectItem.network_event.http.http_refer
+                },
+                {
+                  name: 'Traffic',
+                  value: 'http'
+                },
+                ]
+                break;
+              case 'ftp-data':
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'User',
+                  value: '-'
+                },
+                {
+                  name: 'Traffic',
+                  value: 'FTP'
+                },
+                ]
+                break;
+              case 'imap':
+                if (this.selectItem.network_event.email.to.length > 1) {
+                  this.selectItem.network_event.email_to = this.selectItem.network_event.email.to.join(
+                    ","
+                  );
+                }
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'Mail_from',
+                  value: this.selectItem.network_event.email.from
+                },
+                {
+                  name: 'Recpt_to',
+                  value: this.selectItem.network_event.email_to
+                },
+                {
+                  name: 'Traffic',
+                  value: 'imap'
+                },
+                ]
+                break;
+              case 'pop3':
+                if (this.selectItem.network_event.email.to.length > 1) {
+                  this.selectItem.network_event.email_to = this.selectItem.network_event.email.to.join(
+                    ","
+                  );
+                }
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'Mail_from',
+                  value: this.selectItem.network_event.email.from
+                },
+                {
+                  name: 'Recpt_to',
+                  value: this.selectItem.network_event.email_to
+                },
+                {
+                  name: 'Traffic',
+                  value: 'pop3'
+                },
+                ]
+                break;
+              case 'smb':
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'Domain',
+                  value: '-'
+                },
+                {
+                  name: 'User',
+                  value: '-'
+                },
+                {
+                  name: 'Traffic',
+                  value: 'smb'
+                },
+                ]
+                break;
+              default:
+                if (!this.selectItem.network_event.app_proto) {
+                  this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
+                } else if (this.selectItem.network_event.app_proto == 'failed') {
+                  this.selectItem.network_event.app_proto = ''
+                }
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'Traffic',
+                  value: this.selectItem.network_event.app_proto
+                },
+                ]
+                break;
+            }
+            break;
+          case 'flow':
+            switch (this.selectItem.network_event.app_proto) {
+              case 'ftp':
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'User',
+                  value: this.selectItem.network_event.user
+                },
+                {
+                  name: 'Traffic',
+                  value: this.selectItem.network_event.app_proto
+                },
+                ]
+                break;
+              default:
+                if (!this.selectItem.network_event.app_proto) {
+                  this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
+                } else if (this.selectItem.network_event.app_proto == 'failed') {
+                  this.selectItem.network_event.app_proto = ''
+                }
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'Traffic',
+                  value: this.selectItem.network_event.app_proto
+                },
+                ]
+                break;
+            }
+            break
+          case 'smb':
+            this.selectItem.event_list = [{
+              name: 'Time',
+              value: this.selectItem.network_event.timestamp
+            },
+            {
+              name: 'Source IP',
+              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            },
+            {
+              name: 'Destination IP',
+              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            },
+            {
+              name: 'Domain',
+              value: '-'
+            },
+            {
+              name: 'User',
+              value: '-'
+            },
+            {
+              name: 'Traffic',
+              value: this.selectItem.network_event.event_type
+            },
+            ]
+            break
+          case 'ssh':
+            this.selectItem.event_list = [{
+              name: 'Time',
+              value: this.selectItem.network_event.timestamp
+            },
+            {
+              name: 'Source IP',
+              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            },
+            {
+              name: 'Destination IP',
+              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            },
+            {
+              name: 'Tool',
+              value: this.selectItem.network_event.ssh.client.software_version
+            },
+            {
+              name: 'User',
+              value: '-'
+            },
+            {
+              name: 'Traffic',
+              value: this.selectItem.network_event.event_type
+            },
+            ]
+            break
+          case 'tls':
+            if (this.selectItem.network_event.tls.subject) {
+              this.selectItem.network_event.tls.Authorizing = this.selectItem.network_event.tls.subject.substring(
+                this.selectItem.network_event.tls.subject.indexOf("CN=") + 3
+              );
+            }
+            this.selectItem.event_list = [{
+              name: 'Time',
+              value: this.selectItem.network_event.timestamp
+            },
+            {
+              name: 'Source IP',
+              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            },
+            {
+              name: 'Destination IP',
+              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            },
+            {
+              name: 'URL',
+              value: this.selectItem.network_event.tls.sni
+            },
+            {
+              name: 'Issuerdn',
+              value: this.selectItem.network_event.tls.issuerdn
+            },
+            {
+              name: 'Authorizing',
+              value: this.selectItem.network_event.tls.Authorizing
+            },
+            {
+              name: 'Notafter',
+              value: this.selectItem.network_event.tls.notafter
+            },
+            {
+              name: 'Traffic',
+              value: 'https'
+            },
+            ]
+            break
+          case 'dns':
+            if (this.selectItem.network_event.dns.grouped) {
+              this.selectItem.network_event.dns.HostAddr = this.selectItem.network_event.dns.grouped.join(
+                ","
+              );
+            }
+            if (this.selectItem.network_event.dns.answers) {
+              this.selectItem.network_event.dns.answers.forEach(element => {
+                if (this.selectItem.network_event.dns.rrname == element.rrname) {
+                  this.selectItem.network_event.dns.ttl = element.ttl;
+                  this.selectItem.network_event.dns.rrtype = element.rrtype;
+                }
+              });
+            }
+            this.selectItem.event_list = [{
+              name: 'Time',
+              value: this.selectItem.network_event.timestamp
+            },
+            {
+              name: 'Source IP',
+              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            },
+            {
+              name: 'Destination IP',
+              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            },
+            {
+              name: 'SectianType',
+              value: this.selectItem.network_event.dns.rrtype
+            },
+            {
+              name: 'Domain',
+              value: this.selectItem.network_event.dns.rrname
+            },
+            {
+              name: 'TTL',
+              value: this.selectItem.network_event.dns.HostAddr
+            },
+            {
+              name: 'Traffic',
+              value: 'dns'
+            },
+            ]
+            break
+          case 'krb5':
+            this.selectItem.event_list = [{
+              name: 'Time',
+              value: this.selectItem.network_event.timestamp
+            },
+            {
+              name: 'Source IP',
+              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            },
+            {
+              name: 'Destination IP',
+              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            },
+            {
+              name: 'Msg_type',
+              value: this.selectItem.network_event.krb5.msg_type
+            },
+            {
+              name: 'Cname',
+              value: this.selectItem.network_event.krb5.cname
+            },
+            {
+              name: 'Realm',
+              value: this.selectItem.network_event.krb5.realm
+            },
+            {
+              name: 'Sname',
+              value: this.selectItem.network_event.krb5.sname
+            },
+            {
+              name: 'Traffic',
+              value: 'krb5'
+            },
+            ]
+            break
+          case 'http':
+            this.selectItem.event_list = [{
+              name: 'Method',
+              value: this.selectItem.network_event.http.http_method
+            },
+            {
+              name: 'Source IP',
+              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            },
+            {
+              name: 'Destination IP',
+              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            },
+            {
+              name: 'URL',
+              value: this.selectItem.network_event.http.url
+            },
+            {
+              name: 'User Agent',
+              value: this.selectItem.network_event.http.http_user_agent
+            },
+            {
+              name: 'Referrer',
+              value: this.selectItem.network_event.http.http_refer
+            },
+            {
+              name: 'Traffic',
+              value: 'http'
+            },
+            ]
+            break
+          case 'alert':
+            switch (this.selectItem.network_event.app_proto) {
+              case 'tls':
+                if (this.selectItem.network_event.tls.subject) {
+                  this.selectItem.network_event.tls.Authorizing = this.selectItem.network_event.tls.subject.substring(
+                    this.selectItem.network_event.tls.subject.indexOf("CN=") + 3
+                  );
+                }
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'URL',
+                  value: this.selectItem.network_event.tls.sni
+                },
+                {
+                  name: 'Issuerdn',
+                  value: this.selectItem.network_event.tls.issuerdn
+                },
+                {
+                  name: 'Authorizing',
+                  value: this.selectItem.network_event.tls.Authorizing
+                },
+                {
+                  name: 'Notafter',
+                  value: this.selectItem.network_event.tls.notafter
+                },
+                {
+                  name: 'Traffic',
+                  value: 'https'
+                },
+                ]
+                break;
+              case 'http':
+                this.selectItem.event_list = [{
+                  name: 'Method',
+                  value: this.selectItem.network_event.http.http_method
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'URL',
+                  value: this.selectItem.network_event.http.url
+                },
+                {
+                  name: 'User Agent',
+                  value: this.selectItem.network_event.http.http_user_agent
+                },
+                {
+                  name: 'Referrer',
+                  value: this.selectItem.network_event.http.http_refer
+                },
+                {
+                  name: 'Traffic',
+                  value: 'http'
+                },
+                ]
+                break;
+              default:
+                if (!this.selectItem.network_event.app_proto) {
+                  this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
+                } else if (this.selectItem.network_event.app_proto == 'failed') {
+                  this.selectItem.network_event.app_proto = ''
+                }
+                this.selectItem.event_list = [{
+                  name: 'Time',
+                  value: this.selectItem.network_event.timestamp
+                },
+                {
+                  name: 'Source IP',
+                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                },
+                {
+                  name: 'Destination IP',
+                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                },
+                {
+                  name: 'Traffic',
+                  value: this.selectItem.network_event.app_proto
+                },
+                ]
+                break;
+            }
+          default:
+            if (!this.selectItem.network_event.app_proto) {
+              this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
+            } else if (this.selectItem.network_event.app_proto == 'failed') {
+              this.selectItem.network_event.app_proto = ''
+            }
+            this.selectItem.event_list = [{
+              name: 'Time',
+              value: this.selectItem.network_event.timestamp
+            },
+            {
+              name: 'Source IP',
+              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            },
+            {
+              name: 'Destination IP',
+              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            },
+            {
+              name: 'Traffic',
+              value: this.selectItem.network_event.app_proto
+            },
+            ]
+            break;
+            break;
+        }
       }
-
     }
   },
   computed: {

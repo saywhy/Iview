@@ -341,7 +341,7 @@ export default {
   methods: {
     // 测试密码过期
     check_passwd () {
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
         .then((resp) => {
           let {
             status,
@@ -360,45 +360,45 @@ export default {
         })
     },
     // 修改密码
-    edit_pswd () {
-      this.$axios.get('/yiiapi/site/get-self-password-reset-token')
-        .then(response => {
-          let { status, data } = response.data;
-          console.log(status);
-          console.log(data.data.token);
-          let token = data.data.token
+    // edit_pswd () {
+    //   this.$axios.get('/yiiapi/site/get-self-password-reset-token')
+    //     .then(response => {
+    //       let { status, data } = response.data;
+    //       console.log(status);
+    //       console.log(data.data.token);
+    //       let token = data.data.token
 
-          // site/reset-self-password
-          this.$axios.post('/yiiapi/site/reset-self-password?token=' + token, {
-            ResetPasswordForm: {
-              password: "Hoohoolab*1234",
-              mobile: "151111211111",
-              mail_addr: "12312312@qq.com",
-              department: '123'
-            },
-            old_password: "Hoohoolab*123"
-          })
-            .then(response => {
-              let { status, data } = response.data;
-              console.log(status);
-              console.log(data);
-
-
-
-            })
-            .catch(error => {
-              console.log(error);
-            })
+    //       // site/reset-self-password
+    //       this.$axios.post('/yiiapi/site/reset-self-password?token=' + token, {
+    //         ResetPasswordForm: {
+    //           password: "Hoohoolab*1234",
+    //           mobile: "151111211111",
+    //           mail_addr: "12312312@qq.com",
+    //           department: '123'
+    //         },
+    //         old_password: "Hoohoolab*123"
+    //       })
+    //         .then(response => {
+    //           let { status, data } = response.data;
+    //           console.log(status);
+    //           console.log(data);
 
 
 
+    //         })
+    //         .catch(error => {
+    //           console.log(error);
+    //         })
 
 
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    },
+
+
+
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     })
+    // },
     get_menu () {
       this.$axios.get('/yiiapi/site/menu')
         .then(response => {
@@ -583,12 +583,16 @@ export default {
         );
         return false
       }
-      this.$axios.get('/yiiapi/user/GetPasswordResetToken/' + this.user_edit.id)
+      this.$axios.get('/yiiapi/user/GetPasswordResetToken', {
+        params: {
+          id: this.user_edit.id
+        }
+      })
         .then(response => {
           console.log(response.data);
           this.token_data = response.data.data
           localStorage.setItem("token", response.data.data.token);
-          this.$axios.put('/yiiapi/users/' + localStorage.getItem("token"), {
+          this.$axios.put('/yiiapi/users/0?token=' + localStorage.getItem("token"), {
             ResetPasswordForm: {
               password: this.user_edit.password,
               allow_ip: this.user_edit.allow_ip,

@@ -13,88 +13,55 @@
                     align="center"
                     border
                     style="width: 100%"
-                    :data="alert.new"
+                    :data="table_new.data"
                     tooltip-effect="dark">
-            <el-table-column prop="time"
-                             label="告警时间"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="日志来源"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="日志类型"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="事件类型"
+            <el-table-column prop="alert_time"
+                             label="时间"
                              align="center"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
-                             label="方向"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="方向"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="方向"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="方向"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="方向"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="方向"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="源账号"
+            <el-table-column prop="category"
+                             label="告警类型"
                              align="center"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
-                             label="源账号"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="time"
-                             label="源账号"
+            <el-table-column prop="indicator"
+                             label="威胁指标"
                              align="center"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
-                             label="源账号"
+            <el-table-column label="源地址"
                              align="center"
-                             width="150"
                              show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{JSON.parse(scope.row.src_ip).join(',')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="目的地址"
+                             align="center"
+                             show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{JSON.parse(scope.row.dest_ip).join(',')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="application"
+                             label="应用"
+                             align="center"
+                             show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="威胁等级">
+              <template slot-scope="scope">
+                <span class="btn_alert_background"
+                      :class="{'high_background':scope.row.degree =='高','mid_background':scope.row.degree =='中','low_background':scope.row.degree =='低'}">
+                  {{ scope.row.degree | degree_sino }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="状态"
+                             align="center"
+                             width="80"
+                             show-overflow-tooltip>
+              <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
             </el-table-column>
           </el-table>
 
@@ -107,7 +74,26 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-
+      <el-pagination class="handle-pagination"
+                     v-if="activeName=='2'"
+                     @size-change="handleSizeChange_old"
+                     @current-change="handleCurrentChange_old"
+                     :page-sizes="[10,20,50,100]"
+                     :page-size="table_old.rows*1"
+                     :current-page="table_old.pageNow*1"
+                     :total="table_old.count*1"
+                     layout="total, sizes, prev, pager, next">
+      </el-pagination>
+      <el-pagination class="handle-pagination"
+                     v-if="activeName=='1'"
+                     @size-change="handleSizeChange_new"
+                     @current-change="handleCurrentChange_new"
+                     :page-sizes="[10,20,50,100]"
+                     :page-size="table_new.rows*1"
+                     :current-page="table_new.pageNow*1"
+                     :total="table_new.count*1"
+                     layout="total, sizes, prev, pager, next">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -121,11 +107,116 @@ export default {
         new: [
           { time: '2019.11.08 15:33:24' }
         ]
-      }
+      },
+      table_old: {
+        pageNow: '1',
+        rows: '10',
+        count: '0'
+      },
+      table_new: {
+        pageNow: '1',
+        rows: '10',
+        count: '0'
+      },
+
+
+    }
+  },
+  props: {
+    selectIndicator: {
+      type: String,
+      default: () => { }
+    }
+  },
+  mounted () {
+
+
+  },
+
+  watch: {
+    selectIndicator: function (val) {
+      console.log('val监听selectIndicator:', val)
+      this.$axios.get('/yiiapi/alert/GetSameIndicatorAlert', {
+        params: {
+          page: this.table_old.pageNow,
+          rows: this.table_old.rows,
+          indicator: val,
+          is_deal: '2'
+        }
+      }).then(resp => {
+        console.log(resp);
+        let { status, data } = resp.data;
+        this.table_old = data
+      })
+      this.$axios.get('/yiiapi/alert/GetSameIndicatorAlert', {
+        params: {
+          page: this.table_old.pageNow,
+          rows: this.table_old.rows,
+          indicator: val,
+          is_deal: '0'
+        }
+      }).then(resp => {
+        console.log(resp);
+        let { status, data } = resp.data;
+        this.table_new = data
+      })
+        .catch(error => {
+          console.log(error);
+        })
     }
   },
   methods: {
-    handleClick () { }
+    handleClick () {
+
+    },
+    //每頁多少條切換
+    handleSizeChange_old (val) {
+      this.table_old.rows = val;
+      this.table_old.pageNow = 1;
+      this.get_alert_list('2', '1', val);
+    },
+    //頁數點擊切換
+    handleCurrentChange_old (val) {
+      this.table_old.pageNow = val;
+      this.get_alert_list('2', val, this.table_old.rows);
+    },
+    //每頁多少條切換
+    handleSizeChange_new (val) {
+      this.table_new.rows = val;
+      this.table_new.pageNow = 1;
+      this.get_alert_list('0', '1', val);
+    },
+    //頁數點擊切換
+    handleCurrentChange_new (val) {
+      this.table_new.pageNow = val;
+      this.get_alert_list('0', val, this.table_new.rows);
+    },
+    get_alert_list (is_deal, page, rows) {
+      this.$axios.get('/yiiapi/alert/GetSameIndicatorAlert', {
+        params: {
+          page: page,
+          rows: rows,
+          indicator: this.selectIndicator,
+          is_deal: is_deal
+        }
+      }).then(resp => {
+        console.log(resp);
+        let { status, data } = resp.data;
+        switch (is_deal) {
+          case '0':
+            this.table_new = data
+            break;
+          case '2':
+            this.table_old = data
+            break;
+          default:
+            break;
+        }
+      })
+        .catch(error => {
+          console.log(error);
+        })
+    }
   },
   computed: {}
 }

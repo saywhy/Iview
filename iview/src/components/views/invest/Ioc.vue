@@ -219,7 +219,7 @@ export default {
     },
     // 测试密码过期
     check_passwd () {
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
         .then((resp) => {
           let {
             status,
@@ -351,7 +351,7 @@ export default {
     },
     // 下载模板
     download_template () {
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
         .then((resp) => {
           let {
             status,

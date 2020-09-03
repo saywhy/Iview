@@ -62,48 +62,70 @@
           <div class="content_item">
             <span class="item_title">源地址：</span>
             <div class="item_right src_bg"
-                 :class="more?'show_more_list':''">
-              <el-dropdown @command="change_state_src(item)"
-                           v-for="item in detail_main.src_ip_list"
-                           :key="item"
-                           trigger="click"
-                           class="src_dropdown_box"
-                           placement='bottom-start'
-                           size='148'>
-                <el-button class="change_src_btn">
-                  <span>{{item}}</span>
-                  <i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown"
-                                  style="width200px;"
-                                  class="dropdown_ul_box_detail">
-                  <el-dropdown-item command='1'
-                                    class="select_item">威胁追查</el-dropdown-item>
-                  <el-dropdown-item command="2"
-                                    class="select_item">添加到外部动态列表</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+                 :class="more.src?'show_more_list':''">
+              <div>
+                <el-menu class="el_menu_src"
+                         mode="horizontal"
+                         @select="handleSelect_src">
+                  <el-submenu :index="index+'0'"
+                              :key="index"
+                              v-for="(item,index) in detail_main.src_ip_list">
+                    <template slot="title">{{item}}</template>
+                    <el-submenu :index="index+'1-1'">
+                      <template slot="title">威胁追查</template>
+                      <el-menu-item :index="index+'1'"
+                                    @click="select_src_name(item)">网络视角</el-menu-item>
+                      <el-menu-item :index="index+'2'"
+                                    @click="select_src_name(item)">端点视角</el-menu-item>
+                    </el-submenu>
+                    <el-menu-item :index="index+'3'"
+                                  @click="select_src_name(item)">添加到外部动态列表</el-menu-item>
+                    <el-menu-item :index="index+'4'"
+                                  @click="select_src_name(item)">IP段详情</el-menu-item>
+                  </el-submenu>
+                </el-menu>
+              </div>
             </div>
             <div class="more_box">
-              <span @click="show_more_active">{{more?'收起':'展开'}}</span>
+              <span @click="show_more_active_src">{{more.src?'收起':'展开'}}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">目的地址：</span>
-            <div class="item_right">
+            <div class="item_right src_bg"
+                 :class="more.des?'show_more_list':''">
               <div>
-                <span v-for="item in detail_main.dest_ip_list"> {{item}}</span>
-                <!-- <el-cascader :options="options"
-                             v-model="selectedOptions"
-                             :show-all-levels="false"></el-cascader> -->
+                <el-menu class="el_menu_src"
+                         mode="horizontal"
+                         @select="handleSelect_des">
+                  <el-submenu :index="index+'0'"
+                              :key="index"
+                              v-for="(item,index) in detail_main.dest_ip_list">
+                    <template slot="title">{{item}}</template>
+                    <el-submenu :index="index+'1-1'">
+                      <template slot="title">威胁追查</template>
+                      <el-menu-item :index="index+'1'"
+                                    @click="select_des_name(item)">网络视角</el-menu-item>
+                      <el-menu-item :index="index+'2'"
+                                    @click="select_des_name(item)">端点视角</el-menu-item>
+                    </el-submenu>
+                    <el-menu-item :index="index+'3'"
+                                  @click="select_des_name(item)">添加到外部动态列表</el-menu-item>
+                    <el-menu-item :index="index+'4'"
+                                  @click="select_des_name(item)">IP段详情</el-menu-item>
+                  </el-submenu>
+                </el-menu>
               </div>
+            </div>
+            <div class="more_box">
+              <span @click="show_more_active_des">{{more.des?'收起':'展开'}}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">关联资产名：</span>
             <div class="item_right text_color">
               <span @click="open_assets_info"
-                    v-for="item in detail_main.asset_name_list ">{{item}}</span>
+                    v-for="item in detail_main.asset_name_list">{{item}}</span>
             </div>
           </div>
           <div class="content_item">
@@ -169,7 +191,12 @@
           <div class="content_item">
             <span class="item_title">标签：</span>
             <div class="item_right">
-              <span v-for="item in detail_main.json_label">{{item}}</span>
+              <ul>
+                <li class="tag_btn_box"
+                    v-for="item in detail_main.label_obj">
+                  <span class="tag_btn">{{item}}</span>
+                </li>
+              </ul>
             </div>
           </div>
           <div class="content_item">
@@ -193,13 +220,15 @@
           <div class="content_item">
             <span class="item_title">工单名称：</span>
             <div class="item_right ">
-              <span>告警1</span>
+              <span class="item_li_content Goto_workorder"
+                    @click="Goto_workorder"
+                    v-if="detail_main.work_name!=''">{{detail_main.work_name}}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">工单状态：</span>
             <div class="item_right ">
-              <span>未关联工单</span>
+              <span class="item_li_content">{{detail_main.work_order_status}}</span>
             </div>
           </div>
         </div>
@@ -365,6 +394,117 @@
         </el-table>
       </div>
     </el-dialog>
+    <!-- 编辑标签 -->
+    <el-dialog class="add_tag pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="edit_tag.pop">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_edit_tag_box"
+           class="closed_img"
+           alt="">
+      <div class="title">
+        <div class="mask"></div>
+        <span class="title_name">编辑标签</span>
+      </div>
+      <div class="content">
+        <div class="content_item">
+          <div class="item_addrs"
+               v-for="(item,index) in edit_tag.tag_list">
+            <el-input class="select_box"
+                      placeholder="请输入标签，最多可以设置5个标签"
+                      v-model="item.name"
+                      clearable>
+            </el-input>
+            <img src="@/assets/images/common/add.png"
+                 alt=""
+                 class="img_box"
+                 v-if="item.icon"
+                 @click="add_tag">
+            <img src="@/assets/images/common/del.png"
+                 alt=""
+                 class="img_box"
+                 @click="del_tag(item,index)"
+                 v-if="!item.icon">
+          </div>
+        </div>
+      </div>
+      <div class="btn_box">
+        <el-button @click="closed_edit_tag_box"
+                   class="cancel_btn">取消</el-button>
+        <el-button class="ok_btn"
+                   @click="edit_tag_true">确定</el-button>
+      </div>
+    </el-dialog>
+    <!-- ip段详情 -->
+    <el-dialog class="pop_assets_info pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="ipDes.pop">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_ipDes_info"
+           class="closed_img"
+           alt="">
+      <div class="title">
+        <div class="mask"></div>
+        <span class="title_name">IP段详情</span>
+      </div>
+      <div class="user_content">
+        <el-table class="reset_table"
+                  ref="multipleTable"
+                  align="center"
+                  border
+                  :data="ipDes.data"
+                  tooltip-effect="dark"
+                  style="width: 100%">
+          <el-table-column prop="name"
+                           align="center"
+                           label="IP段名称"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column label="IP地址段"
+                           align="center"
+                           show-overflow-tooltip>
+            <template slot-scope="scope">
+              <li v-for="item in scope.row.ip_segment"
+                  class="btn_tag_box">
+                <p>{{item}}</p>
+              </li>
+            </template>
+          </el-table-column>
+          <el-table-column prop="network_type"
+                           align="center"
+                           label="网段类型"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column label="标签"
+                           align="center"
+                           width="300">
+            <template slot-scope="scope">
+              <span class="btn_tag_box"
+                    v-for="item in scope.row.label">
+                <el-button type="primary"
+                           class="btn_tag">
+                  {{item}}
+                </el-button>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="person"
+                           align="center"
+                           label="责任人"
+                           width="100"
+                           show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column label="更新时间"
+                           align="center"
+                           width="180"
+                           show-overflow-tooltip>
+            <template slot-scope="scope">{{ scope.row.updated_at }}</template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -387,7 +527,12 @@ export default {
         }]
       }],
       selectedOptions: '',
-      more: false,
+      more: {
+        src: false,
+        src_name: '',
+        des_name: '',
+        des: false
+      },
       pop_user_info: false,
       pop_assets_info: false,
       user_info: [{
@@ -407,7 +552,18 @@ export default {
       //---------------------
       detail_list: [],
       detail_main: {},
-      detailArray: []
+      detailArray: [],
+      // 编辑标签
+      edit_tag: {
+        tag_list: [
+        ],
+        pop: false
+      },
+      // ip段详情
+      ipDes: {
+        pop: false,
+        data: []
+      }
     }
   },
   components: {
@@ -417,6 +573,138 @@ export default {
     detailTimeaxis
   },
   methods: {
+
+    activeIndex (item) {
+
+    },
+
+    // 原地址和目的地址相关-----------------------------------------
+    handleSelect_src (key, keyPath) {
+      console.log(key, keyPath);
+      switch (key.substr(key.length - 1, 1)) {
+        // IP段详情
+        case '4':
+          this.ipDes.pop = true
+          break;
+        // 威胁追查-网络视角
+        case '1':
+          break;
+        // 威胁追查-端点视角
+        case '2':
+          break;
+        // 添加到外部动态列表
+        case '3':
+          this.JoinExternalDynamics(this.more.src_name)
+          break;
+
+        default:
+          break;
+      }
+    },
+    //加入外部链接
+    JoinExternalDynamics (ip_addr) {
+      console.log(ip_addr);
+      this.$confirm('本地址会被加入外部动态列表，第三方设备读取后可以对本地址进行告警提示或者拦截。', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var join = ''
+        // horizontalthreat  横向威胁告警  lateral
+        // externalthreat  外部威胁告警  outside
+        // outreachthreat  外联威胁告警  outreath
+        switch (this.$route.query.type) {
+          case 'alert':
+            join = '/yiiapi/alert/JoinExternalDynamics'
+            break;
+          case 'asset':
+            join = '/yiiapi/asset/JoinExternalDynamics'
+            break;
+          case 'lateral':
+            join = '/yiiapi/horizontalthreat/JoinExternalDynamics'
+            break;
+          case 'outside':
+            join = '/yiiapi/externalthreat/JoinExternalDynamics'
+            break;
+          case 'outreath':
+            join = '/yiiapi/outreachthreat/JoinExternalDynamics'
+            break;
+          default:
+            break;
+        }
+        this.$axios.post(join, {
+          addr: ip_addr,
+          type: 1
+        })
+          .then(response => {
+            let { status, data } = response.data;
+            console.log(data);
+            if (status == 0) {
+              this.$message(
+                {
+                  message: '加入外部动态列表成功!',
+                  type: 'success',
+                }
+              );
+            } else {
+              this.$message(
+                {
+                  message: data.msg,
+                  type: 'error',
+                }
+              );
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        });
+      });
+    },
+    handleSelect_des (key, keyPath) {
+      console.log(key, keyPath);
+      switch (key.substr(key.length - 1, 1)) {
+        // IP段详情
+        case '4':
+          this.ipDes.pop = true
+          break;
+        // 威胁追查-网络视角
+        case '1':
+          break;
+        // 威胁追查-端点视角
+        case '2':
+          break;
+        // 添加到外部动态列表
+        case '3':
+          this.JoinExternalDynamics(this.more.des_name)
+          break;
+
+        default:
+          break;
+      }
+    },
+    select_src_name (item) {
+      console.log(item);
+      this.more.src_name = item
+    },
+    select_des_name (item) {
+      console.log(item);
+      this.more.des_name = item
+    },
+    show_more_active_src () {
+      this.more.src = !this.more.src
+    },
+    show_more_active_des () {
+      this.more.des = !this.more.des
+    },
+    // 关闭ip段详情弹出框
+    closed_ipDes_info () {
+      this.ipDes.pop = false
+    },
     // -----------------顶部数据--------------------
     // 状态变更
     change_state (item) {
@@ -515,11 +803,11 @@ export default {
     // 编辑标签
     edit_tag_box () {
       this.edit_tag.tag_list = [];
-      console.log(this.network_detail.label_obj);
-      if (this.network_detail.label_obj.length == 0) {
+      console.log(this.detail_main.label_obj);
+      if (this.detail_main.label_obj.length == 0) {
         this.edit_tag.tag_list.push({ name: '', icon: true })
       } else {
-        this.network_detail.label_obj.forEach(element => {
+        this.detail_main.label_obj.forEach(element => {
           var obj = {
             name: element,
             icon: false
@@ -530,6 +818,91 @@ export default {
       }
       this.edit_tag.pop = true
     },
+    edit_tag_true () {
+      console.log(this.edit_tag.tag_list);
+      // /alert/label-edit
+      var label_list = [];
+      this.edit_tag.tag_list.forEach(element => {
+        if (element.name != '') {
+          label_list.push(element.name)
+        }
+      });
+      var label = ''
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      switch (this.$route.query.type) {
+        case 'alert':
+          label = '/yiiapi/alert/LabelEdit'
+          break;
+        case 'asset':
+          label = '/yiiapi/asset/LabelEdit'
+          break;
+        case 'lateral':
+          label = '/yiiapi/horizontalthreat/LabelEdit'
+          break;
+        case 'outside':
+          label = '/yiiapi/externalthreat/LabelEdit'
+          break;
+        case 'outreath':
+          label = '/yiiapi/outreachthreat/LabelEdit'
+          break;
+        default:
+          break;
+      }
+      this.$axios.put(label, {
+        id: this.$route.query.detail,
+        label: label_list
+      })
+        .then(response => {
+          let { status, data } = response.data;
+          console.log(data);
+          if (status == 0) {
+            this.$message(
+              {
+                message: '修改标签成功!',
+                type: 'success',
+              }
+            );
+            this.edit_tag.pop = false;
+            this.alert_detail()
+          } else {
+            this.$message(
+              {
+                message: data.msg,
+                type: 'error',
+              }
+            );
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
+    closed_edit_tag_box () {
+      this.edit_tag.pop = false
+    },
+    //  添加标签
+    add_tag () {
+      if (this.edit_tag.tag_list.length < 5) {
+        this.edit_tag.tag_list.forEach(item => {
+          item.icon = false;
+        });
+        this.edit_tag.tag_list.push({ name: '', icon: true })
+      } else {
+        this.$message.warning(
+          {
+            message: '最多可以设置5个标签。',
+            offset: 50
+          })
+      }
+    },
+    del_tag (item, index) {
+      this.edit_tag.tag_list.splice(index, 1);
+    },
+
+
+
     // 加入外部链接
     change_state_src (item, index) {
       console.log(item);
@@ -545,75 +918,10 @@ export default {
         this.$router.push({ path: "/invest/url", query: { src_ip: this.network_detail.src_ip, dest_ip: '' } });
 
       }
-      //加入外部链接
-      if (item == '2') {
-        this.$confirm('本地址会被加入外部动态列表，第三方设备读取后可以对本地址进行告警提示或者拦截。', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          var join = ''
-          // horizontalthreat  横向威胁告警  lateral
-          // externalthreat  外部威胁告警  outside
-          // outreachthreat  外联威胁告警  outreath
-          switch (this.$route.query.type) {
-            case 'alert':
-              join = '/yiiapi/alert/join-external-dynamics'
-              break;
-            case 'asset':
-              join = '/yiiapi/asset/join-external-dynamics'
-              break;
-            case 'lateral':
-              join = '/yiiapi/horizontalthreat/join-external-dynamics'
-              break;
-            case 'outside':
-              join = '/yiiapi/externalthreat/join-external-dynamics'
-              break;
-            case 'outreath':
-              join = '/yiiapi/outreachthreat/join-external-dynamics'
-              break;
-            default:
-              break;
-          }
-          this.$axios.post(join, {
-            addr: this.network_detail.src_ip,
-            type: 1
-          })
-            .then(response => {
-              let { status, data } = response.data;
-              console.log(data);
-              if (status == 0) {
-                this.$message(
-                  {
-                    message: '加入外部动态列表成功!',
-                    type: 'success',
-                  }
-                );
-              } else {
-                this.$message(
-                  {
-                    message: data.msg,
-                    type: 'error',
-                  }
-                );
-              }
-            })
-            .catch(error => {
-              console.log(error);
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消操作'
-          });
-        });
-      }
+
     },
 
-    show_more_active () {
-      console.log('1111');
-      this.more = !this.more
-    },
+
     // 用户信息
     open_user_info () {
       this.pop_user_info = true;
@@ -631,18 +939,18 @@ export default {
     alert_detail () {
       // "10009" 10024
       this.$axios.get('/yiiapi/alerts/' + this.$route.query.detail).then(resp => {
-        console.log(resp);
         let { status, data } = resp.data;
-        // console.log(data);
-        // console.log(JSON.parse(data.alarm_merger));
         this.detail_list.push(data)
         this.detail_main = data
+        this.detail_main.label_obj = JSON.parse(this.detail_main.label)
         this.detail_main.json_description = JSON.parse(this.detail_main.description).join(',')
         this.detail_main.json_label = JSON.parse(this.detail_main.label).join(',')
         this.detail_main.src_ip_list = JSON.parse(this.detail_main.src_ip)
+        // this.detail_main.src_ip_list = ['192.168.1.1', '192.12.23.123', '192.168.1.1', '192.12.23.123', '192.168.1.1', '192.12.23.123']
         this.detail_main.dest_ip_list = JSON.parse(this.detail_main.dest_ip)
         this.detail_main.user_list = JSON.parse(this.detail_main.user)
         this.detail_main.asset_name_list = JSON.parse(this.detail_main.asset_name)
+        console.log(this.detail_main);
         JSON.parse(data.alarm_merger).map(item => {
           this.detail_list.push(item)
         })
@@ -653,12 +961,61 @@ export default {
         })
         this.detail_list[0].selected = true
         this.detailArray = this.detail_list
+        if (this.detail_main.workorder_id == '0') {
+          this.detail_main.work_order_status = '未关联工单'
+          this.detail_main.work_name = ''
+        } else {
+          switch (this.detail_main.workorder_status + '') {
+            case '0':
+              this.detail_main.work_order_status = '待分配'
+              break;
+            case '1':
+              this.detail_main.work_order_status = '已分配';
+              break;
+            case '2':
+              this.detail_main.work_order_status = '处置中';
+              break;
+            case '3':
+              this.detail_main.work_order_status = '已处置';
+              break;
+            case '4':
+              this.detail_main.work_order_status = '已取消';
+              break;
+            default:
+              break;
+          }
+          this.detail_main.work_name = this.detail_main.workorder_name
+        }
+
       })
         .catch(error => {
           console.log(error);
         })
 
-    }
+    },
+    // 跳转到工单详情
+    Goto_workorder () {
+      switch (this.$route.query.type) {
+        case 'alert':
+          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'alert_detail' } });
+          break;
+        case 'asset':
+          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'asset' } });
+          break;
+        case 'lateral':
+          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'lateral' } });
+          break;
+        case 'outside':
+          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'outside' } });
+          break;
+        case 'outreath':
+          this.$router.push({ path: "/detail/works", query: { id: this.detail_main.workorder_id, type: 'outreath' } });
+          break;
+        default:
+          break;
+      }
+
+    },
   },
   computed: {
   },
@@ -714,6 +1071,7 @@ export default {
         min-height: 38px;
         line-height: 38px;
         display: flex;
+        margin-bottom: 10px;
         .item_title {
           width: 100px;
           font-size: 16px;
@@ -728,6 +1086,49 @@ export default {
           // border: 1px solid green;
           word-break: break-all;
           word-wrap: break-word;
+          .el-menu--horizontal > .el-submenu {
+            height: 38px;
+          }
+          .el-menu--horizontal > .el-submenu {
+            height: 38px;
+          }
+          /deep/ .el-menu--horizontal {
+            border: 0;
+            background: #f8f8f8;
+            .el-submenu .el-submenu__title {
+              height: 38px;
+              line-height: 38px;
+            }
+            .el-submenu .el-submenu__title:hover {
+              background: #f8f8f8;
+            }
+          }
+          /deep/
+            .el-menu--horizontal
+            > .el-submenu.is-active
+            .el-submenu__title {
+            border: 0;
+            border-color: #f8f8f8;
+          }
+
+          .tag_btn_box {
+            margin: 0 2px;
+            display: inline-block;
+            height: 20px;
+            padding: 0 3px;
+            border-radius: 2px;
+            color: #ffffff;
+            background: #5389e0;
+            text-align: center;
+          }
+          .tag_btn {
+            height: 20px;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 0 3px;
+            // transform: scale(0.8);
+            display: block;
+          }
         }
         .src_bg {
           height: 38px;
@@ -777,7 +1178,7 @@ export default {
     }
   }
   // 用户信息弹窗
-  /deep/ .pop_user_info {
+  .pop_user_info {
     .el-dialog {
       width: 1200px;
       .el-dialog__body {
@@ -807,7 +1208,7 @@ export default {
     }
   }
   // 资产信息弹窗
-  /deep/ .pop_assets_info {
+  /deep/.pop_assets_info {
     .el-dialog {
       width: 1200px;
       .el-dialog__body {
@@ -836,7 +1237,7 @@ export default {
       }
     }
   }
-  .detail_mid {
+  /deep/.detail_mid {
     height: 344px;
     margin-top: 20px;
     display: flex;
@@ -845,6 +1246,65 @@ export default {
     }
     .mid_item {
       flex: 50%;
+    }
+  }
+  // 弹窗编辑标签
+  /deep/.add_tag {
+    .el-dialog {
+      width: 440px;
+      .el-dialog__body {
+        width: 440px;
+        .content {
+          padding: 24px 5px;
+          height: 120px;
+          overflow-y: auto;
+          &::-webkit-scrollbar {
+            /*滚动条整体样式*/
+            width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+            border-radius: 6px;
+          }
+          &::-webkit-scrollbar-thumb {
+            /*滚动条里面小方块*/
+            border-radius: 6px;
+            background: #a8a8a8;
+          }
+          &::-webkit-scrollbar-track {
+            /*滚动条里面轨道*/
+            border-radius: 6px;
+            background: #f4f4f4;
+          }
+          .content_item {
+            margin-bottom: 24px;
+            .item_addrs {
+              margin-bottom: 12px;
+              display: flex;
+            }
+            .img_box {
+              width: 16px;
+              height: 16px;
+              margin-left: 10px;
+              margin-top: 14px;
+              cursor: pointer;
+            }
+            .title {
+              font-size: 12px;
+              color: #999999;
+            }
+            .title_color {
+              color: #ff5f5c;
+            }
+            .select_box {
+              width: 100%;
+              height: 38px;
+              margin-top: 6px;
+              .el-input__inner {
+                background: #f8f8f8;
+                border: 0;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

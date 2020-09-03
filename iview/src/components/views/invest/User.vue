@@ -132,7 +132,7 @@ export default {
     },
     // 测试密码过期
     check_passwd () {
-      this.$axios.get('/yiiapi/site/check-passwd-reset')
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
         .then((resp) => {
           let {
             status,

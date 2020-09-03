@@ -32,7 +32,7 @@
         <!-- 日志 -->
         <base-log></base-log>
         <!-- 告警资产 -->
-        <alert-assets></alert-assets>
+        <alert-assets :selectIndicator='select_item.indicator'></alert-assets>
       </div>
 
     </div>
@@ -91,7 +91,7 @@ export default {
 </script>
 <style scoped lang="less">
 .time_axis {
-  border: 1px solid red;
+  // border: 1px solid red;
   padding: 35px 56px;
   .title {
     font-size: 18px;

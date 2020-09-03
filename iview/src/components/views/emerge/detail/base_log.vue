@@ -194,14 +194,14 @@
                 </div>
                 <div class="time_box">
                   <div class="time_box_left">
-                    <el-input-number v-model="num1"
+                    <el-input-number v-model="b_hh"
                                      @change="before_hh"
                                      :max="24"
                                      :step='1'
                                      :min="0"
                                      label="小时"></el-input-number>
                     <span>hh</span>
-                    <el-input-number v-model="num"
+                    <el-input-number v-model="b_mm"
                                      @change="before_mm"
                                      :min="0"
                                      :max="60"
@@ -212,18 +212,23 @@
                     2019-11-04 14:33:16
                   </div>
                   <div class="time_box_right">
-                    <el-input-number v-model="num"
+                    <el-input-number v-model="a_hh"
                                      @change="after_hh"
                                      :min="1"
                                      :max="10"
                                      label="描述文字"></el-input-number>
-                    <el-input-number v-model="num"
+                    <span>hh</span>
+                    <el-input-number v-model="a_mm"
                                      @change="after_mm"
                                      :min="1"
                                      :max="10"
                                      label="描述文字"></el-input-number>
+                    <span>mm</span>
                   </div>
 
+                </div>
+                <div>
+                  <p class="serch_btn">搜索</p>
                 </div>
               </div>
             </el-tab-pane>
@@ -234,14 +239,14 @@
   </div>
 </template>
 <script>
-import { ALERTS } from '@/apis/alert.js'
-
 export default {
   name: 'baseLog',
   data () {
     return {
-      num: '',
-      num1: '',
+      b_hh: '',
+      b_mm: '',
+      a_hh: '',
+      a_mm: '',
       log_list: {
         data: [
           {
@@ -390,33 +395,9 @@ export default {
     }
   },
   mounted () {
-    this.login()
   },
   methods: {
-    async login () {
-      let user_list = await ALERTS({ page: 1, rows: 10, start_time: '', end_time: '', fall_certainty: '', category: '', degree: '', status: '' })
 
-      //  this.$axios.get('/yiiapi/alert/list', {
-      this.$axios.get('/yiiapi/alerts', {
-        params: {
-          start_time: '',
-          end_time: '',
-          key_word: '',
-          fall_certainty: '',
-          status: '',
-          degree: '',
-          page: '1',
-          rows: '10',
-        }
-      }).then(resp => {
-        console.log(resp);
-      })
-        .catch(error => {
-          console.log(error);
-        })
-
-
-    },
     handleSelectionChange () {
 
     },
@@ -590,7 +571,7 @@ export default {
               width: 180px;
               height: 32px;
               text-align: center;
-              border: 1px solid red;
+              // border: 1px solid red;
               margin: 0 5px;
               background: #f8f8f8;
               font-size: 14px;
@@ -625,6 +606,17 @@ export default {
             p {
               color: #0070ff !important;
             }
+          }
+          .serch_btn {
+            cursor: pointer;
+            width: 162px;
+            height: 38px;
+            background: #0070ff;
+            color: #fff;
+            text-align: center;
+            line-height: 38px;
+            font-size: 14px;
+            margin: 42px auto;
           }
 
           &::-webkit-scrollbar {
