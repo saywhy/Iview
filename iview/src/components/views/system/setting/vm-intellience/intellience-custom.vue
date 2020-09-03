@@ -2,15 +2,6 @@
   <div id="intellience-custom" v-cloak
        v-loading.fullscreen.lock="loading">
     <div class="custom-top">
-      <!--<el-select class="select_box"
-                 v-model="intel_name"
-                 placeholder="选择指标">
-        <el-option v-for="item in intel_attr"
-                   :key="item.name"
-                   :label="item.name"
-                   :value="item.name">
-        </el-option>
-      </el-select>-->
       <!--搜索关键词-->
       <el-input class="select_box"
                 placeholder="搜索指标"
@@ -19,7 +10,7 @@
         <i slot="prefix"
            class="el-input__icon el-icon-search"></i>
       </el-input>
-      <el-button class="c_search">搜索</el-button>
+      <el-button class="c_search"  @click="search()">搜索</el-button>
       <div class="c_btn_group">
         <el-button class="c_add" @click="add_box">添加情报</el-button>
         <el-button class="c_exp" @click="exp_box">批量导入/导出</el-button>
@@ -34,42 +25,42 @@
                 tooltip-effect="dark"
                 @selection-change="handleSelectionChange"
                 style="width: 100%">
-        <el-table-column prop="name"
+        <el-table-column prop="indicator"
                          align="center"
                          label="指标"
-                         width="180"
-                         show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column prop="description"
-                         align="center"
-                         label="指标类型"
                          show-overflow-tooltip>
         </el-table-column>
         <el-table-column prop="type"
                          align="center"
+                         label="指标类型"
+                         show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column prop="description"
+                         align="center"
                          label="描述"
                          show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="label"
-                         align="center"
-                         label="威胁度"
-                         show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column label="置信度"
+
+        <el-table-column label="威胁度"
                          align="center"
                          show-overflow-tooltip>
           <template slot-scope="scope">
           <span class="btn_alert_background"
-                :class="{'high_background':scope.row.degree =='高',
-                      'mid_background':scope.row.degree =='中',
-                      'low_background':scope.row.degree =='低'}">
-            {{ scope.row.degree | degree_sino }}</span>
+                :class="{'high_background':scope.row.degree =='high',
+                      'mid_background':scope.row.degree =='medium',
+                      'low_background':scope.row.degree =='low'}">
+            {{ scope.row.degree | degree }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="导入时间"
+        <el-table-column prop="score"
                          align="center"
-                         width="180">
-          <template slot-scope="scope">{{ scope.row.created_at*1000 |formatDate }}</template>
+                         label="置信度"
+                         show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column prop="created_at"
+                         align="center"
+                         label="导入时间"
+                         show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="操作"
                          align="center"
@@ -309,6 +300,12 @@
   export default {
     name: "intellience-custom",
     components:{viewUpload},
+    props: {
+      option: {
+        type: Object,
+        default: () => { }
+      }
+    },
     data () {
       return {
         key: "",
@@ -338,18 +335,13 @@
         },
       };
     },
-    props: {
-      option: {
-        type: Object,
-        default: () => { }
-      }
-    },
     mounted () {
       this.get_data()
     },
     methods: {
       get_data () {
         this.loading = true;
+
         this.$axios.get('/yiiapi/intelligences', {
           params: {
             page: this.role_data.page,
@@ -363,7 +355,15 @@
 
             let {status,msg,data} = resp.data;
 
-            console.log(data)
+            if(status == 0){
+              let datas = {
+                count:data.count,
+                data:data.data,
+                pageNow:data.pageNow * 1,
+              }
+              console.log(data.data)
+              this.role_list = datas;
+            }
           })
           .catch(error => {
             console.log(error);
@@ -371,10 +371,6 @@
       },
       handleSelectionChange (val) {
         this.select_list = val
-      },
-      // 禁止选中的项目
-      checkSelectable (row) {
-        return row.creatorname != "SYSTEM"
       },
       // 分页
       handleSizeChange (val) {
@@ -384,6 +380,10 @@
       },
       handleCurrentChange (val) {
         this.role_data.page = val
+        this.get_data();
+      },
+      //搜索
+      search(){
         this.get_data();
       },
       ////////////////////////////////////////////////

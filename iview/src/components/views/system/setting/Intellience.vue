@@ -35,10 +35,10 @@ export default {
   name: "system_setting_intellience",
   data () {
     return {
-      activeName: "first",
+      activeName: "second",
       tab_show: {
-        first: true,
-        second: false
+        first: false,
+        second: true
       }
     };
   },
