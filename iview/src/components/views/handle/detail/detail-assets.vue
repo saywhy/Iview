@@ -1260,7 +1260,7 @@ export default {
           }
         })
         .then((resp) => {
-          ///console.log(resp)
+          //console.log(resp)
 
           let { status, data, msg } = resp.data;
 

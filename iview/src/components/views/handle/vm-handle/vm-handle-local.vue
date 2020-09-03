@@ -19,7 +19,9 @@
       methods:{
         drawGraph(){
 
-          //console.log('111111')
+          let options = this.progress_data;
+
+          console.log(options)
 
           let xData = ['7bf2exe1.exe','kzreport2.exe','kzreport3.exe','kreport4.exe','krepor5.exe',
             'kreport6.exe','kreport7.exe','kreport8.exe','kreport9.exe','kreport10.exe'];
