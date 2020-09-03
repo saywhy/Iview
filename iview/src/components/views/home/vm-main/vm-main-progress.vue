@@ -35,7 +35,6 @@
             dataAttr.push({name:key,count:data[key] * 1});
           }
           //console.log(dataAttr);
-
           return dataAttr;
         }
       }
@@ -46,7 +45,23 @@
 <style scoped lang="less">
   .vm-progress-list {
     height: 240px;
-
+    overflow-y: auto;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 6px;
+      /*高宽分别对应横竖滚动条的尺寸*/
+      /* border-radius: 6px;*/
+    }
+    &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+      border-radius: 6px;
+      background: #0070FF;
+      /*background: red;*/
+    }
+    &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+      border-radius: 6px;
+      background: #f4f4f4;
+    }
     .item {
       display: flex;
       line-height: 60px;

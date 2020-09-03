@@ -16,31 +16,34 @@
           {{scope.row.alert_time | time}}
         </template>
       </el-table-column>
-      <el-table-column prop="indicator"
+      <el-table-column prop="alert_type"
                        align="center"
                        label="告警类型"
                        show-overflow-tooltip></el-table-column>
-      <el-table-column prop="target"
+      <el-table-column prop="indicator"
                        align="center"
                        label="威胁指标"
                        show-overflow-tooltip></el-table-column>
-      <el-table-column prop="capital"
+      <el-table-column prop="assets"
                        align="center"
                        label="风险资产"
                        show-overflow-tooltip></el-table-column>
-      <el-table-column prop="capital"
-                       align="center"
-                       label="攻击阶段"
-                       show-overflow-tooltip></el-table-column>
       <el-table-column align="center"
-                       label="威胁等级"
+                       label="攻击阶段"
+                       show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{scope.row.attack_stage | stage}}
+        </template>
+      </el-table-column>
+      <el-table-column label="威胁等级"
+                       align="center"
                        show-overflow-tooltip>
         <template slot-scope="scope">
           <span class="btn_alert_background"
-                :class="{'high_background':scope.row.degree =='高',
-                      'mid_background':scope.row.degree =='中',
-                      'low_background':scope.row.degree =='低'}">
-            {{ scope.row.degree | degree_sino }}</span>
+                :class="{'high_background':scope.row.degree =='high',
+                      'mid_background':scope.row.degree =='medium',
+                      'low_background':scope.row.degree =='low'}">
+            {{ scope.row.degree | degree }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -81,6 +84,16 @@
     created(){
       let options = this.options;
 
+      options = options.map(v => {
+        let assets = '';
+        if(v.src_label != ''){
+          assets = v.src_ip;
+        }
+        if(v.dest_label != ''){
+          assets += ','+v.dest_ip;
+        }
+        return {...v,assets:assets};
+      })
       if (this.split != 0){
          options = options.slice(0,this.split);
       }else {

@@ -345,6 +345,7 @@
 
               if (status == 0) {
                 this.get_data();
+                this.label_pop.lab = false;
                 this.$message(
                   {
                     message: '删除成功！',

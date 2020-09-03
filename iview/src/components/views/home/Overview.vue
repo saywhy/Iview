@@ -129,15 +129,7 @@
       data(){
         return {
           more:[{name:'醉在你世界'},{name:'走过冬日雪'}],
-          gridData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },{
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }],
+          gridData: [],
           more_visible:{
             risk:false,
             risk_name:'vm-main-top5_more',
@@ -325,7 +317,7 @@
                 data
               } = resp.data;
 
-              console.log(data);
+             // console.log(data);
 
               if (status == 0) {
                 this.bom_right = data;

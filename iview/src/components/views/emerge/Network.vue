@@ -1150,8 +1150,7 @@ export default {
         change_status = 5;
       }
 
-      this.$axios.put('/yiiapi/alert/do-alarm', {
-        id: id_group,
+      this.$axios.put('/yiiapi/alerts/'+id_group, {
         status: change_status
       })
         .then(resp => {

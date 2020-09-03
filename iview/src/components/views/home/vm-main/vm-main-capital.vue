@@ -18,7 +18,7 @@
     methods:{
       drawGraph(){
 
-        console.log(this.options)
+        //console.log(this.options)
 
         if(this.options && this.options.length != 0){
 

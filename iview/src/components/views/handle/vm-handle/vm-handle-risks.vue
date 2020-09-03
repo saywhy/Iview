@@ -882,7 +882,7 @@ export default {
 
     //配置到
     column_deploy() {
-      this.$axios.get('/yiiapi/alert/FieldList')
+      this.$axios.get('/yiiapi/' + this.threats + '/FieldList')
         .then((resp) => {
 
           this.dropCol = [];
@@ -1172,13 +1172,13 @@ export default {
         change_status = 5;
       }
 
-      this.$axios.put('/yiiapi/' + this.threats + '/do-alarm', {
-        id: id_group,
+      this.$axios.put('/yiiapi/' + this.threats + 's/'+id_group, {
         status: change_status
       })
         .then(resp => {
 
           let { status, data } = resp.data;
+
           if (status == 0) {
             this.$message.success('告警状态变更成功！');
             //关闭弹窗

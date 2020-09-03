@@ -9,10 +9,11 @@
               @mousedown.native="mousedown"
               @mouseup.native="mouseup"
               :data="tableData">
-      <el-table-column prop="id"
+      <el-table-column prop="index"
                        align="center"
                        label="序号"
-                       width="60"></el-table-column>
+                       width="50"
+                       show-overflow-tooltip></el-table-column>
       <el-table-column prop="asset_ip"
                        align="center"
                        label="IP"
@@ -32,7 +33,7 @@
                 </span>
         </template>
       </el-table-column>
-      <el-table-column prop="threat"
+      <el-table-column prop="category"
                        align="center"
                        label="关联威胁"
                        show-overflow-tooltip></el-table-column>
@@ -41,10 +42,10 @@
                        show-overflow-tooltip>
         <template slot-scope="scope">
           <span class="btn_alert_background"
-                :class="{'high_background':scope.row.degree =='高',
-                      'mid_background':scope.row.degree =='中',
-                      'low_background':scope.row.degree =='低'}">
-            {{ scope.row.degree | degree_sino }}</span>
+                :class="{'high_background':scope.row.degree =='high',
+                      'mid_background':scope.row.degree =='medium',
+                      'low_background':scope.row.degree =='low'}">
+            {{ scope.row.degree | degree }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -84,6 +85,10 @@
     },
     created(){
       let options = this.options;
+
+      options = options.map((v,k)=>{
+        return {...v,index: k+1};
+      });
 
       if (this.split != 0){
         options = options.slice(0,this.split);
