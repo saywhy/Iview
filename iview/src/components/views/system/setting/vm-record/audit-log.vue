@@ -56,13 +56,13 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination_box"
-                     @size-change="handleSizeChange"
+                     @size-change="handleSizeChange*1"
                      @current-change="handleCurrentChange"
-                     :current-page="audit_log.pageNow"
+                     :current-page="audit_log.pageNow*1"
                      :page-sizes="[10,20,50,100]"
                      :page-size="10"
                      layout="total, sizes, prev, pager, next"
-                     :total="audit_log.count">
+                     :total="audit_log.count*1">
       </el-pagination>
     </div>
   </div>
@@ -128,7 +128,7 @@ export default {
       this.loading = true;
       this.$axios.get('/yiiapi/userlogs', {
         params: {
-          username: this.audit_data.key,
+          user_name: this.audit_data.key,
           start_time: this.audit_data.start_time,
           end_time: this.audit_data.end_time,
           page: this.audit_data.page,
@@ -155,8 +155,8 @@ export default {
     changeTime (data) {
       console.log(data);
       if (data) {
-        this.audit_data.start_time = data[0].valueOf() / 1000;
-        this.audit_data.end_time = data[1].valueOf() / 1000;
+        this.audit_data.start_time = parseInt(data[0].valueOf() / 1000);
+        this.audit_data.end_time = parseInt(data[1].valueOf() / 1000)
       } else {
         this.audit_data.start_time = ''
         this.audit_data.end_time = ''

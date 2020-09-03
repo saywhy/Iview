@@ -55,13 +55,13 @@
         </el-table-column>
       </el-table>
       <el-pagination class="pagination_box"
-                     @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange"
-                     :current-page="syslog_list.pageNow"
+                     @size-change="handleSizeChange*1"
+                     @current-change="handleCurrentChange*1"
+                     :current-page="syslog_list.pageNow*1"
                      :page-sizes="[10,20,50,100]"
                      :page-size="10"
                      layout="total, sizes, prev, pager, next"
-                     :total="syslog_list.count">
+                     :total="syslog_list.count*1">
       </el-pagination>
     </div>
     <!-- 添加p配置 -->

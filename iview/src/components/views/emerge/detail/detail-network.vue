@@ -176,7 +176,7 @@
           <div class="content_item">
             <span class="item_title">状态：</span>
             <div class="item_right ">
-              <span>待处置</span>
+              <span>{{detail_main.status | alert_status}}</span>
             </div>
           </div>
           <div class="content_item">
@@ -717,7 +717,7 @@ export default {
       // outreachthreat  外联威胁告警  outreath
       switch (this.$route.query.type) {
         case 'alert':
-          alarm = '/yiiapi/alert/do-alarm'
+          alarm = '/yiiapi/alerts/'
           break;
         case 'asset':
           alarm = '/yiiapi/asset/do-alarm'
@@ -734,8 +734,7 @@ export default {
         default:
           break;
       }
-      this.$axios.put(alarm, {
-        id: id_list,
+      this.$axios.put(alarm + id_list.join(','), {
         status: item
       })
         .then(response => {
@@ -743,7 +742,7 @@ export default {
           console.log(data);
           console.log(response);
           if (status == 0) {
-            this.get_data();
+            this.alert_detail();
             this.$message(
               {
                 message: '修改状态成功!',
