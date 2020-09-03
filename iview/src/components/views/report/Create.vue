@@ -176,8 +176,8 @@ export default {
   },
   components: { VmEmergePicker },
   mounted () {
-    this.get_data()
-    this.check_passwd()
+    //this.get_data()
+    //this.check_passwd()
   },
   methods: {
     // 测试密码过期

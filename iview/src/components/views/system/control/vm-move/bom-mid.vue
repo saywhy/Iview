@@ -3,10 +3,11 @@
 </template>
 
 <script type="text/ecmascript-6">
+  require('../../../../../../static/js/echarts-auto-tooltip');
 export default {
   name: "safe",
   props: {
-    option: {
+    options: {
       type: Object,
       default: () => {}
     }
@@ -16,12 +17,27 @@ export default {
   },
   methods: {
     safe() {
-      let index = 0;
+
+      let options = this.options;
+      if(!options.total_count){
+        options.total_count = 0;
+      }
+      if(!options.alert_count){
+        options.alert_count = 0;
+      }
+      if(!options.offline_count){
+        options.offline_count = 0;
+      }
+      let datas = [
+        { value: options.total_count, name: "设备总数" },
+        { value: options.alert_count, name: "告警总数" },
+        { value: options.offline_count, name: "离线总数" }
+      ];
 
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("safe"));
       // 绘制图表
-      myChart.setOption({
+      let option = {
         grid: {
           top: "20%",
           left: "5%",
@@ -36,9 +52,9 @@ export default {
             type: "pie",
             radius: ["45%", "80%"],
             avoidLabelOverlap: false,
-            hoverAnimation: "false",
+            //hoverAnimation: false,
             legendHoverLink: false,
-            hoverOffset: 0,
+            hoverOffset: 3,
             selectedOffset: 0,
             label: {
               normal: {
@@ -66,36 +82,14 @@ export default {
                 show: false
               }
             },
-            data: [
-              { value: 3, name: "设备总数", selected: true },
-              { value: 2, name: "告警总数" },
-              { value: 1, name: "离线总数" }
-            ]
+            data: datas
           }
         ]
-      });
-      myChart.dispatchAction({
-        type: "highlight",
-        seriesIndex: 0,
-        dataIndex: 0
-      }); //设置默认选中高亮部分
-      myChart.on("mouseover", function(e) {
-        if (e.dataIndex != index) {
-          myChart.dispatchAction({
-            type: "downplay",
-            seriesIndex: 0,
-            dataIndex: index
-          });
-        }
-      });
-      myChart.on("mouseout", function(e) {
-        index = e.dataIndex;
-        myChart.dispatchAction({
-          type: "highlight",
-          seriesIndex: 0,
-          dataIndex: e.dataIndex
-        });
-      });
+      }
+      myChart.setOption(option);
+
+      tools.loopShowTooltip(myChart, option, {loopSeries: true});
+
       window.addEventListener("resize", () => {
         myChart.resize();
       });
