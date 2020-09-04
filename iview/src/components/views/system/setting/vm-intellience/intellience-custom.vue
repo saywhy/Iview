@@ -251,7 +251,7 @@
         },
         intel_list:{
           degrees:[{value:'high',label:'高危'},{value:'medium',label:'中危'},{value:'low',label:'低危'}],
-          types:['指标类型','指标类型1']
+          types:['URL','domain','md5','sha1','sha256','IPv4']
         },
       };
     },
@@ -307,7 +307,14 @@
       add_box(item,type) {
         this.intel_state.tab = true;
         this.intel_state.type = type;
-        console.log(item)
+
+        this.intel_tab.indicator = '';
+        this.intel_tab.type = '';
+        this.intel_tab.degree = '';
+        this.intel_tab.score = '';
+        this.intel_tab.description = '';
+        this.intel_tab.id = '';
+
         if(item){
           this.intel_tab.indicator = item.indicator;
           this.intel_tab.type = item.type;

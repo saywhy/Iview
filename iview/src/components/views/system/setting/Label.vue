@@ -187,6 +187,7 @@
         return {
           loading: false,
           name: '',
+          originalName:'',
           label_pop: {
             lab:false,
             cat:false
@@ -210,9 +211,6 @@
       created(){
         this.get_data();
       },
-     /* updated(){
-        console.log(this.label_data);
-      },*/
       methods:{
         //获取数据
         get_data () {
@@ -258,7 +256,7 @@
 
                 this.label_data = labelAttr;
 
-                console.log(labelAttr)
+                //console.log(labelAttr)
 
               }
             })
@@ -273,11 +271,20 @@
         //新增、编辑标签
         label_handle(item,type){
           this.label_pop.lab = true;
+
+          this.label.name  = '';
+          this.label.category_name  = '';
+          this.label.detail  = '';
+          this.label.id  = '';
+
+          this.label.types = type;
+
           if(type == 'add'){
             if(item){
               this.label.category_name = item;
             }
           }else {
+            this.originalName = item.label_name;
             if(item){
               this.label.name =item.label_name;
               this.label.category_name = item.category_name;
@@ -285,17 +292,81 @@
               this.label.id = item.id;
             }
           }
-          this.label.types = type;
         },
         //新增编辑确定
         closed_submit_box(){
-          if(this.label.name == ''){
-            this.$message({
-                message: '标签名不能为空！',
-                type: 'warning',
-              });
-            return false;
-          }
+
+          this.$axios.get('/yiiapi/site/GetLabel',{
+            params:{
+              label_name:this.name
+            }
+          })
+            .then(resp => {
+              this.loading = false;
+              let {status,data} = resp.data;
+
+
+              if(status == 0){
+
+                let attr = data.map(v => {
+                  return v.label_name;
+                });
+
+
+                if(this.label.name == ''){
+                  this.$message({
+                    message: '标签名不能为空！',
+                    type: 'warning',
+                  });
+                  return false;
+                }
+
+                var pattern = new RegExp("[<>]");
+                if (pattern.test(this.label.name)) {
+                  this.$message({
+                    message: '标签名称不能包含特殊字符！',
+                    type: 'warning',
+                  });
+                  return false
+                }
+
+                if(attr.indexOf(this.label.name) > -1 &&
+                  this.label.name != this.originalName){
+
+                  this.$confirm(`是否合并标签？`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                  }).then(() => {
+                    if(this.label.id == ''){
+                      this.add_label_ok();
+                    }else {
+                      this.edit_label_ok();
+                    }
+                  }).catch(() => {
+                    this.$message({
+                      type: 'info',
+                      message: '已取消'
+                    });
+                  });
+                } else {
+                  if(this.label.id == ''){
+                    this.add_label_ok();
+                  }else {
+                    this.edit_label_ok();
+                  }
+                }
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+
+        },
+
+        //新增保存标签
+        add_label_ok(){
+
           this.$axios.post('/yiiapi/labels',{
             Label: {
               category_name: this.label.category_name,
@@ -303,33 +374,53 @@
               detail: this.label.detail
             }
           }).then(resp => {
-              let {status,msg,data} = resp.data;
-              if(status == 0){
-                this.label_pop.lab = false;
-                this.get_data();
-                if(this.label.types == 'add'){
-                  this.$message({
-                    message: '添加成功！',
-                    type: 'success',
-                  });
-                }else {
-                  this.$message({
-                    message: '编辑成功！',
-                    type: 'success',
-                  });
-                }
-              }else {
-                this.$message({
-                  message: msg,
-                  type: 'error',
-                });
+            let {status,msg,data} = resp.data;
+            if(status == 0){
+              this.label_pop.lab = false;
+              this.get_data();
+              this.$message({
+                message: '添加成功！',
+                type: 'success',
+              });
+            }else {
+              this.$message({
+                message: msg,
+                type: 'error',
+              });
+            }
+          }).catch(error => {
+            console.log(error);
+          })
+        },
+        //编辑保存标签
+        edit_label_ok(){
 
-              }
-            })
-            .catch(error => {
-              console.log(error);
-            })
+          this.$axios.put('/yiiapi/labels/'+this.label.id,{
+            Label: {
+              category_name: this.label.category_name,
+              label_name: this.label.name,
+              detail: this.label.detail
+            }
+          }).then(resp => {
+            let {status,msg,data} = resp.data;
+            if(status == 0){
+              this.label_pop.lab = false;
+              this.get_data();
+              this.$message({
+                message: '编辑成功！',
+                type: 'success',
+              });
 
+            }else {
+              this.$message({
+                message: msg,
+                type: 'error',
+              });
+
+            }
+          }).catch(error => {
+            console.log(error);
+          })
         },
         //新增确定取消
         closed_cancel_box(){
