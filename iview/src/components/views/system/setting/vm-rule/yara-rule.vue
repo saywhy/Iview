@@ -131,31 +131,31 @@ export default {
         );
         return false
       }
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
-        params: {
-          pathInfo: 'yararule/download',
-        }
-      })
-        .then(response => {
-          console.log(response.data);
-          if (response.data.status == 0) {
-            var tt = new Date().getTime();
-            var url = '/yiiapi/yararule/Download';
-            var form = $("<form>"); //定义一个form表单
-            form.attr("style", "display:none");
-            form.attr("target", "");
-            form.attr("method", "get"); //请求类型
-            form.attr("action", url); //请求地址
-            $("body").append(form); //将表单放置在web中
-            var input1 = $("<input>");
-            input1.attr("type", "hidden");
-            form.append(input1);
-            form.submit(); //表单提交
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      // this.$axios.get('/yiiapi/site/check-auth-exist', {
+      //   params: {
+      //     pathInfo: 'yararule/download',
+      //   }
+      // })
+      //   .then(response => {
+      console.log(response.data);
+      if (response.data.status == 0) {
+        var tt = new Date().getTime();
+        var url = '/yiiapi/yararule/Download';
+        var form = $("<form>"); //定义一个form表单
+        form.attr("style", "display:none");
+        form.attr("target", "");
+        form.attr("method", "get"); //请求类型
+        form.attr("action", url); //请求地址
+        $("body").append(form); //将表单放置在web中
+        var input1 = $("<input>");
+        input1.attr("type", "hidden");
+        form.append(input1);
+        form.submit(); //表单提交
+      }
+      // })
+      // .catch(error => {
+      //   console.log(error);
+      // })
     },
     handleExceed () { },
     handlePreview () { },
@@ -177,46 +177,77 @@ export default {
       }
     },
     onsuccess (params) {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
-        params: {
-          pathInfo: 'yararule/download',
+      // this.$axios.get('/yiiapi/site/check-auth-exist', {
+      //   params: {
+      //     pathInfo: 'yararule/download',
+      //   }
+      // })
+      //   .then(response => {
+      //     if (params.status == 1) {
+      //       this.$message(
+      //         {
+      //           message: params.msg,
+      //           type: 'error',
+      //         }
+      //       );
+      //     } else if (params.status == 0) {
+      this.get_data();
+      this.$message(
+        {
+          message: '上传成功',
+          type: 'success',
         }
-      })
-        .then(response => {
-          if (params.status == 1) {
-            this.$message(
-              {
-                message: params.msg,
-                type: 'error',
-              }
-            );
-          } else if (params.status == 0) {
-            this.get_data();
-            this.$message(
-              {
-                message: '上传成功',
-                type: 'success',
-              }
-            );
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      );
+      //   }
+      // })
+      // .catch(error => {
+      //   console.log(error);
+      // })
 
     },
     onerror (params) {
       console.log(params);
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
-        params: {
-          pathInfo: 'yararule/download',
+      // this.$axios.get('/yiiapi/site/check-auth-exist', {
+      //   params: {
+      //     pathInfo: 'yararule/download',
+      //   }
+      // })
+      //   .then(response => {
+      //     if (params.status == 'fail') {
+      this.$message(
+        {
+          message: '上传失败',
+          type: 'error',
         }
-      })
+      );
+    }
+    // })
+    // .catch(error => {
+    //   console.log(error);
+    // })
+  },
+  // 删除
+  del_yara () {
+    this.$confirm('此操作删除此文件, 是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      this.$axios.delete('/yiiapi/yararules/0')
         .then(response => {
-          if (params.status == 'fail') {
+          console.log(response.data.data);
+          if (response.data.data.status == 0) {
+            this.get_data();
             this.$message(
               {
-                message: '上传失败',
+                message: '删除成功',
+                type: 'success',
+              }
+            );
+          } else {
+            this.$message(
+              {
+                message: '删除失败',
                 type: 'error',
               }
             );
@@ -225,57 +256,26 @@ export default {
         .catch(error => {
           console.log(error);
         })
-    },
-    // 删除
-    del_yara () {
-      this.$confirm('此操作删除此文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$axios.delete('/yiiapi/yararules/0')
-          .then(response => {
-            console.log(response.data.data);
-            if (response.data.data.status == 0) {
-              this.get_data();
-              this.$message(
-                {
-                  message: '删除成功',
-                  type: 'success',
-                }
-              );
-            } else {
-              this.$message(
-                {
-                  message: '删除失败',
-                  type: 'error',
-                }
-              );
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
+    }).catch(() => {
+      this.$message({
+        type: 'info',
+        message: '已取消删除'
       });
-    }
-
-  },
-  filters: {
-    filterType: function (val) {
-      if (val == '') return;
-      if (val == undefined) return;
-      if (val == 0) return '0B';
-      var k = 1024;
-      var size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-        i = Math.floor(Math.log(val) / Math.log(k));
-      return (val / Math.pow(k, i)).toPrecision(3) + ' ' + size[i]
-    }
+    });
   }
+
+},
+filters: {
+  filterType: function (val) {
+    if (val == '') return;
+    if (val == undefined) return;
+    if (val == 0) return '0B';
+    var k = 1024;
+    var size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+      i = Math.floor(Math.log(val) / Math.log(k));
+    return (val / Math.pow(k, i)).toPrecision(3) + ' ' + size[i]
+  }
+}
 };
 </script>
 

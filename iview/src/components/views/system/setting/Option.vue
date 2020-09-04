@@ -481,6 +481,14 @@ export default {
                 type: 'success',
               }
             );
+          } else if (status == 1) {
+            this.$message(
+              {
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
+                type: 'error',
+              }
+            );
+
           }
         })
         .catch(error => {
