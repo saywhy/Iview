@@ -351,6 +351,13 @@
           });
           return false;
         }
+        if(this.intel_tab.score > 100){
+          this.$message({
+            message: '置信度不能超过100！',
+            type: 'warning',
+          });
+          return false;
+        }
 
 
         this.$axios.post('/yiiapi/intelligences',{
@@ -401,6 +408,13 @@
         if(this.intel_tab.score == ''){
           this.$message({
             message: '置信度不能为空！',
+            type: 'warning',
+          });
+          return false;
+        }
+        if(this.intel_tab.score > 100){
+          this.$message({
+            message: '置信度不能超过100！',
             type: 'warning',
           });
           return false;

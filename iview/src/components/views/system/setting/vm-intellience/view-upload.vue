@@ -69,19 +69,7 @@ export default {
       }
     },
     onFileSuccess (rootFile, file, response, chunk) {
-      // this.$axios.get('/yiiapi/site/check-auth-exist', {
-      //   params: {
-      //     pathInfo: 'yararule/download',
-      //   }
-      // })
-      //   .then(response => {
-
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   })
       if (JSON.parse(response).status == 0) {
-        console.log(file);
         this.$axios.get('/yiiapi/sandbox/move-file', {
           params: {
             upload_name: file.name,
@@ -122,30 +110,8 @@ export default {
       console.log(chunk);
     },
     onFileProgress (file) {
-      // this.$axios.get('/yiiapi/site/check-auth-exist', {
-      //   params: {
-      //     pathInfo: 'yararule/download',
-      //   }
-      // })
-      //   .then(response => {
-
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   })
     },
     onFileError () {
-      // this.$axios.get('/yiiapi/site/check-auth-exist', {
-      //   params: {
-      //     pathInfo: 'yararule/download',
-      //   }
-      // })
-      //   .then(response => {
-
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   })
     },
   }
 }
