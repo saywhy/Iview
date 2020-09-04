@@ -357,7 +357,19 @@
       add_monitor(row,type) {
         this.monitor_state.tab = true;
         this.monitor_state.type = type;
-        console.log(row)
+     
+        this.monitor_add.id = '';
+        this.monitor_add.name = '';
+        this.monitor_add.type = '';
+        this.monitor_add.ip = '';
+
+        this.monitor_add.snmp = '';
+        this.monitor_add.port = '';
+        this.monitor_add.character = '';
+        this.monitor_add.cpu = '';
+        this.monitor_add.memory = '';
+        this.monitor_add.disk = '';
+
         if(row){
           this.monitor_add.id = row.id;
           this.monitor_add.name = row.name;
