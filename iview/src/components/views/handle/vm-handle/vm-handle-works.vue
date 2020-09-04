@@ -175,7 +175,7 @@
                        align="center"
                        width="180"
                        show-overflow-tooltip>
-        <template slot-scope="scope">{{ scope.row.created_at | time }}</template>
+        <template slot-scope="scope">{{ scope.row.created_at }}</template>
       </el-table-column>
       <el-table-column label="优先级"
                        align="center">
@@ -193,7 +193,7 @@
                        align="center"
                        width="180"
                        show-overflow-tooltip>
-        <template slot-scope="scope">{{ scope.row.updated_at | time }}</template>
+        <template slot-scope="scope">{{ scope.row.updated_at }}</template>
       </el-table-column>
       <el-table-column prop="remarks"
                        align="center"
@@ -1166,6 +1166,8 @@ export default {
         .then((resp) => {
           this.table.loading = false;
           let { status, data } = resp.data;
+
+          console.log(data)
           let datas = data;
           if (status == 0) {
             let { data, count, maxPage, pageNow } = datas;
@@ -1866,7 +1868,9 @@ export default {
       })
         .then((resp) => {
           let { status, data } = resp.data;
-          // console.log(data);
+           //console.log(data);
+
+
           this.edit.asset_list = data
           this.edit.asset_list.data.map(function (v, k) {
             v.label = JSON.parse(v.label);

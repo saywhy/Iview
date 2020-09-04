@@ -48,11 +48,11 @@
         </li>
         <li>
           <span class="title">创建时间：</span>
-          <span class="content">{{data.created_at | time}}</span>
+          <span class="content">{{data.created_at }}</span>
         </li>
         <li>
           <span class="title">更新时间：</span>
-          <span class="content">{{data.updated_at | time }}</span>
+          <span class="content">{{data.updated_at }}</span>
         </li>
         <li>
           <span class="title">备注：</span>
@@ -359,6 +359,7 @@ export default {
 
             if (data.alerts) {
               //是告警
+              console.log(data);
               this.table.tabsFlag = 1;
               this.table.tableData = data.alerts.data;
               this.table.count = data.alerts.count;
