@@ -21,11 +21,12 @@
 
           let options = this.progress_data;
 
-          console.log(options)
 
-          let xData = ['7bf2exe1.exe','kzreport2.exe','kzreport3.exe','kreport4.exe','krepor5.exe',
+         /* let xData = ['7bf2exe1.exe','kzreport2.exe','kzreport3.exe','kreport4.exe','krepor5.exe',
             'kreport6.exe','kreport7.exe','kreport8.exe','kreport9.exe','kreport10.exe'];
-          let yData = [30,40,20,30,50,60,20,10,40,50];
+          let yData = [30,40,20,30,50,60,20,10,40,50];*/
+         let xData = [];
+          let yData = [];
 
           let myChart = this.$echarts.init(document.getElementById('locality'));
           myChart.showLoading({ text: '正在加载数据...' });

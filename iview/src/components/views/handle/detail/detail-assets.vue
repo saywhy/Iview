@@ -1246,6 +1246,7 @@ export default {
     this.detail.asset_ip = asset_ip;
     this.detail.status = status;
     this.detail.id = id;
+
     this.get_list_assets_detail();
     this.get_assets_detail_top();
   },
@@ -1253,12 +1254,7 @@ export default {
     //获取资产详情顶部
     get_assets_detail_top () {
       this.suggest_flag = false;
-      this.$axios.get('/yiiapi/riskasset/AlertDetails',
-        {
-          params: {
-            id: this.detail.id
-          }
-        })
+      this.$axios.get('/yiiapi/riskassets/'+this.detail.id)
         .then((resp) => {
           //console.log(resp)
 

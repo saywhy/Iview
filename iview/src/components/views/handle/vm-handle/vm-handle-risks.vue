@@ -957,9 +957,6 @@ export default {
       this.$axios.get('/yiiapi/' + this.threats + '/SourceTop5')
         .then((resp) => {
           let { status, data } = resp.data;
-
-          console.log(data)
-
           if (status == 0) {
             this.progress_data_source5 = data;
             this.progress_data_source5_show = true;
