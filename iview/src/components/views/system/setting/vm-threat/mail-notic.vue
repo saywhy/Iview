@@ -241,7 +241,6 @@ export default {
     },
     // 发送测试
     send_test () {
-      this.loading = true
       console.log(this.checkList);
       if (this.checkList.length == 0) {
         this.$message(
@@ -299,6 +298,7 @@ export default {
             break;
         }
       });
+      this.loading = true
       this.$axios.post('/yiiapi/emails', {
         Email: {
           encryption: encryption,

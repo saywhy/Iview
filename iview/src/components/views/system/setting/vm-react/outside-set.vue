@@ -252,7 +252,7 @@ export default {
     },
     // 获取开关状态
     get_switch () {
-      this.$axios.get('/yiiapi/externalaccess/GetStatus')
+      this.$axios.get('/yiiapi/externaluser/GetStatus')
         .then(response => {
           console.log(response);
           if (response.data.data.status == '0') {
@@ -276,7 +276,7 @@ export default {
         switch_status = 0
       }
       console.log(switch_status);
-      this.$axios.put('/yiiapi/externalaccess/ChangeStatus', {
+      this.$axios.put('/yiiapi/externaluser/ChangeStatus', {
         status: switch_status
       })
         .then(response => {
@@ -307,7 +307,7 @@ export default {
     },
     // 获取当前IP
     get_ip () {
-      this.$axios.get('/yiiapi/linkage/get-hostip')
+      this.$axios.get('/yiiapi/linkage/GetHostip')
         .then(response => {
           console.log(response.data);
           this.hostip = response.data.data.url
@@ -411,7 +411,7 @@ export default {
         );
         return false
       }
-      this.$axios.put('/yiiapi/externalusers', {
+      this.$axios.put('/yiiapi/externalusers/' + this.outside_pop.edit.id, {
         ExternalAccessUser: {
           passwd: this.outside_pop.edit.pswd
         }

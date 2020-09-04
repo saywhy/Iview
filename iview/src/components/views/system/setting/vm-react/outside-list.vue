@@ -268,7 +268,7 @@ export default {
           if (response.data.status == 1) {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
