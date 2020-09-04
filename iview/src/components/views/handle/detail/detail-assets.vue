@@ -1336,6 +1336,11 @@ export default {
           } else if (status == 9) {
             // this.$message.error(msg);
             this.$router.push({ path: "/handle/assets" });
+          }else {
+            this.$message({
+              message: msg,
+              type: 'error',
+            });
           }
         });
     },

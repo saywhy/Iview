@@ -312,6 +312,14 @@
                   return v.label_name;
                 });
 
+                var pattern = new RegExp("[<>]");
+                if (pattern.test(this.label.category_name)) {
+                  this.$message({
+                    message: '标签类型名不能包含特殊字符！',
+                    type: 'warning',
+                  });
+                  return false
+                }
 
                 if(this.label.name == ''){
                   this.$message({
@@ -329,6 +337,7 @@
                   });
                   return false
                 }
+
 
                 if(attr.indexOf(this.label.name) > -1 &&
                   this.label.name != this.originalName){
@@ -461,36 +470,8 @@
                 console.log(error);
               })
           }).catch(() => {
-            /*this.$message({
-              type: 'info',
-              message: '已取消删除'
-            });*/
+
           });
-
-         /* this.$axios.get('/site/GetEffectedIntelligence',{
-            params: {
-              label_id: this.label.id,
-            }
-          }).then(resp => {
-            this.loading = false;
-            let {status,msg,data} = resp.data;
-
-            console.log(resp)
-
-            if(status == 0){
-
-
-
-            }else {
-              this.$message({
-                message: msg,
-                type: 'error',
-              });
-            }
-          })
-            .catch(error => {
-              console.log(error);
-            })*/
         },
         //类别
         category_edit(item){
@@ -506,6 +487,14 @@
               type: 'warning',
             });
             return false;
+          }
+          var pattern = new RegExp("[<>]");
+          if (pattern.test(this.label_category.name)) {
+            this.$message({
+              message: '标签类型名不能包含特殊字符！',
+              type: 'warning',
+            });
+            return false
           }
           this.$axios.get('/yiiapi/labelcates/'+this.label_category.id,{
             params:{

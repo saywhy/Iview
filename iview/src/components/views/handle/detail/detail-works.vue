@@ -325,7 +325,7 @@ export default {
 
           // console.log(resp.data)
 
-          let { status, data } = resp.data;
+          let { status, msg, data } = resp.data;
 
           if (status == 0) {
 
@@ -365,6 +365,11 @@ export default {
               this.table.maxPage = data.alerts.maxPage;
               this.table.pageNow = data.alerts.pageNow;
             }
+          }else {
+            this.$message({
+              message: msg,
+              type: 'error',
+            });
           }
         });
     },
@@ -407,7 +412,7 @@ export default {
         })
         .then((resp) => {
 
-          let { status, data } = resp.data;
+          let { status,msg, data } = resp.data;
 
           let datas = data;
 
@@ -419,6 +424,11 @@ export default {
             this.table_reply.count = count;
             this.table_reply.maxPage = maxPage;
             this.table_reply.pageNow = pageNow;
+          } else {
+            this.$message({
+              message: msg,
+              type: 'error',
+            });
           }
         });
     },
@@ -537,12 +547,17 @@ export default {
         })
         .then((resp) => {
 
-          let { status, data } = resp.data;
+          let { status, data,msg } = resp.data;
 
           if (status == 0) {
             this.$message.success('提交成功。');
             this.reply = '';
             this.get_reply_works_detail();
+          }else {
+            this.$message({
+              message: msg,
+              type: 'error',
+            });
           }
         });
     },

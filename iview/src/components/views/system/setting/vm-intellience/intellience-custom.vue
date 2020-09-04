@@ -335,13 +335,13 @@
           });
           return false;
         }
-
-        if(this.intel_tab.score == ''){
+        var pattern = new RegExp("[<>]");
+        if (pattern.test(this.intel_tab.indicator)) {
           this.$message({
-            message: '置信度不能为空！',
+            message: '标签名称不能包含特殊字符！',
             type: 'warning',
           });
-          return false;
+          return false
         }
 
         if(this.intel_tab.score == ''){
@@ -351,6 +351,7 @@
           });
           return false;
         }
+
 
         this.$axios.post('/yiiapi/intelligences',{
           CustomIntelligence: {
@@ -388,6 +389,14 @@
             type: 'warning',
           });
           return false;
+        }
+        var pattern = new RegExp("[<>]");
+        if (pattern.test(this.intel_tab.indicator)) {
+          this.$message({
+            message: '标签名称不能包含特殊字符！',
+            type: 'warning',
+          });
+          return false
         }
         if(this.intel_tab.score == ''){
           this.$message({
