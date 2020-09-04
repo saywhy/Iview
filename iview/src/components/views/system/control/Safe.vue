@@ -357,7 +357,7 @@
       add_monitor(row,type) {
         this.monitor_state.tab = true;
         this.monitor_state.type = type;
-     
+
         this.monitor_add.id = '';
         this.monitor_add.name = '';
         this.monitor_add.type = '';

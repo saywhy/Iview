@@ -109,6 +109,7 @@
             </p>
             <el-input class="select_box"
                       placeholder="请输入指标"
+                      maxlength="255"
                       v-model="intel_tab.indicator"
                       clearable>
             </el-input>
@@ -151,7 +152,7 @@
             </p>
             <el-input class="select_box"
                       type="number"
-                      placeholder="请输入置信度"
+                      placeholder="请输入0到100之间的数字"
                       v-model="intel_tab.score"
                       clearable>
             </el-input>
@@ -166,6 +167,7 @@
           <el-input class="select_box_textarea"
                     type="textarea"
                     :rows="4"
+                    maxlength="255"
                     placeholder="请输入描述"
                     v-model="intel_tab.description"
                     clearable>
@@ -333,12 +335,29 @@
           });
           return false;
         }
+
+        if(this.intel_tab.score == ''){
+          this.$message({
+            message: '置信度不能为空！',
+            type: 'warning',
+          });
+          return false;
+        }
+
+        if(this.intel_tab.score == ''){
+          this.$message({
+            message: '置信度不能为空！',
+            type: 'warning',
+          });
+          return false;
+        }
+
         this.$axios.post('/yiiapi/intelligences',{
           CustomIntelligence: {
             indicator:this.intel_tab.indicator,
             type:this.intel_tab.type,
             degree:this.intel_tab.degree,
-            score:this.intel_tab.score,
+            score:parseInt(this.intel_tab.score),
             description:this.intel_tab.description
           }
         }).then(resp => {
@@ -370,12 +389,19 @@
           });
           return false;
         }
+        if(this.intel_tab.score == ''){
+          this.$message({
+            message: '置信度不能为空！',
+            type: 'warning',
+          });
+          return false;
+        }
         this.$axios.put('/yiiapi/intelligences/'+this.intel_tab.id,{
           CustomIntelligence: {
             indicator:this.intel_tab.indicator,
             type:this.intel_tab.type,
             degree:this.intel_tab.degree,
-            score:this.intel_tab.score,
+            score:parseInt(this.intel_tab.score),
             description:this.intel_tab.description
           }
         }).then(resp => {
