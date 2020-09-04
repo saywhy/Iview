@@ -1283,7 +1283,6 @@ export default {
             data.new_department = data.label.department;
             data.new_business = data.label.business;
 
-            console.log(data)
             ///
             if (data.workorder_id == '0') {
               data.new_workorder_status = '未关联工单';
@@ -1446,6 +1445,8 @@ export default {
         .then(resp => {
           let { status, data, msg } = resp.data;
           this.closed_state();
+
+          console.log(resp)
           if (status == 0) {
             this.$message.success('状态变更成功！');
             this.get_assets_detail_top();

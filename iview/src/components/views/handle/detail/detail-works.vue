@@ -349,8 +349,8 @@ export default {
               this.table.tabsFlag = 0;
               data.assets.data.forEach(function (v, k) {
                 v.new_label = v.label.join(',');
-                v.src_ip = JSON.parse(v.src_ip).join(',');
-                v.dest_ip = JSON.parse(v.dest_ip).join(',');
+               // v.src_ip = JSON.parse(v.src_ip).join(',');
+                //v.dest_ip = JSON.parse(v.dest_ip).join(',');
               });
               this.table.tableData = data.assets.data;
               this.table.count = data.assets.count;
