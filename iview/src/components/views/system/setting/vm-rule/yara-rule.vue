@@ -219,49 +219,48 @@ export default {
           type: 'error',
         }
       );
-    }
+    },
     // })
     // .catch(error => {
     //   console.log(error);
     // })
-  },
-  // 删除
-  del_yara () {
-    this.$confirm('此操作删除此文件, 是否继续?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      this.$axios.delete('/yiiapi/yararules/0')
-        .then(response => {
-          console.log(response.data.data);
-          if (response.data.data.status == 0) {
-            this.get_data();
-            this.$message(
-              {
-                message: '删除成功',
-                type: 'success',
-              }
-            );
-          } else {
-            this.$message(
-              {
-                message: '删除失败',
-                type: 'error',
-              }
-            );
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    }).catch(() => {
-      this.$message({
-        type: 'info',
-        message: '已取消删除'
+    // 删除
+    del_yara () {
+      this.$confirm('此操作删除此文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.delete('/yiiapi/yararules/0')
+          .then(response => {
+            console.log(response);
+            if (response.data.status == 0) {
+              this.get_data();
+              this.$message(
+                {
+                  message: '删除成功',
+                  type: 'success',
+                }
+              );
+            } else {
+              this.$message(
+                {
+                  message: '删除失败',
+                  type: 'error',
+                }
+              );
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
       });
-    });
-    // }
+    }
 
   },
   filters: {
