@@ -349,73 +349,71 @@ export default {
           type: 'error',
         }
       );
-    }
+    },
     // })
     // .catch(error => {
     //   console.log(error);
     // })
 
 
-  },
-  handleExceed () { },
-  handleSelectionChange (val) {
-    console.log(val);
-    this.select_list = val
-  },
-  del_white () {
-    console.log(this.select_list);
-    if (this.select_list.length == 0) {
-      this.$message(
-        {
-          message: '请选择需要删除的白名单！',
-          type: 'warning',
-        }
-      );
-      return false
-    }
-    this.$confirm('此操作删除信息, 是否继续?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      var id_list = []
-      this.select_list.forEach(element => {
-        id_list.push(element.id)
-      });
-
-      this.$axios.delete('/yiiapi/yiiapi/whitelists/' + id_list.join(','))
-        .then(response => {
-          console.log(response.data);
-          if (response.data.status == 0) {
-            this.get_data();
-            this.$message(
-              {
-                message: '删除成功！',
-                type: 'success',
-              }
-            );
-          } else {
-            this.$message(
-              {
-                message: '删除失败！',
-                type: 'error',
-              }
-            );
+    handleExceed () { },
+    handleSelectionChange (val) {
+      console.log(val);
+      this.select_list = val
+    },
+    del_white () {
+      console.log(this.select_list);
+      if (this.select_list.length == 0) {
+        this.$message(
+          {
+            message: '请选择需要删除的白名单！',
+            type: 'warning',
           }
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    }).catch(() => {
-      this.$message({
-        type: 'info',
-        message: '已取消删除'
+        );
+        return false
+      }
+      this.$confirm('此操作删除信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var id_list = []
+        this.select_list.forEach(element => {
+          id_list.push(element.id)
+        });
+
+        this.$axios.delete('/yiiapi/yiiapi/whitelists/' + id_list.join(','))
+          .then(response => {
+            console.log(response.data);
+            if (response.data.status == 0) {
+              this.get_data();
+              this.$message(
+                {
+                  message: '删除成功！',
+                  type: 'success',
+                }
+              );
+            } else {
+              this.$message(
+                {
+                  message: '删除失败！',
+                  type: 'error',
+                }
+              );
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
       });
-    });
 
+    }
   }
-
-  // }
 };
 </script>
 
