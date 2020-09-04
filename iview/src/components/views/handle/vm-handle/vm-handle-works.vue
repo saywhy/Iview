@@ -1103,7 +1103,11 @@ export default {
           if (status == 0) {
             let { data, count, maxPage, pageNow } = datas;
 
-            console.log(data)
+            data.map(v => {
+              v.src_ip = JSON.parse(v.src_ip).join(',');
+              v.dest_ip = JSON.parse(v.dest_ip).join(',');
+            })
+
             let that = this;
 
             console.log(this.task_params.multiple_alerts)
@@ -1167,7 +1171,6 @@ export default {
           this.table.loading = false;
           let { status, data } = resp.data;
 
-          console.log(data)
           let datas = data;
           if (status == 0) {
             let { data, count, maxPage, pageNow } = datas;
@@ -1284,6 +1287,7 @@ export default {
     //状态变更取消按钮点击
     cancel_state () {
       this.closed_state();
+      this.$refs.multipleTable.clearSelection();
     },
 
     //状态变更确定按钮点击
@@ -1731,6 +1735,7 @@ export default {
     // 关闭弹窗
     closed_edit_pop () {
       this.edit.pop = false
+      this.$refs.multipleTable.clearSelection();
     },
     // 打开编辑弹窗
     edit_task_pop (item) {
@@ -1906,7 +1911,15 @@ export default {
       })
         .then((resp) => {
           let { status, data } = resp.data;
+
+          console.log(resp);
+
+          data.data.map(v => {
+            v.src_ip = JSON.parse(v.src_ip).join(',');
+            v.dest_ip = JSON.parse(v.dest_ip).join(',');
+          })
           this.edit.alert_list = data;
+
           if (this.edit.handle_sel.length != 0) {
             this.selected_list.concat(this.edit.handle_sel)
           }
@@ -1991,7 +2004,7 @@ export default {
         // }
         all_params.te_alert = handle_sel_list
       }
-      console.log(all_params);
+
       this.handle.save = true
       this.$axios.post('/yiiapi/workorders', all_params)
         .then((resp) => {

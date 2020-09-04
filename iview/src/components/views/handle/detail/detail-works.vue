@@ -203,7 +203,7 @@
                alt="">
           <span class="lst_left_title">{{item.username}}</span>
           <span class="lst_left_time">
-            <i class="lst_time"></i>{{item.created_at | time}}</span>
+            <i class="lst_time"></i>{{item.created_at}}</span>
           <p class="lst_left_content">{{item.comment}}</p>
         </li>
       </ul>
@@ -345,9 +345,12 @@ export default {
             * */
             if (data.assets) {
               //是资产
+              //console.log(data);
               this.table.tabsFlag = 0;
               data.assets.data.forEach(function (v, k) {
                 v.new_label = v.label.join(',');
+                v.src_ip = JSON.parse(v.src_ip).join(',');
+                v.dest_ip = JSON.parse(v.dest_ip).join(',');
               });
               this.table.tableData = data.assets.data;
               this.table.count = data.assets.count;
@@ -359,8 +362,11 @@ export default {
 
             if (data.alerts) {
               //是告警
-              console.log(data);
               this.table.tabsFlag = 1;
+              data.alerts.data.map(v => {
+                v.src_ip = JSON.parse(v.src_ip).join(',');
+                v.dest_ip = JSON.parse(v.dest_ip).join(',');
+              })
               this.table.tableData = data.alerts.data;
               this.table.count = data.alerts.count;
               this.table.maxPage = data.alerts.maxPage;

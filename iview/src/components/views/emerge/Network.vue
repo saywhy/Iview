@@ -957,7 +957,8 @@ export default {
         if (status == 0) {
 
           let { data, count, maxPage, pageNow } = datas;
-          console.log(data)
+          console.log(data);
+          
           this.table.tableData = data;
           this.table.count = count;
           this.table.maxPage = maxPage;
