@@ -2164,14 +2164,13 @@ export default {
   }
 }
 </style>
-
 <style lang="less">
   .s_btn_list{
     position: absolute;
     top: 30px;
     right: 0;
-    width: 288px!important;
-    height: 456px!important;
+    width: 308px!important;
+    height: 476px!important;
     background: #FFFFFF;
     padding: 20px 20px!important;
     box-shadow: 0 0 4px 0 rgba(0,0,0,0.24);

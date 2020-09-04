@@ -864,6 +864,8 @@ export default {
           this.dropCol = [];
           let { status, data } = resp.data;
 
+          console.log(data)
+
           if(status == 0){
 
             let config = data.config;
