@@ -868,7 +868,7 @@ export default {
       })
         .then((resp) => {
 
-          let { status, data } = resp.data;
+          let { status,msg, data } = resp.data;
 
           if(status == 0){
             this.$refs.messageDrop.hide();
@@ -876,6 +876,11 @@ export default {
             this.column_deploy();
             this.get_list_threat();
             this.columnDrop();
+          } else {
+            this.$message({
+              message: msg,
+              type: 'error'
+            });
           }
         });
     },
@@ -1008,6 +1013,13 @@ export default {
         if (status == 0) {
 
           let { data, count, maxPage, pageNow } = datas;
+
+          data.map(v => {
+            // v.alert_description = JSON.parse(v.alert_description).category;
+            v.asset_name = JSON.parse(v.asset_name);
+            v.user = JSON.parse(v.user);
+          });
+
           this.table.tableData = data;
           this.table.count = count;
           this.table.maxPage = maxPage;

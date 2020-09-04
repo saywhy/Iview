@@ -530,7 +530,7 @@
 
       //日志下载
       download_box(row){
-        var url = '/yiiapi/safetyequipment/DownloadLog?id='+row.id;
+        var url = '/yiiapi/safetyequipment/DownloadLog?ip='+row.ip;
         window.location.href = url;
       },
       /************************************/

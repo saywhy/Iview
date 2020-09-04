@@ -108,7 +108,7 @@
               <span class="title">指标</span>
             </p>
             <el-input class="select_box"
-                      placeholder="请输入指标"
+                      placeholder="请输入指标(最多255个字符串)"
                       maxlength="255"
                       v-model="intel_tab.indicator"
                       clearable>
@@ -168,7 +168,7 @@
                     type="textarea"
                     :rows="4"
                     maxlength="255"
-                    placeholder="请输入描述"
+                    placeholder="请输入描述(最多255个字符串)"
                     v-model="intel_tab.description"
                     clearable>
           </el-input>

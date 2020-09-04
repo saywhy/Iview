@@ -3,6 +3,7 @@
     <el-table class="common-table-home"
               ref="multipleTable"
               align="center"
+              border
               @row-click="detail_click"
               @header-click="header_click"
               :row-style="{cursor:'pointer'}"
@@ -175,6 +176,7 @@
             padding: 0;
             height: 36px;
             line-height: 36px;
+            border-right-width: 0;
             border-bottom: 1px solid #ececec;
             .cell {
               .btn_alert_background{
