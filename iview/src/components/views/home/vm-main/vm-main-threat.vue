@@ -87,10 +87,10 @@
       options = options.map(v => {
         let assets = '';
         if(v.src_label != ''){
-          assets = v.src_ip;
+          assets = JSON.parse(v.src_ip).join(',');
         }
         if(v.dest_label != ''){
-          assets += ','+v.dest_ip;
+          assets += ','+JSON.parse(v.dest_ip).join(',');
         }
         return {...v,assets:assets};
       })

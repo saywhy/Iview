@@ -303,7 +303,7 @@ export default {
     init_bom_left () {
       this.$axios.get('/yiiapi/monitor/LogMonitor')
         .then((resp) => {
-          //console.log(resp)
+          console.log(resp)
           let {
             status,
             data
@@ -319,7 +319,7 @@ export default {
     init_bom_mid () {
       this.$axios.get('/yiiapi/monitor/SafetyEquipment')
         .then((resp) => {
-           console.log(resp)
+           //console.log(resp)
           let {
             status,
             data

@@ -33,7 +33,7 @@
                 </span>
         </template>
       </el-table-column>
-      <el-table-column prop="category"
+      <el-table-column prop="categorys"
                        align="center"
                        label="关联威胁"
                        show-overflow-tooltip></el-table-column>
@@ -87,7 +87,7 @@
       let options = this.options;
 
       options = options.map((v,k)=>{
-        return {...v,index: k+1};
+        return {...v,index: k+1,categorys:JSON.parse(v.category).join(',')};
       });
 
       if (this.split != 0){
