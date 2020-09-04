@@ -2272,7 +2272,8 @@ export default {
   }
 }
 //新建工单
-/deep/ .task_new_box {
+/deep/
+.task_new_box {
   .el-dialog {
     .el-dialog__header {
       display: none;

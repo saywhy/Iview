@@ -150,7 +150,7 @@
                   <i class="t_img"></i>
                   <span class="t_name">配置列</span>
               </span>
-                  <el-dropdown-menu class="s_btn_list" slot="dropdown">
+                  <el-dropdown-menu class="s_btn_list" slot="dropdown" style="padding: 20px;">
                     <span class="s_b_name">展示字段</span>
                     <ul class="s_b_list">
                       <li class="item" v-for="(item,$index) in fieldList" :key="$index">
@@ -2173,7 +2173,7 @@ export default {
     width: 288px!important;
     height: 456px!important;
     background: #FFFFFF;
-    padding: 10px 10px;
+    padding: 20px 20px!important;
     box-shadow: 0 0 4px 0 rgba(0,0,0,0.24);
     .s_b_name{
       height: 30px;
