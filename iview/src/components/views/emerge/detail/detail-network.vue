@@ -248,7 +248,8 @@
                     :detailArray="detailArray"></detail-stage>
       <div class="mid_space">
       </div>
-      <detail-rate class="mid_item"></detail-rate>
+      <detail-rate :detailArray="detailArray"
+                   class="mid_item"></detail-rate>
     </div>
     <!-- 攻击频率视图 -->
     <!-- 检测时间轴 -->
@@ -473,12 +474,12 @@
           <el-table-column label="IP地址段"
                            align="center"
                            show-overflow-tooltip>
-<template slot-scope="scope">
-  <li v-for="item in scope.row.ip_segment"
-      class="btn_tag_box">
-    <p>{{item}}</p>
-  </li>
-</template>
+            <template slot-scope="scope">
+              <li v-for="item in scope.row.ip_segment"
+                  class="btn_tag_box">
+                <p>{{item}}</p>
+              </li>
+            </template>
           </el-table-column>
           <el-table-column prop="network_type"
                            align="center"
@@ -488,15 +489,15 @@
           <el-table-column label="标签"
                            align="center"
                            width="300">
-<template slot-scope="scope">
-  <span class="btn_tag_box"
-        v-for="item in scope.row.label">
-    <el-button type="primary"
-               class="btn_tag">
-      {{item}}
-    </el-button>
-  </span>
-</template>
+            <template slot-scope="scope">
+              <span class="btn_tag_box"
+                    v-for="item in scope.row.label">
+                <el-button type="primary"
+                           class="btn_tag">
+                  {{item}}
+                </el-button>
+              </span>
+            </template>
           </el-table-column>
           <el-table-column prop="person"
                            align="center"
@@ -508,9 +509,9 @@
                            align="center"
                            width="180"
                            show-overflow-tooltip>
-<template slot-scope="scope">
-  {{ scope.row.updated_at }}
-</template>
+            <template slot-scope="scope">
+              {{ scope.row.updated_at }}
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -540,15 +541,6 @@
                     tooltip-effect="dark"
                     @selection-change="handle_sel_table_add_works"
                     style="width: 100%">
-            <!--<el-table-column label="选择"
-                             width="55">
-<template slot-scope="scope">
-  <el-radio v-model="worksheets_data.tableRadio" :label="scope.row">
-    <i></i>
-  </el-radio>
-</template>
-
-            </el-table-column>-->
             <el-table-column label="选择"
                              align="center"
                              width="50"></el-table-column>
@@ -568,9 +560,9 @@
             <el-table-column label="优先级"
                              align="center"
                              width="120">
-<template slot-scope="scope">
-  {{ scope.row.priority | priority}}
-</template>
+              <template slot-scope="scope">
+                {{ scope.row.priority | priority}}
+              </template>
             </el-table-column>
             <!--<el-table-column prop="perator_cn"
                              label="经办人"
@@ -585,9 +577,9 @@
                              align="center"
                              width="80"
                              show-overflow-tooltip>
-<template slot-scope="scope">
-  {{ scope.row.status | work_status }}
-</template>
+              <template slot-scope="scope">
+                {{ scope.row.status | work_status }}
+              </template>
             </el-table-column>
           </el-table>
           <el-pagination class="pagination_box"
@@ -766,18 +758,18 @@
                   <el-table-column align="center"
                                    label="源地址"
                                    show-overflow-tooltip>
-<template slot-scope="scope">
-  <p v-for="item in JSON.parse(scope.row.src_ip)">
-    {{item }}</p>
-</template>
+                    <template slot-scope="scope">
+                      <p v-for="item in JSON.parse(scope.row.src_ip)">
+                        {{item }}</p>
+                    </template>
                   </el-table-column>
                   <el-table-column align="center"
                                    label="目的地址"
                                    show-overflow-tooltip>
-<template slot-scope="scope">
-  <p v-for="item in JSON.parse(scope.row.dest_ip)">
-    {{item }}</p>
-</template>
+                    <template slot-scope="scope">
+                      <p v-for="item in JSON.parse(scope.row.dest_ip)">
+                        {{item }}</p>
+                    </template>
                   </el-table-column>
                   <el-table-column prop="application"
                                    align="center"
@@ -788,27 +780,27 @@
                                    align="center"
                                    width="100"
                                    show-overflow-tooltip>
-<template slot-scope="scope">
-  <span class="btn_alert_background"
-        :class="{'high_background':scope.row.degree =='high','mid_background':scope.row.degree =='medium','low_background':scope.row.degree =='low'}">
-    {{ scope.row.degree | degree }}</span>
-</template>
+                    <template slot-scope="scope">
+                      <span class="btn_alert_background"
+                            :class="{'high_background':scope.row.degree =='high','mid_background':scope.row.degree =='medium','low_background':scope.row.degree =='low'}">
+                        {{ scope.row.degree | degree }}</span>
+                    </template>
                   </el-table-column>
                   <el-table-column label="失陷确定性"
                                    align="center"
                                    width="100"
                                    show-overflow-tooltip>
-<template slot-scope="scope">
-  <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
-    {{ scope.row.fall_certainty | certainty }}</span>
-</template>
+                    <template slot-scope="scope">
+                      <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
+                        {{ scope.row.fall_certainty | certainty }}</span>
+                    </template>
                   </el-table-column>
                   <el-table-column label="状态"
                                    align="center"
                                    width="80">
-<template slot-scope="scope">
-  {{ scope.row.status | work_status }}
-</template>
+                    <template slot-scope="scope">
+                      {{ scope.row.status | work_status }}
+                    </template>
                   </el-table-column>
                 </el-table>
               </div>
@@ -1927,7 +1919,8 @@ export default {
         this.new_worksheets_data.table_operator.tableData.unshift(item);
       }
       let pageNow = this.new_worksheets_data.table_operator.pageNow;
-      let handle_data_operator = this.new_worksheets_data.table_operator.tableData.slice((pageNow - 1) * 5, pageNow * 5);
+      let handle_data_operator = this.new_worksheets_data.table_operator.tableData.slice((pageNow - 1) * 5, pageNow *
+        5);
       this.new_worksheets_data.table_operator.tableData_new = handle_data_operator;
       let selected_name_attr = this.new_worksheets_data.table_operator.tableData.map(x => {
         return x.username
@@ -2117,6 +2110,7 @@ export default {
     this.alert_detail()
   }
 }
+
 </script>
 
 <style scoped lang="less">
@@ -2126,25 +2120,31 @@ export default {
   .detail_top {
     background: #fff;
     padding-bottom: 48px;
+
     .top_title {
       height: 62px;
       padding: 0 56px;
       border-bottom: 1px solid #ececec;
+
       .top_left {
         float: left;
         line-height: 62px;
+
         img {
           vertical-align: middle;
         }
       }
+
       .top_right {
         float: right;
+
         .change_btn {
           height: 34px;
           width: 124px;
           padding: 0;
           background: #0070ff;
         }
+
         .edit_btn {
           height: 34px;
           width: 124px;
@@ -2155,21 +2155,25 @@ export default {
         }
       }
     }
+
     .top_content {
       margin-top: 16px;
       padding: 0 56px;
       min-height: 100px;
       display: flex;
+
       .content_item {
         min-height: 38px;
         line-height: 38px;
         display: flex;
         margin-bottom: 10px;
+
         .item_title {
           width: 100px;
           font-size: 16px;
           text-align: right;
         }
+
         .item_right {
           text-align: left;
           flex: 1;
@@ -2179,23 +2183,29 @@ export default {
           // border: 1px solid green;
           word-break: break-all;
           word-wrap: break-word;
+
           .el-menu--horizontal > .el-submenu {
             height: 38px;
           }
+
           .el-menu--horizontal > .el-submenu {
             height: 38px;
           }
+
           /deep/ .el-menu--horizontal {
             border: 0;
             background: #f8f8f8;
+
             .el-submenu .el-submenu__title {
               height: 38px;
               line-height: 38px;
             }
+
             .el-submenu .el-submenu__title:hover {
               background: #f8f8f8;
             }
           }
+
           /deep/
             .el-menu--horizontal
             > .el-submenu.is-active
@@ -2203,6 +2213,7 @@ export default {
             border: 0;
             border-color: #f8f8f8;
           }
+
           .tag_btn_box {
             margin: 0 2px;
             display: inline-block;
@@ -2213,6 +2224,7 @@ export default {
             background: #5389e0;
             text-align: center;
           }
+
           .tag_btn {
             height: 20px;
             font-size: 14px;
@@ -2222,36 +2234,43 @@ export default {
             display: block;
           }
         }
+
         .src_bg {
           height: 38px;
           background: #f8f8f8;
           word-break: break-all;
           word-wrap: break-word;
         }
+
         .text_color {
           font-size: 16px;
           color: #0070ff;
           cursor: pointer;
         }
+
         .show_more_list {
           height: auto !important;
           overflow: auto !important;
         }
       }
+
       .content_left {
         flex: 45%;
+
         .src_dropdown_box {
           text-align: left;
           float: left;
           width: 24%;
           min-width: 125px;
           max-width: 30%;
+
           .el-button {
             border: 0;
             background: #f8f8f8;
             padding: 0;
           }
         }
+
         .more_box {
           width: 75px;
           border-left: 1px solid #ddd;
@@ -2261,36 +2280,44 @@ export default {
           background: #f8f8f8;
         }
       }
+
       .content_mid {
         flex: 30%;
       }
+
       .content_right {
         flex: 25%;
       }
     }
   }
+
   // 用户信息弹窗
   .pop_user_info {
     .el-dialog {
       width: 1200px;
+
       .el-dialog__body {
         width: 1200px;
+
         .content {
           padding-top: 24px;
           // 修改radio 改成对号
           height: 400px;
           overflow-y: auto;
+
           &::-webkit-scrollbar {
             /*滚动条整体样式*/
             width: 6px;
             /*高宽分别对应横竖滚动条的尺寸*/
             border-radius: 6px;
           }
+
           &::-webkit-scrollbar-thumb {
             /*滚动条里面小方块*/
             border-radius: 6px;
             background: #a8a8a8;
           }
+
           &::-webkit-scrollbar-track {
             /*滚动条里面轨道*/
             border-radius: 6px;
@@ -2300,28 +2327,34 @@ export default {
       }
     }
   }
+
   // 资产信息弹窗
   /deep/.pop_assets_info {
     .el-dialog {
       width: 1200px;
+
       .el-dialog__body {
         width: 1200px;
+
         .content {
           padding-top: 24px;
           // 修改radio 改成对号
           height: 400px;
           overflow-y: auto;
+
           &::-webkit-scrollbar {
             /*滚动条整体样式*/
             width: 6px;
             /*高宽分别对应横竖滚动条的尺寸*/
             border-radius: 6px;
           }
+
           &::-webkit-scrollbar-thumb {
             /*滚动条里面小方块*/
             border-radius: 6px;
             background: #a8a8a8;
           }
+
           &::-webkit-scrollbar-track {
             /*滚动条里面轨道*/
             border-radius: 6px;
@@ -2331,49 +2364,61 @@ export default {
       }
     }
   }
+
   /deep/.detail_mid {
     height: 344px;
     margin-top: 20px;
     display: flex;
+
     .mid_space {
       width: 24px;
     }
+
     .mid_item {
       flex: 50%;
     }
   }
+
   // 弹窗编辑标签
   /deep/.add_tag {
     .el-dialog {
       width: 440px;
+
       .el-dialog__body {
         width: 440px;
+
         .content {
           padding: 24px 5px;
           height: 120px;
           overflow-y: auto;
+
           &::-webkit-scrollbar {
             /*滚动条整体样式*/
             width: 6px;
             /*高宽分别对应横竖滚动条的尺寸*/
             border-radius: 6px;
           }
+
           &::-webkit-scrollbar-thumb {
             /*滚动条里面小方块*/
             border-radius: 6px;
             background: #a8a8a8;
           }
+
           &::-webkit-scrollbar-track {
             /*滚动条里面轨道*/
             border-radius: 6px;
             background: #f4f4f4;
           }
+
           .content_item {
             margin-bottom: 24px;
+
             .item_addrs {
               margin-bottom: 12px;
               display: flex;
             }
+
             .img_box {
               width: 16px;
               height: 16px;
@@ -2381,17 +2426,21 @@ export default {
               margin-top: 14px;
               cursor: pointer;
             }
+
             .title {
               font-size: 12px;
               color: #999999;
             }
+
             .title_color {
               color: #ff5f5c;
             }
+
             .select_box {
               width: 100%;
               height: 38px;
               margin-top: 6px;
+
               .el-input__inner {
                 background: #f8f8f8;
                 border: 0;
@@ -2402,36 +2451,44 @@ export default {
       }
     }
   }
+
   //添加到工单
   .pop_state_add {
     .el-dialog {
       width: 960px;
+
       .el-dialog__body {
         width: 960px;
+
         .content {
           padding-top: 24px;
           // 修改radio 改成对号
           height: 400px;
           overflow-y: auto;
+
           &::-webkit-scrollbar {
             /*滚动条整体样式*/
             width: 6px;
             /*高宽分别对应横竖滚动条的尺寸*/
             border-radius: 6px;
           }
+
           &::-webkit-scrollbar-thumb {
             /*滚动条里面小方块*/
             border-radius: 6px;
             background: #a8a8a8;
           }
+
           &::-webkit-scrollbar-track {
             /*滚动条里面轨道*/
             border-radius: 6px;
             background: #f4f4f4;
           }
+
           .el-radio__input.is-checked .el-radio__inner::after {
             transform: rotate(45deg) scaleY(1);
           }
+
           .el-radio__inner::after {
             -webkit-box-sizing: content-box;
             box-sizing: content-box;
@@ -2457,6 +2514,7 @@ export default {
             -webkit-transform-origin: center;
             transform-origin: center;
           }
+
           .el-radio__inner {
             border-radius: 2px;
           }
@@ -2464,12 +2522,15 @@ export default {
       }
     }
   }
+
   //  新建工单
   .task_new_box {
     .el-dialog {
       width: 960px;
+
       .el-dialog__body {
         width: 960px;
+
         .closed_img {
           position: absolute;
           top: -18px;
@@ -2478,16 +2539,19 @@ export default {
           width: 46px;
           height: 46px;
         }
+
         .title {
           height: 24px;
           line-height: 24px;
           text-align: left;
+
           .title_name {
             font-size: 20px;
             color: #333333;
             font-family: PingFangMedium;
             line-height: 24px;
           }
+
           .mask {
             width: 24px;
             height: 0px;
@@ -2502,9 +2566,11 @@ export default {
             margin-left: -10px;
           }
         }
+
         .step_box {
           height: 36px;
           margin: 20px 0 24px 0;
+
           .step_box1 {
             background-image: url('../../../../assets/images/emerge/step1.png');
             background-repeat: no-repeat;
@@ -2515,15 +2581,18 @@ export default {
             position: relative;
             line-height: 36px;
             text-align: center;
+
             .step1_span {
               font-size: 14px;
             }
+
             .selected_img {
               position: absolute;
               left: 0;
               top: 0;
             }
           }
+
           .step_box2 {
             width: 120px;
             height: 36px;
@@ -2535,57 +2604,73 @@ export default {
             line-height: 36px;
             text-align: center;
             margin-left: -10px;
+
             .step2_span {
               font-size: 14px;
             }
           }
+
           .step_now {
             color: #0070ff;
           }
+
           .step_past {
             color: #999999;
           }
         }
+
         .task_new_content {
           /*height: 480px;*/
           .content_top {
             overflow: hidden;
+
             .content_top_left {
               float: left;
               width: 45%;
+
               .left_item {
                 margin-bottom: 16px;
                 display: flex;
+
                 .title {
                   width: 100px;
                   line-height: 38px;
+
                   .improtant_ico {
                     color: #ff3a36;
                   }
                 }
+
                 .task_new_input {
                   flex: 1;
+
                   .el-input__inner {
                     height: 38px;
                   }
                 }
               }
             }
+
             .content_top_right {
               float: right;
               width: 45%;
+
               .right_item {
                 margin-bottom: 16px;
                 display: flex;
+
                 .title {
                   width: 100px;
                   line-height: 38px;
+
                   .improtant_ico {
                     color: #ff3a36;
                   }
                 }
+
                 .task_new_input {
                   flex: 1;
+
                   .el-input__inner {
                     height: 38px;
                   }
@@ -2593,13 +2678,16 @@ export default {
               }
             }
           }
+
           .content_remarks {
             .title {
               font-size: 12px;
               color: #999999;
             }
+
             /deep/ .el-textarea {
               height: 92px;
+
               textarea {
                 resize: none;
                 height: 92px;
@@ -2608,58 +2696,71 @@ export default {
                 font-family: PingFang;
               }
             }
+
             .el-textarea__inner:hover {
               border: none;
             }
+
             .el-textarea__inner {
               border: none;
               background: #f8f8f8;
             }
           }
+
           .content_table {
             margin-top: 16px;
+
             /deep/ .el-table td {
               padding: 0;
               height: 32px;
             }
+
             /deep/ .el-table th {
               padding: 0;
               height: 36px;
               background: #f8f8f8;
+
               .cell {
               }
             }
+
             /deep/ .el-pagination {
               margin-top: 20px;
               text-align: center;
             }
           }
         }
+
         .task_content_box {
           height: 400px;
           overflow-y: auto;
+
           &::-webkit-scrollbar {
             /*滚动条整体样式*/
             width: 6px;
             /*高宽分别对应横竖滚动条的尺寸*/
             border-radius: 6px;
           }
+
           &::-webkit-scrollbar-thumb {
             /*滚动条里面小方块*/
             border-radius: 6px;
             background: #a8a8a8;
           }
+
           &::-webkit-scrollbar-track {
             /*滚动条里面轨道*/
             border-radius: 6px;
             background: #f4f4f4;
           }
         }
+
         .btn_box {
           margin-top: 36px;
           margin-bottom: 24px;
           height: 42px;
           text-align: center;
+
           .cancel_btn {
             border: 1px solid #0070ff;
             background: #fff;
@@ -2668,6 +2769,7 @@ export default {
             height: 42px;
             font-size: 16px;
           }
+
           .next_btn {
             background-color: #0070ff;
             color: #fff;
@@ -2676,10 +2778,12 @@ export default {
             font-size: 16px;
           }
         }
+
         .task_handle_content {
           .handle_content_top {
             height: 42px;
             text-align: left;
+
             .change_btn,
             .ref {
               background-color: #0070ff;
@@ -2688,6 +2792,7 @@ export default {
               height: 42px;
               color: #fff;
             }
+
             .cel {
               border: 1px solid #0070ff;
               background: #fff;
@@ -2697,10 +2802,13 @@ export default {
               margin-left: 0;
             }
           }
+
           .table_box {
             margin-top: 24px;
+
             .table_box_title {
               height: 38px;
+
               li {
                 height: 38px;
                 width: 92px;
@@ -2711,6 +2819,7 @@ export default {
                 text-align: center;
                 border-top: 2px solid #fff;
               }
+
               li.active {
                 cursor: pointer;
                 background: #eef6ff;
@@ -2718,30 +2827,37 @@ export default {
                 border-top: 2px solid #0070ff;
               }
             }
+
             /deep/ .el-table {
               font-size: 12px;
+
               thead.has-gutter {
                 th {
                   color: #333333;
                   background: #f8f8f8;
+
                   .cell {
                   }
                 }
               }
+
               .cell {
                 color: #333333;
               }
             }
+
             /deep/ .el-pagination {
               margin-top: 20px;
               text-align: center;
             }
           }
+
           .btn_box {
             margin-top: 36px;
             margin-bottom: 24px;
             height: 42px;
             text-align: center;
+
             .cancel_btn {
               border: 1px solid #0070ff;
               background: #fff;
@@ -2750,6 +2866,7 @@ export default {
               height: 42px;
               font-size: 16px;
             }
+
             .prev_btn {
               background-color: #0070ff;
               color: #fff;
@@ -2771,6 +2888,7 @@ export default {
 @import '../../../../assets/css/less/common-table-pattern.less';
 @import '../../../../assets/css/less/common-dropdown.less';
 @import '../../../../assets/css/less/reset_css/reset_table.less';
+
 body {
   > ul.dropdown_ul_box_124 {
     width: 128px !important;

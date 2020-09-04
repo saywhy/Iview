@@ -30,7 +30,8 @@
         <!-- 详细信息 -->
         <base-info :selectItem='select_item'></base-info>
         <!-- 日志 -->
-        <base-log></base-log>
+        <base-log :selectItem='select_item'
+                  v-if='select_item.detect_engine=="LOGDF"'></base-log>
         <!-- 告警资产 -->
         <alert-assets :selectIndicator='select_item.indicator'></alert-assets>
       </div>
@@ -66,10 +67,9 @@ export default {
   },
   watch: {
     detailArray: function (val) {
-      console.log('val监听:', val)
-      console.log(this.detailArray);
+      // console.log('val监听:', val)
+      // console.log(this.detailArray);
       this.timeaxis = JSON.parse(JSON.stringify(this.detailArray))
-      //  this.dataArray = this.dataArray.concat(this.data);
       this.select_item = this.timeaxis[0]
     }
   },

@@ -218,81 +218,81 @@ export default {
         },
         // 处置
         {
-          id: 13,
+          id: 4,
           label: '处置',
           children: [
             {
-              id: 14,
+              id: 5,
               label: '资产维度',
             },
             {
-              id: 23,
+              id: 6,
               label: '风险维度',
               children: [
                 {
-                  id: 24,
+                  id: 7,
                   label: '外部威胁',
                 },
                 {
-                  id: 32,
+                  id: 8,
+                  label: '本机威胁',
+                },
+                {
+                  id: 9,
                   label: '横向威胁',
                 },
                 {
-                  id: 40,
+                  id: 10,
                   label: '外联威胁',
                 }
               ]
             },
             {
-              id: 48,
+              id: 11,
               label: '工单中心',
             },
           ]
         },
         // 告警
         {
-          id: 58,
+          id: 12,
           label: '告警',
-          children: [{
-            id: 59,
-            label: '告警',
-          }]
         },
         // 追查
         {
-          id: 76,
+          id: 14,
           label: '追查',
           children: [
             {
-              id: 77,
+              id: 15,
               label: 'DNS追查',
             },
             {
-              id: 81,
+              id: 16,
               label: 'IP/URL追查',
             },
             {
-              id: 85,
+              id: 17,
               label: '主机追查',
             },
             {
-              id: 93,
+              id: 18,
               label: '用户追查',
             },
             {
-              id: 97,
+              id: 19,
               label: '文件追查',
             },
             {
-              id: 101,
+              id: 20,
               label: '数据传输追查',
             },
             {
-              id: 105,
+              id: 21,
               label: '流量方向追查',
             },
             {
-              id: 109,
+              id: 22,
               label: 'IOC扫描器',
             },
 
@@ -300,68 +300,93 @@ export default {
         },
         // 报表
         {
-          id: 123,
+          id: 24,
           label: '报表',
           children: [
             {
-              id: 124,
+              id: 25,
               label: '报表生成',
             },
             {
-              id: 130,
+              id: 26,
               label: '报表发送',
             },
           ]
         },
         // 系统
         {
-          id: 132,
+          id: 27,
           label: '系统',
           children: [
             {
-              id: 133,
-              label: '设备管理',
+              id: 28,
+              label: '系统监控',
+              children: [
+                {
+                  id: 29,
+                  label: '运行监控',
+                },
+                {
+                  id: 30,
+                  label: '安全设备',
+                },
+
+              ]
             },
             {
-              id: 139,
-              label: '受监控IP',
-            },
-            {
-              id: 144,
-              label: '账号管理',
-            },
-            {
-              id: 157,
-              label: '网络配置',
-            },
-            {
-              id: 162,
-              label: '系统选项',
-            },
-            {
-              id: 169,
-              label: '规则库及白名单',
-            },
-            {
-              id: 183,
-              label: '联动',
-            },
-            {
-              id: 187,
-              label: '威胁通知',
-            },
-            {
-              id: 191,
-              label: '日志',
-            },
-            {
-              id: 204,
-              label: '恢复/重启',
-            },
-            {
-              id: 207,
-              label: '许可证',
-            },
+              id: 31,
+              label: '系统设置',
+              children: [
+                {
+                  id: 32,
+                  label: '配置向导',
+                },
+                {
+                  id: 33,
+                  label: '网络配置',
+                },
+                {
+                  id: 34,
+                  label: '系统选项',
+                },
+                {
+                  id: 35,
+                  label: '受监控IP',
+                },
+                {
+                  id: 36,
+                  label: '威胁通知',
+                },
+                {
+                  id: 37,
+                  label: '账号管理',
+                },
+                {
+                  id: 38,
+                  label: '规则库及白名单',
+                },
+                {
+                  id: 39,
+                  label: '情报管理',
+                },
+                {
+                  id: 40,
+                  label: '标签管理',
+                },
+                {
+                  id: 41,
+                  label: '联动',
+                },
+                {
+                  id: 42,
+                  label: '日志',
+                },
+                {
+                  id: 282,
+                  label: '恢复/重启',
+                },
+              ]
+            }
           ]
         },
       ],
@@ -434,7 +459,7 @@ export default {
             this.data.forEach(element => {
               if (element.label == '追查') {
                 element.children.push({
-                  id: 117,
+                  id: 23,
                   label: '沙箱',
                 })
               }

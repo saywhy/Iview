@@ -239,7 +239,7 @@ export default {
               } else {
                 this.$message(
                   {
-                    message: msg,
+                    message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                     type: 'error',
                   }
                 );
@@ -359,7 +359,7 @@ export default {
           } else {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
@@ -404,7 +404,7 @@ export default {
     },
     // 获取新消息
     get_news () {
-      this.$axios.get('/yiiapi/news/count')
+      this.$axios.get('/yiiapi/new/Count')
         .then((resp) => {
           let { status, data } = resp.data;
           let datas = data;

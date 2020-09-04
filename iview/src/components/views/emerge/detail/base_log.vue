@@ -3,8 +3,10 @@
     <p class="title">日志</p>
     <div class="log_content">
       <div class="log_content_top">
-        <div class="log_btn_i">导出归一化日志</div>
-        <div class="log_btn_o">导出原始日志</div>
+        <div class="log_btn_i"
+             @click="NormalizedLog">导出归一化日志</div>
+        <div class="log_btn_o"
+             @click="OriginalLog">导出原始日志</div>
       </div>
       <div class="log_table_box">
         <div class="log_table_left">
@@ -394,10 +396,37 @@ export default {
       ]
     }
   },
+  props: {
+    selectItem: {
+      type: Object,
+      default: () => { }
+    }
+  },
+  watch: {
+    selectItem: function (val) {
+      console.log('222222:', val)
+      this.LogList(val)
+    }
+  },
+
   mounted () {
+    this.LogList()
   },
   methods: {
-
+    LogList () {
+      console.log('11121212');
+      this.$axios.get('/yiiapi/alert/LogList', {
+        params: {
+          srcIp: JSON.parse(this.selectItem.src_ip)[0],
+          destIp: JSON.parse(this.selectItem.dest_ip)[0],
+        }
+      }).then(resp => {
+        console.log(resp);
+      })
+        .catch(error => {
+          console.log(error);
+        })
+    },
     handleSelectionChange () {
 
     },
@@ -423,6 +452,13 @@ export default {
     before_mm () { },
     after_hh () { },
     after_mm () { },
+    NormalizedLog () {
+      console.log(this.selectItem);
+      window.open('/yiiapi/alert/NormalizedLog?destIp=' + JSON.parse(this.selectItem.dest_ip)[0] + '&srcIp=' + JSON.parse(this.selectItem.src_ip)[0]);
+    },
+    OriginalLog () {
+      window.open('/yiiapi/alert/OriginalLog?destIp=' + JSON.parse(this.selectItem.dest_ip)[0] + '&srcIp=' + JSON.parse(this.selectItem.src_ip)[0]);
+    },
   },
   computed: {}
 }

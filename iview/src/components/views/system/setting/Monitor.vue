@@ -392,7 +392,7 @@
                      :file-list="fileList"
                      accept=".xls"
                      drag
-                     action="/yiiapi/ipsegment/upload-excel"
+                     action="/yiiapi/ipsegment/UploadExcel"
                      :multiple='false'>
             <img class="upload_img"
                  src="@/assets/images/setting/upload_s.png"
@@ -895,14 +895,15 @@ export default {
           this.monitor_edit.tag.push(item.name)
         }
       });
-      this.$axios.put('/yiiapi/ipsegment/edit-ip-segment', {
-        id: this.monitor_edit.id,
-        name: this.monitor_edit.name,
-        ip_segment: this.monitor_edit.ip_segment,
-        network_type: this.monitor_edit.network_type,
-        person: this.monitor_edit.person,
-        label: this.monitor_edit.tag,
-        location: this.monitor_edit.selected_cascader_edit,
+      this.$axios.put('/yiiapi/ipsegments/' + this.monitor_edit.id, {
+        IpSegment: {
+          name: this.monitor_edit.name,
+          ip_segment: this.monitor_edit.ip_segment,
+          network_type: this.monitor_edit.network_type,
+          person: this.monitor_edit.person,
+          label: this.monitor_edit.tag,
+          location: this.monitor_edit.selected_cascader_edit,
+        }
       })
         .then(response => {
           console.log(response);
@@ -918,7 +919,7 @@ export default {
           } else {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );

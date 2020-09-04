@@ -142,7 +142,7 @@ export default {
           is_deal: '2'
         }
       }).then(resp => {
-        console.log(resp);
+        // console.log(resp);
         let { status, data } = resp.data;
         this.table_old = data
       })
@@ -154,7 +154,7 @@ export default {
           is_deal: '0'
         }
       }).then(resp => {
-        console.log(resp);
+        // console.log(resp);
         let { status, data } = resp.data;
         this.table_new = data
       })

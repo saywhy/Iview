@@ -212,8 +212,6 @@ export default {
   },
   watch: {
     detailArray: function (val) {
-      console.log('val监听:', val)
-      console.log(this.detailArray);
       this.detailArray.map(item => {
         this.attack_stage_list.map(ele => {
           if (item.attack_stage == ele.name) {
@@ -222,8 +220,6 @@ export default {
         })
       })
       console.log(this.attack_stage_list);
-
-
     }
   },
 }

@@ -35,10 +35,10 @@
                              type="selection"
                              width="50"></el-table-column>
             <el-table-column label="时间"
+                             prop="created_at"
                              align="center"
                              width="200"
                              show-overflow-tooltip>
-              <template slot-scope="scope">{{ scope.row.created_at | time }}</template>
             </el-table-column>
             <el-table-column width="240"
                              align="center"
@@ -120,7 +120,7 @@ export default {
     // 获取新消息
     get_news () {
       // /news/list
-      this.$axios.get('/yiiapi/news/list', {
+      this.$axios.get('/yiiapi/news', {
         params: {
           page: this.news_data.page,
           rows: this.news_data.rows,
@@ -138,7 +138,7 @@ export default {
     },
     // 标记已读 
     update (id, type) {
-      this.$axios.get('/yiiapi/news/update', {
+      this.$axios.get('/yiiapi/news/ChangeStatus', {
         params: {
           id: id
         }

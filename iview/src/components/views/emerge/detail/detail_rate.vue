@@ -12,47 +12,46 @@
   </div>
 </template>
 <script>
+import moment from "moment"
 export default {
   name: 'Rate',
+  props: {
+    detailArray: {
+      type: Array,
+      default: () => { }
+    }
+  },
   data () {
     return {
-      line_list: [
-        {
-          alert_count: "10",
-          statistics_time: "2020-08-05 17:00"
-        },
-        {
-          alert_count: "123",
-          statistics_time: "2020-08-06 17:00"
-        },
-        {
-          alert_count: "442",
-          statistics_time: "2020-08-07 17:00"
-        },
-        {
-          alert_count: "11",
-          statistics_time: "2020-08-08 17:00"
-        },
-        {
-          alert_count: "33",
-          statistics_time: "2020-08-09 17:00"
-        },
-        {
-          alert_count: "123",
-          statistics_time: "2020-08-10 17:00"
-        },
-        {
-          alert_count: "283",
-          statistics_time: "2020-08-11 17:00"
-        },
-      ]
+      line_list: []
     }
   },
   mounted () {
-    this.drawLine();
+  },
+  watch: {
+    detailArray: function (val) {
+      console.log(this.detailArray);
+      this.detailArray.map(item => {
+        var obj = {
+          alert_count: "1",
+          statistics_time: moment(item.alert_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+        }
+        this.line_list.push(obj)
+      })
+
+      //       value = value.toString();
+      // if (value.length == 10) {
+      //   value = value * 1000;
+      // } else {
+      //   value = parseInt(value / 1000) * 1000
+      // }
+      // return moment(value).format('YYYY-MM-DD HH:mm:ss')
+      this.drawLine();
+    }
   },
   methods: {
     drawLine () {
+      console.log('11111111');
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("emergeLine"));
       // 绘制图表
@@ -106,6 +105,7 @@ export default {
         },
         yAxis: {
           //网格样式
+          splitNumber: 1,
           splitLine: {
             show: true,
             lineStyle: {

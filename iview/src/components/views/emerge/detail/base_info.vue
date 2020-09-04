@@ -276,9 +276,9 @@ export default {
     }
   },
   mounted () {
-    console.log(suggestJS);
+    // console.log(suggestJS);
     this.suggest_list = JSON.parse(JSON.stringify(suggestJS))
-    console.log(this.suggest_list);
+    // console.log(this.suggest_list);
   },
   methods: {
     handleClick (tab, event) {
