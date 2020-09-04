@@ -413,9 +413,9 @@ export default {
       });
     });
 
-  },
+  }
 
-}
+  // }
 };
 </script>
 

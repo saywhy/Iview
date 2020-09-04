@@ -137,21 +137,20 @@ export default {
       //   }
       // })
       //   .then(response => {
-      console.log(response.data);
-      if (response.data.status == 0) {
-        var tt = new Date().getTime();
-        var url = '/yiiapi/yararule/Download';
-        var form = $("<form>"); //定义一个form表单
-        form.attr("style", "display:none");
-        form.attr("target", "");
-        form.attr("method", "get"); //请求类型
-        form.attr("action", url); //请求地址
-        $("body").append(form); //将表单放置在web中
-        var input1 = $("<input>");
-        input1.attr("type", "hidden");
-        form.append(input1);
-        form.submit(); //表单提交
-      }
+      // if (response.data.status == 0) {
+      var tt = new Date().getTime();
+      var url = '/yiiapi/yararule/Download';
+      var form = $("<form>"); //定义一个form表单
+      form.attr("style", "display:none");
+      form.attr("target", "");
+      form.attr("method", "get"); //请求类型
+      form.attr("action", url); //请求地址
+      $("body").append(form); //将表单放置在web中
+      var input1 = $("<input>");
+      input1.attr("type", "hidden");
+      form.append(input1);
+      form.submit(); //表单提交
+      // }
       // })
       // .catch(error => {
       //   console.log(error);
@@ -183,22 +182,22 @@ export default {
       //   }
       // })
       //   .then(response => {
-      //     if (params.status == 1) {
-      //       this.$message(
-      //         {
-      //           message: params.msg,
-      //           type: 'error',
-      //         }
-      //       );
-      //     } else if (params.status == 0) {
-      this.get_data();
-      this.$message(
-        {
-          message: '上传成功',
-          type: 'success',
-        }
-      );
-      //   }
+      if (params.status == 1) {
+        this.$message(
+          {
+            message: params.msg,
+            type: 'error',
+          }
+        );
+      } else if (params.status == 0) {
+        this.get_data();
+        this.$message(
+          {
+            message: '上传成功',
+            type: 'success',
+          }
+        );
+      }
       // })
       // .catch(error => {
       //   console.log(error);
@@ -262,20 +261,20 @@ export default {
         message: '已取消删除'
       });
     });
-  }
+    // }
 
-},
-filters: {
-  filterType: function (val) {
-    if (val == '') return;
-    if (val == undefined) return;
-    if (val == 0) return '0B';
-    var k = 1024;
-    var size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-      i = Math.floor(Math.log(val) / Math.log(k));
-    return (val / Math.pow(k, i)).toPrecision(3) + ' ' + size[i]
+  },
+  filters: {
+    filterType: function (val) {
+      if (val == '') return;
+      if (val == undefined) return;
+      if (val == 0) return '0B';
+      var k = 1024;
+      var size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        i = Math.floor(Math.log(val) / Math.log(k));
+      return (val / Math.pow(k, i)).toPrecision(3) + ' ' + size[i]
+    }
   }
-}
 };
 </script>
 

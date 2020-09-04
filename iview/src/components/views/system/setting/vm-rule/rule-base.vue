@@ -83,7 +83,7 @@ export default {
     return {
       loading: false,
       options: {
-        target: '/yiiapi/rulebase/upload-package',
+        target: '/yiiapi/rulebases',
         chunkSize: '10048000',   //分块大小
         singleFile: true,
         testChunks: false,     //是否开启服务器分片校验
@@ -256,7 +256,7 @@ export default {
       this.upload_btn = true;
       if (JSON.parse(response).status == 0) {
         console.log(file);
-        this.$axios.post('/yiiapi/rulebases', {
+        this.$axios.post('/yiiapi/rulebase/upload-success', {
           "file_name": file.name
         })
           .then(response => {
