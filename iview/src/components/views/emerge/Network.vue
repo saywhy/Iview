@@ -603,7 +603,7 @@ export default {
       fieldList:[{checked:true,disabled:true,name:"告警时间",alias:'alert_time'},
         {checked:true,disabled:true,name:"告警类型",alias:'category'},
         {checked:true,disabled:true,name:"威胁等级",alias:'degree'},
-        {checked:true,disabled:false,name:"描述",alias:'alert_description'},
+        {checked:true,disabled:false,name:"描述",alias:'description'},
         {checked:true,disabled:false,name:"安全域",alias:'security_domain'},
         {checked:true,disabled:false,name:"源地址",alias:'src_ip'},
         {checked:true,disabled:false,name:"目的地址",alias:'dest_ip'},
@@ -864,7 +864,7 @@ export default {
           this.dropCol = [];
           let { status, data } = resp.data;
 
-          console.log(data)
+          //console.log(data)
 
           if(status == 0){
 
@@ -970,6 +970,10 @@ export default {
            // v.alert_description = JSON.parse(v.alert_description).category;
             v.asset_name = JSON.parse(v.asset_name);
             v.user = JSON.parse(v.user);
+            if(v.description){
+              v.description = JSON.parse(v.description);
+            }
+
           });
 
           this.table.tableData = data;

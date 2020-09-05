@@ -278,7 +278,7 @@
                 pageNow:data.pageNow * 1,
                 rows:data.rows * 1
               }
-              console.log(data.data)
+             // console.log(data.data)
               this.monitor_data = datas;
             }
 

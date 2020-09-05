@@ -67,7 +67,6 @@ export default {
 }
 </script>
 
-
 <style scoped lang='less'>
 @import '../../../../assets/css/less/system/setting/common_box.less';
 </style>

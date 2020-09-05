@@ -3,36 +3,41 @@
        v-loading.fullscreen.lock="loading">
     <div class="admin-top">
       <el-select class="select_box"
+                 @change="selectChanged"
                  v-model="intel_name"
                  placeholder="请选择情报源管理设备">
         <el-option v-for="item in intel_attr"
-                   :key="item.name"
-                   :label="item.name"
-                   :value="item.name">
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.value">
         </el-option>
       </el-select>
     </div>
     <div class="admin-bom">
-      <div class="item" v-for="(item,$index) in source_data.green" >
+      <div class="item" v-for="(item,$index) in all_source_data"
+           v-if="item.name.toUpperCase() !='MobileMaliciousHash_SHA1'.toUpperCase()&&
+                  item.name.toUpperCase() !='MaliciousHash_SHA1'.toUpperCase()&&
+                  item.name.toUpperCase() !='MaliciousHash_SHA256'.toUpperCase()&&
+                  item.name.toUpperCase() !='MobileMaliciousHash_SHA256'.toUpperCase() ">
         <span class="sw">
-          <el-switch v-model="item.switchFlag"></el-switch>
+          <el-switch v-model="item.choose" @change='changeStatus(item)'></el-switch>
           <span class="name" v-show="item.choose">启用</span>
           <span class="name" v-show="!item.choose">禁用</span>
         </span>
-        <h3 class="num">85</h3>
+        <h3 class="num">{{item.confidence}}</h3>
         <h5 class="cop1">{{item.key}}</h5>
         <h5 class="cop2">{{item.name}}</h5>
         <h4 class="ad1">
           <span class="t1">上次更新时间：</span>
-          <span class="t2">{{item.last_run}}</span>
+          <span class="t2">{{item.last_run | time}}</span>
         </h4>
         <h4 class="ad1">
           <span class="t1">上次成功更新时间：</span>
-          <span class="t2">{{item.last_successful_run}}</span>
+          <span class="t2">{{item.last_successful_run | time}}</span>
         </h4>
         <h4 class="ad2">
           <span class="tm1">结果：</span>
-          <span class="tm2">{{item.sub_state_cn}}</span>
+          <span class="tm2">{{item.sub_state_cn }}</span>
         </h4>
       </div>
     </div>
@@ -46,25 +51,19 @@
     data () {
       return {
         key: "",
-        intel_lists: [{count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:false,switchFlag:true},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:true,switchFlag:true},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:true,switchFlag:false},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:false,switchFlag:true},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:true,switchFlag:true},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:false,switchFlag:false},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:false,switchFlag:true},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:true,switchFlag:true},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:false,switchFlag:false},
-          {count:85,name:'Hoohoolab',corporate:'BotnetCAndCURL',update_time:'2019-01-03',last_time:'2019-01-04',status:false,switchFlag:false}],
         loading: false,
         intel_name:'',
-        intel_attr:[{name:'商业情报'},{name:'开源情报'}],
+        intel_attr:[{value:1,label:'商业情报'},{value:2,label:'开源情报'},{value:3,label:'全部'}],
+        full_version:'',
         full_data:[],
+        cyberhunt_data:[],
         full_cyberhunt_data:[],
         source_data:{
           red: [],
           green: []
-        }
+        },
+        //商业情报+开源情报
+        all_source_data:[]
       };
     },
     props: {
@@ -83,12 +82,13 @@
         this.loading = true;
         this.$axios.get('/yiiapi/intelligence/Config')
           .then(resp => {
-            this.loading = false;
+
             let {status,data} = resp.data;
+
             if (status == 0) {
               let {changed, fabric, mgmtbus, next_node_id, nodes, version} = data.result;
 
-              let full_version = version;
+              this.full_version = version;
 
               this.full_data = nodes;
 
@@ -103,22 +103,23 @@
                 }
               });
 
+              //console.log(this.full_data)
+
               //第二个接口
-              this.$axios.get('/yiiapi/intelligence/Prototype')
+              this.$axios.get('/yiiapi/intelligence/Status')
                 .then(resp => {
 
                   let {status,data} = resp.data;
 
                   if (status == 0) {
 
-                    let cyberhunt_data = data.result;
-                    //console.log(cyberhunt_data);
+                    this.cyberhunt_data = data.result;
+                    //console.log(data)
                     this.full_data.forEach((item) => {
                       if (item != null) {
-
-                        Object.keys(cyberhunt_data).forEach(ele => {
+                        this.cyberhunt_data.forEach(ele => {
                           var obj = {};
-                          if (item.name == ele.name) {
+                          if(item.name == ele.name) {
                             obj.name = item.name;
                             obj.prototype = item.properties.prototype;
                             obj.prototype_name = item.properties.prototype.split(
@@ -150,8 +151,7 @@
 
                       }
                     });
-
-                    console.log(this.full_cyberhunt_data);
+                    //console.log(this.full_cyberhunt_data);
                     this.get_prototype();
 
                   }
@@ -160,7 +160,6 @@
                 .catch(error => {
                   console.log(error);
                 })
-
 
               ///////////////
 
@@ -178,7 +177,7 @@
         this.$axios.get('/yiiapi/intelligence/Prototype')
           .then(resp => {
           let {status,msg,data} = resp.data;
-
+          this.loading = false;
 
           if(status == 0){
 
@@ -205,23 +204,28 @@
                   ) {
                     obj.type = "green";
                   } else {
-                    Object.keys(prototype_data[k].prototypes[item].tags)
-                      .forEach(ele => {
+                    prototype_data[k].prototypes[item].tags.forEach(ele => {
                       if (ele == "ShareLevelGreen") {
                         obj.type = "green";
                       }
                       if (ele == "ShareLevelRed") {
                         obj.type = "red";
                       }
+
                     })
                   }
                 } else {
                   obj.type = "green";
                 }
                 if (prototype_data[k].prototypes[item].config.attributes) {
-                  if (prototype_data[k].prototypes[item].config.attributes.confidence) {
+                  if (
+                    prototype_data[k].prototypes[item].config.attributes
+                      .confidence
+                  ) {
                     obj.confidence =
-                      prototype_data[k].prototypes[item].config.attributes.confidence;
+                      prototype_data[k].prototypes[
+                        item
+                        ].config.attributes.confidence;
                   } else {
                     obj.confidence = 0;
                   }
@@ -237,6 +241,7 @@
                 //   $scope.prototype_list.push(obj);
               }
             }
+
             this.source_data.red.forEach(item => {
               item.choose = false;
               item.last_successful_run = "";
@@ -249,19 +254,21 @@
               item.last_run = "";
               item.sub_state = "";
             });
-            //   判断开启状态
+
+            //判断开启状态
             this.source_data.red.forEach(item => {
               this.full_data.forEach(ele => {
-                if (item.name == ele.properties.prototype.split(".")[1]) {
-                  if (ele.choose) {
-                    item.choose = ele.choose;
+                if (ele != null) {
+                  if (item.name == ele.properties.prototype.split(".")[1]) {
+                    if (ele.choose) {
+                      item.choose = ele.choose;
+                    }
+                    item.id = ele.id;
+                    item.version = ele.version;
                   }
-                  item.id = ele.id;
-                  item.version = ele.version;
                 }
               })
             });
-
             this.source_data.green.forEach(item => {
               this.full_data.forEach(ele => {
                 if (ele != null) {
@@ -293,7 +300,6 @@
                 }
               })
             });
-
             this.source_data.green.forEach(item => {
               this.full_cyberhunt_data.forEach(ele => {
                 if (item.key + '.' + item.name == ele.prototype) {
@@ -311,15 +317,89 @@
               })
             });
 
-            console.log(this.source_data);
-
+            //console.log(this.source_data);
+            this.all_source_data = [...this.source_data.red,...this.source_data.green];
           }
         })
           .catch(error => {
             console.log(error);
           })
-      }
+      },
 
+      //情报选择
+      selectChanged(val){
+        switch (val) {
+          case 1:
+            this.all_source_data = this.source_data.red;
+            break;
+          case 2:
+            this.all_source_data = this.source_data.green;
+            break;
+          case 3:
+            this.all_source_data = [...this.source_data.red,...this.source_data.green];
+            break;
+          default:
+            this.all_source_data = [...this.source_data.red,...this.source_data.green];
+            break;
+        }
+      },
+
+      changeStatus(item){
+
+        //开启
+        if(item.choose){
+          var node = {
+            name: item.key + "_" + item.name,
+            properties: {
+              inputs: [],
+              output: true,
+              prototype: item.key + "." + item.name
+            },
+            version: this.full_version
+          };
+          this.$axios.post("/yiiapi/intelligence/StatusOpen", node)
+            .then(resp => {
+              let {status,msg,data} = resp.data;
+              console.log(resp)
+              if(status == 0){
+                this.get_data();
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        }else {
+          
+          //禁止
+          var node = {
+            id:item.id,
+            name: item.key + "_" + item.name,
+            properties: {
+              inputs: [],
+              output: true,
+              prototype: item.key + "." + item.name
+            },
+            version: this.full_version
+          };
+          this.$axios.post("/yiiapi/intelligence/StatusClose", node)
+            .then(resp => {
+              let {status,msg,data} = resp.data;
+              console.log(resp)
+              if(status == 0){
+                this.get_data();
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+
+        }
+
+
+        //禁止
+
+
+      }
     },
 
     filters:{

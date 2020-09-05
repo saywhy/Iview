@@ -780,7 +780,7 @@ export const asyncRouterMap = [
             name: 'resume',
             meta: {
               title: '恢复/重启',
-              auth: '43',
+              auth: '282',
               icon: 'e-aside-none',
               parentAuth: '31',
               rootAuth: '27',
@@ -793,7 +793,7 @@ export const asyncRouterMap = [
             name: 'licence',
             meta: {
               title: '许可证',
-              auth: '44',
+              auth: '288',
               icon: 'e-aside-none',
               parentAuth: '31',
               rootAuth: '27',

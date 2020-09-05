@@ -200,13 +200,7 @@
         <span class="title_name">批量导入</span>
       </div>
       <div class="content_exp">
-        <view-upload></view-upload>
-      </div>
-      <div class="btn_box">
-        <el-button @click="closed_exp_box"
-                   class="cancel_btn">取消</el-button>
-        <el-button class="ok_btn"
-                   @click="submit_exp_box">确定</el-button>
+        <view-upload v-on:titleChanged="getExpState"></view-upload>
       </div>
     </el-dialog>
   </div>
@@ -495,13 +489,15 @@
       exp_box() {
         this.intel_state.exp = true;
       },
+      getExpState(state){
+        this.intel_state.exp = state;
+      },
       closed_exp_box(){
         this.intel_state.exp = false;
       },
       submit_exp_box(){
         this.intel_state.exp = false;
       },
-
     },
     filters: {
       formatDate: function (value) {
@@ -660,7 +656,7 @@
           }
           .content_exp{
             display: flex;
-            height: 400px;
+            height: 520px;
             overflow-y: hidden;
           }
           .btn_box{

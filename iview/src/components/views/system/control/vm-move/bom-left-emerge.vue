@@ -9,7 +9,7 @@ export default {
     return {};
   },
   props: {
-    option: {
+    options: {
       type: Object,
       default: () => {}
     }
@@ -19,6 +19,16 @@ export default {
   },
   methods: {
     emerge() {
+
+      let data = this.options.alert;
+
+      var xdata = [];
+      var ydata = [];
+      if(data){
+        xdata = data.aggregations.types_count.buckets.map(v => {return v.key_as_string});
+        ydata = data.aggregations.types_count.buckets.map(v => {return v.doc_count});
+      }
+
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("emerge"));
       // 绘制图表
@@ -70,21 +80,7 @@ export default {
           axisTick: {
             show: false
           },
-          data: [
-            "08:00",
-            "08:10",
-            "08:20",
-            "08:30",
-            "08:40",
-            "08:50",
-            "09:00",
-            "09:10",
-            "09:20",
-            "09:30",
-            "09:40",
-            "09:50",
-            "10:00"
-          ]
+          data: xdata
         },
         yAxis: {
           splitLine: {
@@ -117,7 +113,7 @@ export default {
             symbol: "none",
             cursor: "pointer",
             smooth: true,
-            data: [32, 14, 16, 30, 35, 20, 18, 32, 14, 16, 30, 35, 20, 18],
+            data: ydata,
             lineStyle: {
               color: "#DC5F5F "
             },

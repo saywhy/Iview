@@ -104,9 +104,9 @@ export function setRedirect(per) {
         redirect = '/system/setting/react';
       }else if(per.includes('42')) {
         redirect = '/system/setting/record';
-      }else if(per.includes('43')) {
+      }else if(per.includes('282')) {
         redirect = '/system/setting/resume';
-      }else if(per.includes('44')) {
+      }else if(per.includes('288')) {
         redirect = '/system/setting/licence';
       }
     }

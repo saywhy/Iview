@@ -81,10 +81,10 @@
                         </div>
                         <div class="bom_left_content">
                             <div class="content_top">
-                                <bom-left-test></bom-left-test>
+                                <bom-left-test :options="bom_left" v-if="bom_left_show"></bom-left-test>
                             </div>
                             <div class="content_bom">
-                                <bom-left-emerge></bom-left-emerge>
+                                <bom-left-emerge  :options="bom_left" v-if="bom_left_show"></bom-left-emerge>
                             </div>
                         </div>
                     </div>
@@ -214,14 +214,12 @@ export default {
       top_right_show: false,
 
       ///////////
-      bom_left: [],
+      bom_left: {},
       bom_left_show: false,
 
       bom_mid: {},
       bom_mid_show: false,
 
-      bom_right: [],
-      bom_right_show: false,
       //-----
       el_dialog: false,
       state_detail: false,
@@ -303,12 +301,13 @@ export default {
     init_bom_left () {
       this.$axios.get('/yiiapi/monitor/LogMonitor')
         .then((resp) => {
-          console.log(resp)
+          //console.log(resp)
           let {
             status,
             data
           } = resp.data;
           if (status == 0) {
+            //console.log(data)
             this.bom_left = data;
             this.bom_left_show = true;
           }
