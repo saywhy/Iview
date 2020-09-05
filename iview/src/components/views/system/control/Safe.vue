@@ -303,7 +303,7 @@
       },
       //删除确定
       del_monitor () {
-        if (this.select_list.length == 0) {
+        if(this.select_list.length == 0) {
           this.$message(
             {
               message: '请选择需要删除的数据！',
@@ -392,6 +392,7 @@
 
       //添加确定
       submit_add_box () {
+        var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
         if (this.monitor_add.name == '') {
           this.$message(
             {
@@ -401,6 +402,7 @@
           );
           return false
         }
+
         if (this.monitor_add.type == '') {
           this.$message(
             {
@@ -417,6 +419,13 @@
               type: 'warning',
             }
           );
+          return false
+        }
+        if (pattern.test(this.monitor_add.name)) {
+          this.$message({
+            message: '工单名称不能包含特殊字符！',
+            type: 'warning',
+          });
           return false
         }
         this.$axios.post('/yiiapi/safetyequipments', {
@@ -462,6 +471,7 @@
 
       //编辑确定
       submit_edit_box () {
+        var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
         if (this.monitor_add.name == '') {
           this.$message(
             {
@@ -487,6 +497,13 @@
               type: 'warning',
             }
           );
+          return false
+        }
+        if (pattern.test(this.monitor_add.name)) {
+          this.$message({
+            message: '工单名称不能包含特殊字符！',
+            type: 'warning',
+          });
           return false
         }
         this.$axios.put('/yiiapi/safetyequipments/'+this.monitor_add.id, {

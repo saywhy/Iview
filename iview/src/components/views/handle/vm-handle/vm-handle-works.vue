@@ -1707,7 +1707,7 @@ export default {
         .then(resp => {
           let { status, data } = resp.data;
           if (status == 0) {
-            console.log(this.edit);
+            //console.log(this.edit);
             this.edit.operator_list = data;
             if (this.edit.data.perator && this.edit.data.perator.length != 0) {
               this.edit.operator_list.forEach(element => {

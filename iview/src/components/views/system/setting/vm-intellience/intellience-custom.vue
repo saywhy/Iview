@@ -330,7 +330,7 @@
           });
           return false;
         }
-        var pattern = new RegExp("[<>]");
+        var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
         if (pattern.test(this.intel_tab.indicator)) {
           this.$message({
             message: '标签名称不能包含特殊字符！',
@@ -392,7 +392,7 @@
           });
           return false;
         }
-        var pattern = new RegExp("[<>]");
+        var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
         if (pattern.test(this.intel_tab.indicator)) {
           this.$message({
             message: '标签名称不能包含特殊字符！',

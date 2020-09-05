@@ -312,7 +312,8 @@
                   return v.label_name;
                 });
 
-                var pattern = new RegExp("[<>]");
+                var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
+
                 if (pattern.test(this.label.category_name)) {
                   this.$message({
                     message: '标签类型名不能包含特殊字符！',
@@ -329,7 +330,7 @@
                   return false;
                 }
 
-                var pattern = new RegExp("[<>]");
+                var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
                 if (pattern.test(this.label.name)) {
                   this.$message({
                     message: '标签名称不能包含特殊字符！',
@@ -488,7 +489,7 @@
             });
             return false;
           }
-          var pattern = new RegExp("[<>]");
+          var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
           if (pattern.test(this.label_category.name)) {
             this.$message({
               message: '标签类型名不能包含特殊字符！',
