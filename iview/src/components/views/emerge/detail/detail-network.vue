@@ -9,8 +9,10 @@
           <img src="@/assets/images/emerge/top1.png"
                alt="">
           <img src="@/assets/images/emerge/top2.png"
+               v-if="detail_main.security_domain!='terminal'"
                alt="">
           <img src="@/assets/images/emerge/top3.png"
+               v-if="detail_main.security_domain!='terminal'"
                alt="">
         </div>
         <div class="top_right">
@@ -160,7 +162,7 @@
           <div class="content_item">
             <span class="item_title">更新时间：</span>
             <div class="item_right ">
-              <span>{{detail_main.updated_at }}</span>
+              <span>{{detail_main.update_time }}</span>
             </div>
           </div>
           <div class="content_item">
@@ -249,6 +251,7 @@
       <div class="mid_space">
       </div>
       <detail-rate :detailArray="detailArray"
+                   v-if="detail_main.security_domain!='terminal'"
                    class="mid_item"></detail-rate>
     </div>
     <!-- 攻击频率视图 -->
@@ -510,7 +513,7 @@
                            width="180"
                            show-overflow-tooltip>
             <template slot-scope="scope">
-              {{ scope.row.updated_at }}
+              {{ scope.row.update_time }}
             </template>
           </el-table-column>
         </el-table>

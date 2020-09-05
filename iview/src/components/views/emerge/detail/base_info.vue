@@ -217,7 +217,7 @@
                   <p class="suggest_bom_title">威胁描述</p>
                   <p class="suggest_bom_des"
                      v-for="(item,index) in suggest_list"
-                     v-if="index==selectItem.safety_suggestion">{{ item.des}}</p>
+                     v-if="item.key==selectItem.safety_suggestion">{{ item.des}}</p>
                   <p class="suggest_bom_title">安全建议</p>
                   <p class="suggest_bom_list">
                     <img src="@/assets/images/emerge/detail_suggest.png"
@@ -226,7 +226,7 @@
                     <span class="suggest_bom_title">处置建议</span>
                   </p>
                   <div v-for="(item,index)  in suggest_list"
-                       v-if="index==selectItem.safety_suggestion">
+                       v-if="item.key==selectItem.safety_suggestion">
                     <p class="suggest_bom_li"
                        v-for="it in item.handle">
                       {{it}}
@@ -239,7 +239,7 @@
                     <span class="suggest_bom_title">加固建议</span>
                   </p>
                   <div v-for="(item,index)  in suggest_list"
-                       v-if="index==selectItem.safety_suggestion">
+                       v-if="item.key==selectItem.safety_suggestion">
                     <p class="suggest_bom_li"
                        v-for="it in item.reinforce">
                       {{it}}

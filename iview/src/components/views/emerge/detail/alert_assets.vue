@@ -69,9 +69,62 @@
         <el-tab-pane label="历史告警资产"
                      class="tabs-item"
                      name="2">
-          <div class="reset_item_box">
-
-          </div>
+          <el-table class="reset_table"
+                    ref="multipleTable"
+                    align="center"
+                    border
+                    style="width: 100%"
+                    :data="table_old.data"
+                    tooltip-effect="dark">
+            <el-table-column prop="alert_time"
+                             label="时间"
+                             align="center"
+                             show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="category"
+                             label="告警类型"
+                             align="center"
+                             show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="indicator"
+                             label="威胁指标"
+                             align="center"
+                             show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column label="源地址"
+                             align="center"
+                             show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{JSON.parse(scope.row.src_ip).join(',')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="目的地址"
+                             align="center"
+                             show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{JSON.parse(scope.row.dest_ip).join(',')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="application"
+                             label="应用"
+                             align="center"
+                             show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column align="center"
+                             label="威胁等级">
+              <template slot-scope="scope">
+                <span class="btn_alert_background"
+                      :class="{'high_background':scope.row.degree =='高','mid_background':scope.row.degree =='中','low_background':scope.row.degree =='低'}">
+                  {{ scope.row.degree | degree_sino }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="状态"
+                             align="center"
+                             width="80"
+                             show-overflow-tooltip>
+              <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
       </el-tabs>
       <el-pagination class="handle-pagination"
@@ -134,33 +187,8 @@ export default {
   watch: {
     selectIndicator: function (val) {
       console.log('val监听selectIndicator:', val)
-      this.$axios.get('/yiiapi/alert/GetSameIndicatorAlert', {
-        params: {
-          page: this.table_old.pageNow,
-          rows: this.table_old.rows,
-          indicator: val,
-          is_deal: '2'
-        }
-      }).then(resp => {
-        // console.log(resp);
-        let { status, data } = resp.data;
-        this.table_old = data
-      })
-      this.$axios.get('/yiiapi/alert/GetSameIndicatorAlert', {
-        params: {
-          page: this.table_old.pageNow,
-          rows: this.table_old.rows,
-          indicator: val,
-          is_deal: '0'
-        }
-      }).then(resp => {
-        // console.log(resp);
-        let { status, data } = resp.data;
-        this.table_new = data
-      })
-        .catch(error => {
-          console.log(error);
-        })
+      this.get_alert_list('2', '1', this.table_old.rows);
+      this.get_alert_list('0', '1', this.table_new.rows);
     }
   },
   methods: {

@@ -23,86 +23,86 @@
                     :highlight-current-row='true'
                     :row-class-name="tableRowClassName"
                     @selection-change="handleSelectionChange">
-            <el-table-column prop="time"
+            <el-table-column prop="_source.@timestamp"
                              label="日志时间"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.server_name"
                              label="日志来源"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.classification"
                              label="日志类型"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.eventtype"
                              label="事件类型"
                              align="center"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.direction"
                              label="方向"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.srcIp"
                              label="源地址"
                              align="center"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.src_name"
                              label="源资产名"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.src_port"
                              label="源端口"
                              align="center"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.src_account"
                              label="源账号"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.destIp"
                              label="目的地址"
                              align="center"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.dst_name"
                              label="目的资产名"
                              align="center"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.dst_port"
                              label="目的端口"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.dst_account"
                              label="目的账号"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.proto"
                              label="协议"
                              align="center"
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="time"
+            <el-table-column prop="_source.app"
                              label="应用"
                              align="center"
                              width="150"
@@ -118,49 +118,34 @@
                          class="tabs-item"
                          name="1">
               <div class="reset_item_box">
-                <div class="complete_item">
-                  <p class="complete_item_title">Log Count :</p>
-                  <p class="complete_item_content">1</p>
+                <div v-if="JSON.stringify(complete_log) == '{}'">
+                  <img src="@/assets/images/emerge/log_space.png"
+                       class="img_box"
+                       alt="">
+                  <p class="space_title">未选择日志</p>
                 </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Classification :</p>
-                  <p class="complete_item_content">Configuration</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Common Event :</p>
-                  <p class="complete_item_content">AIE Configuration: New Autorun Registry Key</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Direction :</p>
-                  <p class="complete_item_content">Unknow</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Log Source Entity :</p>
-                  <p class="complete_item_content">Log Source Entity</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Log Source Host :</p>
-                  <p class="complete_item_content">Log Source Host</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Log Source Type :</p>
-                  <p class="complete_item_content">Log Source Type</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Log Date :</p>
-                  <p class="complete_item_content">2019-11-04 14:33:16</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Object :</p>
-                  <p class="complete_item_content">Object :</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Object Name :</p>
-                  <p class="complete_item_content">Object Name</p>
-                </div>
-                <div class="complete_item">
-                  <p class="complete_item_title">Priority :</p>
-                  <p class="complete_item_content">Log Source Type</p>
+                <div class="complete_item"
+                     v-for="(val, key, index) in complete_log"
+                     v-if="key!='message'&& JSON.stringify(complete_log) != '{}'">
+                  <p class="complete_item_title">{{key}}</p>
+                  <div class="complete_item_content"
+                       v-if="typeof(val)=='string'">{{val}}</div>
+                  <div class="complete_item_content"
+                       v-if="typeof(val)=='object'&&!val.concat">
+                    <p v-for="(v, k, i) in val">
+                      <span>{{k}}</span>
+                      <span>{{v}}</span>
+                    </p>
+                  </div>
+                  <div class="complete_item_content"
+                       v-if="typeof(val)=='object'&&val.concat">
+                    <div v-for="(item, x) in val">
+                      <p v-for="(value, key, s) in item">
+                        <span>{{key}}</span>
+                        <span>{{value}}</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -169,68 +154,83 @@
                          class="tabs-item"
                          name="2">
               <div class="reset_item_box">
-                <p class="original_log">{{original_log}}</p>
+                <div v-if="JSON.stringify(complete_log) == '{}'">
+                  <img src="@/assets/images/emerge/log_space.png"
+                       class="img_box"
+                       alt="">
+                  <p class="space_title">未选择日志</p>
+                </div>
+                <p v-if="JSON.stringify(complete_log) != '{}'"
+                   class="original_log">{{original_log}}</p>
               </div>
             </el-tab-pane>
             <el-tab-pane label="更多日志"
                          class="tabs-item"
                          name="3">
               <div class="reset_item_box">
-                <div class="more_title">
-                  <p class="more_title_item">IP地址</p>
-                  <p class="more_title_item">资产名</p>
-                  <p class="more_title_item">属性</p>
+                <div v-if="JSON.stringify(complete_log) == '{}'">
+                  <img src="@/assets/images/emerge/log_space.png"
+                       class="img_box"
+                       alt="">
+                  <p class="space_title">未选择日志</p>
                 </div>
-                <div class="more_item"
-                     v-for="(item,index) in asset_list"
-                     :class="item.icon?'text_color':''"
-                     @click="select_asset(item,index)">
-                  <p class="more_item_text">{{item.asset}}</p>
-                  <p class="more_item_text">{{item.type}}</p>
-                  <p class="more_item_text">{{item.type}}</p>
-                  <div class="img_box"
-                       v-if="item.icon">
-                    <img src="@/assets/images/emerge/base/checked.png"
-                         alt="">
+                <div v-if="JSON.stringify(complete_log) != '{}'">
+                  <div class="more_title">
+                    <p class="more_title_item">IP地址</p>
+                    <p class="more_title_item">资产名</p>
+                    <p class="more_title_item">属性</p>
                   </div>
-                </div>
-                <div class="time_box">
-                  <div class="time_box_left">
-                    <el-input-number v-model="b_hh"
-                                     @change="before_hh"
-                                     :max="24"
-                                     :step='1'
-                                     :min="0"
-                                     label="小时"></el-input-number>
-                    <span>hh</span>
-                    <el-input-number v-model="b_mm"
-                                     @change="before_mm"
-                                     :min="0"
-                                     :max="60"
-                                     label="分钟"></el-input-number>
-                    <span>mm</span>
+                  <div class="more_item"
+                       v-for="(item,index) in asset_list"
+                       :class="item.icon?'text_color':''"
+                       @click="select_asset(item,index)">
+                    <p class="more_item_text">{{item.asset}}</p>
+                    <p class="more_item_text">{{item.type}}</p>
+                    <p class="more_item_text">{{item.type}}</p>
+                    <div class="img_more_box"
+                         v-if="item.icon">
+                      <img src="@/assets/images/emerge/base/checked.png"
+                           alt="">
+                    </div>
                   </div>
-                  <div class="time">
-                    2019-11-04 14:33:16
-                  </div>
-                  <div class="time_box_right">
-                    <el-input-number v-model="a_hh"
-                                     @change="after_hh"
-                                     :min="1"
-                                     :max="10"
-                                     label="描述文字"></el-input-number>
-                    <span>hh</span>
-                    <el-input-number v-model="a_mm"
-                                     @change="after_mm"
-                                     :min="1"
-                                     :max="10"
-                                     label="描述文字"></el-input-number>
-                    <span>mm</span>
-                  </div>
+                  <div class="time_box">
+                    <div class="time_box_left">
+                      <el-input-number v-model="b_hh"
+                                       @change="before_hh"
+                                       :max="24"
+                                       :step='1'
+                                       :min="0"
+                                       label="小时"></el-input-number>
+                      <span>hh</span>
+                      <el-input-number v-model="b_mm"
+                                       @change="before_mm"
+                                       :min="0"
+                                       :max="60"
+                                       label="分钟"></el-input-number>
+                      <span>mm</span>
+                    </div>
+                    <div class="time">
+                      {{search_time}}
+                    </div>
+                    <div class="time_box_right">
+                      <el-input-number v-model="a_hh"
+                                       @change="after_hh"
+                                       :min="1"
+                                       :max="10"
+                                       label="描述文字"></el-input-number>
+                      <span>hh</span>
+                      <el-input-number v-model="a_mm"
+                                       @change="after_mm"
+                                       :min="1"
+                                       :max="10"
+                                       label="描述文字"></el-input-number>
+                      <span>mm</span>
+                    </div>
 
-                </div>
-                <div>
-                  <p class="serch_btn">搜索</p>
+                  </div>
+                  <div>
+                    <p class="serch_btn">搜索</p>
+                  </div>
                 </div>
               </div>
             </el-tab-pane>
@@ -250,138 +250,13 @@ export default {
       a_hh: '',
       a_mm: '',
       log_list: {
-        data: [
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-          {
-            time: '2019-11-04 14:33:16',
-            src: '奇安信防火墙，启明星…',
-            type: 'XXXXXXXX',
-            src: '奇安信防火墙，启明星…',
-          },
-        ]
+        data: []
       },
       tableRowClassName: '',
       activeName: '1',
-      original_log: '< aie v=“1”> <_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks<_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks<_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks<_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks<_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks<_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks<_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks<_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks<_0 Dhdfakjshdaskhdas;jdajshfakshaks;fhasjkfhas;kfhskdjsfkdfks> </aie>',
+      original_log: '',
+      complete_log: {},
+      search_time: '',
       asset_list: [
         {
           asset: '关联资产001',
@@ -410,7 +285,7 @@ export default {
   },
 
   mounted () {
-    this.LogList()
+    // this.LogList()
   },
   methods: {
     LogList () {
@@ -418,10 +293,15 @@ export default {
       this.$axios.get('/yiiapi/alert/LogList', {
         params: {
           srcIp: JSON.parse(this.selectItem.src_ip)[0],
+          size: 10,
+          from: 1,
           destIp: JSON.parse(this.selectItem.dest_ip)[0],
         }
       }).then(resp => {
         console.log(resp);
+        this.log_list.data = resp.data.data.hits.hits
+        console.log(this.log_list.data);
+
       })
         .catch(error => {
           console.log(error);
@@ -436,6 +316,14 @@ export default {
     },
     rowClick (row, event, column) {
       console.log(row);
+      this.original_log = row._source.message;
+      this.complete_log = row._source;
+      for (var k in row._source) {
+        if (k == '@timestamp') {
+          var dateee = new Date(row._source[k]).toJSON();
+          this.search_time = new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        }
+      }
       this.$refs.multipleTable.setCurrentRow(row)
     },
     handleClick () {
@@ -530,9 +418,20 @@ export default {
           background: #f0f7ff;
           padding: 16px;
           overflow-y: scroll;
+          .img_box {
+            margin: 100px auto;
+            width: 100px;
+            height: 80px;
+          }
+          .space_title {
+            font-size: 24px;
+            color: #bbbbbb;
+            text-align: center;
+            margin-top: 20px;
+          }
           .complete_item {
             display: flex;
-            height: 36px;
+            min-height: 36px;
             line-height: 36px;
             text-align: left;
             .complete_item_title {
@@ -582,7 +481,7 @@ export default {
               font-size: 14px;
               color: #333333;
             }
-            .img_box {
+            .img_more_box {
               cursor: pointer;
               position: absolute;
               top: 50%;
