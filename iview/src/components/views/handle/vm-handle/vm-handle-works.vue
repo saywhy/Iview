@@ -1707,7 +1707,7 @@ export default {
         .then(resp => {
           let { status, data } = resp.data;
           if (status == 0) {
-            //console.log(this.edit);
+
             this.edit.operator_list = data;
             if (this.edit.data.perator && this.edit.data.perator.length != 0) {
               this.edit.operator_list.forEach(element => {
@@ -1722,7 +1722,6 @@ export default {
             }
 
             //console.log(this.edit.operator_list);
-
             this.edit.pop = true
             this.edit.task.frist = true;
           }
@@ -1759,6 +1758,7 @@ export default {
         this.$message({ message: '工单状态只有‘待分配’可以被编辑！', type: 'warning' });
         return false;
       }
+
       this.edit.data = sel_table_data[0]
       this.edit.notice = JSON.parse(this.edit.data.remind);
       //console.log(this.edit.data);
