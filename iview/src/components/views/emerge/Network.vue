@@ -232,12 +232,12 @@
                 </el-table-column>
 
                 <!--更新时间-->
-                <el-table-column align="center" v-else-if="dropCol[index].prop == 'updated_at'"
+                <el-table-column align="center" v-else-if="dropCol[index].prop == 'update_time'"
                                  show-overflow-tooltip
                                  sortable="custom"
                                  :prop="dropCol[index].prop"
                                  :label="item.label">
-                  <template slot-scope="scope">{{ scope.row.risk_num  }}</template>
+                  <template slot-scope="scope">{{ scope.row.update_time | time  }}</template>
                 </el-table-column>
 
                 <!--其他-->
@@ -612,7 +612,7 @@ export default {
         {checked:false,disabled:false,name:"标签",alias:'labels'},
         {checked:false,disabled:false,name:"失陷确定性",alias:'fall_certainty'},
         {checked:false,disabled:false,name:"风险指数",alias:'risk_num'},
-        {checked:true,disabled:false,name:"更新时间",alias:'updated_at'},
+        {checked:true,disabled:false,name:"更新时间",alias:'update_time'},
         {checked:false,disabled:false,name:"工单状态",alias:'workorder_status'},
         {checked:false,disabled:false,name:"日志数量",alias:'log_count'},
         {checked:true,disabled:false,name:"状态",alias:'status'}],
@@ -633,7 +633,7 @@ export default {
         status: '',
         domain:'',
         sort:'3',
-        order:'alert_time'
+        order:'update_time'
       },
       options_degrees: [
         {
@@ -964,16 +964,12 @@ export default {
         if (status == 0) {
 
           let { data, count, maxPage, pageNow } = datas;
-
-
           data.map(v => {
-           // v.alert_description = JSON.parse(v.alert_description).category;
             v.asset_name = JSON.parse(v.asset_name);
             v.user = JSON.parse(v.user);
             if(v.description){
               v.description = JSON.parse(v.description);
             }
-
           });
 
           this.table.tableData = data;
@@ -1061,8 +1057,8 @@ export default {
     },
     //列排序
     header_cell(val){
-      if(val.prop == 'alert_time'){
-        this.params.order = 'alert_time';
+      if(val.prop == 'update_time'){
+        this.params.order = 'update_time';
       }else {
         this.params.order = 'risk_num';
       }
