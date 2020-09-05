@@ -14,7 +14,8 @@
       <el-button class="c_search"  @click="search()">搜索</el-button>
       <div class="c_btn_group">
         <el-button class="c_add" @click="add_box('','add')">添加情报</el-button>
-        <el-button class="c_exp" @click="exp_box">批量导入/导出</el-button>
+        <el-button class="c_exp" @click="exp_box_1">批量导入</el-button>
+        <el-button class="c_exp" @click="exp_box_2">批量导出</el-button>
       </div>
     </div>
     <div class="custom-bom">
@@ -486,8 +487,27 @@
 
       /* **************************以上已完成********************* */
       //批量导入
-      exp_box() {
+      exp_box_1() {
         this.intel_state.exp = true;
+      },
+      //批量导出
+      exp_box_2() {
+        this.$confirm('是否确定导出自定义情报?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.get('/yiiapi/intelligence/Template')
+            .then(response => {
+              var url1 = "/yiiapi/intelligence/Export";
+              window.location.href = url1;
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        }).catch(() => {
+          this.$message({ type: 'info', message: '已取消' });
+        });
       },
       getExpState(state){
         this.intel_state.exp = state;

@@ -362,6 +362,10 @@
               let {status,msg,data} = resp.data;
               console.log(resp)
               if(status == 0){
+                this.$message({
+                  message: '开启成功！',
+                  type: 'success',
+                });
                 this.get_data();
               }
             })
@@ -369,7 +373,7 @@
               console.log(error);
             })
         }else {
-          
+
           //禁止
           var node = {
             id:item.id,
@@ -386,6 +390,10 @@
               let {status,msg,data} = resp.data;
               console.log(resp)
               if(status == 0){
+                this.$message({
+                  message: '关闭成功！',
+                  type: 'success',
+                });
                 this.get_data();
               }
             })
@@ -394,11 +402,6 @@
             })
 
         }
-
-
-        //禁止
-
-
       }
     },
 

@@ -239,7 +239,7 @@ export default {
     return {
       id: 0,
       page_show: true,
-      loadlinks: '/yiiapi/workorder/download?id=',
+    /*loadlinks: '/yiiapi/workorder/download?id=',*/
       title_name: "工单详情",
       activeName: 'first',
       data: {
@@ -275,7 +275,7 @@ export default {
   created () {
     let newId = this.$route.query.id;
     this.id = newId;
-    this.loadlinks += newId;
+    //this.loadlinks += newId;
     this.get_list_works_detail();
     this.get_reply_works_detail();
   },
@@ -568,7 +568,6 @@ export default {
           }
         });
     },
-
   }
 };
 </script>
