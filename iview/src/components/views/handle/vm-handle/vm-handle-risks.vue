@@ -1028,7 +1028,6 @@ export default {
           this.table.maxPage = maxPage;
           this.table.pageNow = pageNow * 1;
 
-           console.log(datas)
         }
       })
     },
