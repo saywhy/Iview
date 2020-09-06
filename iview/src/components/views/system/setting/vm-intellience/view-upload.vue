@@ -20,7 +20,7 @@
       </uploader-drop>
       <uploader-list></uploader-list>
     </uploader>-->
-
+   <!-- action="https://jsonplaceholder.typicode.com/posts/"-->
     <el-upload
       class="uploader-example"
       drag
@@ -30,12 +30,12 @@
       :on-success="onFileSuccess"
       :on-remove="handleRemove"
       :on-error="onFileError"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      :option="uploadUrl()"
       multiple>
 
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      <div class="el-upload__tip" slot="tip">支持PDF、DOCX、XLS、XLSX、TXT</div>
+      <div class="el-upload__tip" slot="tip">支持PDF、DOCX、XLS、XLSX、TXT文件格式</div>
     </el-upload>
     <div class="btn_box_group">
       <el-button @click="closed_exp_box"
@@ -58,7 +58,6 @@
 &lt;!&ndash;<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>&ndash;&gt;
       <div slot="tip" class="el-upload__tip">PDF、DOCX、XLS、XLSX、TXTb</div>
     </el-upload>
-
     -->
 
   </div>
@@ -70,7 +69,7 @@ export default {
   data () {
     return {
       options: {
-        target: '/yiiapi/intelligence/Export',
+        target: '/yiiapi/intelligence/Upload',
         chunkSize: '10048000',   //分块大小
         testChunks: false     //是否开启服务器分片校验
       },
@@ -84,6 +83,9 @@ export default {
     }
   },
   methods: {
+    uploadUrl(){
+      return "/yiiapi/intelligence/Upload";
+    },
     // 上传
     onFileAdded (file) {
       file.pause()

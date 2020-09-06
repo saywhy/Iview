@@ -393,6 +393,9 @@
       //添加确定
       submit_add_box () {
         var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
+
+        var pattern1 = /^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$/
+
         if (this.monitor_add.name == '') {
           this.$message(
             {
@@ -402,14 +405,11 @@
           );
           return false
         }
-
         if (this.monitor_add.type == '') {
-          this.$message(
-            {
-              message: '请选择snmp服务器类型！',
+          this.$message({
+              message: '主机类型不能为空！',
               type: 'warning',
-            }
-          );
+          });
           return false
         }
         if (this.monitor_add.ip == '') {
@@ -421,6 +421,16 @@
           );
           return false
         }
+        if (this.monitor_add.snmp == '') {
+          this.$message(
+            {
+              message: '请选择snmp服务器类型！',
+              type: 'warning',
+            }
+          );
+          return false
+        }
+
         if (pattern.test(this.monitor_add.name)) {
           this.$message({
             message: '工单名称不能包含特殊字符！',
@@ -428,6 +438,7 @@
           });
           return false
         }
+
         this.$axios.post('/yiiapi/safetyequipments', {
           SafetyEquipment: {
             name: this.monitor_add.name,
@@ -458,7 +469,7 @@
             } else {
               this.$message(
                 {
-                  message: msg,
+                  message: msg.ip[0],
                   type: 'error',
                 }
               );
@@ -482,12 +493,10 @@
           return false
         }
         if (this.monitor_add.type == '') {
-          this.$message(
-            {
-              message: '请选择snmp服务器类型！',
-              type: 'warning',
-            }
-          );
+          this.$message({
+            message: '主机类型不能为空！',
+            type: 'warning',
+          });
           return false
         }
         if (this.monitor_add.ip == '') {
@@ -499,6 +508,16 @@
           );
           return false
         }
+        if (this.monitor_add.snmp == '') {
+          this.$message(
+            {
+              message: '请选择snmp服务器类型！',
+              type: 'warning',
+            }
+          );
+          return false
+        }
+
         if (pattern.test(this.monitor_add.name)) {
           this.$message({
             message: '工单名称不能包含特殊字符！',

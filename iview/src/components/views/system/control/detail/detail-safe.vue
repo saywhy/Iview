@@ -105,7 +105,7 @@
     methods: {
       // 获取数据
       get_data () {
-        this.loading = true
+        //this.loading = true
         this.$axios.get('/yiiapi/asset/alert-details', {
           params: {
             id: this.$route.query.detail
@@ -115,21 +115,18 @@
             this.loading = false;
             this.drawGraphTop();
             this.drawFlow();
-
           })
           .catch(error => {
             console.log(error);
           })
       },
       get_table () {
-        this.loading = true
         this.$axios.get('/yiiapi/user/role-list', {
           params: {
             page: this.role_data.page,
             rows: this.role_data.rows
           }
         }).then(response => {
-            this.loading = false
             this.role_list = response.data.data;
             this.role_list.data.forEach((item, index) => {
               item.index_cn = index + 1
@@ -199,7 +196,6 @@
           gauge1.resize();
         });
 
-
         let gauge2 = this.$echarts.init(document.getElementById('gauge2'));
         gauge2.showLoading({ text: '正在加载数据...' });
         gauge2.clear();
@@ -255,7 +251,6 @@
         window.addEventListener("resize", () => {
           gauge2.resize();
         });
-
 
         let gauge3 = this.$echarts.init(document.getElementById('gauge3'));
         gauge3.showLoading({ text: '正在加载数据...' });
@@ -316,7 +311,6 @@
 
       },
       drawFlow(){
-
         let safe_flow = this.$echarts.init(document.getElementById('safe_flow'));
         safe_flow.showLoading({ text: '正在加载数据...' });
         safe_flow.clear();
@@ -461,8 +455,6 @@
           }
         }).then((resp) => {
           let { status, data } = resp.data;
-          console.log(data);
-          console.log(status);
           if (status == 0) {
             console.log(data);
             this.worksheets_list = data

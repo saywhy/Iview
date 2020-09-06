@@ -73,7 +73,7 @@ export default {
   name: 'UserRegister',
   data () {
     const validatePassword = (rule, value, callback) => {
-      /*if (!isvalidPassword(value)) {
+      /*if(!isvalidPassword(value)) {
         callback(new Error('密码不正确，请重新输入'))
       } else {
         callback()

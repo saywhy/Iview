@@ -330,13 +330,12 @@
           });
           return false;
         }
-        var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
-        if (pattern.test(this.intel_tab.indicator)) {
+        if(this.intel_tab.degree == ''){
           this.$message({
-            message: '标签名称不能包含特殊字符！',
+            message: '请选择威胁度！',
             type: 'warning',
           });
-          return false
+          return false;
         }
 
         if(this.intel_tab.score == ''){
@@ -352,6 +351,16 @@
             type: 'warning',
           });
           return false;
+        }
+
+        var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
+
+        if (pattern.test(this.intel_tab.indicator)) {
+          this.$message({
+            message: '标签名称不能包含特殊字符！',
+            type: 'warning',
+          });
+          return false
         }
 
 
@@ -392,14 +401,14 @@
           });
           return false;
         }
-        var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
-        if (pattern.test(this.intel_tab.indicator)) {
+        if(this.intel_tab.degree == ''){
           this.$message({
-            message: '标签名称不能包含特殊字符！',
+            message: '请选择威胁度！',
             type: 'warning',
           });
-          return false
+          return false;
         }
+
         if(this.intel_tab.score == ''){
           this.$message({
             message: '置信度不能为空！',
@@ -413,6 +422,16 @@
             type: 'warning',
           });
           return false;
+        }
+
+        var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
+
+        if (pattern.test(this.intel_tab.indicator)) {
+          this.$message({
+            message: '标签名称不能包含特殊字符！',
+            type: 'warning',
+          });
+          return false
         }
         this.$axios.put('/yiiapi/intelligences/'+this.intel_tab.id,{
           CustomIntelligence: {
@@ -498,7 +517,10 @@
           type: 'warning'
         }).then(() => {
           this.$axios.get('/yiiapi/intelligence/Template')
-            .then(response => {
+            .then(resp => {
+
+              console.log(resp);
+
               var url1 = "/yiiapi/intelligence/Export";
               window.location.href = url1;
             })
