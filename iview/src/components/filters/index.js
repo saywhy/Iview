@@ -2,6 +2,14 @@ import Vue from 'vue'
 
 import moment from "moment"
 
+Vue.filter('timestamp', function (value) {
+   var dateee = new Date(+new Date(new Date(value).toJSON()) + 8 * 3600 * 1000)
+     .toISOString()
+     .replace(/T/g, " ")
+    .replace(/\.[\d]{3}Z/, ""); 
+  return dateee
+});
+
 Vue.filter('time', function (value) {
   if (value) {
     value = value.toString();

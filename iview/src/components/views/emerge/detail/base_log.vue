@@ -3,142 +3,157 @@
     <p class="title">日志</p>
     <div class="log_content">
       <div class="log_content_top">
-        <div class="log_btn_i"
-             @click="NormalizedLog">导出归一化日志</div>
-        <div class="log_btn_o"
-             @click="OriginalLog">导出原始日志</div>
+        <div class="log_btn_i" @click="NormalizedLog">导出归一化日志</div>
+        <div class="log_btn_o" @click="OriginalLog">导出原始日志</div>
       </div>
       <div class="log_table_box">
         <div class="log_table_left">
-          <el-table class="reset_table"
-                    ref="multipleTable"
-                    align="center"
-                    border
-                    height="99%"
-                    :data="log_list.data"
-                    tooltip-effect="dark"
-                    style="width: 100%"
-                    :row-style="selectedHighlight"
-                    @row-click="rowClick"
-                    :highlight-current-row='true'
-                    :row-class-name="tableRowClassName"
-                    @selection-change="handleSelectionChange">
-            <el-table-column prop="_source.@timestamp"
-                             label="日志时间"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
+          <el-table
+            class="reset_table"
+            ref="multipleTable"
+            align="center"
+            border
+            height="90%"
+            :data="log_list.data.hits.hits"
+            tooltip-effect="dark"
+            style="width: 100%"
+            :row-style="selectedHighlight"
+            @row-click="rowClick"
+            :highlight-current-row="true"
+            :row-class-name="tableRowClassName"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column
+              label="日志时间"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            >
+               <template slot-scope="scope">
+                <span>{{ scope.row._source.time|dateee}}</span>
+              </template>
             </el-table-column>
-            <el-table-column prop="_source.server_name"
-                             label="日志来源"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.classification"
-                             label="日志类型"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.eventtype"
-                             label="事件类型"
-                             align="center"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.direction"
-                             label="方向"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.srcIp"
-                             label="源地址"
-                             align="center"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.src_name"
-                             label="源资产名"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.src_port"
-                             label="源端口"
-                             align="center"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.src_account"
-                             label="源账号"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.destIp"
-                             label="目的地址"
-                             align="center"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.dst_name"
-                             label="目的资产名"
-                             align="center"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.dst_port"
-                             label="目的端口"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.dst_account"
-                             label="目的账号"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.proto"
-                             label="协议"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column prop="_source.app"
-                             label="应用"
-                             align="center"
-                             width="150"
-                             show-overflow-tooltip>
-            </el-table-column>
+            <el-table-column
+              prop="_source.server_name"
+              label="日志来源"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.classification"
+              label="日志类型"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.eventtype"
+              label="事件类型"
+              align="center"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.direction"
+              label="方向"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column prop="_source.srcIp" label="源地址" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column
+              prop="_source.src_name"
+              label="源资产名"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.src_port"
+              label="源端口"
+              align="center"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.src_account"
+              label="源账号"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.destIp"
+              label="目的地址"
+              align="center"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.dst_name"
+              label="目的资产名"
+              align="center"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.dst_port"
+              label="目的端口"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.dst_account"
+              label="目的账号"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.proto"
+              label="协议"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              prop="_source.app"
+              label="应用"
+              align="center"
+              width="150"
+              show-overflow-tooltip
+            ></el-table-column>
           </el-table>
+            <el-pagination class="handle_pagination"
+                     @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :page-sizes="[2,10,20,50,100]"
+                     :page-size="log_list.rows*1"
+                     :current-page="log_list.pageNow*1"
+                     :total="log_list.data.hits.total.value*1"
+                     layout="total, sizes, prev, pager, next">
+      </el-pagination>
         </div>
         <div class="log_table_right">
-          <el-tabs v-model="activeName"
-                   @tab-click="handleClick"
-                   class="reset_tab">
-            <el-tab-pane label="完整日志"
-                         class="tabs-item"
-                         name="1">
+          <el-tabs v-model="activeName" @tab-click="handleClick" class="reset_tab">
+            <el-tab-pane label="完整日志" class="tabs-item" name="1">
               <div class="reset_item_box">
                 <div v-if="JSON.stringify(complete_log) == '{}'">
-                  <img src="@/assets/images/emerge/log_space.png"
-                       class="img_box"
-                       alt="">
+                  <img src="@/assets/images/emerge/log_space.png" class="img_box" alt />
                   <p class="space_title">未选择日志</p>
                 </div>
-                <div class="complete_item"
-                     v-for="(val, key, index) in complete_log"
-                     v-if="key!='message'&& JSON.stringify(complete_log) != '{}'">
+                <div
+                  class="complete_item"
+                  v-for="(val, key, index) in complete_log"
+                  v-if="key!='message'&& JSON.stringify(complete_log) != '{}'"
+                >
                   <p class="complete_item_title">{{key}}</p>
-                  <div class="complete_item_content"
-                       v-if="typeof(val)=='string'">{{val}}</div>
-                  <div class="complete_item_content"
-                       v-if="typeof(val)=='object'&&!val.concat">
+                  <div class="complete_item_content" v-if="typeof(val)=='string'">{{val}}</div>
+                  <div class="complete_item_content" v-if="typeof(val)=='object'&&!val.concat">
                     <p v-for="(v, k, i) in val">
                       <span>{{k}}</span>
                       <span>{{v}}</span>
                     </p>
                   </div>
-                  <div class="complete_item_content"
-                       v-if="typeof(val)=='object'&&val.concat">
+                  <div class="complete_item_content" v-if="typeof(val)=='object'&&val.concat">
                     <div v-for="(item, x) in val">
                       <p v-for="(value, key, s) in item">
                         <span>{{key}}</span>
@@ -148,30 +163,20 @@
                   </div>
                 </div>
               </div>
-
             </el-tab-pane>
-            <el-tab-pane label="原始日志"
-                         class="tabs-item"
-                         name="2">
+            <el-tab-pane label="原始日志" class="tabs-item" name="2">
               <div class="reset_item_box">
                 <div v-if="JSON.stringify(complete_log) == '{}'">
-                  <img src="@/assets/images/emerge/log_space.png"
-                       class="img_box"
-                       alt="">
+                  <img src="@/assets/images/emerge/log_space.png" class="img_box" alt />
                   <p class="space_title">未选择日志</p>
                 </div>
-                <p v-if="JSON.stringify(complete_log) != '{}'"
-                   class="original_log">{{original_log}}</p>
+                <p v-if="JSON.stringify(complete_log) != '{}'" class="original_log">{{original_log}}</p>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="更多日志"
-                         class="tabs-item"
-                         name="3">
+            <el-tab-pane label="更多日志" class="tabs-item" name="3">
               <div class="reset_item_box">
                 <div v-if="JSON.stringify(complete_log) == '{}'">
-                  <img src="@/assets/images/emerge/log_space.png"
-                       class="img_box"
-                       alt="">
+                  <img src="@/assets/images/emerge/log_space.png" class="img_box" alt />
                   <p class="space_title">未选择日志</p>
                 </div>
                 <div v-if="JSON.stringify(complete_log) != '{}'">
@@ -180,56 +185,61 @@
                     <p class="more_title_item">资产名</p>
                     <p class="more_title_item">属性</p>
                   </div>
-                  <div class="more_item"
-                       v-for="(item,index) in asset_list"
-                       :class="item.icon?'text_color':''"
-                       @click="select_asset(item,index)">
+                  <div
+                    class="more_item"
+                    v-for="(item,index) in asset_list"
+                    :class="item.icon?'text_color':''"
+                    @click="select_asset(item,index)"
+                  >
+                    <p class="more_item_text">{{item.ip}}</p>
                     <p class="more_item_text">{{item.asset}}</p>
                     <p class="more_item_text">{{item.type}}</p>
-                    <p class="more_item_text">{{item.type}}</p>
-                    <div class="img_more_box"
-                         v-if="item.icon">
-                      <img src="@/assets/images/emerge/base/checked.png"
-                           alt="">
+                    <div class="img_more_box" v-if="item.icon">
+                      <img src="@/assets/images/emerge/base/checked.png" alt />
                     </div>
                   </div>
                   <div class="time_box">
                     <div class="time_box_left">
-                      <el-input-number v-model="b_hh"
-                                       @change="before_hh"
-                                       :max="24"
-                                       :step='1'
-                                       :min="0"
-                                       label="小时"></el-input-number>
+                      <el-input-number
+                        v-model="b_hh"
+                        @change="before_hh"
+                        :max="24"
+                        :step="1"
+                        :min="0"
+                        label="小时"
+                      ></el-input-number>
                       <span>hh</span>
-                      <el-input-number v-model="b_mm"
-                                       @change="before_mm"
-                                       :min="0"
-                                       :max="60"
-                                       label="分钟"></el-input-number>
+                      <el-input-number
+                        v-model="b_mm"
+                        @change="before_mm"
+                        :min="0"
+                        :max="60"
+                        label="分钟"
+                      ></el-input-number>
                       <span>mm</span>
                     </div>
-                    <div class="time">
-                      {{search_time}}
-                    </div>
+                    <div class="time">{{search_time}}</div>
                     <div class="time_box_right">
-                      <el-input-number v-model="a_hh"
-                                       @change="after_hh"
-                                       :min="1"
-                                       :max="10"
-                                       label="描述文字"></el-input-number>
+                      <el-input-number
+                        v-model="a_hh"
+                        @change="after_hh"
+                        :min="1"
+                        :max="10"
+                        label="描述文字"
+                      ></el-input-number>
                       <span>hh</span>
-                      <el-input-number v-model="a_mm"
-                                       @change="after_mm"
-                                       :min="1"
-                                       :max="10"
-                                       label="描述文字"></el-input-number>
+                      <el-input-number
+                        v-model="a_mm"
+                        @change="after_mm"
+                        :min="1"
+                        :max="10"
+                        label="描述文字"
+                      ></el-input-number>
                       <span>mm</span>
                     </div>
-
                   </div>
                   <div>
-                    <p class="serch_btn">搜索</p>
+                    <p class="serch_btn" @click="serch_more_log">搜索</p>
                   </div>
                 </div>
               </div>
@@ -242,114 +252,182 @@
 </template>
 <script>
 export default {
-  name: 'baseLog',
-  data () {
+  name: "baseLog",
+  data() {
     return {
-      b_hh: '',
-      b_mm: '',
-      a_hh: '',
-      a_mm: '',
+      b_hh: "",
+      b_mm: "",
+      a_hh: "",
+      a_mm: "",
       log_list: {
-        data: []
+        data: {
+          hits:{
+            hits:[],
+            total:{
+              value:0
+            }
+          }
+        },
+        rows:2,
+        pageNow:1
       },
-      tableRowClassName: '',
-      activeName: '1',
-      original_log: '',
+      tableRowClassName: "",
+      activeName: "1",
+      original_log: "",
       complete_log: {},
-      search_time: '',
+      search_time: "",
+      search_log_item: {},
       asset_list: [
         {
-          asset: '关联资产001',
-          type: '源地址',
-          icon: true
+          asset: "关联资产001",
+          type: "源地址",
+          icon: true,
         },
         {
-          asset: '关联资产002',
-          type: '目的地址',
-          icon: false
+          asset: "关联资产002",
+          type: "目的地址",
+          icon: false,
         },
-      ]
-    }
+      ],
+    };
   },
   props: {
     selectItem: {
       type: Object,
-      default: () => { }
-    }
+      default: () => {},
+    },
   },
   watch: {
     selectItem: function (val) {
-      console.log('222222:', val)
-      this.LogList(val)
-    }
+      console.log("222222:", val);
+      this.LogList(val);
+    },
   },
 
-  mounted () {
-    // this.LogList()
+  mounted() {
+    this.LogList();
   },
   methods: {
-    LogList () {
-      console.log('11121212');
-      this.$axios.get('/yiiapi/alert/LogList', {
-        params: {
-          srcIp: JSON.parse(this.selectItem.src_ip)[0],
-          size: 10,
-          from: 1,
-          destIp: JSON.parse(this.selectItem.dest_ip)[0],
-        }
-      }).then(resp => {
-        console.log(resp);
-        this.log_list.data = resp.data.data.hits.hits
-        console.log(this.log_list.data);
-
-      })
-        .catch(error => {
-          console.log(error);
+    LogList() {
+      console.log("11121212");
+       this.original_log = '';
+      this.complete_log = {};
+      this.$axios
+        .get("/yiiapi/alert/LogList", {
+          params: {
+            srcIp: JSON.parse(this.selectItem.src_ip)[0],
+            size: this.log_list.rows,
+            from: this.log_list.rows*(this.log_list.pageNow-1),
+            destIp: JSON.parse(this.selectItem.dest_ip)[0],
+          },
         })
-    },
-    handleSelectionChange () {
+        .then((resp) => {
+          console.log(resp);
+          this.log_list.data = resp.data.data;
 
+ this.log_list.data.hits.hits._source.map(item=>{
+  //  item.time = item.@timestamp
+  for (var k in item) {
+        if (k == "@timestamp") {
+            item.time = item[k]
+      }
+  }
+
+ })
+
+          // pageNow
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    selectedHighlight ({ row, rowIndex }) {
+    handleSelectionChange() {},
+    selectedHighlight({ row, rowIndex }) {
       // console.log(row);
       // console.log(rowIndex);
     },
-    rowClick (row, event, column) {
+    rowClick(row, event, column) {
       console.log(row);
       this.original_log = row._source.message;
       this.complete_log = row._source;
+      this.asset_list = [];
+      let src_obj = {
+        ip: this.complete_log.srcIp,
+        asset: this.complete_log.server_name,
+        type: "源地址",
+        icon: true,
+        key: "src",
+      };
+      let des_obj = {
+        ip: this.complete_log.destIp,
+        asset: this.complete_log.server_name,
+        type: "目的地址",
+        icon: false,
+        key: "des",
+      };
+
+      this.asset_list.push(src_obj);
+      this.asset_list.push(des_obj);
+
       for (var k in row._source) {
-        if (k == '@timestamp') {
+        if (k == "@timestamp") {
           var dateee = new Date(row._source[k]).toJSON();
-          this.search_time = new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+          this.search_time = new Date(+new Date(dateee) + 8 * 3600 * 1000)
+            .toISOString()
+            .replace(/T/g, " ")
+            .replace(/\.[\d]{3}Z/, "");
         }
       }
-      this.$refs.multipleTable.setCurrentRow(row)
+      this.$refs.multipleTable.setCurrentRow(row);
     },
-    handleClick () {
-
+     //每頁多少條切換
+    handleSizeChange (val) {
+      this.log_list.rows = val;
+      this.log_list.pageNow = 1;
+      this.LogList();
     },
-    select_asset (item, index) {
-      this.asset_list.map(item => {
-        item.icon = false
-      })
-      this.asset_list[index].icon = true
-
+    //頁數點擊切換
+    handleCurrentChange (val) {
+      this.log_list.pageNow = val;
+      this.LogList()
     },
-    before_hh () { },
-    before_mm () { },
-    after_hh () { },
-    after_mm () { },
-    NormalizedLog () {
+    handleClick() {},
+    select_asset(item, index) {
+      console.log(item);
+      this.search_log_item = item;
+      this.asset_list.map((item) => {
+        item.icon = false;
+      });
+      this.asset_list[index].icon = true;
+    },
+    // 更多日志搜索
+    serch_more_log() {
+      console.log(this.search_log_item);
+    },
+    before_hh() {},
+    before_mm() {},
+    after_hh() {},
+    after_mm() {},
+    NormalizedLog() {
       console.log(this.selectItem);
-      window.open('/yiiapi/alert/NormalizedLog?destIp=' + JSON.parse(this.selectItem.dest_ip)[0] + '&srcIp=' + JSON.parse(this.selectItem.src_ip)[0]);
+      window.open(
+        "/yiiapi/alert/NormalizedLog?destIp=" +
+          JSON.parse(this.selectItem.dest_ip)[0] +
+          "&srcIp=" +
+          JSON.parse(this.selectItem.src_ip)[0]
+      );
     },
-    OriginalLog () {
-      window.open('/yiiapi/alert/OriginalLog?destIp=' + JSON.parse(this.selectItem.dest_ip)[0] + '&srcIp=' + JSON.parse(this.selectItem.src_ip)[0]);
+    OriginalLog() {
+      window.open(
+        "/yiiapi/alert/OriginalLog?destIp=" +
+          JSON.parse(this.selectItem.dest_ip)[0] +
+          "&srcIp=" +
+          JSON.parse(this.selectItem.src_ip)[0]
+      );
     },
   },
-  computed: {}
-}
+  computed: {},
+};
 </script>
 <style scoped lang="less">
 .base_log {
@@ -408,6 +486,9 @@ export default {
               }
             }
           }
+        }
+        .handle_pagination{
+          margin-top: 10px;
         }
       }
       .log_table_right {

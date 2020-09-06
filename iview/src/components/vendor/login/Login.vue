@@ -49,9 +49,9 @@ export default {
 
           console.log(resp)
 
-          let { status, msg } = resp.data;
+          let { status, msg } = resp;
 
-          if (status == 207) {
+          if (status == 203) {
             this.stu = false;
           } else {
             this.stu = true;

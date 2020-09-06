@@ -188,7 +188,7 @@
                                  show-overflow-tooltip
                                  :prop="dropCol[index].prop"
                                  :label="item.label">
-                  <template slot-scope="scope">{{ scope.row.alert_time | time }}</template>
+                  <template slot-scope="scope">{{ scope.row.detect_engine  }}</template>
                 </el-table-column>
 
                 <!--威胁等级-->
