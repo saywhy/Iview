@@ -518,6 +518,19 @@ export const asyncRouterMap = [
         component: () => import('@/components/views/invest/Ioc')
       },
       {
+        path: '/invest/custom_invest',
+        name: 'custom_invest',
+        meta: {
+          title: '自定义追查',
+          auth: '297',
+          icon: 'e-aside-ioc',
+          parentAuth: '14',
+          rootAuth: '14',
+          deep: 1
+        },
+        component: () => import('@/components/views/invest/custom_invest')
+      },
+      {
         path: '/invest/sandbox',
         name: 'sandbox',
         meta: {

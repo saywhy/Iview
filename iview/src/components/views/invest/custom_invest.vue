@@ -2,8 +2,9 @@
 <template>
   <div id="custom_invest"
        class="custom_invest"
-       v-loading.fullscreen.lock="data_search.loading">
+      >
     <div class="invest_box">
+      打算大苏打
       <el-input placeholder="请输入内容"
                 v-model="input3"
                 class="input-with-select">
@@ -24,7 +25,6 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import VmEmergePicker from "@/components/common/vm-emerge-picker";
 import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: "custom_invest",
@@ -59,44 +59,7 @@ export default {
           }
         })
     },
-    handleClick () { },
 
-    get_data () {
-      this.data_search.loading = true
-      this.$axios.get('/yiiapi/investigate/flowsize-timelength-investigation', {
-        params: {
-          flow_size: this.data_search.flow_size,
-          flow_duration: this.data_search.flow_duration,
-          host_ip: this.data_search.host_ip,
-          start_time: this.data_search.start_time,
-          end_time: this.data_search.end_time,
-          current_page: this.data_search.page,
-          per_page_count: this.data_search.rows
-        }
-      })
-        .then(response => {
-          this.data_search.loading = false
-          let { status, data } = response.data;
-          if (status == '602') {
-            return false
-          }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
-          this.data_list = data
-          this.data_list_data = data.data
-          this.data_list_data.data.forEach((item, index) => {
-            item.index_cn = index + 1
-          });
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    },
   },
   filters: {
     filterType: function (val) {
