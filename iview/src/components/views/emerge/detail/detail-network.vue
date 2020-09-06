@@ -461,12 +461,12 @@
         <div class="mask"></div>
         <span class="title_name">IP段详情</span>
       </div>
-      <div class="user_content">
+      <div class="content">
         <el-table class="reset_table"
                   ref="multipleTable"
                   align="center"
                   border
-                  :data="ipDes.data"
+                  :data="more.IpDetails"
                   tooltip-effect="dark"
                   style="width: 100%">
           <el-table-column prop="name"
@@ -478,7 +478,7 @@
                            align="center"
                            show-overflow-tooltip>
             <template slot-scope="scope">
-              <li v-for="item in scope.row.ip_segment"
+              <li v-for="item in JSON.parse(scope.row.ip_segment)"
                   class="btn_tag_box">
                 <p>{{item}}</p>
               </li>
@@ -494,7 +494,7 @@
                            width="300">
             <template slot-scope="scope">
               <span class="btn_tag_box"
-                    v-for="item in scope.row.label">
+                    v-for="item in  JSON.parse(scope.row.label)">
                 <el-button type="primary"
                            class="btn_tag">
                   {{item}}
@@ -849,7 +849,8 @@ export default {
         src: false,
         src_name: '',
         des_name: '',
-        des: false
+        des: false,
+        IpDetails: []
       },
       pop_user_info: false,
       pop_assets_info: false,
@@ -1166,6 +1167,7 @@ export default {
         // IP段详情
         case '4':
           this.ipDes.pop = true
+
           break;
         // 威胁追查-网络视角
         case '1':
@@ -1185,10 +1187,37 @@ export default {
     select_src_name (item) {
       console.log(item);
       this.more.src_name = item
+
+      this.$axios.get('/yiiapi/alert/IpDetails', {
+        params: {
+          ip: item,
+        }
+      }).then(resp => {
+        console.log(resp);
+        let { status, data } = resp.data;
+        this.more.IpDetails = data
+      })
+        .catch(error => {
+          console.log(error);
+        })
+
+
     },
     select_des_name (item) {
       console.log(item);
       this.more.des_name = item
+      this.$axios.get('/yiiapi/alert/IpDetails', {
+        params: {
+          ip: item,
+        }
+      }).then(resp => {
+        console.log(resp);
+        let { status, data } = resp.data;
+        this.more.IpDetails = data
+      })
+        .catch(error => {
+          console.log(error);
+        })
     },
     show_more_active_src () {
       this.more.src = !this.more.src
@@ -2362,6 +2391,17 @@ export default {
             /*滚动条里面轨道*/
             border-radius: 6px;
             background: #f4f4f4;
+          }
+          .btn_tag_box {
+            margin: 2px;
+            .btn_tag {
+              background: #5389e0;
+              border-radius: 2px;
+              min-height: 20px;
+              font-size: 10px;
+              color: #ffffff;
+              padding: 2px 5px;
+            }
           }
         }
       }
