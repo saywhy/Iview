@@ -17,7 +17,7 @@ export default {
   name: 'nofind_600',
   methods: {
     reLastPage () {
-      this.$router.push({ path: '/system/licence' });
+      this.$router.push({ path: '/system/setting/licence' });
     }
   }
 }

@@ -48,17 +48,17 @@ export default {
     },
     // 测试600专用
     test () {
-      // this.$axios.get('/yiiapi/site/check-auth-exist', {
-      //   params: {
-      //     pathInfo: 'seting/restore',
-      //   }
-      // })
-      //   .then(response => {
+      this.$axios.get('/yiiapi/site/check-auth-exist', {
+        params: {
+          pathInfo: 'seting/restore',
+        }
+      })
+        .then(response => {
 
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   })
+        })
+        .catch(error => {
+          console.log(error);
+        })
     },
     restore () {
       this.$confirm('此操作将恢复出场设置, 是否继续?', '提示', {

@@ -30,7 +30,9 @@ axios.interceptors.request.use(
 );
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
-  //console.log(response)
+  console.log(response)
+  console.log(121212)
+  console.log(response.data.status)
   //status内层
   switch (response.data.status) {
     case 602:
@@ -54,6 +56,7 @@ axios.interceptors.response.use(response => {
       });
       break;
     case 401:
+      console.log(111111);
       Router.push({
         path: '/404'
       });
@@ -64,13 +67,21 @@ axios.interceptors.response.use(response => {
   }
   return response
 }, err => {
-  if (err && err.response) {
+    if (err && err.response) {
+    console.log(44444);
+    console.log(err);
+    console.log(err.response);
     switch (err.response.status) {
       case 400:
         console.log('错误请求')
         break;
       case 401:
         console.log('未授权，请重新登录')
+        break;
+      case 402:
+         Router.push({
+           path: '/600'
+         });
         break;
       case 403:
         console.log('拒绝访问111')

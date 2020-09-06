@@ -136,7 +136,7 @@ export default {
             //返回成功跳转
             if (resp[0]) {
               this.$message.success('注册管理员成功，欢迎首次登录！');
-              this.$router.push({path:'/system/licence'});//登录成功之后重定向到首页
+              this.$router.push({path:'/system/setting/licence'});//登录成功之后重定向到首页
               //失败
             } else {
               this.$message.error(resp[1]);

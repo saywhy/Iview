@@ -181,6 +181,7 @@ export default {
     };
   },
   mounted () {
+       console.log(7777777);
     this.get_data();
     this.get_license();
     this.get_version();

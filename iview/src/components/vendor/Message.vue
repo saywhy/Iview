@@ -157,7 +157,7 @@ export default {
                   eventBus.$emit('reset')
                   break;
                 case '2':
-                  this.$router.push({ path: '/system/licence' });
+                  this.$router.push({ path: '/system/setting/licence' });
                   break;
                 case '3':
                   this.$router.push({ path: '/handle/works' });
