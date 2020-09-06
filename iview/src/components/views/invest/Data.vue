@@ -135,9 +135,10 @@ export default {
   methods: {
     // 测试600专用
     test () {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'investigate/flowsize-timelength-investigation',
+          method: 'GET',
         }
       })
         .then(response => {
@@ -234,9 +235,10 @@ export default {
       //   });
       //   return false
       // }
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
+           method: 'GET',
         }
       })
         .then(response => {

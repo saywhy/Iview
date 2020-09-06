@@ -280,9 +280,10 @@ export default {
 
       console.log(params_response);
       console.log(chunk);
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
+           method: 'GET',
         }
       })
         .then(response => {
@@ -317,9 +318,10 @@ export default {
       console.log(params);
       console.log(file);
       file.ignored = true
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
+           method: 'GET',
         }
       })
         .then(response => {
@@ -367,9 +369,10 @@ export default {
             );
             eventBus.$emit('reset')
           } else {
-            this.$axios.get('/yiiapi/site/check-auth-exist', {
+            this.$axios.get('/yiiapi/site/CheckAuthExist', {
               params: {
                 pathInfo: 'yararule/download',
+                 method: 'GET',
               }
             })
               .then(response => {
@@ -404,9 +407,10 @@ export default {
       });
       console.log(id_list);
       var id_list_str = JSON.stringify(id_list)
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
+           method: 'GET',
         }
       })
         .then(response => {

@@ -219,9 +219,10 @@ export default {
       }
     },
     onFileSuccess (rootFile, file, response, chunk) {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
+           method: 'GET',
         }
       })
         .then(response => {
@@ -272,9 +273,10 @@ export default {
       console.log(chunk);
     },
     onFileProgress (file) {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
+           method: 'GET',
         }
       })
         .then(response => {
@@ -285,9 +287,10 @@ export default {
         })
     },
     onFileError () {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
+           method: 'GET',
         }
       })
         .then(response => {
@@ -334,9 +337,10 @@ export default {
     },
     // 下载
     download (item) {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
+           method: 'GET',
         }
       })
         .then(response => {

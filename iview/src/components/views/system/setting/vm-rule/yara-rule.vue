@@ -131,7 +131,7 @@ export default {
         );
         return false
       }
-      // this.$axios.get('/yiiapi/site/check-auth-exist', {
+      // this.$axios.get('/yiiapi/site/CheckAuthExist', {
       //   params: {
       //     pathInfo: 'yararule/download',
       //   }
@@ -176,7 +176,7 @@ export default {
       }
     },
     onsuccess (params) {
-      // this.$axios.get('/yiiapi/site/check-auth-exist', {
+      // this.$axios.get('/yiiapi/site/CheckAuthExist', {
       //   params: {
       //     pathInfo: 'yararule/download',
       //   }
@@ -206,7 +206,7 @@ export default {
     },
     onerror (params) {
       console.log(params);
-      // this.$axios.get('/yiiapi/site/check-auth-exist', {
+      // this.$axios.get('/yiiapi/site/CheckAuthExist', {
       //   params: {
       //     pathInfo: 'yararule/download',
       //   }

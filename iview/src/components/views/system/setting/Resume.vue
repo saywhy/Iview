@@ -48,9 +48,10 @@ export default {
     },
     // 测试600专用
     test () {
-      this.$axios.get('/yiiapi/site/check-auth-exist', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'seting/restore',
+          method: 'GET',
         }
       })
         .then(response => {
