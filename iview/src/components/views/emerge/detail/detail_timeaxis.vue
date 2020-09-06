@@ -1,25 +1,18 @@
 <template>
-  <div class='time_axis'>
+  <div class="time_axis">
     <p class="title">检测时间轴</p>
     <div class="content">
-
       <div class="content_left">
-        <div class="time_item"
-             @click="selected_time(item,index)"
-             :class="item.selected?'item_background':''"
-             v-for="(item,index) in timeaxis">
+        <div
+          class="time_item"
+          @click="selected_time(item,index)"
+          :class="item.selected?'item_background':''"
+          v-for="(item,index) in timeaxis"
+        >
           <div class="time_item_left">
-            <img src="@/assets/images/emerge/time_i.png"
-                 class="time_img"
-                 v-if="!item.selected"
-                 alt="">
-            <img src="@/assets/images/emerge/time_o.png"
-                 class="time_img"
-                 v-if="item.selected"
-                 alt="">
-            <div class="line"
-                 v-if="!item.selected">
-            </div>
+            <img src="@/assets/images/emerge/time_i.png" class="time_img" v-if="!item.selected" alt />
+            <img src="@/assets/images/emerge/time_o.png" class="time_img" v-if="item.selected" alt />
+            <div class="line" v-if="!item.selected"></div>
           </div>
           <div class="time_item_right">
             <p :class="item.selected?'item_text':''">{{item.alert_time | time}}</p>
@@ -28,15 +21,14 @@
       </div>
       <div class="content_right">
         <!-- 详细信息 -->
-        <base-info :selectItem='select_item'></base-info>
+        <base-info :selectItem="select_item"></base-info>
         <!-- 日志 -->
-        <!-- <base-log :selectItem='select_item'
-                  v-if='select_item.detect_engine=="LOGDF"'></base-log> -->
-        <base-log :selectItem='select_item'></base-log>
+        <base-log :selectItem='select_item'
+        v-if='select_item.detect_engine=="LOGDF"'></base-log>
+        <!-- <base-log :selectItem="select_item"></base-log> -->
         <!-- 告警资产 -->
-        <alert-assets :selectIndicator='select_item.indicator'></alert-assets>
+        <alert-assets :selectIndicator="select_item.indicator"></alert-assets>
       </div>
-
     </div>
   </div>
 </template>
@@ -46,49 +38,46 @@ import baseLog from "@/components/views/emerge/detail/base_log";
 import baseAssets from "@/components/views/emerge/detail/base_assets";
 import alertAssets from "@/components/views/emerge/detail/alert_assets";
 export default {
-  name: 'time_axis',
-  data () {
+  name: "time_axis",
+  data() {
     return {
       timeaxis: [],
-      select_item: {}
-    }
+      select_item: {},
+    };
   },
   props: {
     detailArray: {
       type: Array,
-      default: () => { }
-    }
+      default: () => {},
+    },
   },
   components: {
     baseInfo,
     baseLog,
-    alertAssets
+    alertAssets,
   },
-  mounted () {
-  },
+  mounted() {},
   watch: {
     detailArray: function (val) {
       // console.log('val监听:', val)
       // console.log(this.detailArray);
-      this.timeaxis = JSON.parse(JSON.stringify(this.detailArray))
-      this.select_item = this.timeaxis[0]
-    }
+      this.timeaxis = JSON.parse(JSON.stringify(this.detailArray));
+      this.select_item = this.timeaxis[0];
+    },
   },
   methods: {
-    selected_time (item, index) {
+    selected_time(item, index) {
       console.log(item);
       console.log(index);
-      this.select_item = item
-      this.timeaxis.map(x => {
-        x.selected = false
-      })
-      this.timeaxis[index].selected = true
-    }
+      this.select_item = item;
+      this.timeaxis.map((x) => {
+        x.selected = false;
+      });
+      this.timeaxis[index].selected = true;
+    },
   },
-  computed: {
-
-  }
-}
+  computed: {},
+};
 </script>
 <style scoped lang="less">
 .time_axis {

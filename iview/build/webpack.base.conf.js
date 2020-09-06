@@ -4,6 +4,7 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const webpack = require('webpack')
+const FileManagerPlugin = require('filemanager-webpack-plugin')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -28,9 +29,21 @@ module.exports = {
     }
   },
   plugins: [
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery'
+    // new webpack.ProvidePlugin({
+    //   $: 'jquery',
+    //   jQuery: 'jquery'
+    // }),
+   
+    new FileManagerPlugin({
+      onEnd: {
+        delete: [
+         './iviewfrontend.zip',
+        ],
+        archive: [{
+          source: './iviewfrontend', // eg: './dist
+            destination: './iviewfrontend.zip' // eg: './dist/项目名称-正式版-时间.zip'
+        }, ]
+      }
     })
   ],
   module: {
