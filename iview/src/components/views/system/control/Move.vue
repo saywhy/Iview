@@ -11,11 +11,11 @@
                         </div>
                         <div class="legend">
                             <span class="legend_icon color2"></span>
-                            <span>预警:2</span>
+                            <span>预警:{{top_left.warning_count}}</span>
                             <span class="legend_icon color5"></span>
-                            <span>健康:5</span>
+                            <span>健康:{{top_left.healthy_count}}</span>
                             <span class="legend_icon color6"></span>
-                            <span>离线:3</span>
+                            <span>离线:{{top_left.offline_count}}</span>
                         </div>
                         <div class="top_left_content">
                           <top-left :top_left="top_left"
@@ -258,6 +258,7 @@ export default {
           } = resp.data;
           if (status == 0) {
             this.top_left = data;
+            console.log(data)
             this.top_left_show = true;
           }
         })

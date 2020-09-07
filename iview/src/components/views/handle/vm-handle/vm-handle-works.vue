@@ -1873,10 +1873,14 @@ export default {
       })
         .then((resp) => {
           let { status, data } = resp.data;
-           //console.log(data);
 
+           console.log('*********');
 
-          this.edit.asset_list = data
+           console.log(data);
+
+           console.log('*********');
+
+          this.edit.asset_list = data;
           this.edit.asset_list.data.map(function (v, k) {
             v.label = JSON.parse(v.label);
             if (v.label && v.label.length) {

@@ -8,7 +8,7 @@
            alt="logo" />
     </div>
     <p class="login-copyright">
-      ©2019虎特信息科技（上海）有限公司 版权所有
+      ©2020虎特信息科技（上海）有限公司 版权所有
     </p>
     <div class="login-box">
       <div class="border-line"></div>

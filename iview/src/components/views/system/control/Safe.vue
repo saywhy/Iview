@@ -200,9 +200,9 @@
           <el-button @click="closed_cancel_box"
                      class="cancel_btn">取消</el-button>
           <el-button class="ok_btn" v-if="monitor_state.type == 'add'"
-                     @click="submit_add_box">确定</el-button>
+                     @click.native.prevent="submit_add_box">确定</el-button>
           <el-button class="ok_btn" v-if="monitor_state.type == 'edit'"
-                     @click="submit_edit_box">确定</el-button>
+                     @click.native.prevent="submit_edit_box">确定</el-button>
         </div>
       </el-dialog>
     </div>

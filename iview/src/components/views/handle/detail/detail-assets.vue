@@ -1039,6 +1039,12 @@ export default {
           } else if (status == 9) {
             // this.$message.error(msg);
             this.$router.push({ path: "/handle/assets" });
+          }else if(status == 1){
+            this.$message({
+              message: msg,
+              type: 'error',
+            });
+            this.$router.push({ path: "/handle/assets" });
           }else {
             this.$message({
               message: msg,

@@ -285,29 +285,31 @@ export default {
 
     // this.$route.query.id
     //获取工单详情列表
+
     get_list_works_detail () {
+      this.loading = true;
       var url = ''
       switch (this.$route.query.type) {
         case 'workorder':
           url = '/yiiapi/workorders/'+this.id
           break;
         case 'alert_detail':
-          url = '/yiiapi/alerts/'+this.id
+          url = '/yiiapi/alert/WorkorderDetails?id='+this.id
           break;
         case 'asset':
-          url = '/yiiapi/riskassets/'+this.id
+          url = '/yiiapi/riskasset/WorkorderDetails?id='+this.id
           break;
         case 'lateral':
-          url = '/yiiapi/horizontalthreats/'+this.id
+          url = '/yiiapi/horizontalthreat/WorkorderDetails?id='+this.id
           break;
         case 'outside':
-          url = '/yiiapi/externalthreats/'+this.id
+          url = '/yiiapi/externalthreat/WorkorderDetails?id='+this.id
           break;
         case 'outreath':
-          url = '/yiiapi/outreachthreats/'+this.id
+          url = '/yiiapi/outreachthreat/WorkorderDetails?id='+this.id
           break;
         case 'locality':
-          url = '/yiiapi/nativethreat/'+this.id
+          url = '/yiiapi/nativethreat/WorkorderDetails?id='+this.id
           break;
         default:
           break;
@@ -322,11 +324,8 @@ export default {
           }
         })
         .then((resp) => {
-
-          // console.log(resp.data)
-
+          this.loading = true;
           let { status, msg, data } = resp.data;
-
           if (status == 0) {
 
             //对经办人处理
@@ -372,7 +371,7 @@ export default {
               this.table.maxPage = data.alerts.maxPage;
               this.table.pageNow = data.alerts.pageNow;
             }
-          }else {
+          } else {
             this.$message({
               message: msg,
               type: 'error',
