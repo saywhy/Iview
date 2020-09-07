@@ -13,7 +13,7 @@
       <el-table-column prop="index"
                        align="center"
                        label="序号"
-                       width="50"
+                       width="60"
                        show-overflow-tooltip></el-table-column>
       <el-table-column prop="asset_ip"
                        align="center"
