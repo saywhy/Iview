@@ -61,6 +61,8 @@ import '@/components/filters/index'
 
 import './assets/css/index.css'
 
+import $ from 'jquery'
+
 
 Vue.config.productionTip = false;
 const whiteList = ['/login', '/'];

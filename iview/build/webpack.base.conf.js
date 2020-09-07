@@ -29,11 +29,11 @@ module.exports = {
     }
   },
   plugins: [
-    // new webpack.ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery'
-    // }),
-   
+     new webpack.ProvidePlugin({
+       $: 'jquery',
+       jQuery: 'jquery'
+     }),
+
     new FileManagerPlugin({
       onEnd: {
         delete: [
