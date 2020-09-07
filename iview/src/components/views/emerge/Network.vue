@@ -969,9 +969,9 @@ export default {
           data.map(v => {
             v.asset_name = JSON.parse(v.asset_name);
             v.user = JSON.parse(v.user);
-            if(v.description){
+            /*if(v.description){
               v.description = JSON.parse(v.description);
-            }
+            }*/
           });
 
           this.table.tableData = data;

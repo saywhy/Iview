@@ -73,7 +73,7 @@
                                 <span class="title_left">日志监控</span>
                                 <span class="title_right">
                                     <span class="title_right_icon color3"></span>
-                                    <span>失实日志</span>
+                                    <span>实时日志</span>
                                     <span class="title_right_icon color4"></span>
                                     <span>告警日志</span>
                                 </span>
