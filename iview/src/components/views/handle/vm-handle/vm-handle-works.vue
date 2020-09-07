@@ -2202,16 +2202,15 @@ export default {
 }
 /* 弹窗 */
 /* 状态变更 */
-/deep/ .pop_state_box {
+/deep/
+.pop_state_box {
   .el-dialog {
     .el-dialog__header {
       display: none;
     }
-
     .el-dialog__body {
       height: 260px;
       padding: 30px;
-
       .closed_img {
         position: absolute;
         top: -18px;
@@ -2220,18 +2219,15 @@ export default {
         width: 46px;
         height: 46px;
       }
-
       .title {
         height: 24px;
         line-height: 24px;
         text-align: left;
-
         .title_name {
           font-size: 20px;
           color: #333333;
           line-height: 24px;
         }
-
         .mask {
           width: 24px;
           height: 0px;
@@ -2248,8 +2244,8 @@ export default {
       }
 
       .content {
-        height: 128px;
-        padding-top: 48px;
+        height: 112px;
+        padding-top: 36px;
       }
 
       .btn_box {
