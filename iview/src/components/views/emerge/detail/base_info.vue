@@ -197,9 +197,9 @@
                          name="4">
               <div class="base_box">
                 <p class="left_item_content"
-                   v-for="item in selectItem.sample_list"
+                   v-for="item in selectItem.sample_list.value"
                    v-if="item.name=='相关联恶意文件'">
-                  {{item.value}}
+                  {{item}}
                 </p>
               </div>
             </el-tab-pane>

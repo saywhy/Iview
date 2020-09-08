@@ -1051,7 +1051,7 @@ export default {
               }
             })
               .then(response => {
-                var url1 = '/yiiapi/ipsegment/template-download';
+                var url1 = '/yiiapi/ipsegment/TemplateDownload';
                 window.location.href = url1;
               })
               .catch(error => {
