@@ -1022,12 +1022,10 @@ export default {
               v.description = JSON.parse(v.description);
             }*/
           });
-
           this.table.tableData = data;
           this.table.count = count;
           this.table.maxPage = maxPage;
           this.table.pageNow = pageNow * 1;
-
         }
       })
     },
