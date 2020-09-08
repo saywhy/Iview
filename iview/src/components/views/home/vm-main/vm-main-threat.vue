@@ -17,7 +17,7 @@
           {{scope.row.alert_time | time}}
         </template>
       </el-table-column>
-      <el-table-column prop="alert_type"
+      <el-table-column prop="category"
                        align="center"
                        label="告警类型"
                        show-overflow-tooltip></el-table-column>
