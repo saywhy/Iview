@@ -121,7 +121,7 @@ export default {
           { name: "管理口" },
           { name: "通讯口" },
           { name: "镜像口" },
-          { name: "沙箱口" }
+          // { name: "沙箱口" }
         ],
         obtain: "",
         obtain_list: [{ name: "手动获取" }, { name: "自动获取" }],
@@ -191,9 +191,9 @@ export default {
             case 3:
               this.network_model.role_name = "镜像口";
               break;
-            case 4:
-              this.network_model.role_name = "沙箱口";
-              break;
+            // case 4:
+            //   this.network_model.role_name = "沙箱口";
+            //   break;
             default:
               this.network_model.role_name = "";
               break;
@@ -257,8 +257,17 @@ export default {
       this.$axios.get('/yiiapi/network/GetNetwork')
         .then(response => {
           this.network_loading = false
+          if (response.data.status == 1) {
+            this.$message(
+              {
+                message: response.data.msg,
+                type: 'error',
+              }
+            );
+          }
           this.network = response.data.data.data;
           this.change_name(this.network[0].NAME)
+
         })
         .catch(error => {
           console.log(error);
@@ -298,8 +307,8 @@ export default {
         case '镜像口':
           PORT = 3;
           break;
-        case '沙箱口':
-          PORT = 4;
+          // case '沙箱口':
+          //   PORT = 4;
           break;
         default:
           break;

@@ -30,9 +30,6 @@ axios.interceptors.request.use(
 );
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
-  console.log(response)
-  console.log(121212)
-  console.log(response.data.status)
   //status内层
   switch (response.data.status) {
     case 602:
@@ -67,7 +64,7 @@ axios.interceptors.response.use(response => {
   }
   return response
 }, err => {
-    if (err && err.response) {
+  if (err && err.response) {
     console.log(44444);
     console.log(err);
     console.log(err.response);
@@ -79,23 +76,20 @@ axios.interceptors.response.use(response => {
         console.log('未授权，请重新登录')
         break;
       case 402:
-         Router.push({
-           path: '/600'
-         });
+        Router.push({
+          path: '/600'
+        });
         break;
       case 403:
         console.log('拒绝访问111')
-        let locate = window.sessionStorage;
-        locate.setItem('overtime', 'true');
-        removeToken();
-        location.reload();
-        Vue.$router.push({
-          path: '/login'
-        });
-        return false;
-        // Router.push({
+        // let locate = window.sessionStorage;
+        // locate.setItem('overtime', 'true');
+        // removeToken();
+        // location.reload();
+        // Vue.$router.push({
         //   path: '/login'
         // });
+        return false;
         break;
       case 404:
         console.log('请求错误,未找到该资源')

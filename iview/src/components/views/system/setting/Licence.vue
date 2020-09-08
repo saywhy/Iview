@@ -181,7 +181,7 @@ export default {
     };
   },
   mounted () {
-       console.log(7777777);
+    console.log(7777777);
     this.get_data();
     this.get_license();
     this.get_version();
@@ -271,9 +271,11 @@ export default {
         return false
       }
       this.loading = true
-      this.$axios.post('/yiiapi/licenses/0', {
-        SN: this.licence_pop.cdk,
-        key: this.licence_pop.key
+      this.$axios.put('/yiiapi/licenses/0', {
+        License: {
+          SN: this.licence_pop.cdk,
+          key: this.licence_pop.key
+        }
       })
         .then(response => {
           this.loading = false

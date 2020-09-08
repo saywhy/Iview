@@ -468,6 +468,7 @@ export default {
     };
   },
   mounted () {
+    this.test()
     this.get_data()
     this.check_passwd()
     var options = []
@@ -496,6 +497,20 @@ export default {
     this.area_array = options
   },
   methods: {
+    test () {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
+        params: {
+          pathInfo: 'ipsegments',
+          method: 'GET',
+        }
+      })
+        .then(response => {
+
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
     // 测试密码过期
     check_passwd () {
       this.$axios.get('/yiiapi/site/CheckPasswdReset')
@@ -1032,16 +1047,16 @@ export default {
             this.$axios.get('/yiiapi/site/CheckAuthExist', {
               params: {
                 pathInfo: 'yararule/download',
-                 method: 'GET',
+                method: 'GET',
               }
             })
               .then(response => {
-            var url1 = '/yiiapi/ipsegment/template-download';
-            window.location.href = url1;
-            })
-            .catch(error => {
-              console.log(error);
-            })
+                var url1 = '/yiiapi/ipsegment/template-download';
+                window.location.href = url1;
+              })
+              .catch(error => {
+                console.log(error);
+              })
           }
         })
     },
@@ -1104,15 +1119,15 @@ export default {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
-           method: 'GET',
+          method: 'GET',
         }
       })
         .then(response => {
-      this.$refs.uploadExcel.submit()
-      })
-      .catch(error => {
-        console.log(error);
-      })
+          this.$refs.uploadExcel.submit()
+        })
+        .catch(error => {
+          console.log(error);
+        })
     },
     // 导出
     download () {
@@ -1135,16 +1150,16 @@ export default {
             this.$axios.get('/yiiapi/site/CheckAuthExist', {
               params: {
                 pathInfo: 'yararule/download',
-                 method: 'GET',
+                method: 'GET',
               }
             })
               .then(response => {
-            var url2 = '/yiiapi/ipsegment/export';
-            window.location.href = url2;
-            })
-            .catch(error => {
-              console.log(error);
-            })
+                var url2 = '/yiiapi/ipsegment/export';
+                window.location.href = url2;
+              })
+              .catch(error => {
+                console.log(error);
+              })
           }
         })
     }

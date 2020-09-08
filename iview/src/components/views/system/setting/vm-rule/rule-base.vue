@@ -86,7 +86,7 @@ export default {
         target: '/yiiapi/rulebases',
         // target: '/yiiapi/rulebase/upload-package',
         // target: '/yiiapi/site/Aaa',
-        chunkSize: '10048000',   //分块大小
+        chunkSize: '1048000',   //分块大小
         singleFile: true,
         testChunks: false,     //是否开启服务器分片校验
         parseTimeRemaining: function (timeRemaining, parsedTimeRemaining) {

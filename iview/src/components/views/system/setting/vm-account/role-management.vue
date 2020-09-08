@@ -455,16 +455,16 @@ export default {
         .then(response => {
           let { status, data } = response.data;
           console.log(data.edition);
-          if (data.edition == 2) {
-            this.data.forEach(element => {
-              if (element.label == '追查') {
-                element.children.push({
-                  id: 23,
-                  label: '沙箱',
-                })
-              }
-            });
-          }
+          // if (data.edition == 2) {
+          //   this.data.forEach(element => {
+          //     if (element.label == '追查') {
+          //       element.children.push({
+          //         id: 23,
+          //         label: '沙箱',
+          //       })
+          //     }
+          //   });
+          // }
         })
         .catch(error => {
           console.log(error);
@@ -485,6 +485,7 @@ export default {
           this.role_list.data.forEach((item, index) => {
             item.index_cn = index + 1
           });
+
         })
         .catch(error => {
           console.log(error);
@@ -579,6 +580,14 @@ export default {
               {
                 message: '添加角色成功',
                 type: 'success',
+              }
+            );
+          }
+          if (response.data.status == 1) {
+            this.$message(
+              {
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
+                type: 'warning',
               }
             );
           }

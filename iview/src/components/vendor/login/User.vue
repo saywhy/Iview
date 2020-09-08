@@ -180,6 +180,8 @@ export default {
           this.$store.dispatch('LoginByUsername', this.loginForm)
             .then((resp) => {
               //返回成功跳转
+              console.log(resp);
+
               if (resp[0]) {
                 this.$message.success('登录成功');
                 this.$router.push('/', () => { });//登录成功之后重定向到首页
@@ -188,6 +190,7 @@ export default {
                 }, 1000)
                 //失败
               } else {
+                // resp.data.msg[Object.keys(response.data.msg)[0]][0],
                 this.$message.error(resp[1]);
                 this.count++;
                 //this.loginForm = {username: '', password: ''};

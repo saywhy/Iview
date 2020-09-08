@@ -381,8 +381,7 @@ export default {
         this.select_list.forEach(element => {
           id_list.push(element.id)
         });
-
-        this.$axios.delete('/yiiapi/yiiapi/whitelists/' + id_list.join(','))
+        this.$axios.delete('/yiiapi/whitelists/' + id_list.join(','))
           .then(response => {
             console.log(response.data);
             if (response.data.status == 0) {

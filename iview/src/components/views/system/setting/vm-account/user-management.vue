@@ -169,6 +169,7 @@
         <div class="content_item">
           <p>
             <span class="title">角色</span>
+            <span class="red">*</span>
           </p>
           <el-select class="select_box"
                      v-model="user_add.role"
@@ -359,46 +360,6 @@ export default {
           }
         })
     },
-    // 修改密码
-    // edit_pswd () {
-    //   this.$axios.get('/yiiapi/site/get-self-password-reset-token')
-    //     .then(response => {
-    //       let { status, data } = response.data;
-    //       console.log(status);
-    //       console.log(data.data.token);
-    //       let token = data.data.token
-
-    //       // site/reset-self-password
-    //       this.$axios.post('/yiiapi/site/reset-self-password?token=' + token, {
-    //         ResetPasswordForm: {
-    //           password: "Hoohoolab*1234",
-    //           mobile: "151111211111",
-    //           mail_addr: "12312312@qq.com",
-    //           department: '123'
-    //         },
-    //         old_password: "Hoohoolab*123"
-    //       })
-    //         .then(response => {
-    //           let { status, data } = response.data;
-    //           console.log(status);
-    //           console.log(data);
-
-
-
-    //         })
-    //         .catch(error => {
-    //           console.log(error);
-    //         })
-
-
-
-
-
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //     })
-    // },
     get_menu () {
       this.$axios.get('/yiiapi/site/menu')
         .then(response => {
@@ -496,6 +457,33 @@ export default {
         this.$message(
           {
             message: '密码必须同时包含大写、小写、数字和特殊字符其中三项',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+      if (this.user_add.email_addr == '') {
+        this.$message(
+          {
+            message: '请输入邮箱',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+      if (this.user_add.mobile == '') {
+        this.$message(
+          {
+            message: '请输入手机号',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+      if (this.user_add.role == '') {
+        this.$message(
+          {
+            message: '请选择角色',
             type: 'warning',
           }
         );
