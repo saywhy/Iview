@@ -319,7 +319,7 @@ export default {
     init_bom_mid () {
       this.$axios.get('/yiiapi/monitor/SafetyEquipment')
         .then((resp) => {
-          console.log(resp)
+          //console.log(resp)
           let {
             status,
             data
@@ -365,7 +365,7 @@ export default {
             status,
             data
           } = response.data;
-          console.log("****")
+          console.log('*****')
           console.log(data);
           this.sysState_data = data
           data.dev_info.forEach(element => {
@@ -529,8 +529,6 @@ export default {
           this.equipment.echart_array.push(data_item1);
         })
       }
-      console.log(this.equipment.echart_array);
-      console.log(this.equipment.echart_array);
       this.equipment.echart_array.forEach(element => {
         console.log(element.names);
         if (element.names == '引擎') {
@@ -560,7 +558,7 @@ export default {
         }
       });
 
-      console.log(this.equipment.links_array);
+      console.log(this.equipment.echart_array);
 
       var myChart = this.$echarts.init(document.getElementById("graph"));
       // console.log(myChart);

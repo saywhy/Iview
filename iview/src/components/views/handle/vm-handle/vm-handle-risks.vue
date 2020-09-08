@@ -862,6 +862,7 @@ export default {
       fieldAttr = this.dropCol.map(item => {
         return item.prop;
       });
+      fieldAttr.push('汉字')
 
       this.$axios.put('/yiiapi/' + this.threats + '/FieldEdit',{
         fields: fieldAttr
@@ -878,8 +879,9 @@ export default {
             this.columnDrop();
           } else {
             this.$message({
+             /* message: msg[Object.keys(msg)[0]][0],*/
               message: msg,
-              type: 'error'
+              type: 'error',
             });
           }
         });
@@ -891,7 +893,7 @@ export default {
         .then((resp) => {
 
           this.dropCol = [];
-          let { status, data } = resp.data;
+          let { status, msg, data } = resp.data;
 
           if(status == 0){
 
@@ -915,7 +917,6 @@ export default {
 
             this.columnDrop();
           }
-
         });
     },
 

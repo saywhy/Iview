@@ -851,8 +851,9 @@ export default {
             this.columnDrop();
           }else {
             this.$message({
+              /* message: msg[Object.keys(msg)[0]][0],*/
               message: msg,
-              type: 'error'
+              type: 'error',
             });
           }
         });

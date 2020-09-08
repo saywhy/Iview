@@ -10,6 +10,7 @@
              @click="enter_home">
           <img class="e-image"
                :src="logoSrc">
+          <span class="e-name">iView</span>
         </div>
       </el-col>
       <el-col :span="12">
@@ -430,10 +431,17 @@ export default {
   .nav_user {
     .header-logo {
       .e-image {
-        margin: 5px 0;
-        width: 142px;
-        height: 50px;
+        margin: 9px 0;
+        width: 56px;
+        height: 42px;
         cursor: pointer;
+      }
+      .e-name{
+        font-size: 20px;
+        color: #fff;
+        font-family: PingFang;
+        margin-top: 20px;
+        display: inline-block;
       }
     }
     .el-col {
