@@ -65,18 +65,19 @@
                 v-if="attack_stage_list[9].count>1">
             {{attack_stage_list[9].count}}
           </span>
-        <span :class="attack_stage_list[9].count>0?'count_color':''">凭证访问</span>
+        <span :class="attack_stage_list[9].count>0?'count_color':''">命令控制</span>
       </div>
       <div class="stage_img_box">
         <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
+
       <div class="stage_item_box">
           <span class="circle_box"
                 v-if="attack_stage_list[8].count>1">
             {{attack_stage_list[8].count}}
           </span>
-        <span :class="attack_stage_list[8].count>0?'count_color':''">信息发现</span>
+        <span :class="attack_stage_list[8].count>0?'count_color':''">信息收集</span>
       </div>
       <div class="stage_img_box">
         <img src="@/assets/images/emerge/detail_jiantou_left.png"
@@ -98,7 +99,7 @@
                 v-if="attack_stage_list[6].count>1">
             {{attack_stage_list[6].count}}
           </span>
-        <span :class="attack_stage_list[6].count>0?'count_color':''">信息收集</span>
+        <span :class="attack_stage_list[6].count>0?'count_color':''">信息发现</span>
       </div>
       <div class="stage_img_box">
         <img src="@/assets/images/emerge/detail_jiantou_left.png"
@@ -109,7 +110,7 @@
                 v-if="attack_stage_list[5].count>1">
             {{attack_stage_list[5].count}}
           </span>
-        <span :class="attack_stage_list[5].count>0?'count_color':''">命令控制</span>
+        <span :class="attack_stage_list[5].count>0?'count_color':''">凭证访问</span>
       </div>
     </div>
 
@@ -137,7 +138,6 @@
         <span :class="attack_stage_list[11].count>0?'count_color':''">毁坏</span>
       </div>
     </div>
-
   </el-col>
 </template>
 

@@ -18,18 +18,24 @@
     methods:{
       drawGraph(){
 
-        //console.log(this.options)
+        console.log('&')
+        console.log(this.options)
+
+        let colorAttr = [];
 
         if(this.options && this.options.length != 0){
 
           var data = this.options.RiskAssetDegree;
           data.forEach(item => {
-            if(item.degree == 'low'){
-              Object.assign(item,{value:item.count * 1,name:'低危'});
+            if(item.degree == 'high'){
+              Object.assign(item,{value:item.count * 1,name:'高危'});
+              colorAttr.push('#DC5F5F');
             }else if(item.degree == 'medium'){
               Object.assign(item,{value:item.count * 1,name:'中危'});
-            }else if(item.degree == 'high'){
-              Object.assign(item,{value:item.count * 1,name:'高危'});
+              colorAttr.push('#E0C840');
+            }else if(item.degree == 'low'){
+              Object.assign(item,{value:item.count * 1,name:'低危'});
+              colorAttr.push('#47CAD9');
             }
           });
         }else {
@@ -47,7 +53,7 @@
             bottom: '8%',
             containLabel: true
           },
-          color:['#47CAD9','#E0C840','#DC5F5F'],
+          color:colorAttr,
           legend: {
             orient: 'horizontal',
             top: 10,

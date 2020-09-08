@@ -502,7 +502,6 @@
           });
         });
       },
-
       /* **************************以上已完成********************* */
       //批量导入
       exp_box_1() {
@@ -517,7 +516,6 @@
         }).then(() => {
           this.$axios.get('/yiiapi/intelligence/Template')
             .then(resp => {
-
               var url1 = "/yiiapi/intelligence/Export";
               window.location.href = url1;
             })
