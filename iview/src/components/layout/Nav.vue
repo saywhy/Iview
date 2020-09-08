@@ -540,7 +540,8 @@ export default {
       }
     }
   }
-  /deep/ .el-dialog {
+  /deep/
+  .el-dialog {
     width: 550px;
     .el-dialog__body {
       width: 550px;
