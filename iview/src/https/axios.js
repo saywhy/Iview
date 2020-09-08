@@ -82,13 +82,13 @@ axios.interceptors.response.use(response => {
         break;
       case 403:
         console.log('拒绝访问111')
-        // let locate = window.sessionStorage;
-        // locate.setItem('overtime', 'true');
-        // removeToken();
-        // location.reload();
-        // Vue.$router.push({
-        //   path: '/login'
-        // });
+        let locate = window.sessionStorage;
+        locate.setItem('overtime', 'true');
+        removeToken();
+        location.reload();
+        Vue.$router.push({
+          path: '/login'
+        });
         return false;
         break;
       case 404:
