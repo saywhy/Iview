@@ -97,11 +97,11 @@
           <div class="content_item_box">
             <div class="content_item">
               <p>
-                <span class="title">工单名称</span>
+                <span class="title">设备名称</span>
                 <!--<span class="title_color">*</span>-->
               </p>
               <el-input class="select_box"
-                        placeholder="请输入工单名称"
+                        placeholder="请输入设备名称"
                         v-model="monitor_add.name"
                         clearable>
               </el-input>
@@ -399,7 +399,7 @@
         if (this.monitor_add.name == '') {
           this.$message(
             {
-              message: '工单名称不能为空！',
+              message: '设备名称不能为空！',
               type: 'warning',
             }
           );
@@ -430,10 +430,19 @@
           );
           return false
         }
+        if (this.monitor_add.port == '') {
+          this.$message(
+            {
+              message: '端口不能为空！',
+              type: 'warning',
+            }
+          );
+          return false
+        }
 
         if (pattern.test(this.monitor_add.name)) {
           this.$message({
-            message: '工单名称不能包含特殊字符！',
+            message: '设备名称不能包含特殊字符！',
             type: 'warning',
           });
           return false
@@ -467,9 +476,15 @@
                 }
               );
             } else {
+             /* if(Object.prototype.toString.call(msg) == '[object Object]')
+              {
+                msg = msg[Object.keys(msg)].toString()
+              }else {
+                msg = msg;
+              }*/
               this.$message(
                 {
-                  message: msg.ip[0],
+                  message: msg[Object.keys(msg)[0]][0],
                   type: 'error',
                 }
               );
@@ -486,7 +501,7 @@
         if (this.monitor_add.name == '') {
           this.$message(
             {
-              message: '工单名称不能为空！',
+              message: '设备名称不能为空！',
               type: 'warning',
             }
           );
@@ -517,10 +532,19 @@
           );
           return false
         }
+        if (this.monitor_add.port == '') {
+          this.$message(
+            {
+              message: '端口不能为空！',
+              type: 'warning',
+            }
+          );
+          return false
+        }
 
         if (pattern.test(this.monitor_add.name)) {
           this.$message({
-            message: '工单名称不能包含特殊字符！',
+            message: '设备名称不能包含特殊字符！',
             type: 'warning',
           });
           return false
@@ -551,9 +575,15 @@
                 }
               );
             } else {
+           /*if(Object.prototype.toString.call(msg) == '[object Object]')
+              {
+                msg = msg[Object.keys(msg)].toString()
+              }else {
+                msg = msg;
+              }*/
               this.$message(
                 {
-                  message: msg,
+                  message: msg[Object.keys(msg)[0]][0],
                   type: 'error',
                 }
               );
@@ -566,6 +596,7 @@
 
       //日志下载
       download_box(row){
+        //console.log(row)
         var url = '/yiiapi/safetyequipment/DownloadLog?ip='+row.ip;
         window.location.href = url;
       },

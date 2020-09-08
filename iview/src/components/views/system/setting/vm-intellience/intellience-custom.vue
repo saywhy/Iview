@@ -383,7 +383,7 @@
             });
           }else {
             this.$message({
-              message: msg,
+              message: msg[Object.keys(msg)[0]][0],
               type: 'error',
             });
           }
@@ -408,7 +408,6 @@
           });
           return false;
         }
-
         if(this.intel_tab.score == ''){
           this.$message({
             message: '置信度不能为空！',
@@ -452,7 +451,7 @@
             });
           }else {
             this.$message({
-              message: msg,
+              message: msg[Object.keys(msg)[0]][0],
               type: 'error',
             });
           }
@@ -518,8 +517,6 @@
         }).then(() => {
           this.$axios.get('/yiiapi/intelligence/Template')
             .then(resp => {
-
-              console.log(resp);
 
               var url1 = "/yiiapi/intelligence/Export";
               window.location.href = url1;
