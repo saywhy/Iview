@@ -430,9 +430,9 @@ export default {
   .nav_user {
     .header-logo {
       .e-image {
-        margin: 9px 0;
-        width: 56px;
-        height: 42px;
+        margin: 5px 0;
+        width: 142px;
+        height: 50px;
         cursor: pointer;
       }
     }

@@ -18,13 +18,9 @@
     methods:{
       drawGraph(){
 
-        console.log('&')
-        console.log(this.options)
-
         let colorAttr = [];
 
         if(this.options && this.options.length != 0){
-
           var data = this.options.RiskAssetDegree;
           data.forEach(item => {
             if(item.degree == 'high'){
