@@ -14,8 +14,9 @@
       <el-button class="c_search"  @click="search()">搜索</el-button>
       <div class="c_btn_group">
         <el-button class="c_add" @click="add_box('','add')">添加情报</el-button>
-        <el-button class="c_exp" @click="exp_box_1">批量导入</el-button>
-        <el-button class="c_exp" @click="exp_box_2">批量导出</el-button>
+        <el-button class="c_add" @click="exp_box_0">下载模板</el-button>
+        <el-button class="c_exp" @click="exp_box_1">导入</el-button>
+        <el-button class="c_exp" @click="exp_box_2">导出</el-button>
       </div>
     </div>
     <div class="custom-bom">
@@ -503,28 +504,52 @@
         });
       },
       /* **************************以上已完成********************* */
+      //下载模板
+      exp_box_0(){
+        this.$axios.get('/yiiapi/site/CheckPasswdReset')
+          .then((resp) => {
+            let {
+              status,
+              msg,
+              data
+            } = resp.data;
+            if (status == '602') {
+              this.$message(
+                {
+                  message: msg,
+                  type: 'warning',
+                }
+              );
+              eventBus.$emit('reset')
+            } else {
+              var url = "/yiiapi/intelligence/Template";
+              window.location.href = url;
+            }
+          })
+      },
       //批量导入
       exp_box_1() {
         this.intel_state.exp = true;
       },
       //批量导出
       exp_box_2() {
-        this.$confirm('是否确定导出自定义情报?', '提示', {
+        /*this.$confirm('是否确定导出自定义情报?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$axios.get('/yiiapi/intelligence/Template')
             .then(resp => {
-              var url1 = "/yiiapi/intelligence/Export";
-              window.location.href = url1;
+
             })
             .catch(error => {
               console.log(error);
             })
         }).catch(() => {
           this.$message({ type: 'info', message: '已取消' });
-        });
+        });*/
+        var url1 = "/yiiapi/intelligence/Export";
+        window.location.href = url1;
       },
       getExpState(state){
         this.intel_state.exp = state;

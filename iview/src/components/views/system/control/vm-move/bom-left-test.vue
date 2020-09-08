@@ -30,7 +30,7 @@ export default {
         ydata = data.aggregations.types_count.buckets.map(v => {return v.doc_count});
       }
 
-      console.log(this.options.log)
+     // console.log(this.options.log)
       let myChart = this.$echarts.init(document.getElementById("test"));
       // 绘制图表
       myChart.setOption({

@@ -34,7 +34,7 @@
       multiple>
 
       <i class="el-icon-upload"></i>
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      <div class="el-upload__text">导入支持的文件格式<em>点击</em></div>
       <div class="el-upload__tip" slot="tip">支持PDF、DOCX、XLS、XLSX、TXT文件格式</div>
     </el-upload>
     <div class="btn_box_group">

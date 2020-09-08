@@ -331,6 +331,7 @@
                 }
 
                 var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
+
                 if (pattern.test(this.label.name)) {
                   this.$message({
                     message: '标签名称不能包含特殊字符！',
@@ -339,33 +340,32 @@
                   return false
                 }
 
+                //编辑
+                if(this.label.types == 'edit'){
 
-                if(attr.indexOf(this.label.name) > -1 &&
-                  this.label.name != this.originalName){
+                  if(attr.indexOf(this.label.name) > -1 &&
+                    this.label.name != this.originalName){
 
-                  this.$confirm(`是否合并标签？`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                  }).then(() => {
-                    if(this.label.id == ''){
-                      this.add_label_ok();
-                    }else {
+                    this.$confirm(`是否合并标签？`, '提示', {
+                      confirmButtonText: '确定',
+                      cancelButtonText: '取消',
+                      type: 'warning'
+                    }).then(() => {
                       this.edit_label_ok();
-                    }
-                  }).catch(() => {
-                    this.$message({
-                      type: 'info',
-                      message: '已取消'
+                    }).catch(() => {
+                      this.$message({
+                        type: 'info',
+                        message: '已取消'
+                      });
                     });
-                  });
-                } else {
-                  if(this.label.id == ''){
-                    this.add_label_ok();
-                  }else {
+                  } else {
                     this.edit_label_ok();
                   }
+                  //新增
+                }else {
+                  this.add_label_ok();
                 }
+
               }
             })
             .catch(error => {
@@ -394,7 +394,7 @@
               });
             }else {
               this.$message({
-                message: msg,
+                message: msg[Object.keys(msg)[0]][0],
                 type: 'error',
               });
             }
@@ -423,7 +423,7 @@
 
             }else {
               this.$message({
-                message: msg,
+                message: msg[Object.keys(msg)[0]][0],
                 type: 'error',
               });
 
