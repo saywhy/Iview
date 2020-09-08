@@ -365,6 +365,7 @@ export default {
             status,
             data
           } = response.data;
+          console.log("****")
           console.log(data);
           this.sysState_data = data
           data.dev_info.forEach(element => {
