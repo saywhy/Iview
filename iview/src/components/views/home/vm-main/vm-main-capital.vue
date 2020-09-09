@@ -51,6 +51,7 @@
           },
           color:colorAttr,
           legend: {
+            show:false,
             orient: 'horizontal',
             top: 10,
             right: 10,

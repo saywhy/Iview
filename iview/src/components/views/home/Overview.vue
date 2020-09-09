@@ -8,6 +8,14 @@
          <div class="vam-title">威胁告警（7天）</div>
          <vm-main-emerge :options="top_left"
                          v-if="top_left_show"></vm-main-emerge>
+         <div class="legend">
+           <span class="legend_icon color1"></span>
+           <span class="legend_name">低危</span>
+           <span class="legend_icon color2"></span>
+           <span class="legend_name">中危</span>
+           <span class="legend_icon color3"></span>
+           <span class="legend_name">高危</span>
+         </div>
        </div>
      </el-col>
      <el-col :span="6">
@@ -36,6 +44,14 @@
            <vm-main-progress :options="mid_left"
                              v-if="mid_left_show"></vm-main-progress>
          </el-col>
+         <div class="legend">
+           <span class="legend_icon color1"></span>
+           <span class="legend_name">低危</span>
+           <span class="legend_icon color2"></span>
+           <span class="legend_name">中危</span>
+           <span class="legend_icon color3"></span>
+           <span class="legend_name">高危</span>
+         </div>
        </div>
      </el-col>
      <el-col :span="12">
@@ -216,7 +232,7 @@
         init_top_left () {
           this.$axios.get('/yiiapi/overview/Last7DaysAlarm')
             .then((resp) => {
-               //console.log(resp)
+              // console.log(resp)
               let {
                 status,
                 data
@@ -353,7 +369,36 @@
         border-radius: 4px;
         background-color: #fff;
         position: relative;
+        .legend{
+          position: absolute;
+          top: 14px;
+          right: 24px;
+          .legend_icon {
+            margin-left: 12px;
+            margin-right: 5px;
+            border-radius: 2px;
+            height: 14px;
+            width: 28px;
+            vertical-align: middle;
+            display: inline-block;
+            &.color1 {
+              background: #47CAD9;
+            }
+            &.color2 {
+              background: #E0C840;
+            }
+            &.color3 {
+              background: #DC5F5F;
+            }
+          }
+          .legend_name{
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: #333333;
+          }
+        }
       }
+
     }
     .va-main-3{
       margin-top: 20px;
@@ -367,6 +412,34 @@
           right: 10px;
           top: 54px;
           z-index: 999;
+        }
+        .legend{
+          position: absolute;
+          top: 14px;
+          right: 24px;
+          .legend_icon {
+            margin-left: 12px;
+            margin-right: 5px;
+            border-radius: 2px;
+            height: 14px;
+            width: 28px;
+            vertical-align: middle;
+            display: inline-block;
+            &.color1 {
+              background: #47CAD9;
+            }
+            &.color2 {
+              background: #E0C840;
+            }
+            &.color3 {
+              background: #DC5F5F;
+            }
+          }
+          .legend_name{
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: #333333;
+          }
         }
       }
     }

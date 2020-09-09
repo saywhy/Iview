@@ -22,8 +22,8 @@
 
         let xAxis = data.map(item => {return item.statistics_time});
         let lowyAxis = data.map(item => {return item.alert_count_details.low});
-        let midyAxis = data.map(item => {return item.alert_count_details.medium})
-        let highyAxis = data.map(item => {return item.alert_count_details.high})
+        let midyAxis = data.map(item => {return item.alert_count_details.medium});
+        let highyAxis = data.map(item => {return item.alert_count_details.high});
 
         // 基于准备好的dom，初始化echarts实例
         let myChart = this.$echarts.init(document.getElementById('threatWarn'));
@@ -38,6 +38,7 @@
           },
           color:['#47CAD9','#E0C840','#DC5F5F'],
           legend: {
+            show:false,
             orient: 'horizontal',
             top: 10,
             right: 10,
@@ -119,7 +120,8 @@
                 }]
               }
             }
-          },{
+          },
+            {
             name: '中危',
             type: 'line',
             symbol: "none",
@@ -142,7 +144,8 @@
                 }]
               }
             }
-          },{
+          },
+            {
             name: '高危',
             type: 'line',
             symbol: "none",
