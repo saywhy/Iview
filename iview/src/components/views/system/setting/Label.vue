@@ -109,6 +109,7 @@
                 v-model="label.category_name"
                 :fetch-suggestions="querySearchAsync"
                 @select="handleSelect"
+                :disabled="label.category_flag"
                 placeholder="下拉选择或直接输入">
               </el-autocomplete>
             </div>
@@ -199,6 +200,7 @@
             types:'add',
             lists:[],
             id:'',
+            category_flag:false,
             intelligence:10
           },
           label_category:{
@@ -279,6 +281,12 @@
 
           this.label.types = type;
 
+          //编辑时禁止去选择标签类型，不然会报错
+          if(item == ''){
+            this.label.category_flag = false;
+          }else {
+            this.label.category_flag = true;
+          }
           if(type == 'add'){
             if(item){
               this.label.category_name = item;
@@ -304,7 +312,6 @@
             .then(resp => {
               this.loading = false;
               let {status,data} = resp.data;
-
 
               if(status == 0){
 
@@ -436,9 +443,9 @@
         closed_cancel_box(){
           this.label_pop.lab = false;
         },
-        //新增编辑删除
+        //新增、编辑删除
         closed_remove_box(){
-          console.log(this.label.id)
+         // console.log(this.label.id)
           this.$confirm(`确认是否删除?`, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -450,8 +457,8 @@
              let {status,data} = resp.data;
 
               if (status == 0) {
-                this.get_data();
                 this.label_pop.lab = false;
+                this.get_data();
                 this.$message(
                   {
                     message: '删除成功！',
@@ -484,7 +491,7 @@
         closed_sub_box(){
           if(this.label_category.name == ''){
             this.$message({
-              message: '标签类型名不能为空！',
+              message: '标签类别名不能为空！',
               type: 'warning',
             });
             return false;
@@ -492,7 +499,7 @@
           var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
           if (pattern.test(this.label_category.name)) {
             this.$message({
-              message: '标签类型名不能包含特殊字符！',
+              message: '标签类别名不能包含特殊字符！',
               type: 'warning',
             });
             return false
@@ -510,6 +517,11 @@
               if(status == 200){
                 this.label_pop.cat = false;
                 this.get_data();
+              }else {
+                this.$message({
+                  message: '标签类别编辑错误！',
+                  type: 'warning',
+                });
               }
             })
             .catch(error => {
@@ -534,7 +546,9 @@
               let {status,data} = resp.data;
 
               if (status == 0) {
+
                 this.get_data();
+
                 this.$message(
                   {
                     message: '删除成功！',
@@ -575,7 +589,7 @@
                 });
               }else{
                 this.$message({
-                  message: msg,
+                  message: '标签拖拽失败',
                   type: 'error',
                 });
               }
@@ -605,8 +619,8 @@
               });
             }else{
               this.$message({
-                message: msg,
-                type: 'error',
+                message: '标签类别拖拽失败',
+                type: 'error'
               });
             }
           })
@@ -636,7 +650,7 @@
               });
             }else{
               this.$message({
-                message: msg,
+                message: '置顶失败！',
                 type: 'error',
               });
             }
@@ -659,6 +673,7 @@
                   i.value = i.category_name;
                 }
               }
+              //data.push({category_name:'',id:'',value:''})
               callback(data);
             })
             .catch(error => {

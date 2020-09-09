@@ -122,6 +122,7 @@
               </p>
               <el-input class="select_box"
                         placeholder="请输入端口"
+                        type="number"
                         v-model="monitor_add.port"
                         clearable>
               </el-input>
@@ -433,13 +434,12 @@
         if (this.monitor_add.port == '') {
           this.$message(
             {
-              message: '端口不能为空！',
+              message: '端口不能为空且为整数！',
               type: 'warning',
             }
           );
           return false
         }
-
         if (pattern.test(this.monitor_add.name)) {
           this.$message({
             message: '设备名称不能包含特殊字符！',
@@ -535,7 +535,7 @@
         if (this.monitor_add.port == '') {
           this.$message(
             {
-              message: '端口不能为空！',
+              message: '端口不能为空且为整数！',
               type: 'warning',
             }
           );

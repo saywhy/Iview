@@ -84,13 +84,12 @@
     },
     created(){
       let options = this.options;
-
       options = options.map(v => {
         let assets = '';
-        if(v.src_label != ''){
+        if(v.src_label != '[]'){
           assets = JSON.parse(v.src_ip).join(',');
         }
-        if(v.dest_label != ''){
+        if(v.dest_label != '[]'){
           assets += ','+JSON.parse(v.dest_ip).join(',');
         }
         return {...v,assets:assets};

@@ -256,13 +256,14 @@
         text-align: center;
         position: relative;
         .circle_box {
-          display: block;
           font-size: 12px;
           box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.24);
-          width: 20px;
+          width: auto;
           height: 20px;
           line-height: 20px;
           color: #fff;
+          padding: 0 5px;
+          display: inline-block;
           border-radius: 20px;
           background: #ff5f5c;
           position: absolute;

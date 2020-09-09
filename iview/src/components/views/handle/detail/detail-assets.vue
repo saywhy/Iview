@@ -1687,18 +1687,19 @@ export default {
         text-align: center;
         position: relative;
         .circle_box {
-          display: block;
           font-size: 12px;
           box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.24);
-          width: 18px;
-          height: 18px;
-          line-height: 18px;
+          width: auto;
+          height: 20px;
+          line-height: 20px;
           color: #fff;
-          border-radius: 18px;
+          padding: 0 5px;
+          display: inline-block;
+          border-radius: 20px;
           background: #ff5f5c;
           position: absolute;
-          top: -9px;
-          right: -9px;
+          top: -10px;
+          right: -10px;
         }
       }
       .count_color {
