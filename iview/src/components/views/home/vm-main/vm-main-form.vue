@@ -20,11 +20,10 @@
 
         let data = this.options;
         //data = data.reverse();
-
-        let xAxis = data.map(item => {return item.alert_type});
+        let xAxis = data.map(item => {return item.category});
 
         data.forEach(item => {
-          Object.assign(item,{value:item.total_count,name:item.alert_type});
+          Object.assign(item,{value:item.total_count,name:item.category});
         });
 
         // 基于准备好的dom，初始化echarts实例

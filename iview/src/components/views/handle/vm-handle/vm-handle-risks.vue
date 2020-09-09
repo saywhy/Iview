@@ -1020,7 +1020,7 @@ export default {
             v.asset_name = JSON.parse(v.asset_name);
             v.user = JSON.parse(v.user);
             if(v.description){
-              v.description = JSON.parse(v.description);
+              v.description = JSON.parse(v.description).join(',');
             }
           });
           this.table.tableData = data;
