@@ -16,7 +16,7 @@
         </template>
       </div>
     <transition name="fade">
-      <el-menu :default-active="$route.meta.auth" :collapse="isCollapse" v-cloak>
+      <el-menu class="slider-e-menu" :default-active="$route.meta.auth" :collapse="isCollapse" v-cloak>
         <aside-item v-for="item in asideList" :key="item.meta.auth" :item="item"
                     :collapse="isCollapse"></aside-item>
       </el-menu>
@@ -95,6 +95,7 @@
   #aside {
     width: 210px;
     position: relative;
+    min-height: auto;
     .aside-breadcrumb {
       height: 60px;
       display: flex;
@@ -133,6 +134,27 @@
     .el-menu {
       width: 210px;
       border-width: 0;
+    }
+    /deep/
+    .slider-e-menu{
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: calc(100vh - 180px);
+      &::-webkit-scrollbar {
+        /*滚动条整体样式*/
+        width: 6px;
+        /*高宽分别对应横竖滚动条的尺寸*/
+        /* border-radius: 6px;*/
+      }
+      &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+        border-radius: 6px;
+        background: #0070FF;
+        /*background: red;*/
+      }
+      &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+        border-radius: 6px;
+        background: #f4f4f4;
+      }
     }
   }
   .fade-enter-active, .fade-leave-active {
