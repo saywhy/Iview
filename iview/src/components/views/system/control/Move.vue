@@ -96,13 +96,16 @@
                                 <span class="title_left">安全设备</span>
                             </p>
                         </div>
-                        <div class="legend">
-                            <span class="legend_icon color7"></span>
-                            <span>设备总数</span>
-                            <span class="legend_icon color4"></span>
-                            <span>告警总数</span>
-                            <span class="legend_icon color8"></span>
-                            <span>离线设备</span>
+                        <div class="legend" v-if="bom_mid_show">
+                            <!--<span class="legend_icon color7"></span>-->
+                            <span>设备总数：</span>
+                            <span class="num">{{this.bom_mid.total_count}}</span>
+                            <!--<span class="legend_icon color4"></span>-->
+                            <span>告警总数：</span>
+                            <span class="num">{{this.bom_mid.alert_count}}</span>
+                            <!--<span class="legend_icon color8"></span>-->
+                            <span>离线设备：</span>
+                            <span class="num num_last">{{this.bom_mid.offline_count}}</span>
                         </div>
                         <div class="bom_mid_content">
                           <bom-mid :options="bom_mid" v-if="bom_mid_show"></bom-mid>
@@ -325,6 +328,7 @@ export default {
             data
           } = resp.data;
           if (status == 0) {
+            //console.log(data)
             this.bom_mid = data;
             this.bom_mid_show = true;
           }

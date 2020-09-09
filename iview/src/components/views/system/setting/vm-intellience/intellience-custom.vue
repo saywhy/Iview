@@ -346,9 +346,9 @@
           });
           return false;
         }
-        if(this.intel_tab.score > 100){
+        if(this.intel_tab.score > 100 || this.intel_tab.score <= 0){
           this.$message({
-            message: '置信度不能超过100！',
+            message: '置信度在1到100之间！',
             type: 'warning',
           });
           return false;
@@ -416,9 +416,9 @@
           });
           return false;
         }
-        if(this.intel_tab.score > 100){
+        if(this.intel_tab.score > 100 || this.intel_tab.score <= 0){
           this.$message({
-            message: '置信度不能超过100！',
+            message: '置信度在1到100之间！',
             type: 'warning',
           });
           return false;

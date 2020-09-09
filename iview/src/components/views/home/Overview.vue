@@ -203,7 +203,6 @@
                 status,
                 data
               } = resp.data;
-
              // console.log(resp);
 
               if (status == 0) {
