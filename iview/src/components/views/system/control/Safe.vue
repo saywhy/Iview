@@ -97,7 +97,7 @@
           <div class="content_item_box">
             <div class="content_item">
               <p>
-                <span class="title">设备名称</span>
+                <span class="title">设备名称<span class="lab" title="必填">*</span></span>
                 <!--<span class="title_color">*</span>-->
               </p>
               <el-input class="select_box"
@@ -108,7 +108,7 @@
             </div>
             <div class="content_item">
               <p>
-                <span class="title">IP地址</span>
+                <span class="title">IP地址<span class="lab" title="必填">*</span></span>
               </p>
               <el-input class="select_box"
                         placeholder="请输入IP地址"
@@ -118,7 +118,7 @@
             </div>
             <div class="content_item">
               <p>
-                <span class="title">端口</span>
+                <span class="title">端口<span class="lab" title="必填">*</span></span>
               </p>
               <el-input class="select_box"
                         placeholder="请输入端口"
@@ -151,7 +151,7 @@
           <div class="content_item_box">
             <div class="content_item">
               <p>
-                <span class="title">主机类型</span>
+                <span class="title">主机类型<span class="lab" title="必填">*</span></span>
                 <!--<span class="title_color">*</span>-->
               </p>
               <el-input class="select_box"
@@ -162,7 +162,7 @@
             </div>
             <div class="content_item">
               <p>
-                <span class="title">snmp服务器</span>
+                <span class="title">snmp服务器<span class="lab" title="必填">*</span></span>
               </p>
               <el-select class="select_box"
                          v-model="monitor_add.snmp"

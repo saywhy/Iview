@@ -49,7 +49,7 @@ export default {
           containLabel: true
         },
         //["#47CAD9", "#2f4554", "#D53A35"]
-        color: ["#47CAD9", "#D53A35", "#2f4554"],
+        color: ["#47CAD9", "#D53A35", "#CDDC39"],
         series: [
           {
             name: "来源",

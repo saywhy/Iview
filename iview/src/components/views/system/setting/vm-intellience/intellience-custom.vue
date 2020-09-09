@@ -107,7 +107,7 @@
         <div class="content_item_box">
           <div class="content_item">
             <p>
-              <span class="title">指标</span>
+              <span class="title">指标<span class="lab" title="必填">*</span></span>
             </p>
             <el-input class="select_box"
                       placeholder="请输入指标(最多255个字符串)"
@@ -118,7 +118,7 @@
           </div>
           <div class="content_item">
             <p>
-              <span class="title">威胁度</span>
+              <span class="title">威胁度<span class="lab" title="必填">*</span></span>
             </p>
             <el-select class="select_box"
                        v-model="intel_tab.degree"
@@ -136,7 +136,7 @@
         <div class="content_item_box">
           <div class="content_item">
             <p>
-              <span class="title">指标类型</span>
+              <span class="title">指标类型<span class="lab" title="必填">*</span></span>
             </p>
             <el-select class="select_box"
                        v-model="intel_tab.type"
@@ -150,7 +150,7 @@
           </div>
           <div class="content_item">
             <p>
-              <span class="title">置信度</span>
+              <span class="title">置信度<span class="lab" title="必填">*</span></span>
             </p>
             <el-input class="select_box"
                       type="number"
@@ -164,7 +164,7 @@
       <div class="content_sec">
         <div class="content_item">
           <p>
-            <span class="title">描述</span>
+            <span class="title">描述<span class="lab" title="必填">*</span></span>
           </p>
           <el-input class="select_box_textarea"
                     type="textarea"
@@ -331,6 +331,14 @@
           });
           return false;
         }
+        if(this.intel_tab.type == ''){
+          this.$message({
+            message: '请选择指标类型！',
+            type: 'warning',
+          });
+          return false;
+        }
+
         if(this.intel_tab.degree == ''){
           this.$message({
             message: '请选择威胁度！',
@@ -339,6 +347,7 @@
           return false;
         }
 
+
         if(this.intel_tab.score == ''){
           this.$message({
             message: '置信度不能为空！',
@@ -346,9 +355,19 @@
           });
           return false;
         }
+
+
         if(this.intel_tab.score > 100 || this.intel_tab.score <= 0){
           this.$message({
             message: '置信度在1到100之间！',
+            type: 'warning',
+          });
+          return false;
+        }
+
+        if(this.intel_tab.description == ''){
+          this.$message({
+            message: '描述不能为空！',
             type: 'warning',
           });
           return false;
@@ -402,6 +421,13 @@
           });
           return false;
         }
+        if(this.intel_tab.type == ''){
+          this.$message({
+            message: '请选择指标类型！',
+            type: 'warning',
+          });
+          return false;
+        }
         if(this.intel_tab.degree == ''){
           this.$message({
             message: '请选择威胁度！',
@@ -419,6 +445,14 @@
         if(this.intel_tab.score > 100 || this.intel_tab.score <= 0){
           this.$message({
             message: '置信度在1到100之间！',
+            type: 'warning',
+          });
+          return false;
+        }
+
+        if(this.intel_tab.description == ''){
+          this.$message({
+            message: '描述不能为空！',
             type: 'warning',
           });
           return false;
