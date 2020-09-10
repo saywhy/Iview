@@ -2016,7 +2016,6 @@ export default {
       }
     }
   }
-
   //添加到工单
   /deep/
   .pop_state_add {
@@ -2065,14 +2064,14 @@ export default {
         }
 
         .content {
-          padding-top: 24px;
+          padding-top: 48px;
         }
 
         .btn_box {
           height: 42px;
           text-align: center;
           margin-bottom: 24px;
-          margin-top: 16px;
+          margin-top: 36px;
 
           .ok_btn {
             width: 136px;
@@ -2092,7 +2091,6 @@ export default {
       }
     }
   }
-
   /deep/
   .pop_box {
     .el-dialog {
@@ -2104,6 +2102,7 @@ export default {
       transform: translateX(-50%);
     }
   }
+
 }
 </style>
 <style lang="less">

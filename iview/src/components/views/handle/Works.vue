@@ -197,7 +197,8 @@ export default {
       top: 16px;
       z-index: 999;
       height: 18px;
-      min-width: 18px;
+      min-width: 16px;
+      padding: 1px 3px;
       box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2),
         -1px -1px 5px rgba(0, 0, 0, 0.2);
       &.hc1 {

@@ -1620,7 +1620,7 @@ export default {
     //分配参数具体请求
     get_distribution (all_params) {
       this.handle.save = true;
-      this.$axios.put('/yiiapi/workordes', all_params)
+      this.$axios.put('/yiiapi/workorders/0', all_params)
         .then((resp) => {
           this.handle.save = false;
           let { status, msg, data } = resp.data;
@@ -2047,9 +2047,11 @@ export default {
         priority: this.edit.data.priority,
         perator: this.edit.perator,
         remarks: this.edit.data.remarks,
-        type: this.edit.data.type,
+
         remind: this.edit.notice
       };
+      //type: this.edit.data.type,
+
       if (this.edit.data.type == 'asset') {
         // if (handle_sel_list.length == 0) {
         //   this.$message({ message: '请选择至少一项资产！', type: 'warning' });
@@ -2065,7 +2067,7 @@ export default {
       }
       console.log(all_params);
       this.handle.save = true
-      this.$axios.put('/yiiapi/workordes', all_params)
+      this.$axios.put('/yiiapi/workorders/0', all_params)
         .then((resp) => {
           this.handle.save = false
           let { status, msg, data } = resp.data;

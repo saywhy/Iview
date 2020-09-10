@@ -1741,7 +1741,8 @@ export default {
   }
 
   // 编辑工单
-  /deep/ .task_new_box {
+  /deep/
+  .task_new_box {
     .el-dialog {
       .el-dialog__header {
         display: none;
@@ -2083,7 +2084,8 @@ export default {
   }
 
   //添加到工单
-  /deep/ .pop_state_add {
+  /deep/
+  .pop_state_add {
     .el-dialog {
       .el-dialog__header {
         display: none;
