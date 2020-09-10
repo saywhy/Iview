@@ -27,15 +27,18 @@
       ref="upload"
       :autoStart='false'
       :auto-upload="false"
+      :before-upload="beforeUpload"
       :on-success="onFileSuccess"
       :on-remove="handleRemove"
       :on-error="onFileError"
-      :option="uploadUrl()"
+      :file-list="fileList"
+      accept=".xls"
+      action="/yiiapi/intelligence/Upload"
       multiple>
 
       <i class="el-icon-upload"></i>
-      <div class="el-upload__text">导入支持的文件格式<em>点击</em></div>
-      <div class="el-upload__tip" slot="tip">支持PDF、DOCX、XLS、XLSX、TXT文件格式</div>
+      <div class="el-upload__text">导入支持的文件格式<em>&nbsp;&nbsp;点击此处</em></div>
+      <div class="el-upload__tip" slot="tip">只支持xls，xlsx文件格式</div>
     </el-upload>
     <div class="btn_box_group">
       <el-button @click="closed_exp_box"
@@ -43,7 +46,6 @@
       <el-button class="ok_btn"
                  @click="submit_exp_box">确定</el-button>
     </div>
-
    <!-- <el-upload
       class="uploader-example"
       ref="upload"
@@ -59,7 +61,6 @@
       <div slot="tip" class="el-upload__tip">PDF、DOCX、XLS、XLSX、TXTb</div>
     </el-upload>
     -->
-
   </div>
 </template>
 
@@ -73,6 +74,7 @@ export default {
         chunkSize: '10048000',   //分块大小
         testChunks: false     //是否开启服务器分片校验
       },
+      fileList:[],
       fileStatusText: {
         success: '成功',
         error: '错误',
@@ -86,8 +88,28 @@ export default {
     uploadUrl(){
       return "/yiiapi/intelligence/Upload";
     },
+    beforeUpload(file) {
+      console.log(file)
+      var testmsg=file.name.substring(file.name.lastIndexOf('.')+1)
+      const extension = testmsg === 'xls'
+      const extension2 = testmsg === 'xlsx'
+      const isLt2M = file.size / 1024 / 1024 < 100;
+      if(!extension && !extension2) {
+        this.$message({
+          message: '上传文件只能是 xls、xlsx格式!',
+          type: 'warning'
+        });
+      }
+       if(!isLt2M) {
+           this.$message({
+               message: '上传文件大小不能超过 100MB!',
+               type: 'warning'
+           });
+       }
+      return (extension || extension2) && isLt2M
+    },
     // 上传
-    onFileAdded (file) {
+    /*onFileAdded (file) {
       file.pause()
       if (file.size > 100 * 1024 * 1024) {
         this.$message({
@@ -102,19 +124,25 @@ export default {
           file.resume();
         }, 100)
       }
-    },
+    },*/
     onFileSuccess (rootFile, file, response, chunk) {
       console.log('成功');
       this.$emit('titleChanged',false);
-
+      this.$message({
+        message: '导入成功！',
+        type: 'success'
+      });
     },
     onFileProgress (file) {
-
       console.log('333')
     },
     onFileError () {
       console.log('失败')
       //this.$emit('titleChanged',false);
+      this.$message({
+        message: '导入失败！',
+        type: 'error'
+      });
     },
     //
     handleRemove(file, fileList) {
@@ -128,6 +156,7 @@ export default {
     //确定
     submit_exp_box() {
       this.$refs.upload.submit();
+      this.$refs.upload.clearFiles();
     },
     //取消
     closed_exp_box(){
