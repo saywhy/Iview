@@ -121,7 +121,7 @@ export default {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'investigate/user-investigation',
-           method: 'GET',
+          method: 'GET',
         }
       })
         .then(response => {
@@ -198,6 +198,7 @@ export default {
       this.user_search.start_time = ''
       this.user_search.end_time = ''
       $(document.querySelector('.el-button--text')).trigger('click');
+      this.get_data()
     },
     // 下载
     download () {
@@ -218,7 +219,7 @@ export default {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
-           method: 'GET',
+          method: 'GET',
         }
       })
         .then(response => {

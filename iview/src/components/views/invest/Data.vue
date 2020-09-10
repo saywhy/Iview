@@ -218,6 +218,7 @@ export default {
       this.data_search.start_time = '';
       this.data_search.end_time = '';
       $(document.querySelector('.el-button--text')).trigger('click');
+      this.get_data()
     },
     // 下载
     download () {
@@ -238,7 +239,7 @@ export default {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
-           method: 'GET',
+          method: 'GET',
         }
       })
         .then(response => {

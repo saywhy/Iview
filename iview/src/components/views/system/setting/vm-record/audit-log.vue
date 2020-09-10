@@ -179,6 +179,8 @@ export default {
       this.time_list = {
         time: []
       }
+      $(document.querySelector('.el-button--text')).trigger('click');
+      this.get_data()
     },
     download () {
       this.$axios.get('/yiiapi/site/CheckPasswdReset')
