@@ -396,7 +396,7 @@
               this.label_pop.lab = false;
               this.get_data();
               this.$message({
-                message: '添加成功！',
+                message: '标签添加成功！',
                 type: 'success',
               });
             }else {
@@ -424,7 +424,7 @@
               this.label_pop.lab = false;
               this.get_data();
               this.$message({
-                message: '编辑成功！',
+                message: '标签编辑成功！',
                 type: 'success',
               });
 
@@ -504,22 +504,24 @@
             });
             return false
           }
-          this.$axios.get('/yiiapi/labelcates/'+this.label_category.id,{
-            params:{
-              LabelCategory:{
-                category_name:this.label_category.name
-              }
+          this.$axios.put('/yiiapi/labelcates/'+this.label_category.id,{
+            LabelCategory:{
+              category_name:this.label_category.name
             }
           })
             .then(resp => {
-              let {status,data} = resp;
-              //console.log(resp)
-              if(status == 200){
+              let {status,msg,data} = resp.data;
+              console.log(resp)
+              if(status == 0){
                 this.label_pop.cat = false;
                 this.get_data();
+                this.$message({
+                  message: '标签类别修改成功！',
+                  type: 'success',
+                });
               }else {
                 this.$message({
-                  message: '标签类别编辑错误！',
+                  message: '标签类别修改失败！',
                   type: 'warning',
                 });
               }
