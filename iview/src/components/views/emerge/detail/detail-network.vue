@@ -1,53 +1,61 @@
 <template>
-  <div class="detail_box" v-loading.fullscreen.lock="loading">
+  <div class="detail_box"
+       v-loading.fullscreen.lock="loading">
     <back-title :title-name="title_name"></back-title>
     <!-- 顶部基础 -->
     <div class="detail_top">
       <div class="top_title">
         <div class="top_left">
-          <img src="@/assets/images/emerge/top1.png" alt />
-          <img
-            src="@/assets/images/emerge/top2.png"
-            v-if="detail_main.security_domain!='terminal'"
-            alt
-          />
-          <img
-            src="@/assets/images/emerge/top3.png"
-            v-if="detail_main.security_domain!='terminal'"
-            alt
-          />
+          <img src="@/assets/images/emerge/top1.png"
+               alt />
+          <img src="@/assets/images/emerge/top2.png"
+               v-if="detail_main.security_domain!='terminal'"
+               alt />
+          <img src="@/assets/images/emerge/top3.png"
+               v-if="detail_main.security_domain!='terminal'"
+               alt />
         </div>
         <div class="top_right">
           <el-row class="common_btn common_btn_124">
-            <el-col :span="24" class="common_btn_list">
-              <el-dropdown
-                @command="change_state"
-                trigger="click"
-                placement="bottom-start"
-                size="148"
-              >
-                <el-button type="primary" class="change_btn">
+            <el-col :span="24"
+                    class="common_btn_list">
+              <el-dropdown @command="change_state"
+                           trigger="click"
+                           placement="bottom-start"
+                           size="148">
+                <el-button type="primary"
+                           class="change_btn">
                   <span>状态变更</span>
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
-                <el-dropdown-menu slot="dropdown" class="dropdown_ul_box_124">
-                  <el-dropdown-item command="2" class="select_item">处置中</el-dropdown-item>
-                  <el-dropdown-item command="3" class="select_item">已处置</el-dropdown-item>
-                  <el-dropdown-item command="4" class="select_item">已忽略</el-dropdown-item>
-                  <el-dropdown-item command="5" class="select_item">误报</el-dropdown-item>
+                <el-dropdown-menu slot="dropdown"
+                                  class="dropdown_ul_box_124">
+                  <el-dropdown-item command="2"
+                                    class="select_item">处置中</el-dropdown-item>
+                  <el-dropdown-item command="3"
+                                    class="select_item">已处置</el-dropdown-item>
+                  <el-dropdown-item command="4"
+                                    class="select_item">已忽略</el-dropdown-item>
+                  <el-dropdown-item command="5"
+                                    class="select_item">误报</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-dropdown @command="change_task" placement="bottom-start" trigger="click">
-                <el-button type="primary" class="change_btn">
+              <el-dropdown @command="change_task"
+                           placement="bottom-start"
+                           trigger="click">
+                <el-button type="primary"
+                           class="change_btn">
                   <span>工单任务</span>
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
-                <el-dropdown-menu slot="dropdown" class="dropdown_ul_box_124">
+                <el-dropdown-menu slot="dropdown"
+                                  class="dropdown_ul_box_124">
                   <el-dropdown-item command="1">新建工单</el-dropdown-item>
                   <el-dropdown-item command="2">添加到工单</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <el-button class="edit_btn" @click="edit_tag_box">编辑标签</el-button>
+              <el-button class="edit_btn"
+                         @click="edit_tag_box">编辑标签</el-button>
             </el-col>
           </el-row>
         </div>
@@ -56,22 +64,27 @@
         <div class="content_left">
           <div class="content_item">
             <span class="item_title">源地址：</span>
-            <div class="item_right src_bg" :class="more.src?'show_more_list':''">
+            <div class="item_right src_bg"
+                 :class="more.src?'show_more_list':''">
               <div>
-                <el-menu class="el_menu_src" mode="horizontal" @select="handleSelect_src">
-                  <el-submenu
-                    :index="index+'0'"
-                    :key="index"
-                    v-for="(item,index) in detail_main.src_ip_list"
-                  >
+                <el-menu class="el_menu_src"
+                         mode="horizontal"
+                         @select="handleSelect_src">
+                  <el-submenu :index="index+'0'"
+                              :key="index"
+                              v-for="(item,index) in detail_main.src_ip_list">
                     <template slot="title">{{item}}</template>
                     <el-submenu :index="index+'1-1'">
                       <template slot="title">威胁追查</template>
-                      <el-menu-item :index="index+'1'" @click="select_src_name(item)">网络视角</el-menu-item>
-                      <el-menu-item :index="index+'2'" @click="select_src_name(item)">端点视角</el-menu-item>
+                      <el-menu-item :index="index+'1'"
+                                    @click="select_src_name(item)">网络视角</el-menu-item>
+                      <el-menu-item :index="index+'2'"
+                                    @click="select_src_name(item)">端点视角</el-menu-item>
                     </el-submenu>
-                    <el-menu-item :index="index+'3'" @click="select_src_name(item)">添加到外部动态列表</el-menu-item>
-                    <el-menu-item :index="index+'4'" @click="select_src_name(item)">IP段详情</el-menu-item>
+                    <el-menu-item :index="index+'3'"
+                                  @click="select_src_name(item)">添加到外部动态列表</el-menu-item>
+                    <el-menu-item :index="index+'4'"
+                                  @click="select_src_name(item)">IP段详情</el-menu-item>
                   </el-submenu>
                 </el-menu>
               </div>
@@ -82,22 +95,27 @@
           </div>
           <div class="content_item">
             <span class="item_title">目的地址：</span>
-            <div class="item_right src_bg" :class="more.des?'show_more_list':''">
+            <div class="item_right src_bg"
+                 :class="more.des?'show_more_list':''">
               <div>
-                <el-menu class="el_menu_src" mode="horizontal" @select="handleSelect_des">
-                  <el-submenu
-                    :index="index+'0'"
-                    :key="index"
-                    v-for="(item,index) in detail_main.dest_ip_list"
-                  >
+                <el-menu class="el_menu_src"
+                         mode="horizontal"
+                         @select="handleSelect_des">
+                  <el-submenu :index="index+'0'"
+                              :key="index"
+                              v-for="(item,index) in detail_main.dest_ip_list">
                     <template slot="title">{{item}}</template>
                     <el-submenu :index="index+'1-1'">
                       <template slot="title">威胁追查</template>
-                      <el-menu-item :index="index+'1'" @click="select_des_name(item)">网络视角</el-menu-item>
-                      <el-menu-item :index="index+'2'" @click="select_des_name(item)">端点视角</el-menu-item>
+                      <el-menu-item :index="index+'1'"
+                                    @click="select_des_name(item)">网络视角</el-menu-item>
+                      <el-menu-item :index="index+'2'"
+                                    @click="select_des_name(item)">端点视角</el-menu-item>
                     </el-submenu>
-                    <el-menu-item :index="index+'3'" @click="select_des_name(item)">添加到外部动态列表</el-menu-item>
-                    <el-menu-item :index="index+'4'" @click="select_des_name(item)">IP段详情</el-menu-item>
+                    <el-menu-item :index="index+'3'"
+                                  @click="select_des_name(item)">添加到外部动态列表</el-menu-item>
+                    <el-menu-item :index="index+'4'"
+                                  @click="select_des_name(item)">IP段详情</el-menu-item>
                   </el-submenu>
                 </el-menu>
               </div>
@@ -109,13 +127,15 @@
           <div class="content_item">
             <span class="item_title">关联资产名：</span>
             <div class="item_right text_color">
-              <span @click="open_assets_info" v-for="item in detail_main.asset_name_list">{{item}}</span>
+              <span @click="open_assets_info"
+                    v-for="item in detail_main.asset_name_list">{{item}}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">用户：</span>
             <div class="item_right text_color">
-              <span @click="open_user_info" v-for="item in detail_main.user_list">{{item}}</span>
+              <span @click="open_user_info"
+                    v-for="item in detail_main.user_list">{{item}}</span>
             </div>
           </div>
           <div class="content_item">
@@ -135,7 +155,7 @@
           <div class="content_item">
             <span class="item_title">更新时间：</span>
             <div class="item_right">
-              <span>{{detail_main.update_time }}</span>
+              <span>{{detail_main.update_time|time }}</span>
             </div>
           </div>
           <div class="content_item">
@@ -174,7 +194,8 @@
             <span class="item_title">标签：</span>
             <div class="item_right">
               <ul>
-                <li class="tag_btn_box" v-for="item in detail_main.label_obj">
+                <li class="tag_btn_box"
+                    v-for="item in detail_main.label_obj">
                   <span class="tag_btn">{{item}}</span>
                 </li>
               </ul>
@@ -201,11 +222,9 @@
           <div class="content_item">
             <span class="item_title">工单名称：</span>
             <div class="item_right">
-              <span
-                class="item_li_content Goto_workorder"
-                @click="Goto_workorder"
-                v-if="detail_main.work_name!=''"
-              >{{detail_main.work_name}}</span>
+              <span class="item_li_content Goto_workorder"
+                    @click="Goto_workorder"
+                    v-if="detail_main.work_name!=''">{{detail_main.work_name}}</span>
             </div>
           </div>
           <div class="content_item">
@@ -219,193 +238,246 @@
     </div>
     <!-- 攻击阶段分布 -->
     <div class="detail_mid">
-      <detail-stage class="mid_item" :detailArray="detailArray"></detail-stage>
+      <detail-stage class="mid_item"
+                    :detailArray="detailArray"></detail-stage>
       <div class="mid_space"></div>
-      <detail-rate
-        :detailArray="detailArray"
-        v-if="detail_main.security_domain!='terminal'"
-        class="mid_item"
-      ></detail-rate>
+      <detail-rate :detailArray="detailArray"
+                   v-if="detail_main.security_domain!='terminal'"
+                   class="mid_item"></detail-rate>
     </div>
     <!-- 攻击频率视图 -->
     <!-- 检测时间轴 -->
     <detail-timeaxis :detailArray="detailArray"></detail-timeaxis>
     <!-- 用户信息弹窗 -->
-    <el-dialog
-      class="pop_user_info pop_box"
-      :close-on-click-modal="false"
-      :modal-append-to-body="false"
-      :visible.sync="pop_user_info"
-    >
-      <img src="@/assets/images/emerge/closed.png" @click="closed_user_info" class="closed_img" alt />
+    <el-dialog class="pop_user_info pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="pop_user_info">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_user_info"
+           class="closed_img"
+           alt />
       <div class="title">
         <div class="mask"></div>
         <span class="title_name">用户信息</span>
       </div>
       <div class="user_content">
-        <el-table
-          class="reset_table"
-          ref="multipleTable"
-          align="center"
-          border
-          :data="user_info"
-          tooltip-effect="dark"
-          style="width: 100%"
-        >
-          <el-table-column prop="name" label="用户" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="account" label="账号" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="account" label="邮箱" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="account" label="电话" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="account" label="分支" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="account" label="部门" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="account" label="岗位" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="account" label="上级主管" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="account" label="入职时间" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="department" label="离职时间" align="center" show-overflow-tooltip></el-table-column>
+        <el-table class="reset_table"
+                  ref="multipleTable"
+                  align="center"
+                  border
+                  :data="user_info"
+                  tooltip-effect="dark"
+                  style="width: 100%">
+          <el-table-column prop="name"
+                           label="用户"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="account"
+                           label="账号"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="account"
+                           label="邮箱"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="account"
+                           label="电话"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="account"
+                           label="分支"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="account"
+                           label="部门"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="account"
+                           label="岗位"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="account"
+                           label="上级主管"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="account"
+                           label="入职时间"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="department"
+                           label="离职时间"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
         </el-table>
       </div>
     </el-dialog>
     <!-- 资产信息弹窗 -->
-    <el-dialog
-      class="pop_assets_info pop_box"
-      :close-on-click-modal="false"
-      :modal-append-to-body="false"
-      :visible.sync="pop_assets_info"
-    >
-      <img
-        src="@/assets/images/emerge/closed.png"
-        @click="closed_assets_info"
-        class="closed_img"
-        alt
-      />
+    <el-dialog class="pop_assets_info pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="pop_assets_info">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_assets_info"
+           class="closed_img"
+           alt />
       <div class="title">
         <div class="mask"></div>
         <span class="title_name">资产信息</span>
       </div>
       <div class="user_content">
-        <el-table
-          class="reset_table"
-          ref="multipleTable"
-          align="center"
-          border
-          :data="assets_info"
-          tooltip-effect="dark"
-          style="width: 100%"
-        >
-          <el-table-column prop="ip_name" label="资产名" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="ip_addr" label="当前IP" align="center" show-overflow-tooltip></el-table-column>
+        <el-table class="reset_table"
+                  ref="multipleTable"
+                  align="center"
+                  border
+                  :data="assets_info"
+                  tooltip-effect="dark"
+                  style="width: 100%">
+          <el-table-column prop="ip_name"
+                           label="资产名"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="ip_addr"
+                           label="当前IP"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
 
-          <el-table-column prop="tag" label="标签" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="responsible" label="责任人" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="type" label="邮箱" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="type" label="电话" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="type" label="所在经度" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="type" label="所在维度" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="type" label="地理位置" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="time" label="更新时间" align="center" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="tag"
+                           label="标签"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="responsible"
+                           label="责任人"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="type"
+                           label="邮箱"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="type"
+                           label="电话"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="type"
+                           label="所在经度"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="type"
+                           label="所在维度"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="type"
+                           label="地理位置"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="time"
+                           label="更新时间"
+                           align="center"
+                           show-overflow-tooltip></el-table-column>
         </el-table>
       </div>
     </el-dialog>
     <!-- 编辑标签 -->
-    <el-dialog
-      class="add_tag pop_box"
-      :close-on-click-modal="false"
-      :modal-append-to-body="false"
-      :visible.sync="edit_tag.pop"
-    >
-      <img
-        src="@/assets/images/emerge/closed.png"
-        @click="closed_edit_tag_box"
-        class="closed_img"
-        alt
-      />
+    <el-dialog class="add_tag pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="edit_tag.pop">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_edit_tag_box"
+           class="closed_img"
+           alt />
       <div class="title">
         <div class="mask"></div>
         <span class="title_name">编辑标签</span>
       </div>
       <div class="content">
         <div class="content_item">
-          <div class="item_addrs" v-for="(item,index) in edit_tag.tag_list">
-            <el-input
-              class="select_box"
-              placeholder="请输入标签，最多可以设置5个标签"
-              v-model="item.name"
-              clearable
-            ></el-input>
-            <img
-              src="@/assets/images/common/add.png"
-              alt
-              class="img_box"
-              v-if="item.icon"
-              @click="add_tag"
-            />
-            <img
-              src="@/assets/images/common/del.png"
-              alt
-              class="img_box"
-              @click="del_tag(item,index)"
-              v-if="!item.icon"
-            />
+          <div class="item_addrs"
+               v-for="(item,index) in edit_tag.tag_list">
+            <el-input class="select_box"
+                      placeholder="请输入标签，最多可以设置5个标签"
+                      v-model="item.name"
+                      clearable></el-input>
+            <img src="@/assets/images/common/add.png"
+                 alt
+                 class="img_box"
+                 v-if="item.icon"
+                 @click="add_tag" />
+            <img src="@/assets/images/common/del.png"
+                 alt
+                 class="img_box"
+                 @click="del_tag(item,index)"
+                 v-if="!item.icon" />
           </div>
         </div>
       </div>
       <div class="btn_box">
-        <el-button @click="closed_edit_tag_box" class="cancel_btn">取消</el-button>
-        <el-button class="ok_btn" @click="edit_tag_true">确定</el-button>
+        <el-button @click="closed_edit_tag_box"
+                   class="cancel_btn">取消</el-button>
+        <el-button class="ok_btn"
+                   @click="edit_tag_true">确定</el-button>
       </div>
     </el-dialog>
     <!-- ip段详情 -->
-    <el-dialog
-      class="pop_assets_info pop_box"
-      :close-on-click-modal="false"
-      :modal-append-to-body="false"
-      :visible.sync="ipDes.pop"
-    >
-      <img
-        src="@/assets/images/emerge/closed.png"
-        @click="closed_ipDes_info"
-        class="closed_img"
-        alt
-      />
+    <el-dialog class="pop_assets_info pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="ipDes.pop">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_ipDes_info"
+           class="closed_img"
+           alt />
       <div class="title">
         <div class="mask"></div>
         <span class="title_name">IP段详情</span>
       </div>
       <div class="content">
-        <el-table
-          class="reset_table"
-          ref="multipleTable"
-          align="center"
-          border
-          :data="more.IpDetails"
-          tooltip-effect="dark"
-          style="width: 100%"
-        >
-          <el-table-column prop="name" align="center" label="IP段名称" show-overflow-tooltip></el-table-column>
-          <el-table-column label="IP地址段" align="center" show-overflow-tooltip>
+        <el-table class="reset_table"
+                  ref="multipleTable"
+                  align="center"
+                  border
+                  :data="more.IpDetails"
+                  tooltip-effect="dark"
+                  style="width: 100%">
+          <el-table-column prop="name"
+                           align="center"
+                           label="IP段名称"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column label="IP地址段"
+                           align="center"
+                           show-overflow-tooltip>
             <template slot-scope="scope">
-              <li v-for="item in JSON.parse(scope.row.ip_segment)" class="btn_tag_box">
+              <li v-for="item in JSON.parse(scope.row.ip_segment)"
+                  class="btn_tag_box">
                 <p>{{item}}</p>
               </li>
             </template>
           </el-table-column>
-          <el-table-column prop="network_type" align="center" label="网段类型" show-overflow-tooltip></el-table-column>
-          <el-table-column label="标签" align="center" width="300">
+          <el-table-column prop="network_type"
+                           align="center"
+                           label="网段类型"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column label="标签"
+                           align="center"
+                           width="300">
             <template slot-scope="scope">
-              <span class="btn_tag_box" v-for="item in  JSON.parse(scope.row.label)">
-                <el-button type="primary" class="btn_tag">{{item}}</el-button>
+              <span class="btn_tag_box"
+                    v-for="item in  JSON.parse(scope.row.label)">
+                <el-button type="primary"
+                           class="btn_tag">{{item}}</el-button>
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="person"
-            align="center"
-            label="责任人"
-            width="100"
-            show-overflow-tooltip
-          ></el-table-column>
-          <el-table-column label="更新时间" align="center" width="180" show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.update_time }}</template>
+          <el-table-column prop="person"
+                           align="center"
+                           label="责任人"
+                           width="100"
+                           show-overflow-tooltip></el-table-column>
+          <el-table-column prop="updated_at"
+                           label="更新时间"
+                           align="center"
+                           width="180"
+                           show-overflow-tooltip>
           </el-table-column>
         </el-table>
       </div>
@@ -413,98 +485,107 @@
     <!-- 弹窗 -->
     <!-- 添加到工单 -->
     <!--:visible.sync="worksheets_data.pop" class="pop_state_add pop_box"-->
-    <el-dialog
-      class="pop_state_add pop_box"
-      :close-on-click-modal="false"
-      :modal-append-to-body="false"
-      :visible.sync="add_state_change"
-    >
-      <img
-        src="@/assets/images/emerge/closed.png"
-        @click="add_closed_state1"
-        class="closed_img"
-        alt
-      />
+    <el-dialog class="pop_state_add pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="add_state_change">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="add_closed_state1"
+           class="closed_img"
+           alt />
       <div class="title">
         <div class="mask"></div>
         <span class="title_name">添加到工单</span>
       </div>
       <div class="content">
         <div class="add_works">
-          <el-table
-            ref="multipleTable"
-            class="reset_table"
-            align="center"
-            border
-            :data="table_add_works.tableData"
-            tooltip-effect="dark"
-            @selection-change="handle_sel_table_add_works"
-            style="width: 100%"
-          >
-            <el-table-column label="选择" align="center" width="50"></el-table-column>
-            <el-table-column type="selection" align="center" width="50"></el-table-column>
-            <el-table-column prop="name" label="工单名称" align="center" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="creator" align="center" label="创建人" show-overflow-tooltip></el-table-column>
-            <el-table-column label="优先级" align="center" width="120">
+          <el-table ref="multipleTable_add"
+                    class="reset_table add_worker"
+                    align="center"
+                    border
+                    :data="table_add_works.tableData"
+                    tooltip-effect="dark"
+                    @selection-change="handle_sel_table_add_works"
+                    style="width: 100%">
+            <el-table-column type="selection"
+                             align="center"
+                             width="50"></el-table-column>
+            <el-table-column prop="name"
+                             label="工单名称"
+                             align="center"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="creator"
+                             align="center"
+                             label="创建人"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column label="优先级"
+                             align="center"
+                             width="120">
               <template slot-scope="scope">{{ scope.row.priority | priority}}</template>
             </el-table-column>
             <!--<el-table-column prop="perator_cn"
                              label="经办人"
                              show-overflow-tooltip>
             </el-table-column>-->
-            <el-table-column prop="new_perator" align="center" label="经办人" show-overflow-tooltip></el-table-column>
-            <el-table-column label="状态" align="center" width="80" show-overflow-tooltip>
+            <el-table-column prop="new_perator"
+                             align="center"
+                             label="经办人"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column label="状态"
+                             align="center"
+                             width="80"
+                             show-overflow-tooltip>
               <template slot-scope="scope">{{ scope.row.status | work_status }}</template>
             </el-table-column>
           </el-table>
-          <el-pagination
-            class="pagination_box"
-            @size-change="sc_table_add_works"
-            @current-change="hcc_table_add_works"
-            :current-page="table_add_works.pageNow"
-            :page-sizes="[10,20,50,100]"
-            :page-size="table_add_works.eachPage"
-            layout="total, sizes, prev, pager, next"
-            :total="table_add_works.count"
-          ></el-pagination>
+          <el-pagination class="pagination_box"
+                         @size-change="sc_table_add_works"
+                         @current-change="hcc_table_add_works"
+                         :current-page="table_add_works.pageNow"
+                         :page-sizes="[10,20,50,100]"
+                         :page-size="table_add_works.eachPage"
+                         layout="total, sizes, prev, pager, next"
+                         :total="table_add_works.count"></el-pagination>
         </div>
       </div>
       <div class="btn_box">
-        <el-button @click="add_closed_state1" class="cancel_btn">取消</el-button>
-        <el-button @click="add_ok_state" class="ok_btn">确定</el-button>
+        <el-button @click="add_closed_state1"
+                   class="cancel_btn">取消</el-button>
+        <el-button @click="add_ok_state"
+                   class="ok_btn">确定</el-button>
       </div>
     </el-dialog>
 
     <!-- 弹窗 -->
     <!-- 新建工单任务 -->
-    <el-dialog
-      class="task_new_box pop_box"
-      :close-on-click-modal="false"
-      :modal-append-to-body="false"
-      :visible.sync="new_worksheets_data.pop"
-    >
-      <img src="@/assets/images/emerge/closed.png" @click="closed_task_new" class="closed_img" alt />
+    <el-dialog class="task_new_box pop_box"
+               :close-on-click-modal="false"
+               :modal-append-to-body="false"
+               :visible.sync="new_worksheets_data.pop">
+      <img src="@/assets/images/emerge/closed.png"
+           @click="closed_task_new"
+           class="closed_img"
+           alt />
       <div class="title">
         <div class="mask"></div>
         <span class="title_name">编辑工单</span>
       </div>
       <div class="step_box">
         <div class="step_box1">
-          <span
-            class="step1_span"
-            :class="new_worksheets_data.new_contet?'step_now':'step_past'"
-          >基本信息</span>
-          <img src="@/assets/images/emerge/selected01.png" class="selected_img" alt />
+          <span class="step1_span"
+                :class="new_worksheets_data.new_contet?'step_now':'step_past'">基本信息</span>
+          <img src="@/assets/images/emerge/selected01.png"
+               class="selected_img"
+               alt />
         </div>
         <div class="step_box2">
-          <span
-            class="step2_span"
-            :class="!new_worksheets_data.new_contet?'step_now':'step_past'"
-          >处置内容</span>
+          <span class="step2_span"
+                :class="!new_worksheets_data.new_contet?'step_now':'step_past'">处置内容</span>
         </div>
       </div>
       <!-- 基本信息 -->
-      <div class="task_new_content" v-if="new_worksheets_data.new_contet">
+      <div class="task_new_content"
+           v-if="new_worksheets_data.new_contet">
         <div class="task_content_box">
           <div class="content_top">
             <div class="content_top_left">
@@ -513,33 +594,27 @@
                   <span>工单名称</span>
                   <span class="improtant_ico">*</span>
                 </div>
-                <el-input
-                  class="task_new_input"
-                  placeholder="请输入工单名称"
-                  v-model="new_worksheets_list.name"
-                  show-word-limit
-                  maxlength="32"
-                  clearable
-                ></el-input>
+                <el-input class="task_new_input"
+                          placeholder="请输入工单名称"
+                          v-model="new_worksheets_list.name"
+                          show-word-limit
+                          maxlength="32"
+                          clearable></el-input>
               </li>
               <li class="left_item">
                 <div class="title">
                   <span>经办人</span>
                   <span class="improtant_ico">*</span>
                 </div>
-                <el-select
-                  class="task_new_input"
-                  v-model="new_worksheets_list.operator"
-                  clearable
-                  placeholder="请选择经办人"
-                >
-                  <el-option
-                    v-for="item in new_worksheets_data.operator_list"
-                    @click.native="select_changced(item)"
-                    :key="item.id"
-                    :label="item.username"
-                    :value="item.username"
-                  ></el-option>
+                <el-select class="task_new_input"
+                           v-model="new_worksheets_list.operator"
+                           clearable
+                           placeholder="请选择经办人">
+                  <el-option v-for="item in new_worksheets_data.operator_list"
+                             @click.native="select_changced(item)"
+                             :key="item.id"
+                             :label="item.username"
+                             :value="item.username"></el-option>
                 </el-select>
               </li>
             </div>
@@ -549,121 +624,125 @@
                   <span>优先级</span>
                   <span class="improtant_ico">*</span>
                 </div>
-                <el-select
-                  class="task_new_input"
-                  v-model="new_worksheets_list.level"
-                  clearable
-                  placeholder="请选择优先级"
-                >
-                  <el-option
-                    v-for="item in new_worksheets_data.level_list"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
+                <el-select class="task_new_input"
+                           v-model="new_worksheets_list.level"
+                           clearable
+                           placeholder="请选择优先级">
+                  <el-option v-for="item in new_worksheets_data.level_list"
+                             :key="item.value"
+                             :label="item.label"
+                             :value="item.value"></el-option>
                 </el-select>
               </li>
               <li class="right_item">
                 <el-checkbox-group v-model="new_worksheets_list.notice">
-                  <el-checkbox label="email" value="email">邮件通知</el-checkbox>
-                  <el-checkbox label="message" value="message">短信通知</el-checkbox>
-                  <el-checkbox label="news" value="news">消息中心通知</el-checkbox>
+                  <el-checkbox label="email"
+                               value="email">邮件通知</el-checkbox>
+                  <el-checkbox label="message"
+                               value="message">短信通知</el-checkbox>
+                  <el-checkbox label="news"
+                               value="news">消息中心通知</el-checkbox>
                 </el-checkbox-group>
               </li>
             </div>
           </div>
           <div class="content_remarks">
             <p class="title">备注</p>
-            <el-input
-              type="textarea"
-              :rows="4"
-              placeholder="请输入内容"
-              maxlength="500"
-              show-word-limit
-              v-model="new_worksheets_list.textarea"
-            ></el-input>
+            <el-input type="textarea"
+                      :rows="4"
+                      placeholder="请输入内容"
+                      maxlength="500"
+                      show-word-limit
+                      v-model="new_worksheets_list.textarea"></el-input>
           </div>
           <div class="content_table">
-            <el-table
-              :data="new_worksheets_data.table_operator.tableData"
-              class="reset_table"
-              align="center"
-              border
-              style="width: 100%"
-            >
-              <el-table-column prop="username" align="center" label="经办人"></el-table-column>
-              <el-table-column prop="department" align="center" label="部门"></el-table-column>
-              <el-table-column prop="email_addr" align="center" label="邮箱"></el-table-column>
+            <el-table :data="new_worksheets_data.table_operator.tableData"
+                      class="reset_table"
+                      align="center"
+                      border
+                      style="width: 100%">
+              <el-table-column prop="username"
+                               align="center"
+                               label="经办人"></el-table-column>
+              <el-table-column prop="department"
+                               align="center"
+                               label="部门"></el-table-column>
+              <el-table-column prop="email_addr"
+                               align="center"
+                               label="邮箱"></el-table-column>
             </el-table>
           </div>
         </div>
 
         <div class="btn_box">
-          <el-button @click="closed_task_new" class="cancel_btn">取消</el-button>
-          <el-button @click="next_task" class="next_btn">下一步</el-button>
+          <el-button @click="closed_task_new"
+                     class="cancel_btn">取消</el-button>
+          <el-button @click="next_task"
+                     class="next_btn">下一步</el-button>
         </div>
       </div>
 
       <!-- 处置内容 -->
-      <div class="task_handle_content" v-if="!new_worksheets_data.new_contet">
+      <div class="task_handle_content"
+           v-if="!new_worksheets_data.new_contet">
         <div class="task_content_box">
           <div class="table_box">
             <div>
               <div>
-                <el-table
-                  align="center"
-                  class="reset_table"
-                  border
-                  :data="new_worksheets_data.network_detail"
-                  @selection-change="select_alert_new"
-                  tooltip-effect="dark"
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    prop="category"
-                    align="center"
-                    label="告警类型"
-                    show-overflow-tooltip
-                  ></el-table-column>
-                  <el-table-column
-                    prop="indicator"
-                    align="center"
-                    label="威胁指标"
-                    show-overflow-tooltip
-                  ></el-table-column>
-                  <el-table-column align="center" label="源地址" show-overflow-tooltip>
+                <el-table align="center"
+                          class="reset_table"
+                          border
+                          :data="new_worksheets_data.network_detail"
+                          @selection-change="select_alert_new"
+                          tooltip-effect="dark"
+                          style="width: 100%">
+                  <el-table-column prop="category"
+                                   align="center"
+                                   label="告警类型"
+                                   show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="indicator"
+                                   align="center"
+                                   label="威胁指标"
+                                   show-overflow-tooltip></el-table-column>
+                  <el-table-column align="center"
+                                   label="源地址"
+                                   show-overflow-tooltip>
                     <template slot-scope="scope">
                       <p v-for="item in JSON.parse(scope.row.src_ip)">{{item }}</p>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" label="目的地址" show-overflow-tooltip>
+                  <el-table-column align="center"
+                                   label="目的地址"
+                                   show-overflow-tooltip>
                     <template slot-scope="scope">
                       <p v-for="item in JSON.parse(scope.row.dest_ip)">{{item }}</p>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="application"
-                    align="center"
-                    label="应用"
-                    show-overflow-tooltip
-                  ></el-table-column>
-                  <el-table-column label="威胁等级" align="center" width="100" show-overflow-tooltip>
+                  <el-table-column prop="application"
+                                   align="center"
+                                   label="应用"
+                                   show-overflow-tooltip></el-table-column>
+                  <el-table-column label="威胁等级"
+                                   align="center"
+                                   width="100"
+                                   show-overflow-tooltip>
                     <template slot-scope="scope">
-                      <span
-                        class="btn_alert_background"
-                        :class="{'high_background':scope.row.degree =='high','mid_background':scope.row.degree =='medium','low_background':scope.row.degree =='low'}"
-                      >{{ scope.row.degree | degree }}</span>
+                      <span class="btn_alert_background"
+                            :class="{'high_background':scope.row.degree =='high','mid_background':scope.row.degree =='medium','low_background':scope.row.degree =='low'}">{{ scope.row.degree | degree }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="失陷确定性" align="center" width="100" show-overflow-tooltip>
+                  <el-table-column label="失陷确定性"
+                                   align="center"
+                                   width="100"
+                                   show-overflow-tooltip>
                     <template slot-scope="scope">
-                      <span
-                        :class="{'fall_certainty':scope.row.fall_certainty == '1'}"
-                      >{{ scope.row.fall_certainty | certainty }}</span>
+                      <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">{{ scope.row.fall_certainty | certainty }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="状态" align="center" width="80">
-                    <template slot-scope="scope">{{ scope.row.status | work_status }}</template>
+                  <el-table-column label="状态"
+                                   align="center"
+                                   width="80">
+                    <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
                   </el-table-column>
                 </el-table>
               </div>
@@ -671,10 +750,14 @@
           </div>
         </div>
         <div class="btn_box">
-          <el-button @click="closed_task_new" class="cancel_btn">取消</el-button>
-          <el-button @click="prev_task_handle" class="prev_btn">上一步</el-button>
-          <el-button @click="prev_task_handle_assign" class="prev_btn">分配</el-button>
-          <el-button @click="prev_task_handle_save" class="prev_btn">保存</el-button>
+          <el-button @click="closed_task_new"
+                     class="cancel_btn">取消</el-button>
+          <el-button @click="prev_task_handle"
+                     class="prev_btn">上一步</el-button>
+          <el-button @click="prev_task_handle_assign"
+                     class="prev_btn">分配</el-button>
+          <el-button @click="prev_task_handle_save"
+                     class="prev_btn">保存</el-button>
         </div>
       </div>
     </el-dialog>
@@ -688,7 +771,7 @@ import detailRate from "@/components/views/emerge/detail/detail_rate";
 import detailTimeaxis from "@/components/views/emerge/detail/detail_timeaxis";
 export default {
   name: "detail_network",
-  data() {
+  data () {
     return {
       loading: false,
       title_name: "告警详情",
@@ -859,8 +942,8 @@ export default {
     detailTimeaxis,
   },
   methods: {
-    activeIndex(item) {},
-    alert_detail() {
+    activeIndex (item) { },
+    alert_detail () {
       this.loading = true;
       this.$axios
         .get("/yiiapi/alerts/" + this.$route.query.detail)
@@ -936,7 +1019,7 @@ export default {
     },
 
     // 原地址和目的地址相关-----------------------------------------
-    handleSelect_src(key, keyPath) {
+    handleSelect_src (key, keyPath) {
       console.log(key, keyPath);
       switch (key.substr(key.length - 1, 1)) {
         // IP段详情
@@ -959,7 +1042,7 @@ export default {
       }
     },
     //加入外部链接
-    JoinExternalDynamics(ip_addr) {
+    JoinExternalDynamics (ip_addr) {
       console.log(ip_addr);
       this.$confirm(
         "本地址会被加入外部动态列表，第三方设备读取后可以对本地址进行告警提示或者拦截。",
@@ -1027,7 +1110,7 @@ export default {
           });
         });
     },
-    handleSelect_des(key, keyPath) {
+    handleSelect_des (key, keyPath) {
       console.log(key, keyPath);
       switch (key.substr(key.length - 1, 1)) {
         // IP段详情
@@ -1050,7 +1133,7 @@ export default {
           break;
       }
     },
-    select_src_name(item) {
+    select_src_name (item) {
       console.log(item);
       this.more.src_name = item;
       var url_ipdetail = "";
@@ -1092,10 +1175,10 @@ export default {
           console.log(error);
         });
     },
-    select_des_name(item) {
+    select_des_name (item) {
       console.log(item);
       this.more.des_name = item;
-         var url_ipdetail_des = "";
+      var url_ipdetail_des = "";
       switch (this.$route.query.type) {
         case "alert":
           url_ipdetail_des = "/yiiapi/alert/IpDetails";
@@ -1133,19 +1216,19 @@ export default {
           console.log(error);
         });
     },
-    show_more_active_src() {
+    show_more_active_src () {
       this.more.src = !this.more.src;
     },
-    show_more_active_des() {
+    show_more_active_des () {
       this.more.des = !this.more.des;
     },
     // 关闭ip段详情弹出框
-    closed_ipDes_info() {
+    closed_ipDes_info () {
       this.ipDes.pop = false;
     },
     // -----------------顶部数据--------------------
     // 状态变更
-    change_state(item) {
+    change_state (item) {
       console.log(item);
       var id_list = [];
       id_list.push(this.$route.query.detail);
@@ -1200,11 +1283,11 @@ export default {
         });
     },
 
-    closed_task_new() {
+    closed_task_new () {
       this.new_worksheets_data.pop = false;
     },
     //工单任务选择
-    change_task(command) {
+    change_task (command) {
       if (command == "1") {
         this.new_worksheets_list.name = "";
         this.new_worksheets_list.level = "";
@@ -1226,7 +1309,13 @@ export default {
         this.new_worksheets_data.network_detail = [];
         // 存在被创建工单的告警
         console.log(this.detail_main.status);
-
+        if (this.detail_main.workorder_id != "0") {
+          this.$message({
+            message: "此告警已经关联工单，请勿重复新建",
+            type: "warning",
+          });
+          return false;
+        }
         // this.table_alerts.tableData[0].status
         if (
           this.detail_main.status == "3" ||
@@ -1239,15 +1328,23 @@ export default {
           });
           return false;
         }
+
         this.get_user_list();
       } else if (command == "2") {
+        if (this.detail_main.workorder_id != "0") {
+          this.$message({
+            message: "此告警已经关联工单，请勿重复添加",
+            type: "warning",
+          });
+          return false;
+        }
         this.open_add_new();
         // 添加到工单，只有告警状态 0 1
         // 告警：0新告警，1待处置，2处置中，3已处置，4已忽略，5误报
       }
     },
     // 编辑标签
-    edit_tag_box() {
+    edit_tag_box () {
       this.edit_tag.tag_list = [];
       console.log(this.detail_main.label_obj);
       if (this.detail_main.label_obj.length == 0) {
@@ -1267,7 +1364,7 @@ export default {
       }
       this.edit_tag.pop = true;
     },
-    edit_tag_true() {
+    edit_tag_true () {
       console.log(this.edit_tag.tag_list);
       // /alert/label-edit
       var label_list = [];
@@ -1327,11 +1424,11 @@ export default {
           console.log(error);
         });
     },
-    closed_edit_tag_box() {
+    closed_edit_tag_box () {
       this.edit_tag.pop = false;
     },
     //  添加标签
-    add_tag() {
+    add_tag () {
       if (this.edit_tag.tag_list.length < 5) {
         this.edit_tag.tag_list.forEach((item) => {
           item.icon = false;
@@ -1347,12 +1444,12 @@ export default {
         });
       }
     },
-    del_tag(item, index) {
+    del_tag (item, index) {
       this.edit_tag.tag_list.splice(index, 1);
     },
 
     // 加入外部链接
-    change_state_src(item, index) {
+    change_state_src (item, index) {
       console.log(item);
       // 只能是1和2；动态类型，1Ip，2url
       // 选择“威胁追查“后就直接跳到威胁调查页面的IP/URL通讯调查页面，把该IP地址作为搜索条件得出搜索结果。
@@ -1374,22 +1471,22 @@ export default {
     },
 
     // 用户信息
-    open_user_info() {
+    open_user_info () {
       this.pop_user_info = true;
     },
-    closed_user_info() {
+    closed_user_info () {
       this.pop_user_info = false;
     },
     // 资产信息
-    open_assets_info() {
+    open_assets_info () {
       this.pop_assets_info = true;
     },
-    closed_assets_info() {
+    closed_assets_info () {
       this.pop_assets_info = false;
     },
 
     // 跳转到工单详情
-    Goto_workorder() {
+    Goto_workorder () {
       switch (this.$route.query.type) {
         case "alert":
           this.$router.push({
@@ -1443,7 +1540,7 @@ export default {
 
     // 添加到工单
     //获取工单列表
-    get_worksheets_list() {
+    get_worksheets_list () {
       var workorder_list = "";
       var workorder_type = "";
       // horizontalthreat  横向威胁告警  lateral
@@ -1507,25 +1604,27 @@ export default {
           }
         });
     },
-    handleSizeChange_add(val) {
+    handleSizeChange_add (val) {
       this.worksheets_data.rows = val;
       this.worksheets_data.page = 1;
       this.worksheets_data.tableRadio = {};
       this.get_worksheets_list();
     },
-    handleCurrentChange_add(val) {
+    handleCurrentChange_add (val) {
       this.worksheets_data.page = val;
       this.worksheets_data.tableRadio = {};
       this.get_worksheets_list();
     },
 
     // -新加到工单取消状态
-    add_closed_state() {
+    add_closed_state () {
       this.worksheets_data.pop = false;
+      this.table_add_works.multipleSelection = []
+
     },
 
     //新加到工单确定
-    add_ok_worksheets() {
+    add_ok_worksheets () {
       console.log(this.worksheets_data.tableRadio);
       if (Object.keys(this.worksheets_data.tableRadio).length == 0) {
         this.$message({
@@ -1600,14 +1699,16 @@ export default {
     /***************新加到工单*****************/
 
     //添加到工单打开
-    open_add_new() {
+    open_add_new () {
       this.add_open_state();
+      if (this.$refs.multipleTable_add) {
+        this.$refs.multipleTable_add.clearSelection()
+      }
     },
 
     //新加到工单打开状态
-    add_open_state() {
+    add_open_state () {
       let status = this.table_alerts.tableData[0].status;
-
       if (status == "3" || status == "4" || status == "5") {
         this.$message({
           message: "告警状态为已处置、已忽略、误报的不能添加到工单。",
@@ -1619,7 +1720,7 @@ export default {
       }
     },
     //新加到工单取消状态
-    add_closed_state1() {
+    add_closed_state1 () {
       this.add_state_change = false;
       this.add_params = {
         name: "",
@@ -1633,7 +1734,7 @@ export default {
       };
     },
     //获取列表
-    get_table_works_list() {
+    get_table_works_list () {
       let workorder_list = "";
       let workorder_type = "";
       switch (this.$route.query.type) {
@@ -1685,20 +1786,28 @@ export default {
             this.table_add_works.count = count;
             this.table_add_works.maxPage = maxPage;
             this.table_add_works.pageNow = Number(pageNow);
+
           }
         });
     },
 
     //新加工单列表勾选某一条记录
-    handle_sel_table_add_works(row) {
+    handle_sel_table_add_works (row) {
       // el-radio单选框,不需要这一步
+      console.log(row);
+      if (row.length > 1) {
+        console.log('22222');
+        this.$refs.multipleTable_add.toggleRowSelection(row[0], false)
+        // this.$refs.multipleTable_add.setCurrentRow(row[0], false)
+        row.splice(0, 1)
+      }
       console.log("&&&&&3434");
       console.log(row);
       this.table_add_works.multipleSelection = row;
     },
 
     //新加到工单确定
-    add_ok_state() {
+    add_ok_state () {
       let selected_attr = this.table_alerts.tableData.map((x) => {
         return x.id * 1;
       });
@@ -1799,20 +1908,20 @@ export default {
     },
 
     //每页显示多少条
-    sc_table_add_works(val) {
+    sc_table_add_works (val) {
       this.table_add_works.eachPage = val;
       this.table_add_works.pageNow = 1;
       this.get_table_works_list();
     },
 
     //新加工单列表分页页面切换
-    hcc_table_add_works(val) {
+    hcc_table_add_works (val) {
       this.table_add_works.pageNow = val;
       this.get_table_works_list();
     },
 
     //获取用户列表(经办人使用)
-    get_user_list() {
+    get_user_list () {
       this.$axios
         .get("/yiiapi/site/UserList")
         .then((resp) => {
@@ -1832,7 +1941,7 @@ export default {
     },
 
     //经办人change处理
-    select_changced(item) {
+    select_changced (item) {
       console.log(item);
       // this.new_worksheets_data.table_operator.tableData.push(item)
       let level_list = this.new_worksheets_data.table_operator.tableData;
@@ -1860,11 +1969,11 @@ export default {
       // this.task_params.new_operator = selected_name_attr;
     },
     //经办人页数点击
-    hcc_table_operator(val) {
+    hcc_table_operator (val) {
       this.new_worksheets_data.table_operator.pageNow = val;
     },
     //下一步时候验证工单名称，优先级、经办人等参数
-    next_task() {
+    next_task () {
       var pattern = new RegExp(
         "[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]"
       );
@@ -1895,17 +2004,17 @@ export default {
       console.log(this.detail_main);
     },
     // 上一步
-    prev_task_handle() {
+    prev_task_handle () {
       this.new_worksheets_data.network_detail = [];
       this.new_worksheets_data.new_contet = true;
     },
     // 添加工单 选择告警列表
-    select_alert_new(val) {
+    select_alert_new (val) {
       this.new_worksheets_list.select_list = val;
       console.log(val);
     },
     // 分配
-    prev_task_handle_assign() {
+    prev_task_handle_assign () {
       var te_alert = [];
       var perator_list = [];
       te_alert.push(this.detail_main.id * 1);
@@ -1968,7 +2077,7 @@ export default {
         });
     },
     // 保存
-    prev_task_handle_save() {
+    prev_task_handle_save () {
       var te_alert = [];
       var perator_list = [];
       this.new_worksheets_data.table_operator.tableData.forEach((element) => {
@@ -2031,7 +2140,7 @@ export default {
     },
   },
   computed: {},
-  mounted() {
+  mounted () {
     // this.alert()
     this.alert_detail();
   },
@@ -2212,6 +2321,10 @@ export default {
 
       .content_right {
         flex: 25%;
+        .Goto_workorder {
+          color: #0070ff;
+          cursor: pointer;
+        }
       }
     }
   }
@@ -2420,6 +2533,13 @@ export default {
             border-radius: 6px;
             background: #f4f4f4;
           }
+          /deep/.add_worker {
+            thead {
+              .el-checkbox {
+                display: none;
+              }
+            }
+          }
 
           .el-radio__input.is-checked .el-radio__inner::after {
             transform: rotate(45deg) scaleY(1);
@@ -2429,7 +2549,7 @@ export default {
             -webkit-box-sizing: content-box;
             box-sizing: content-box;
             background-color: transparent;
-            content: "";
+            content: '';
             border: 1px solid #fff;
             border-left: 0;
             border-top: 0;
@@ -2508,7 +2628,7 @@ export default {
           margin: 20px 0 24px 0;
 
           .step_box1 {
-            background-image: url("../../../../assets/images/emerge/step1.png");
+            background-image: url('../../../../assets/images/emerge/step1.png');
             background-repeat: no-repeat;
             background-size: 100% 100%;
             width: 120px;
@@ -2532,7 +2652,7 @@ export default {
           .step_box2 {
             width: 120px;
             height: 36px;
-            background-image: url("../../../../assets/images/emerge/step2.png");
+            background-image: url('../../../../assets/images/emerge/step2.png');
             background-repeat: no-repeat;
             background-size: 100% 100%;
             float: left;
@@ -2819,11 +2939,11 @@ export default {
 </style>
 
 <style lang="less">
-@import "../../../../assets/css/less/reset_css/reset_tab.less";
-@import "../../../../assets/css/less/reset_css/reset_pop.less";
-@import "../../../../assets/css/less/common-table-pattern.less";
-@import "../../../../assets/css/less/common-dropdown.less";
-@import "../../../../assets/css/less/reset_css/reset_table.less";
+@import '../../../../assets/css/less/reset_css/reset_tab.less';
+@import '../../../../assets/css/less/reset_css/reset_pop.less';
+@import '../../../../assets/css/less/common-table-pattern.less';
+@import '../../../../assets/css/less/common-dropdown.less';
+@import '../../../../assets/css/less/reset_css/reset_table.less';
 
 body {
   > ul.dropdown_ul_box_124 {

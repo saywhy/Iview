@@ -280,8 +280,8 @@ export default {
         .then(response => {
           this.loading = false
           console.log(response);
-          if (response.data.status == 'fail') {
-            switch (response.data.errorMessage) {
+          if (response.data.status == 1) {
+            switch (response.data.msg) {
               case 'License does not exist':
                 this.$message(
                   {
@@ -301,16 +301,15 @@ export default {
               default:
                 this.$message(
                   {
-                    message: '序列号激活成功。',
-                    type: 'success',
+                    message: response.data.msg,
+                    type: 'error',
                   }
                 );
                 break;
             }
-          } else if (response.data.status == 'success') {
-            console.log(response.data.bin);
+          } else if (response.data.status == 0) {
             this.$axios.post('/yiiapi/licenses', {
-              bin: response.data.bin
+              bin: response.data.data.bin
             })
               .then(response => {
                 console.log(response.data);

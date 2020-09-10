@@ -81,7 +81,7 @@
         <div class="time_right_net">
           <div class="time_right_net_item"
                v-for="demo in selectItem.event_list">
-            <div class="title_net">{{demo.name}}</div>
+            <div class="title_net">{{demo.name |network_event}}</div>
             <div class="value_net">{{demo.value}}</div>
           </div>
         </div>
@@ -173,7 +173,7 @@
                 <div class="base_left_item"
                      v-for="item in selectItem.whois_list">
                   <p class="left_item_title">
-                    {{item.name}}
+                    {{item.name |ip_whois}}
                   </p>
                   <p class="left_item_content">
                     {{item.value}}
@@ -196,11 +196,15 @@
                          class="tabs-item"
                          name="4">
               <div class="base_box">
-                <p class="left_item_content"
-                   v-for="item in selectItem.sample_list.value"
-                   v-if="item.name=='相关联恶意文件'">
-                  {{item}}
-                </p>
+                <div v-if="selectItem.sample_list.length!=0"
+                     v-for="item in selectItem.sample_list">
+                  <p class="left_item_content"
+                     v-if="item.name=='相关联恶意文件'"
+                     v-for="key in item.value">
+                    {{key}}
+                  </p>
+                </div>
+
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -266,7 +270,8 @@ export default {
         right_activeName: '1',
       },
       event_obj: {},
-      suggest_list: []
+      suggest_list: [],
+
     }
   },
   props: {
@@ -380,7 +385,8 @@ export default {
       if (typeof (val.alert_description) == 'string') {
         this.selectItem.alert_description = JSON.parse(val.alert_description)
       }
-      this.selectItem.whois_list = []
+      this.selectItem.whois_list = [];
+      this.selectItem.sample_list = [];
       if (this.selectItem.description) {
         if (typeof (this.selectItem.description) == 'string') {
           this.selectItem.description_list = JSON.parse(this.selectItem.description).join(',')
@@ -408,11 +414,10 @@ export default {
         }
       }
       this.event_obj = this.selectItem.network_event;
-
       // 情报类型匹配
       switch (this.selectItem.description_type) {
         case 'BotnetCAndCURL':
-          this.selectItem.sample_list = [];
+          // this.selectItem.sample_list = [];
           if (this.selectItem.alert_description.files) {
             this.selectItem.files_md5_cn = [];
             this.selectItem.alert_description.files.forEach(element => {
@@ -436,10 +441,6 @@ export default {
           this.selectItem.info_list = [{
             name: 'URL',
             value: this.selectItem.alert_description.mask
-          },
-          {
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
           },
           {
             name: '威胁细分',
@@ -485,10 +486,6 @@ export default {
             value: this.selectItem.alert_description.mask
           },
           {
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
-          },
-          {
             name: '全球首次发现时间',
             value: this.selectItem.alert_description.first_seen
           },
@@ -517,10 +514,6 @@ export default {
           this.selectItem.info_list = [{
             name: 'IP',
             value: this.selectItem.alert_description.ip
-          },
-          {
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
           },
           {
             name: '全球首次发现时间',
@@ -574,10 +567,6 @@ export default {
             value: this.selectItem.alert_description.file_name
           },
           {
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
-          },
-          {
             name: '威胁细分',
             value: this.selectItem.alert_description.threat
           },
@@ -605,10 +594,6 @@ export default {
             value: this.selectItem.alert_description.mask
           },
           {
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
-          },
-          {
             name: '全球首次发现时间',
             value: this.selectItem.alert_description.first_seen
           },
@@ -620,20 +605,20 @@ export default {
             name: "主要受影响地区",
             value: this.selectItem.alert_description.geo,
           },
-          {
-            name: "相关联恶意文件",
-            value: this.selectItem.alert_description.file,
-          },
           ];
+
+          if (this.selectItem.alert_description.file) {
+            this.selectItem.sample_list.push({
+              name: "相关联恶意文件",
+              value: this.selectItem.alert_description.file,
+            });
+          }
+
           break;
         case 'PhishingURL':
           this.selectItem.info_list = [{
             name: 'URL',
             value: this.selectItem.alert_description.mask
-          },
-          {
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
           },
           {
             name: '全球首次发现时间',
@@ -667,10 +652,6 @@ export default {
             value: this.selectItem.alert_description.file_size
           },
           {
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
-          },
-          {
             name: '威胁细分',
             value: this.selectItem.alert_description.threat
           },
@@ -689,26 +670,23 @@ export default {
           ];
           break;
         case 'sdk':
-          this.selectItem.info_list = [{
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
-          },
-          {
-            name: '文件名',
-            value: this.selectItem.alert_description.file_name
-          },
-          {
-            name: '文件大小',
-            value: this.selectItem.alert_description.file_size
-          },
-          {
-            name: '文件哈希值',
-            value: this.selectItem.alert_description.md5
-          },
-          {
-            name: 'SDK检测威胁',
-            value: this.selectItem.alert_description.threat
-          },
+          this.selectItem.info_list = [
+            {
+              name: '文件名',
+              value: this.selectItem.alert_description.file_name
+            },
+            {
+              name: '文件大小',
+              value: this.selectItem.alert_description.file_size
+            },
+            {
+              name: '文件哈希值',
+              value: this.selectItem.alert_description.md5
+            },
+            {
+              name: 'SDK检测威胁',
+              value: this.selectItem.alert_description.threat
+            },
           ];
 
           if (this.selectItem.alert_description.category == '恶意程序') {
@@ -720,38 +698,35 @@ export default {
           }
           break;
         case 'sandbox':
-          this.selectItem.info_list = [{
-            name: '威胁类型',
-            value: this.selectItem.alert_description.category
-          },
-          {
-            name: '文件名',
-            value: this.selectItem.alert_description.filename
-          },
-          {
-            name: '文件大小',
-            value: this.selectItem.alert_description.size
-          },
-          {
-            name: '文件类型',
-            value: this.selectItem.alert_description.type
-          },
-          {
-            name: 'MD5',
-            value: this.selectItem.alert_description.md5
-          },
-          {
-            name: 'SHA1',
-            value: this.selectItem.alert_description.sha1
-          },
-          {
-            name: 'SHA256',
-            value: this.selectItem.alert_description.sha256
-          },
-          {
-            name: 'taskID',
-            value: this.selectItem.alert_description.taskID
-          },
+          this.selectItem.info_list = [
+            {
+              name: '文件名',
+              value: this.selectItem.alert_description.filename
+            },
+            {
+              name: '文件大小',
+              value: this.selectItem.alert_description.size
+            },
+            {
+              name: '文件类型',
+              value: this.selectItem.alert_description.type
+            },
+            {
+              name: 'MD5',
+              value: this.selectItem.alert_description.md5
+            },
+            {
+              name: 'SHA1',
+              value: this.selectItem.alert_description.sha1
+            },
+            {
+              name: 'SHA256',
+              value: this.selectItem.alert_description.sha256
+            },
+            {
+              name: 'taskID',
+              value: this.selectItem.alert_description.taskID
+            },
           ];
           this.selectItem.info_list.forEach(element => {
             if (element.name == 'taskID' && element.value) {
@@ -1526,10 +1501,10 @@ export default {
           overflow-y: scroll;
           // border: 1px solid green;
           background: #f8f8f8;
-          padding-top: 30px;
+          padding: 24px;
           .base_left_item {
             display: flex;
-            height: 36px;
+            // height: 36px;
             line-height: 36px;
             margin-bottom: 20px;
             padding: 0 24px;

@@ -91,7 +91,7 @@ export default {
           } else if (msg.password) {
             tips = msg.password[0];
           } else if (msg.allow_ip) {
-            tips = msg.allow_ip;
+            tips = msg.allow_ip[0];
           } else {
             tips = msg;
           }

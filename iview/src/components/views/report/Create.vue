@@ -129,6 +129,7 @@
       <div id="alert_trend"></div>
       <!-- 威胁类型 -->
       <div id="alert_type"></div>
+      <div id="demo"></div>
     </div>
   </div>
 </template>
@@ -176,7 +177,7 @@ export default {
   },
   components: { VmEmergePicker },
   mounted () {
-    //this.get_data()
+    this.demo()
     //this.check_passwd()
   },
   methods: {
@@ -252,7 +253,7 @@ export default {
               this.alert_type(data.alert_type);
             }
             setTimeout(() => {
-              this.$axios.post('/yiiapi/report/create-report', {
+              this.$axios.post('/yiiapi/report/reports', {
                 stime: this.report.start_time,
                 etime: this.report.end_time,
                 report_name: this.report.name,
@@ -682,6 +683,50 @@ export default {
       myChart.setOption(option);
       this.alert_type_data.base64 = myChart.getDataURL();
     },
+    demo () {
+      var myChart = this.$echarts.init(document.getElementById("demo"));
+      var option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ['新告警', '风险资产']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: ['2020-08-23', '2020-08-24', '2020-08-25', '2020-08-26', '2020-08-27', '2020-08-28', '2020-08-29', '2020-08-30', '2020-08-31', '2020-09-01', '2020-09-02', '2020-08-25', '2020-08-26', '2020-08-27', '2020-08-28', '2020-08-29', '2020-08-30', '2020-08-31', '2020-08-23', '2020-08-24', '2020-08-25', '2020-08-26', '2020-08-27', '2020-08-28', '2020-08-29', '2020-08-30', '2020-08-31']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: '新告警',
+            type: 'bar',
+            data: [320, 332, 301, 334, 390, 330, 320, 320, 332, 301, 320, 332, 301, 334, 390, 330, 320, 320, 332, 301, 320, 332, 301, 334, 390, 330, 320, 320, 332, 301]
+          },
+          {
+            name: '风险资产',
+            type: 'bar',
+            data: [120, 132, 101, 134, 90, 230, 210, 101, 134, 90, 120, 132, 101, 134, 90, 230, 210, 101, 134, 90, 120, 132, 101, 134, 90, 230, 210, 101, 134, 90]
+          },
+        ]
+      };
+      myChart.setOption(option);
+    },
     // 取消
     reseet () {
       this.report.name = ''
@@ -717,16 +762,16 @@ export default {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
-           method: 'GET',
+          method: 'GET',
         }
       })
         .then(response => {
-      var url1 = '/yiiapi/report/download-report?id=' + item.id;
-      window.location.href = url1;
-      })
-      .catch(error => {
-        console.log(error);
-      })
+          var url1 = '/yiiapi/report/download-report?id=' + item.id;
+          window.location.href = url1;
+        })
+        .catch(error => {
+          console.log(error);
+        })
     },
     // 删除
     del_box (item) {
@@ -920,11 +965,12 @@ export default {
     margin-right: 10px;
   }
   .echarts {
-    display: none;
+    // display: none;
   }
   #untreatedalarm_report,
   #application_protocol,
   #alert_trend,
+  #demo,
   #alert_type {
     border: 1px solid red;
     width: 1000px;

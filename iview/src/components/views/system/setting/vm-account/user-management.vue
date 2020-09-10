@@ -258,6 +258,7 @@
         <div class="content_item">
           <p>
             <span class="title">角色</span>
+            <span class="red">*</span>
           </p>
           <el-select class="select_box"
                      v-model="user_edit.role"
@@ -471,10 +472,30 @@ export default {
         );
         return false
       }
+      var email_reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+      if (!email_reg.test(this.user_add.email_addr)) {
+        this.$message(
+          {
+            message: '邮箱格式错误',
+            type: 'warning',
+          }
+        );
+        return false
+      }
       if (this.user_add.mobile == '') {
         this.$message(
           {
             message: '请输入手机号',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+      var myreg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      if (!myreg.test(this.user_add.mobile)) {
+        this.$message(
+          {
+            message: '手机号格式错误',
             type: 'warning',
           }
         );
@@ -571,6 +592,54 @@ export default {
         );
         return false
       }
+      if (this.user_edit.email_addr == '') {
+        this.$message(
+          {
+            message: '请输入邮箱',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+      var email_reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+      if (!email_reg.test(this.user_edit.email_addr)) {
+        this.$message(
+          {
+            message: '邮箱格式错误',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+      if (this.user_edit.mobile == '') {
+        this.$message(
+          {
+            message: '请输入手机号',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+      var myreg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
+      if (!myreg.test(this.user_edit.mobile)) {
+        this.$message(
+          {
+            message: '手机号格式错误',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+      if (this.user_edit.role == '') {
+        this.$message(
+          {
+            message: '请选择角色',
+            type: 'warning',
+          }
+        );
+        return false
+      }
+
       this.$axios.get('/yiiapi/user/GetPasswordResetToken', {
         params: {
           id: this.user_edit.id

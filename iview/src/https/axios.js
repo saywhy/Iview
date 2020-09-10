@@ -74,6 +74,7 @@ axios.interceptors.response.use(response => {
         break;
       case 401:
         console.log('未授权，请重新登录')
+        location.reload();
         break;
       case 402:
         Router.push({

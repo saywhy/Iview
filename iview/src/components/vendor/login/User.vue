@@ -118,11 +118,11 @@ export default {
   },
   created () {
     this.setHeight();
-    if (window.sessionStorage.getItem('overtime')) {
-      this.$message.warning('连接超时，请重新登录');
-      // Connection timed out,Please login again.
-      window.sessionStorage.removeItem('overtime');
-    }
+    // if (window.sessionStorage.getItem('overtime')) {
+    //   this.$message.warning('连接超时，请重新登录');
+    //   // Connection timed out,Please login again.
+    //   window.sessionStorage.removeItem('overtime');
+    // }
   },
   mounted () {
     this.identifyCode = "";

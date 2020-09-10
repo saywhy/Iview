@@ -200,7 +200,7 @@
                      v-if="!item.icon">
               </div>
             </div>
-            <div class="content_item">
+            <!-- <div class="content_item">
               <p>
                 <span class="title">地理位置</span>
               </p>
@@ -214,7 +214,7 @@
                              filterable
                              clearable></el-cascader>
               </div>
-            </div>
+            </div> -->
             <div class="content_item">
               <p>
                 <span class="title">责任人</span>
@@ -333,7 +333,7 @@
                      v-if="!item.icon">
               </div>
             </div>
-            <div class="content_item">
+            <!-- <div class="content_item">
               <p>
                 <span class="title">地理位置</span>
               </p>
@@ -345,7 +345,7 @@
                              filterable
                              clearable></el-cascader>
               </div>
-            </div>
+            </div> -->
             <div class="content_item">
               <p>
                 <span class="title">责任人</span>
@@ -449,7 +449,11 @@ export default {
         person: "",
         tag: [],
         selected_cascader_add: [],
-        tag_list: [{ name: '', icon: true }]
+        tag_list: [{ name: '', icon: true }],
+        test: {
+          headquarters: false,
+          server: false
+        }
       },
       monitor_edit: {
         id: '',
@@ -462,6 +466,10 @@ export default {
         ip_segment: [],
         ip_segment_list: [],
         selected_cascader_edit: [],
+        test: {
+          headquarters: false,
+          server: false
+        }
       },
       select_list: [],
       fileList: []
@@ -607,6 +615,10 @@ export default {
       var isRepeat_ip_segment = []
       this.monitor_add.ip_segment = [];
       this.monitor_add.ip_segment = [];
+      // 总部分支不兼容
+      this.monitor_add.test.headquarters = false;
+      // 服务器终端网络设备不兼容
+      this.monitor_add.test.server = false;
       var isRepeat_tag = []
       var tag_test = []
       var tag_test_str = ''
@@ -618,7 +630,7 @@ export default {
       if (isRepeat_ip_segment.length == 0) {
         this.$message(
           {
-            message: 'IP地址段不能为空！',
+            message: 'IP地址段不能为空',
             type: 'warning',
           }
         );
@@ -627,7 +639,7 @@ export default {
       if (this.isRepeat(isRepeat_ip_segment)) {
         this.$message(
           {
-            message: 'IP地址或地址段有重复项,请重新输入！',
+            message: 'IP地址或地址段有重复项',
             type: 'warning',
           }
         );
@@ -642,46 +654,61 @@ export default {
       if (this.isRepeat(tag_test)) {
         this.$message(
           {
-            message: '标签有重复项,请重新输入。',
+            message: '标签有重复项',
             type: 'warning',
           }
         );
         return false
       }
-      tag_test_str = JSON.stringify(tag_test)
-      console.log(tag_test_str.indexOf("终端") != -1);
-      if (tag_test_str.indexOf("总部") != -1 && (tag_test_str.indexOf("分支") != -1)) {
-        this.$message(
-          {
-            message: '“总部”和“分支”标签只能设置其中的一种，请重新设置！',
-            type: 'warning',
-          }
-        );
-        return false
-      }
+      console.log(tag_test);
 
-      if (tag_test_str.indexOf("终端") != -1 && (tag_test_str.indexOf("服务器") != -1 || tag_test_str.indexOf("网络设备") != -1)) {
+      tag_test_str = JSON.stringify(tag_test)
+      tag_test.map(item => {
+        // “总部”和“分支”标签只能设置其中的一种
+        if (item == '总部') {
+          tag_test.map(key => {
+            if (key.indexOf("分支") != -1 && key != '分支' &&
+              key.substring(key.length - 2) == '分支') {
+              this.monitor_add.test.headquarters = true;
+            }
+          })
+        }
+        if (item == '终端') {
+          tag_test.map(key => {
+            if (key == '服务器' || key == '网络设备') {
+              this.monitor_add.test.server = true;
+            }
+          })
+        }
+        if (item == '服务器') {
+          tag_test.map(key => {
+            if (key == '终端' || key == '网络设备') {
+              this.monitor_add.test.server = true;
+            }
+          })
+        }
+        if (item == '网络设备') {
+          tag_test.map(key => {
+            if (key == '终端' || key == '服务器') {
+              this.monitor_add.test.server = true;
+            }
+          })
+        }
+      })
+      if (this.monitor_add.test.headquarters) {
+        console.log('1111111');
         this.$message(
           {
-            message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
+            message: '“总部”和“分支”标签只能设置其中的一种',
             type: 'warning',
           }
         );
         return false
       }
-      if (tag_test_str.indexOf("服务器") != -1 && (tag_test_str.indexOf("终端") != -1 || tag_test_str.indexOf("网络设备") != -1)) {
+      if (this.monitor_add.test.server) {
         this.$message(
           {
-            message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-            type: 'warning',
-          }
-        );
-        return false
-      }
-      if (tag_test_str.indexOf("网络设备") != -1 && (tag_test_str.indexOf("服务器") != -1 || tag_test_str.indexOf("终端") != -1)) {
-        this.$message(
-          {
-            message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
+            message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种',
             type: 'warning',
           }
         );
@@ -706,7 +733,7 @@ export default {
           network_type: this.monitor_add.type,
           person: this.monitor_add.person,
           label: this.monitor_add.tag,
-          location: this.monitor_add.selected_cascader_add,
+          // location: this.monitor_add.selected_cascader_add,
         }
       })
         .then(response => {
@@ -826,6 +853,10 @@ export default {
       var isRepeat_tag_edit = []
       this.monitor_edit.ip_segment = []
       this.monitor_edit.tag = []
+      // 总部分支不兼容
+      this.monitor_edit.test.headquarters = false;
+      // 服务器终端网络设备不兼容
+      this.monitor_edit.test.server = false;
       var tag_test = []
       var tag_test_str = ''
 
@@ -840,43 +871,65 @@ export default {
         }
       });
       tag_test_str = JSON.stringify(tag_test)
-      console.log(tag_test_str.indexOf("终端") != -1);
-      if (tag_test_str.indexOf("总部") != -1 && (tag_test_str.indexOf("分支") != -1)) {
+
+
+      tag_test.map(item => {
+        // “总部”和“分支”标签只能设置其中的一种
+        if (item == '总部') {
+          tag_test.map(key => {
+            if (key.indexOf("分支") != -1 && key != '分支' &&
+              key.substring(key.length - 2) == '分支') {
+              this.monitor_edit.test.headquarters = true;
+            }
+          })
+        }
+        if (item == '终端') {
+          tag_test.map(key => {
+            if (key == '服务器' || key == '网络设备') {
+              this.monitor_edit.test.server = true;
+            }
+          })
+        }
+        if (item == '服务器') {
+          tag_test.map(key => {
+            if (key == '终端' || key == '网络设备') {
+              this.monitor_edit.test.server = true;
+            }
+          })
+        }
+        if (item == '网络设备') {
+          tag_test.map(key => {
+            if (key == '终端' || key == '服务器') {
+              this.monitor_edit.test.server = true;
+            }
+          })
+        }
+      })
+      if (this.monitor_edit.test.headquarters) {
+        console.log('1111111');
         this.$message(
           {
-            message: '“总部”和“分支”标签只能设置其中的一种，请重新设置！',
+            message: '“总部”和“分支”标签只能设置其中的一种',
             type: 'warning',
           }
         );
         return false
       }
-      if (tag_test_str.indexOf("终端") != -1 && (tag_test_str.indexOf("服务器") != -1 || tag_test_str.indexOf("网络设备") != -1)) {
+      if (this.monitor_edit.test.server) {
         this.$message(
           {
-            message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-            type: 'error',
+            message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种',
+            type: 'warning',
           }
         );
         return false
       }
-      if (tag_test_str.indexOf("服务器") != -1 && (tag_test_str.indexOf("终端") != -1 || tag_test_str.indexOf("网络设备") != -1)) {
-        this.$message(
-          {
-            message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-            type: 'error',
-          }
-        );
-        return false
-      }
-      if (tag_test_str.indexOf("网络设备") != -1 && (tag_test_str.indexOf("服务器") != -1 || tag_test_str.indexOf("终端") != -1)) {
-        this.$message(
-          {
-            message: '“终端”、“服务器”、“网络设备”三类标签只能设置其中的一种，请重新设置！',
-            type: 'error',
-          }
-        );
-        return false
-      }
+
+
+
+
+
+
       this.monitor_edit.label_list.forEach(item => {
         if (item.name != '') {
           isRepeat_tag_edit.push(item.name)
@@ -885,8 +938,8 @@ export default {
       if (this.isRepeat(isRepeat_ip_segment_edit)) {
         this.$message(
           {
-            message: 'IP地址或地址段有重复项,请重新输入。',
-            type: 'error',
+            message: 'IP地址或地址段有重复项',
+            type: 'warning',
           }
         );
         return false
@@ -894,8 +947,8 @@ export default {
       if (this.isRepeat(isRepeat_tag_edit)) {
         this.$message(
           {
-            message: '标签有重复项,请重新输入。',
-            type: 'error',
+            message: '标签有重复项',
+            type: 'warning',
           }
         );
         return false
@@ -917,7 +970,7 @@ export default {
           network_type: this.monitor_edit.network_type,
           person: this.monitor_edit.person,
           label: this.monitor_edit.tag,
-          location: this.monitor_edit.selected_cascader_edit,
+          // location: this.monitor_edit.selected_cascader_edit,
         }
       })
         .then(response => {
@@ -963,7 +1016,7 @@ export default {
       if (this.select_list.length == 0) {
         this.$message(
           {
-            message: '请选择需要删除的IP/IP段！',
+            message: '请选择需要删除的IP/IP段',
             type: 'warning',
           }
         );
@@ -985,14 +1038,14 @@ export default {
               this.get_data();
               this.$message(
                 {
-                  message: '删除成功！',
+                  message: '删除成功',
                   type: 'success',
                 }
               );
             } else {
               this.$message(
                 {
-                  message: '删除失败！',
+                  message: '删除失败',
                   type: 'error',
                 }
               );
@@ -1098,7 +1151,7 @@ export default {
         this.monitor_state.import = false;
         this.$message(
           {
-            message: '上传成功！',
+            message: '上传成功',
             type: 'success',
           }
         );
