@@ -216,12 +216,21 @@
                     {{ scope.row.fall_certainty | certainty }}</span>
                   </template>
                 </el-table-column>
+
                 <!--状态-->
                 <el-table-column align="center" v-else-if="dropCol[index].prop == 'status'"
                                  show-overflow-tooltip
                                  :prop="dropCol[index].prop"
                                  :label="item.label">
                   <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
+                </el-table-column>
+
+                <!--工单状态-->
+                <el-table-column align="center" v-else-if="dropCol[index].prop == 'workorder_status'"
+                                 show-overflow-tooltip
+                                 :prop="dropCol[index].prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.workorder_status | work_status }}</template>
                 </el-table-column>
 
                 <!--风险指数-->

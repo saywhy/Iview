@@ -2017,7 +2017,7 @@ export default {
           console.log(resp);
           // "存在已被创建工单的资产"
           if (resp.data.status == 0) {
-            this.$message.success('修改成功');
+            this.$message.success('保存成功');
             this.get_list_works();
             this.edit.pop = false
           } else {
@@ -2047,10 +2047,9 @@ export default {
         priority: this.edit.data.priority,
         perator: this.edit.perator,
         remarks: this.edit.data.remarks,
-
+        type: this.edit.data.type,
         remind: this.edit.notice
       };
-      //type: this.edit.data.type,
 
       if (this.edit.data.type == 'asset') {
         // if (handle_sel_list.length == 0) {
@@ -2074,7 +2073,7 @@ export default {
           console.log(resp);
           // "存在已被创建工单的资产"
           if (resp.data.status == 0) {
-            this.$message.success('修改成功');
+            this.$message.success('分配成功');
             this.get_list_works();
             this.edit.pop = false
           } else {

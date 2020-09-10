@@ -90,7 +90,11 @@
           assets = JSON.parse(v.src_ip).join(',');
         }
         if(v.dest_label != '[]'){
-          assets += ','+JSON.parse(v.dest_ip).join(',');
+          if(assets != ''){
+            assets += ','+JSON.parse(v.dest_ip).join(',');
+          }else {
+            assets += JSON.parse(v.dest_ip).join(',');
+          }
         }
         return {...v,assets:assets};
       })
