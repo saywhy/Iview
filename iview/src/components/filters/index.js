@@ -51,6 +51,9 @@ Vue.filter('network_event', function (value) {
     case 'TTL':
       return 'TTL'
       break;
+    case 'Domain':
+      return '域名'
+      break;
     case 'SectianType':
       return '类型'
       break;
