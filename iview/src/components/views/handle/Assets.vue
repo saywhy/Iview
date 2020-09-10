@@ -2092,7 +2092,7 @@ export default {
       }
 
       .el-dialog__body {
-        max-height: 640px;
+        /*max-height: 640px;*/
         padding: 30px;
 
         .closed_img {
@@ -2129,16 +2129,13 @@ export default {
             margin-left: -10px;
           }
         }
-
         .content {
-          padding-top: 48px;
+          padding-top: 16px;
         }
-
         .btn_box {
           height: 42px;
           text-align: center;
-          margin-bottom: 24px;
-          margin-top: 36px;
+          margin-bottom: 10px;
 
           .ok_btn {
             width: 136px;
@@ -2158,7 +2155,8 @@ export default {
       }
     }
   }
-  /deep/ .pop_box {
+  /deep/
+  .pop_box {
     .el-dialog {
       background: #ffffff;
       border-radius: 4px;

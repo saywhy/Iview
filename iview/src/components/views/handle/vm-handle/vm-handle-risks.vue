@@ -862,7 +862,6 @@ export default {
       fieldAttr = this.dropCol.map(item => {
         return item.prop;
       });
-      fieldAttr.push('汉字')
 
       this.$axios.put('/yiiapi/' + this.threats + '/FieldEdit',{
         fields: fieldAttr
@@ -880,7 +879,7 @@ export default {
           } else {
             this.$message({
              /* message: msg[Object.keys(msg)[0]][0],*/
-              message: msg,
+              message: '修改错误！',
               type: 'error',
             });
           }
@@ -2079,14 +2078,15 @@ export default {
   }
 
   //添加到工单
-  /deep/ .pop_state_add {
+  /deep/
+  .pop_state_add {
     .el-dialog {
       .el-dialog__header {
         display: none;
       }
 
       .el-dialog__body {
-        max-height: 640px;
+        /*max-height: 640px;*/
         padding: 30px;
 
         .closed_img {
@@ -2123,16 +2123,13 @@ export default {
             margin-left: -10px;
           }
         }
-
         .content {
-          padding-top: 48px;
+          padding-top: 16px;
         }
-
         .btn_box {
           height: 42px;
           text-align: center;
-          margin-bottom: 24px;
-          margin-top: 36px;
+          margin-bottom: 10px;
 
           .ok_btn {
             width: 136px;
@@ -2152,8 +2149,8 @@ export default {
       }
     }
   }
-
-  /deep/ .pop_box {
+  /deep/
+  .pop_box {
     .el-dialog {
       background: #ffffff;
       border-radius: 4px;
