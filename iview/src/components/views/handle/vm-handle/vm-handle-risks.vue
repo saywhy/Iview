@@ -267,6 +267,14 @@
                     <template slot-scope="scope">{{ scope.row.update_time | time  }}</template>
                   </el-table-column>
 
+                  <!--安全域-->
+                  <el-table-column align="center" v-else-if="dropCol[index].prop == 'security_domain'"
+                                   show-overflow-tooltip
+                                   :prop="dropCol[index].prop"
+                                   :label="item.label">
+                    <template slot-scope="scope">{{ scope.row.security_domain | securityDomain  }}</template>
+                  </el-table-column>
+
                   <!--其他-->
                   <el-table-column align="center" v-else
                                    show-overflow-tooltip

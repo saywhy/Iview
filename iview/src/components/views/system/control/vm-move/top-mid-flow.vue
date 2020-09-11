@@ -55,7 +55,7 @@ export default {
             }
           }
         },
-        color: ["#4CAF50"],
+        color: ["#F57C00"],
         xAxis: {
           boundaryGap: false,
           //网格样式
@@ -117,7 +117,7 @@ export default {
             data: flow_diff,
             smooth: true,
             lineStyle: {
-              color: "#4CAF50"
+              color: "#F57C00"
             },
             areaStyle: {
               color: {
@@ -129,11 +129,11 @@ export default {
                 colorStops: [
                   {
                     offset: 0,
-                    color: "rgba(76,175,80,0.3)" // 0% 处的颜色
+                    color: "rgba(245,124,0,0.3)" // 0% 处的颜色
                   },
                   {
                     offset: 1,
-                    color: "rgba(76,175,80,0.1)" // 100% 处的颜色
+                    color: "rgba(245,124,0,0.1)" // 100% 处的颜色
                   }
                 ]
               }
