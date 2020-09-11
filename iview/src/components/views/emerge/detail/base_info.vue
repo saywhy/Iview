@@ -378,7 +378,6 @@ export default {
   },
   watch: {
     selectItem: function (val) {
-      console.log('val监听1111:', val)
       if (typeof (val.network_event) == 'string' && val.network_event != '') {
         this.selectItem.network_event = JSON.parse(val.network_event)
       }

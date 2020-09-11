@@ -72,7 +72,7 @@
                          @select="handleSelect_src">
                   <el-submenu :index="index+'0'"
                               :key="index"
-                              v-for="(item,index) in detail_main.src_ip_list">
+                              v-for="(item,index) in detail_main.src_ip">
                     <template slot="title">{{item}}</template>
                     <el-submenu :index="index+'1-1'">
                       <template slot="title">威胁追查</template>
@@ -103,7 +103,7 @@
                          @select="handleSelect_des">
                   <el-submenu :index="index+'0'"
                               :key="index"
-                              v-for="(item,index) in detail_main.dest_ip_list">
+                              v-for="(item,index) in detail_main.dest_ip">
                     <template slot="title">{{item}}</template>
                     <el-submenu :index="index+'1-1'">
                       <template slot="title">威胁追查</template>
@@ -128,14 +128,14 @@
             <span class="item_title">关联资产名：</span>
             <div class="item_right text_color">
               <span @click="open_assets_info"
-                    v-for="item in detail_main.asset_name_list">{{item}}</span>
+                    v-for="item in detail_main.asset_name">{{item}}</span>
             </div>
           </div>
           <div class="content_item">
             <span class="item_title">用户：</span>
             <div class="item_right text_color">
               <span @click="open_user_info"
-                    v-for="item in detail_main.user_list">{{item}}</span>
+                    v-for="item in detail_main.user">{{item}}</span>
             </div>
           </div>
           <div class="content_item">
@@ -195,7 +195,7 @@
             <div class="item_right">
               <ul>
                 <li class="tag_btn_box"
-                    v-for="item in detail_main.label_obj">
+                    v-for="item in detail_main.label">
                   <span class="tag_btn">{{item}}</span>
                 </li>
               </ul>
@@ -708,14 +708,14 @@
                                    label="源地址"
                                    show-overflow-tooltip>
                     <template slot-scope="scope">
-                      <p v-for="item in JSON.parse(scope.row.src_ip)">{{item }}</p>
+                      <p v-for="item in scope.row.src_ip">{{item }}</p>
                     </template>
                   </el-table-column>
                   <el-table-column align="center"
                                    label="目的地址"
                                    show-overflow-tooltip>
                     <template slot-scope="scope">
-                      <p v-for="item in JSON.parse(scope.row.dest_ip)">{{item }}</p>
+                      <p v-for="item in scope.row.dest_ip">{{item }}</p>
                     </template>
                   </el-table-column>
                   <el-table-column prop="application"
@@ -957,36 +957,26 @@ export default {
             });
             return false;
           }
-          let attr = [];
-          attr.push(resp.data.data);
-          this.table_alerts.tableData = attr;
-          this.detail_list.push(data);
-          console.log(this.table_alerts);
           this.detail_main = data;
-          this.detail_main.label_obj = JSON.parse(this.detail_main.label);
-          this.detail_main.json_description = JSON.parse(
-            this.detail_main.description
-          ).join(",");
-          this.detail_main.json_label = JSON.parse(this.detail_main.label).join(
-            ","
-          );
-          this.detail_main.src_ip_list = JSON.parse(this.detail_main.src_ip);
-          // this.detail_main.src_ip_list = ['192.168.1.1', '192.12.23.123', '192.168.1.1', '192.12.23.123', '192.168.1.1', '192.12.23.123']
-          this.detail_main.dest_ip_list = JSON.parse(this.detail_main.dest_ip);
-          this.detail_main.user_list = JSON.parse(this.detail_main.user);
-          this.detail_main.asset_name_list = JSON.parse(
-            this.detail_main.asset_name
-          );
-          console.log(this.detail_main);
-          JSON.parse(data.alarm_merger).map((item) => {
-            this.detail_list.push(item);
-          });
-          console.log(this.detail_list);
-          this.detail_list.map((item) => {
-            item.selected = false;
-          });
-          this.detail_list[0].selected = true;
-          this.detailArray = this.detail_list;
+          this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
+          this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
+          this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
+
+          this.detail_main.label = JSON.parse(this.detail_main.label);
+          this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
+          this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
+          this.detail_main.description = JSON.parse(this.detail_main.description);
+
+          this.detail_main.description_list = JSON.parse(this.detail_main.description_list);
+          this.detail_main.dest_ip = JSON.parse(this.detail_main.dest_ip);
+          this.detail_main.dest_label = JSON.parse(this.detail_main.dest_label);
+          this.detail_main.dest_label_list = JSON.parse(this.detail_main.dest_label_list);
+          this.detail_main.security_domain_list = JSON.parse(this.detail_main.security_domain_list);
+          this.detail_main.src_ip = JSON.parse(this.detail_main.src_ip);
+          this.detail_main.src_label = JSON.parse(this.detail_main.src_label);
+          this.detail_main.src_label_list = JSON.parse(this.detail_main.src_label_list);
+          this.detail_main.user = JSON.parse(this.detail_main.user);
+          this.detail_main.json_description = this.detail_main.description.join(",");
           if (this.detail_main.workorder_id == "0") {
             this.detail_main.work_order_status = "未关联工单";
             this.detail_main.work_name = "";
@@ -1012,6 +1002,16 @@ export default {
             }
             this.detail_main.work_name = this.detail_main.workorder_name;
           }
+          this.detail_main.selected = true;
+          this.detailArray.push(this.detail_main);
+          this.detail_main.alarm_merger.map((item) => {
+            item.selected = false;
+            this.detailArray.push(item);
+          });
+          console.log(this.detail_main);
+
+          this.table_alerts.tableData.push(this.detail_main)
+
         })
         .catch((error) => {
           console.log(error);
@@ -1316,7 +1316,6 @@ export default {
           });
           return false;
         }
-        // this.table_alerts.tableData[0].status
         if (
           this.detail_main.status == "3" ||
           this.detail_main.status == "4" ||
@@ -1346,14 +1345,14 @@ export default {
     // 编辑标签
     edit_tag_box () {
       this.edit_tag.tag_list = [];
-      console.log(this.detail_main.label_obj);
-      if (this.detail_main.label_obj.length == 0) {
+      console.log(this.detail_main.label);
+      if (this.detail_main.label.length == 0) {
         this.edit_tag.tag_list.push({
           name: "",
           icon: true,
         });
       } else {
-        this.detail_main.label_obj.forEach((element) => {
+        this.detail_main.label.forEach((element) => {
           var obj = {
             name: element,
             icon: false,
@@ -1449,27 +1448,6 @@ export default {
     },
 
     // 加入外部链接
-    change_state_src (item, index) {
-      console.log(item);
-      // 只能是1和2；动态类型，1Ip，2url
-      // 选择“威胁追查“后就直接跳到威胁调查页面的IP/URL通讯调查页面，把该IP地址作为搜索条件得出搜索结果。
-      if (item == "1") {
-        // var label = ''
-        // if (this.$route.query.type == 'alert') {
-        //   label = '/yiiapi/alert/label-edit'
-        // } else if (this.$route.query.type == 'risks') {
-        //   label = '/yiiapi/outreachthreat/label-edit'
-        // }
-        this.$router.push({
-          path: "/invest/url",
-          query: {
-            src_ip: this.detail_main.src_ip,
-            dest_ip: "",
-          },
-        });
-      }
-    },
-
     // 用户信息
     open_user_info () {
       this.pop_user_info = true;
@@ -1708,7 +1686,7 @@ export default {
 
     //新加到工单打开状态
     add_open_state () {
-      let status = this.table_alerts.tableData[0].status;
+      let status = this.detailArray[0].status;
       if (status == "3" || status == "4" || status == "5") {
         this.$message({
           message: "告警状态为已处置、已忽略、误报的不能添加到工单。",
@@ -1808,9 +1786,7 @@ export default {
 
     //新加到工单确定
     add_ok_state () {
-      let selected_attr = this.table_alerts.tableData.map((x) => {
-        return x.id * 1;
-      });
+      let selected_attr = this.detailArray[0].id * 1;
       this.add_params.multiple = selected_attr;
 
       //判断工单列表长度
