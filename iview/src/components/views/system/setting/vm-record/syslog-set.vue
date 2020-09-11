@@ -291,8 +291,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.syslog_data.loading = true;
         this.$axios.delete('/yiiapi/syslogs/' + item.id)
           .then(response => {
+            this.syslog_data.loading = false;
             console.log(response);
             if (response.data.status == 0) {
               this.get_data();
@@ -339,6 +341,7 @@ export default {
       } else {
         this.syslog_pop.add.status = '0'
       }
+      this.syslog_data.loading = true;
       this.$axios.post('/yiiapi/syslogs', {
         SyslogConf: {
           server_ip: this.syslog_pop.add.server_ip,
@@ -348,6 +351,7 @@ export default {
         }
       })
         .then(response => {
+          this.syslog_data.loading = false;
           console.log(response);
           if (response.data.status == 1) {
             this.$message(
@@ -387,6 +391,7 @@ export default {
       } else {
         this.syslog_pop.edit.status = '0'
       }
+      this.syslog_data.loading = true;
       this.$axios.put('/yiiapi/syslogs/' + this.syslog_pop.edit.id, {
         SyslogConf: {
           server_ip: this.syslog_pop.edit.ip,
@@ -396,6 +401,7 @@ export default {
         }
       })
         .then(response => {
+          this.syslog_data.loading = false;
           console.log(response);
           if (response.data.status == 0) {
             this.get_data();

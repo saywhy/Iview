@@ -227,7 +227,7 @@ export default {
           this.user_data.password = response.data.data
           this.user_data.placeholder = '请输入包含大写、小写、数字和特殊字符其中三项,' + response.data.data.min_passwd_len + '-' + response.data.data.max_passwd_len + '位密码'
           //!@#QWEasd123 Lele#easy123 Lele@19930901
-          this.$axios.get('/yiiapi/site/get-self-password-reset-token')
+          this.$axios.get('/yiiapi/site/getSelfPasswordResetToken')
             .then(response => {
               let { status, msg, data } = response.data;
               if (status == 0) {
@@ -436,7 +436,7 @@ export default {
         height: 42px;
         cursor: pointer;
       }
-      .e-name{
+      .e-name {
         font-size: 20px;
         color: #fff;
         font-family: PingFang;
@@ -540,8 +540,7 @@ export default {
       }
     }
   }
-  /deep/
-  .el-dialog {
+  /deep/ .el-dialog {
     width: 550px;
     .el-dialog__body {
       width: 550px;

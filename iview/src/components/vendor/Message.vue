@@ -138,11 +138,7 @@ export default {
     },
     // 标记已读 
     update (id, type) {
-      this.$axios.get('/yiiapi/news/ChangeStatus', {
-        params: {
-          id: id
-        }
-      })
+      this.$axios.put('/yiiapi/news/' + id)
         .then((resp) => {
           let { status, data, msg } = resp.data;
           let datas = data;
@@ -186,7 +182,7 @@ export default {
       this.multipleSelection.forEach(element => {
         id_list.push(element.id * 1)
       });
-      this.$axios.put('/yiiapi/news/change-status', {
+      this.$axios.put('/yiiapi/new/ChangeStatus', {
         id: id_list,
       })
         .then((resp) => {
@@ -227,11 +223,7 @@ export default {
         this.multipleSelection.forEach(element => {
           id_list.push(element.id * 1)
         });
-        this.$axios.delete('/yiiapi/news/del', {
-          data: {
-            id: id_list,
-          }
-        })
+        this.$axios.delete('/yiiapi/news/' + id_list.join(','))
           .then((resp) => {
             let { status, data, msg } = resp.data;
             let datas = data;
