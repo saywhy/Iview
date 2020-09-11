@@ -135,6 +135,7 @@
             </el-button>
           </el-col>
         </el-row>
+
       </el-form>
     </div>
     <el-table ref="multipleTable"
@@ -788,6 +789,7 @@
 
 <script type="text/ecmascript-6">
 import VmEmergePicker from "@/components/common/vm-emerge-picker";
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: 'vm-handle-tabs',
   props: {
@@ -948,7 +950,6 @@ export default {
           new_contet: true,
         },
         data: {
-
         },
         level_list: [
           {
@@ -1130,6 +1131,7 @@ export default {
         });
     },
     /**************************************************替换***********************************************************/
+
     //工单中心列表
     get_list_works () {
       this.table.loading = true;
@@ -1159,7 +1161,8 @@ export default {
           params: {
             stime: this.params.startTime,
             etime: this.params.endTime,
-            status: params_status,
+            //status: params_status,
+            status: "0",
             priority: this.params.priority,
             key_word: this.params.key,
             owned: this.owned,
@@ -1359,7 +1362,6 @@ export default {
 
       }
     },
-
     /*******************删除***********************/
     worksDelete () {
       let that = this;
@@ -1401,9 +1403,7 @@ export default {
         });
       }
     },
-
     /*******************新增***********************/
-
     //新增
     open_task_new (type) {
       //  this.open_task_new('alert')
@@ -1707,7 +1707,9 @@ export default {
         .then(resp => {
           let { status, data } = resp.data;
           if (status == 0) {
-
+            console.log('console.log(this.edit);')
+           console.log(this.edit);
+            console.log(this.edit.operator_list)
             this.edit.operator_list = data;
             if (this.edit.data.perator && this.edit.data.perator.length != 0) {
               this.edit.operator_list.forEach(element => {
@@ -1750,6 +1752,9 @@ export default {
       this.edit.page = 1
       this.edit.rows = 10
       let sel_table_data = this.table.multipleSelection;
+
+     // console.log(sel_table_data);
+
       if (sel_table_data.length != 1) {
         this.$message({ message: '请选择一项需要编辑的工单！', type: 'warning' });
         return false;
@@ -1758,10 +1763,10 @@ export default {
         this.$message({ message: '工单状态只有‘待分配’可以被编辑！', type: 'warning' });
         return false;
       }
+      //console.log(sel_table_data);
 
       this.edit.data = sel_table_data[0]
       this.edit.notice = JSON.parse(this.edit.data.remind);
-      //console.log(this.edit.data);
 
       // 获取工单 资产或者告警数组---------------------------------
       this.$axios.get('/yiiapi/workorder/GetExists', {
@@ -1772,7 +1777,6 @@ export default {
         .then(resp => {
           this.selected_list = []
           let { status, data } = resp.data;
-          //console.log(data);
           // 储存资产数组
           this.edit.data.risk_asset_cn = []
           if (data.risk_asset && data.risk_asset.length != 0) {
@@ -1782,7 +1786,9 @@ export default {
                 id: item
               }
               // this.edit.handle_sel.push(obj)
-              this.selected_list.push(obj)
+             // this.selected_list.push(obj)
+
+              this.selected_list.push(item)
             })
           } else {
             this.edit.data.risk_asset_cn = []
@@ -1799,7 +1805,9 @@ export default {
                   id: item
                 }
                 // this.edit.handle_sel.push(obj)
-                this.selected_list.push(obj)
+               // this.selected_list.push(obj)
+
+                this.selected_list.push(item)
               });
             });
           } else {
@@ -1816,7 +1824,7 @@ export default {
 
     //经办人change处理
     select_changced_edit (item) {
-      console.log(item);
+
       let level_list = this.edit.table_operator
       let selected_id_attr = level_list.map(x => { return x.id });
       if (selected_id_attr.includes(item.id)) {
@@ -1825,7 +1833,7 @@ export default {
         this.edit.table_operator.unshift(item);
       }
       let selected_name_attr = this.edit.table_operator.map(x => { return x.username });
-      console.log(selected_name_attr);
+
 
       // this.task_params.new_operator = selected_name_attr;
     },
@@ -1837,7 +1845,6 @@ export default {
         return false
       }
       if (pattern.test(this.edit.data.name)) {
-        console.log(true);
         this.$message.error('工单名称不能包含特殊字符');
         return false
       }
@@ -1852,8 +1859,6 @@ export default {
         } else if (this.edit.data.type == 'alert') {
           this.get_list_alert()
         }
-        console.log(this.edit.data.risk_asset_cn);
-        console.log(this.edit.data.risk_alert_cn);
         this.edit.task.frist = false;
 
       }
@@ -1873,14 +1878,7 @@ export default {
       })
         .then((resp) => {
           let { status, data } = resp.data;
-
-           console.log('*********');
-
-           console.log(data);
-
-           console.log('*********');
-
-          this.edit.asset_list = data;
+          this.edit.asset_list = data
           this.edit.asset_list.data.map(function (v, k) {
             v.label = JSON.parse(v.label);
             if (v.label && v.label.length) {
@@ -1915,15 +1913,7 @@ export default {
       })
         .then((resp) => {
           let { status, data } = resp.data;
-
-          console.log(resp);
-
-          data.data.map(v => {
-            v.src_ip = JSON.parse(v.src_ip).join(',');
-            v.dest_ip = JSON.parse(v.dest_ip).join(',');
-          })
           this.edit.alert_list = data;
-
           if (this.edit.handle_sel.length != 0) {
             this.selected_list.concat(this.edit.handle_sel)
           }
@@ -1972,9 +1962,6 @@ export default {
     },
     //编辑工单保存
     prev_task_handle_save_edit () {
-      console.log(this.edit.handle_sel);
-
-
       this.edit.table_operator.forEach(element => {
         this.edit.perator.push(element.username)
       });
@@ -2008,16 +1995,14 @@ export default {
         // }
         all_params.te_alert = handle_sel_list
       }
-
       this.handle.save = true
       this.$axios.post('/yiiapi/workorders', all_params)
         .then((resp) => {
           this.handle.save = false
           let { status, msg, data } = resp.data;
-          console.log(resp);
           // "存在已被创建工单的资产"
           if (resp.data.status == 0) {
-            this.$message.success('保存成功');
+            this.$message.success('修改成功');
             this.get_list_works();
             this.edit.pop = false
           } else {
@@ -2035,9 +2020,12 @@ export default {
         this.edit.perator.push(element.username)
       });
       var handle_sel_list = []
+      console.log("*****")
+      console.log(this.edit.handle_sel)
       this.edit.handle_sel.forEach(element => {
         handle_sel_list.push(element.id)
       });
+      console.log(handle_sel_list)
       handle_sel_list = handle_sel_list.concat(this.selected_list)
       handle_sel_list = [...new Set(handle_sel_list)];
       let all_params = {
@@ -2050,7 +2038,6 @@ export default {
         type: this.edit.data.type,
         remind: this.edit.notice
       };
-
       if (this.edit.data.type == 'asset') {
         // if (handle_sel_list.length == 0) {
         //   this.$message({ message: '请选择至少一项资产！', type: 'warning' });
@@ -2064,25 +2051,24 @@ export default {
         // }
         all_params.te_alert = handle_sel_list
       }
-      console.log(all_params);
-      this.handle.save = true
-      this.$axios.put('/yiiapi/workorders/0', all_params)
-        .then((resp) => {
-          this.handle.save = false
-          let { status, msg, data } = resp.data;
-          console.log(resp);
-          // "存在已被创建工单的资产"
-          if (resp.data.status == 0) {
-            this.$message.success('分配成功');
-            this.get_list_works();
-            this.edit.pop = false
-          } else {
-            this.$message.error(resp.data.msg);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+        this.$axios.put('/yiiapi/workorders/0', all_params)
+           .then((resp) => {
+             this.handle.save = false
+             let { status, msg, data } = resp.data;
+             console.log(resp);
+             // "存在已被创建工单的资产"
+             if (resp.data.status == 0) {
+               this.$message.success('分配成功');
+               eventBus.$emit('num')
+               this.get_list_works();
+               this.edit.pop = false
+             } else {
+               this.$message.error(resp.data.msg);
+             }
+           })
+           .catch(err => {
+             console.log(err);
+           });
     },
   }
 }
