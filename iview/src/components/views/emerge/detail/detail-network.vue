@@ -957,6 +957,7 @@ export default {
             });
             return false;
           }
+          this.detailArray = [];
           this.detail_main = data;
           // this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
           // this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);

@@ -31,6 +31,7 @@ export default {
   watch: {
     detailArray: function (val) {
       console.log(this.detailArray);
+      this.line_list = []
       this.detailArray.map(item => {
         var obj = {
           alert_count: "1",

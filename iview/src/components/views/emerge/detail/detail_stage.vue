@@ -212,6 +212,9 @@ export default {
   },
   watch: {
     detailArray: function (val) {
+      this.attack_stage_list.map(ele => {
+        ele.count = 0
+      })
       this.detailArray.map(item => {
         this.attack_stage_list.map(ele => {
           if (item.attack_stage == ele.name) {

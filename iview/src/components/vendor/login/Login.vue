@@ -15,9 +15,11 @@
       <div class="login-main">
         <div class="l-container">
           <img class="l-container_img"
-               src="@/assets/images/login/logo.png"
+               src="static/image/logo.png"
                alt="logo" />
         </div>
+        <!-- src="@/assets/images/login/logo.png" -->
+
         <h2 class="l-title">{{name}}</h2>
         <User v-if="stu"></User>
         <Register v-if="!stu"></Register>
