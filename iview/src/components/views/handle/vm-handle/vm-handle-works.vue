@@ -1913,6 +1913,16 @@ export default {
       })
         .then((resp) => {
           let { status, data } = resp.data;
+
+          data.data.map(v => {;
+            if(v.src_ip != '[]'){
+              v.src_ip = JSON.parse(v.src_ip).join(',');
+            }
+            if(v.dest_ip != '[]'){
+              v.dest_ip = JSON.parse(v.dest_ip).join(',');
+            }
+          })
+
           this.edit.alert_list = data;
           if (this.edit.handle_sel.length != 0) {
             this.selected_list.concat(this.edit.handle_sel)

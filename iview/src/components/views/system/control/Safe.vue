@@ -177,9 +177,10 @@
             </div>
             <div class="content_item">
               <p>
-                <span class="title">字符串</span>
+                <span class="title">字符串<span class="lab" title="必填">*</span></span>
               </p>
               <el-input class="select_box"
+                        type="password"
                         placeholder="请输入字符串"
                         v-model="monitor_add.character"
                         clearable>
@@ -395,7 +396,8 @@
       submit_add_box () {
         var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
 
-        var pattern1 = /^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$/
+       // var pattern1 = /^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$/
+
 
         if (this.monitor_add.name == '') {
           this.$message(
@@ -434,7 +436,7 @@
         if (this.monitor_add.port == '') {
           this.$message(
             {
-              message: '端口不能为空且为整数！',
+              message: '端口不能为空且为整数，不能带小数点！',
               type: 'warning',
             }
           );
@@ -446,6 +448,24 @@
             type: 'warning',
           });
           return false
+        }
+
+        if (this.monitor_add.character == '') {
+          this.$message(
+            {
+              message: '字符串不能为空！',
+              type: 'warning',
+            }
+          );
+          return false
+        }
+        var pattern0 = /^[a-zA-Z0-9]{6,16}$/;
+        if (!pattern0.test(this.monitor_add.character)) {
+          this.$message({
+            message: '字符串为6-16个数字或字母！',
+            type: 'warning',
+          });
+          return false;
         }
 
         this.$axios.post('/yiiapi/safetyequipments', {
@@ -535,13 +555,12 @@
         if (this.monitor_add.port == '') {
           this.$message(
             {
-              message: '端口不能为空且为整数！',
+              message: '端口不能为空且为整数，不能带小数点！',
               type: 'warning',
             }
           );
           return false
         }
-
         if (pattern.test(this.monitor_add.name)) {
           this.$message({
             message: '设备名称不能包含特殊字符！',
@@ -549,6 +568,25 @@
           });
           return false
         }
+
+        if (this.monitor_add.character == '') {
+          this.$message(
+            {
+              message: '字符串不能为空！',
+              type: 'warning',
+            }
+          );
+          return false
+        }
+        var pattern0 = /^[a-zA-Z0-9]{6,16}$/;
+        if (!pattern0.test(this.monitor_add.character)) {
+          this.$message({
+            message: '字符串为6-16个数字或字母！',
+            type: 'warning',
+          });
+          return false;
+        }
+        
         this.$axios.put('/yiiapi/safetyequipments/'+this.monitor_add.id, {
           SafetyEquipment: {
             name: this.monitor_add.name,
@@ -650,6 +688,8 @@
           attr = '正常';
         }else if(value == 1) {
           attr = '告警';
+        }else {
+          attr = '离线';
         }
         return attr;
       },

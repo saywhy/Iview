@@ -58,7 +58,7 @@
        <div class="vam-3">
          <div class="vam-title">风险资产 TOP5</div>
          <div class="vam-more" v-more="more" v-if="mid_right_show"
-              @click="more_visible.risk = true"></div>
+              @click="more_router_assets()"></div>
          <vm-main-top5 :options="mid_right" :split="5"
                        v-if="mid_right_show">
          </vm-main-top5>
@@ -78,7 +78,7 @@
          <div class="vam-title">最新告警</div>
          <div class="vam-more" v-more="more"
               v-if="bom_right_show"
-              @click="more_visible.alarm = true"></div>
+              @click="more_router_risks()"></div>
          <vm-main-threat :options="bom_right" :split="5"
                          v-if="bom_right_show">
          </vm-main-threat>
@@ -339,6 +339,13 @@
                 this.bom_right_show = true;
               }
             })
+        },
+
+        more_router_assets(){
+          this.$router.push({path:'/handle/assets'});
+        },
+        more_router_risks(){
+          this.$router.push({path:'/emerge/network'});
         }
       }
     }
