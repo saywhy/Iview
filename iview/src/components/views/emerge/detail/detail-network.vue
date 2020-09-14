@@ -958,8 +958,8 @@ export default {
             return false;
           }
           this.detail_main = data;
-          this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
-          this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
+          // this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
+          // this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
           this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
 
           this.detail_main.label = JSON.parse(this.detail_main.label);

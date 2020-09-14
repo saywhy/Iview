@@ -3,7 +3,8 @@
   <div class="base_info">
     <p class="content_right_title">详细信息</p>
     <div class="info_base">
-      <div class="info_base_top">
+      <div class="info_base_top"
+           v-if="selectItem.detect_engine !='LOGRULE'">
         <li class="info_top_item">
           <span class="info_top_item_title">日志来源</span>
           <span class="info_top_item_content">{{selectItem.log_source}}</span>
@@ -74,9 +75,81 @@
           </div>
         </div>
       </div>
+      <!-- 安全域为“网络安全域”，检测引擎为“LOGRULE”的时候 -->
+      <div class="info_base_top"
+           v-if="selectItem.detect_engine =='LOGRULE'&&  selectItem.security_domain =='network'">
+        <li class="info_top_item">
+          <span class="info_top_item_title">日志来源</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">威胁类型</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">应用</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">描述</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">检测引擎</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">攻击阶段</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">参考信息</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">ATT&CK技术</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+      </div>
+      <!-- 安全域是“端点”，在检测引擎为“LOGRULE”的时候 -->
+      <div class="info_base_top"
+           v-if="selectItem.detect_engine =='LOGRULE'&&  selectItem.security_domain =='terminal'">
+        <li class="info_top_item">
+          <span class="info_top_item_title">日志来源</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">威胁类型</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">检测引擎</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">描述</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">文件</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">攻击阶段</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">参考信息</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">ATT&CK技术</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+      </div>
       <!-- 网络事件 -->
       <div class="info_base_mid"
-           v-if="selectItem.detect_engine != 'LOGDF'">
+           v-if="selectItem.detect_engine != 'LOGDF'&& selectItem.detect_engine != 'LOGRULE'">
         <p class="title">网络事件</p>
         <div class="time_right_net">
           <div class="time_right_net_item"
@@ -86,8 +159,8 @@
           </div>
         </div>
       </div>
-
-      <div class="info_base_bom">
+      <div class="info_base_bom"
+           v-if="selectItem.detect_engine !='LOGRULE'">
         <div class="base_bom_left">
           <el-tabs v-model="baseInfo.left_activeName"
                    @tab-click="handleClick"
@@ -254,6 +327,9 @@
             </el-tab-pane>
           </el-tabs>
         </div>
+      </div>
+      <div v-if="selectItem.detect_engine =='LOGRULE'">
+        LOGRULE威胁安全建议
       </div>
     </div>
   </div>
