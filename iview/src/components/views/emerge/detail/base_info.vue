@@ -399,19 +399,19 @@ export default {
         // outreachthreat  外联威胁告警  outreath
         switch (this.$route.query.type) {
           case 'alert':
-            window_open = '/yiiapi/alert/get-file?md5='
+            window_open = '/yiiapi/alert/GetFile?md5='
             break;
           case 'asset':
-            window_open = '/yiiapi/asset/get-file?md5='
+            window_open = '/yiiapi/asset/GetFile?md5='
             break;
           case 'lateral':
-            window_open = '/yiiapi/horizontalthreat/get-file?md5='
+            window_open = '/yiiapi/horizontalthreat/GetFile?md5='
             break;
           case 'outside':
-            window_open = '/yiiapi/externalthreat/get-file?md5='
+            window_open = '/yiiapi/externalthreat/GetFile?md5='
             break;
           case 'outreath':
-            window_open = '/yiiapi/outreachthreat/get-file?md5='
+            window_open = '/yiiapi/outreachthreat/GetFile?md5='
             break;
           default:
             break;

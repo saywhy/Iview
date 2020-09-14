@@ -1011,11 +1011,31 @@ export default {
           console.log(this.detail_main);
 
           this.table_alerts.tableData.push(this.detail_main)
+          this.get_Workorders();
 
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    // 获取告警工单状态
+    get_Workorders () {
+      this.$axios
+        .get("/yiiapi/alert/Workorders", {
+          params: {
+            id: this.detail_main.id
+          }
+        })
+        .then((resp) => {
+          console.log('1232132');
+          console.log(resp);
+
+
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
     },
 
     // 原地址和目的地址相关-----------------------------------------
@@ -1810,7 +1830,8 @@ export default {
         this.add_params.perator = JSON.parse(multipe[0].perator);
         this.add_params.remarks = multipe[0].remarks;
         this.add_params.remind = JSON.parse(multipe[0].remind);
-
+        this.add_params.multiple = []
+        this.add_params.multiple.push(this.detail_main.id * 1)
         this.add_params.old_as = JSON.parse(multipe[0].te_alert);
         //console.log(this.add_params);
         this.add_params.multiple = [
