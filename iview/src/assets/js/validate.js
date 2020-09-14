@@ -2,6 +2,20 @@
  * Created by jiachenpan on 16/11/18.
  */
 
+//判断是否位数字（ycl）
+export function isRealNum(val){
+  // isNaN()函数 把空串 空格 以及NUll 按照0来处理 所以先去除，
+  if(val === "" || val == null){
+    return false;
+  }
+  if(!isNaN(val) && typeof val === 'number'){
+   //if(!isNaN(val) && typeof val === 'number' )
+    return true; 　　
+  }else{ 　　　
+    return false; 　　
+  }
+}
+
 //用户名验证
 export function isvalidUsername(str) {
   const valid_map = ['admin']

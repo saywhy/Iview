@@ -675,8 +675,7 @@
                                      label="资产组"
                                      show-overflow-tooltip></el-table-column>
                     <el-table-column label="威胁等级"
-                                     align="center"
-                                     width="100">
+                                     align="center">
                       <template slot-scope="scope">
                         <span class="btn_alert_background"
                               :class="{'high_background':scope.row.degree =='high','mid_background':scope.row.degree =='medium','low_background':scope.row.degree =='low'}">
@@ -790,6 +789,8 @@
 <script type="text/ecmascript-6">
 import VmEmergePicker from "@/components/common/vm-emerge-picker";
 import { eventBus } from '@/components/common/eventBus.js';
+
+import {isRealNum} from "@/assets/js/validate";
 export default {
   name: 'vm-handle-tabs',
   props: {
@@ -1111,7 +1112,6 @@ export default {
 
             let that = this;
 
-            console.log(this.task_params.multiple_alerts)
             data.forEach(element => {
               this.table_alerts.multipleSelection.forEach(function (item) {
                 if (element.id == item.id) {
@@ -1161,8 +1161,8 @@ export default {
           params: {
             stime: this.params.startTime,
             etime: this.params.endTime,
-            //status: params_status,
-            status: "0",
+            status: params_status,
+            //status: "0",
             priority: this.params.priority,
             key_word: this.params.key,
             owned: this.owned,
@@ -1470,7 +1470,6 @@ export default {
         return false
       }
       if (pattern.test(this.task_params.name)) {
-        console.log(true);
         this.$message.error('工单名称不能包含特殊字符');
         return false
       }
@@ -1711,6 +1710,7 @@ export default {
            console.log(this.edit);
             console.log(this.edit.operator_list)
             this.edit.operator_list = data;
+
             if (this.edit.data.perator && this.edit.data.perator.length != 0) {
               this.edit.operator_list.forEach(element => {
                 this.edit.data.perator.forEach(item => {
@@ -1723,9 +1723,15 @@ export default {
               this.edit.table_operator = []
             }
 
+            //ycl添加（09/14）
+            this.task_params.operator = this.edit.data.new_perator;
+            //ycl添加（09/14）
+
             //console.log(this.edit.operator_list);
             this.edit.pop = true
             this.edit.task.frist = true;
+
+
           }
         })
         .catch(err => {
@@ -1763,9 +1769,8 @@ export default {
         this.$message({ message: '工单状态只有‘待分配’可以被编辑！', type: 'warning' });
         return false;
       }
-      //console.log(sel_table_data);
 
-      this.edit.data = sel_table_data[0]
+      this.edit.data = sel_table_data[0];
       this.edit.notice = JSON.parse(this.edit.data.remind);
 
       // 获取工单 资产或者告警数组---------------------------------
@@ -1921,7 +1926,7 @@ export default {
             if(v.dest_ip != '[]'){
               v.dest_ip = JSON.parse(v.dest_ip).join(',');
             }
-          })
+          });
 
           this.edit.alert_list = data;
           if (this.edit.handle_sel.length != 0) {
@@ -1980,7 +1985,13 @@ export default {
         handle_sel_list.push(element.id)
       });
 
-      handle_sel_list = handle_sel_list.concat(this.selected_list)
+      this.selected_list.map(v => {
+        if(isRealNum(v)){
+          v = v.toString();
+        }
+        return v;
+      });
+      handle_sel_list = handle_sel_list.concat(this.selected_list);
       handle_sel_list = [...new Set(handle_sel_list)];
       let all_params = {
         workorder_edit: '1',
@@ -2030,14 +2041,18 @@ export default {
         this.edit.perator.push(element.username)
       });
       var handle_sel_list = []
-      console.log("*****")
-      console.log(this.edit.handle_sel)
       this.edit.handle_sel.forEach(element => {
         handle_sel_list.push(element.id)
       });
-      console.log(handle_sel_list)
-      handle_sel_list = handle_sel_list.concat(this.selected_list)
+      this.selected_list.map(v => {
+        if(isRealNum(v)){
+          v = v.toString();
+        }
+        return v;
+      });
+      handle_sel_list = handle_sel_list.concat(this.selected_list);
       handle_sel_list = [...new Set(handle_sel_list)];
+
       let all_params = {
         workorder_edit: '1',
         id: this.edit.data.id,

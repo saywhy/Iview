@@ -31,7 +31,7 @@
         <div class="invest_form invest_form_network">
           <el-form class="common-pattern">
             <el-row class="common_box"
-                    style="padding-bottom:16px;border-bottom: 1px solid #ECECEC;">
+                    style="padding-bottom:16px;border-bottom: 1px solid #ececec;">
               <!--1-->
               <el-col :span="24" class="common_box_list">
                 <!--搜索关键词-->
@@ -145,7 +145,7 @@
                 </el-dropdown>
 
                 <!--配置列-->
-                <el-dropdown class="e_deplay" trigger="click" ref="messageDrop" >
+                <el-dropdown class="e_deplay" trigger="click" ref="messageDrop" @visible-change="dropdown_hide">
               <span class="s_btn_train">
                   <i class="t_img"></i>
                   <span class="t_name">配置列</span>
@@ -972,6 +972,13 @@ export default {
           },500);
         }
       });
+    },
+
+    //配置列弹窗关闭事件
+    dropdown_hide(val){
+      if(!val){
+        this.label_cancel_Click();
+      }
     },
     //威脅源top5
     get_list_source_top5 () {

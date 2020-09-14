@@ -125,7 +125,10 @@
             </el-dropdown>
 
             <!--配置列-->
-            <el-dropdown class="e_deplay" trigger="click" ref="messageDrop" >
+            <el-dropdown class="e_deplay"
+                         trigger="click"
+                         ref="messageDrop"
+                         @visible-change="dropdown_hide">
               <span class="s_btn_train">
                   <i class="t_img"></i>
                   <span class="t_name">配置列</span>
@@ -949,6 +952,13 @@ export default {
           },500);
         }
       });
+    },
+
+    //配置列弹窗关闭事件
+    dropdown_hide(val){
+      if(!val){
+        this.label_cancel_Click();
+      }
     },
 
     // 获取告警列表

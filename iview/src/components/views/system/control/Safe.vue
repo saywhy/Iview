@@ -586,7 +586,7 @@
           });
           return false;
         }
-        
+
         this.$axios.put('/yiiapi/safetyequipments/'+this.monitor_add.id, {
           SafetyEquipment: {
             name: this.monitor_add.name,
