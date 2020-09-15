@@ -518,18 +518,14 @@
             <el-table class="common-table"
                       align="center"
                       border
+                      ref="multipleTable_add"
+                      tooltip-effect="dark"
                       v-loading="table_add_works.loading"
                       :data="table_add_works.tableData"
-                      @row-click="handle_sel_table_row_works"
                       @selection-change="handle_sel_table_add_works">
-              <!--<el-table-column type="selection"
+              <el-table-column type="selection"
                                align="center"
-                               width="50"></el-table-column>-->
-              <el-table-column width="50">
-                <template slot-scope="scope">
-                  <el-checkbox v-model="scope.row.checked" @change.native.stop="check_box_change(scope.row.id)"></el-checkbox>
-                </template>
-              </el-table-column>
+                               width="50"></el-table-column>
               <el-table-column prop="name"
                                align="center"
                                label="工单名称"
@@ -1329,6 +1325,9 @@ export default {
     //添加到工单打开
     open_add_new () {
       this.add_open_state();
+      if (this.$refs.multipleTable_add) {
+        this.$refs.multipleTable_add.clearSelection();
+      }
     },
 
     //新加到工单打开状态
@@ -1397,22 +1396,17 @@ export default {
 
     //新加工单列表勾选某一条记录
     handle_sel_table_add_works (row) {
+      //this.table_add_works.multipleSelection = row;
+
+      if (row.length > 1) {
+        // console.log('22222');
+        this.$refs.multipleTable_add.toggleRowSelection(row[0], false)
+        // this.$refs.multipleTable_add.setCurrentRow(row[0], false)
+        row.splice(0, 1)
+      }
+      // console.log("&&&&&3434");
+      // console.log(row);
       this.table_add_works.multipleSelection = row;
-    },
-
-    //单选
-    handle_sel_table_row_works(row){
-      this.table_add_works.tableData.forEach(item => {
-        // 排他,每次选择时把其他选项都清除
-        if (item.id !== row.id) {
-          item.checked = false
-        }else {
-          item.checked = true;
-        }
-      });
-
-      console.log(row);
-
     },
 
     //新加到工单确定
@@ -2179,6 +2173,12 @@ export default {
             border-color: #0070ff;
             background: #fff;
             color: #0070ff;
+          }
+        }
+
+        .el-table__header{
+          .el-checkbox{
+            display: none;
           }
         }
       }

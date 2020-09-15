@@ -704,7 +704,8 @@
             <el-table class="reset_table"
                       align="center"
                       border
-                      highlight-current-row
+                      ref="multipleTable_add"
+                      tooltip-effect="dark"
                       v-loading="table_add_works.loading"
                       :data="table_add_works.tableData"
                       @selection-change="handle_sel_table_add_works">
@@ -1376,6 +1377,9 @@ export default {
     //添加到工单打开
     open_add_new () {
       this.add_open_state();
+      if (this.$refs.multipleTable_add) {
+        this.$refs.multipleTable_add.clearSelection();
+      }
     },
 
     //新加到工单打开状态
@@ -1437,8 +1441,20 @@ export default {
 
     //新加工单列表勾选某一条记录
     handle_sel_table_add_works (row) {
-      console.log('************')
+     /*console.log('************')
       console.log(row);
+      this.table_add_works.multipleSelection = row;*/
+
+      //this.table_add_works.multipleSelection = row;
+
+      if (row.length > 1) {
+        // console.log('22222');
+        this.$refs.multipleTable_add.toggleRowSelection(row[0], false)
+        // this.$refs.multipleTable_add.setCurrentRow(row[0], false)
+        row.splice(0, 1)
+      }
+      // console.log("&&&&&3434");
+      // console.log(row);
       this.table_add_works.multipleSelection = row;
     },
 
@@ -2393,6 +2409,12 @@ export default {
             border-color: #0070ff;
             background: #fff;
             color: #0070ff;
+          }
+        }
+
+        .el-table__header{
+          .el-checkbox{
+            display: none;
           }
         }
       }
