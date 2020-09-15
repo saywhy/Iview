@@ -28,7 +28,8 @@
                              width="150"
                              show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row._source.time|dateee}}</span>
+                <span>{{ scope.row._source.time | timestamp}}</span>
+                <!-- <span>{{ scope.row._source.time}}</span> -->
               </template>
             </el-table-column>
             <el-table-column prop="_source.server_name"
@@ -100,7 +101,7 @@
           <el-pagination class="handle_pagination"
                          @size-change="handleSizeChange"
                          @current-change="handleCurrentChange"
-                         :page-sizes="[2,10,20,50,100]"
+                         :page-sizes="[10,20,50,100]"
                          :page-size="log_list.rows*1"
                          :current-page="log_list.pageNow*1"
                          :total="log_list.data.hits.total.value*1"
@@ -204,7 +205,7 @@
                                        :max="60"></el-input-number>
                       <span>mm</span>
                     </div>
-                    <div class="time">{{search_time}}</div>
+                    <div class="time">{{search_time |timestamp}}</div>
                     <div class="time_box_right">
                       <el-input-number v-model="a_hh"
                                        @change="after_hh"
@@ -252,7 +253,7 @@ export default {
             }
           }
         },
-        rows: 2,
+        rows: 10,
         pageNow: 1
       },
       tableRowClassName: "",
@@ -294,32 +295,27 @@ export default {
   methods: {
     LogList () {
       console.log("11121212");
+      console.log(this.selectItem.src_ip);
       this.original_log = '';
       this.complete_log = {};
       this.$axios
         .get("/yiiapi/alert/LogList", {
           params: {
-            srcIp: JSON.parse(this.selectItem.src_ip)[0],
+            srcIp: this.selectItem.src_ip[0],
             size: this.log_list.rows,
             from: this.log_list.rows * (this.log_list.pageNow - 1),
-            destIp: JSON.parse(this.selectItem.dest_ip)[0],
+            destIp: this.selectItem.dest_ip[0],
           },
         })
         .then((resp) => {
-          console.log(resp);
           this.log_list.data = resp.data.data;
-
-          this.log_list.data.hits.hits._source.map(item => {
-            //  item.time = item.@timestamp
-            for (var k in item) {
+          this.log_list.data.hits.hits.map(item => {
+            for (var k in item._source) {
               if (k == "@timestamp") {
-                item.time = item[k]
+                item._source.time = item._source[k]
               }
             }
-
           })
-
-          // pageNow
         })
         .catch((error) => {
           console.log(error);
@@ -337,31 +333,23 @@ export default {
       this.asset_list = [];
       let src_obj = {
         ip: this.complete_log.srcIp,
-        asset: this.complete_log.server_name,
+        asset: this.complete_log.src_name,
+        server_name: this.complete_log.server_name,
         type: "源地址",
         icon: true,
         key: "src",
       };
       let des_obj = {
         ip: this.complete_log.destIp,
-        asset: this.complete_log.server_name,
+        asset: this.complete_log.dst_name,
+        server_name: this.complete_log.server_name,
         type: "目的地址",
         icon: false,
         key: "des",
       };
-
       this.asset_list.push(src_obj);
       this.asset_list.push(des_obj);
-
-      for (var k in row._source) {
-        if (k == "@timestamp") {
-          var dateee = new Date(row._source[k]).toJSON();
-          this.search_time = new Date(+new Date(dateee) + 8 * 3600 * 1000)
-            .toISOString()
-            .replace(/T/g, " ")
-            .replace(/\.[\d]{3}Z/, "");
-        }
-      }
+      this.search_time = row._source.time
       this.$refs.multipleTable.setCurrentRow(row);
     },
     //每頁多少條切換
@@ -378,7 +366,6 @@ export default {
     handleClick () { },
     select_asset (item, index) {
       console.log(item);
-      this.search_log_item = item;
       this.asset_list.map((item) => {
         item.icon = false;
       });
@@ -386,7 +373,36 @@ export default {
     },
     // 更多日志搜索
     serch_more_log () {
-      console.log(this.search_log_item);
+      this.asset_list.map(item => {
+        if (item.icon == true) {
+          this.search_log_item.srcTime = '2010-01-01 12:12:12';
+          this.search_log_item.destTime = '2030-01-01 12:12:12';
+          if (item.key == 'src') {
+            this.search_log_item.ip = 'srcIp:127.0.0.1';
+          }
+          if (item.key == 'des') {
+            this.search_log_item.ip = 'desIp:127.0.0.1';
+          }
+          this.search_log_item.server_name = '我是测试1';
+        }
+      })
+      this.$axios
+        .get("/yiiapi/alert/MoreLog", {
+          params: {
+            srcTime: this.search_log_item.srcTime,
+            destTime: this.search_log_item.destTime,
+            ip: this.search_log_item.ip,
+            server_name: this.search_log_item.server_name,
+          },
+        })
+        .then((resp) => {
+          console.log(resp);
+
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
     },
     before_hh () { },
     before_mm () { },
@@ -396,17 +412,17 @@ export default {
       console.log(this.selectItem);
       window.open(
         "/yiiapi/alert/NormalizedLog?destIp=" +
-        JSON.parse(this.selectItem.dest_ip)[0] +
+        this.selectItem.dest_ip[0] +
         "&srcIp=" +
-        JSON.parse(this.selectItem.src_ip)[0]
+        this.selectItem.src_ip[0]
       );
     },
     OriginalLog () {
       window.open(
         "/yiiapi/alert/OriginalLog?destIp=" +
-        JSON.parse(this.selectItem.dest_ip)[0] +
+        this.selectItem.dest_ip[0] +
         "&srcIp=" +
-        JSON.parse(this.selectItem.src_ip)[0]
+        this.selectItem.src_ip[0]
       );
     },
   },

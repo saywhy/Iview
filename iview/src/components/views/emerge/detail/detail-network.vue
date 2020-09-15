@@ -961,8 +961,9 @@ export default {
           this.detail_main = data;
           // this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
           // this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
-          this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
-
+          if (this.detail_main.detect_engine != 'LOGDF') {
+            this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
+          }
           this.detail_main.label = JSON.parse(this.detail_main.label);
           this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
           this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
@@ -1009,7 +1010,7 @@ export default {
             item.selected = false;
             this.detailArray.push(item);
           });
-          console.log(this.detail_main);
+          // console.log(this.detail_main);
 
           this.table_alerts.tableData.push(this.detail_main)
           this.get_Workorders();
@@ -1028,8 +1029,7 @@ export default {
           }
         })
         .then((resp) => {
-          console.log('1232132');
-          console.log(resp);
+          // console.log(resp);
 
 
         })
@@ -1041,7 +1041,7 @@ export default {
 
     // 原地址和目的地址相关-----------------------------------------
     handleSelect_src (key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
       switch (key.substr(key.length - 1, 1)) {
         // IP段详情
         case "4":
@@ -1064,7 +1064,7 @@ export default {
     },
     //加入外部链接
     JoinExternalDynamics (ip_addr) {
-      console.log(ip_addr);
+      // console.log(ip_addr);
       this.$confirm(
         "本地址会被加入外部动态列表，第三方设备读取后可以对本地址进行告警提示或者拦截。",
         "提示",
@@ -1107,7 +1107,7 @@ export default {
             .then((response) => {
               this.loading = false;
               let { status, data } = response.data;
-              console.log(data);
+              // console.log(data);
               if (status == 0) {
                 this.$message({
                   message: "加入外部动态列表成功!",
@@ -1132,7 +1132,7 @@ export default {
         });
     },
     handleSelect_des (key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
       switch (key.substr(key.length - 1, 1)) {
         // IP段详情
         case "4":
@@ -1155,7 +1155,7 @@ export default {
       }
     },
     select_src_name (item) {
-      console.log(item);
+      // console.log(item);
       this.more.src_name = item;
       var url_ipdetail = "";
       switch (this.$route.query.type) {
@@ -1188,7 +1188,7 @@ export default {
           },
         })
         .then((resp) => {
-          console.log(resp);
+          // console.log(resp);
           let { status, data } = resp.data;
           this.more.IpDetails = data;
         })
@@ -1197,7 +1197,7 @@ export default {
         });
     },
     select_des_name (item) {
-      console.log(item);
+      // console.log(item);
       this.more.des_name = item;
       var url_ipdetail_des = "";
       switch (this.$route.query.type) {
@@ -1229,7 +1229,7 @@ export default {
           },
         })
         .then((resp) => {
-          console.log(resp);
+          // console.log(resp);
           let { status, data } = resp.data;
           this.more.IpDetails = data;
         })
@@ -1250,7 +1250,7 @@ export default {
     // -----------------顶部数据--------------------
     // 状态变更
     change_state (item) {
-      console.log(item);
+      // console.log(item);
       var id_list = [];
       id_list.push(this.$route.query.detail);
       var alarm = "";
@@ -1284,8 +1284,8 @@ export default {
         .then((response) => {
           this.loading = false;
           let { status, data } = response.data;
-          console.log(data);
-          console.log(response);
+          // console.log(data);
+          // console.log(response);
           if (status == 0) {
             this.alert_detail();
             this.$message({
@@ -1329,7 +1329,7 @@ export default {
         this.new_worksheets_data.table_operator.eachPage = 5;
         this.new_worksheets_data.network_detail = [];
         // 存在被创建工单的告警
-        console.log(this.detail_main.status);
+        // console.log(this.detail_main.status);
         if (this.detail_main.workorder_id != "0") {
           this.$message({
             message: "此告警已经关联工单，请勿重复新建",
@@ -1366,7 +1366,7 @@ export default {
     // 编辑标签
     edit_tag_box () {
       this.edit_tag.tag_list = [];
-      console.log(this.detail_main.label);
+      // console.log(this.detail_main.label);
       if (this.detail_main.label.length == 0) {
         this.edit_tag.tag_list.push({
           name: "",
@@ -1385,7 +1385,7 @@ export default {
       this.edit_tag.pop = true;
     },
     edit_tag_true () {
-      console.log(this.edit_tag.tag_list);
+      // console.log(this.edit_tag.tag_list);
       // /alert/label-edit
       var label_list = [];
       this.edit_tag.tag_list.forEach((element) => {
@@ -1425,7 +1425,7 @@ export default {
         .then((response) => {
           this.loading = false;
           let { status, data } = response.data;
-          console.log(data);
+          // console.log(data);
           if (status == 0) {
             this.$message({
               message: "修改标签成功!",
@@ -1580,10 +1580,10 @@ export default {
         })
         .then((resp) => {
           let { status, data } = resp.data;
-          console.log(data);
-          console.log(status);
+          // console.log(data);
+          // console.log(status);
           if (status == 0) {
-            console.log(data);
+            // console.log(data);
             this.worksheets_list = data;
             this.worksheets_list.pageNow = data.pageNow * 1;
             this.worksheets_data.pop = true;
@@ -1624,7 +1624,7 @@ export default {
 
     //新加到工单确定
     add_ok_worksheets () {
-      console.log(this.worksheets_data.tableRadio);
+      // console.log(this.worksheets_data.tableRadio);
       if (Object.keys(this.worksheets_data.tableRadio).length == 0) {
         this.$message({
           message: "请选择工单！",
@@ -1642,7 +1642,7 @@ export default {
         }
       );
       te_alert.push(this.$route.query.detail * 1);
-      console.log(te_alert);
+      // console.log(te_alert);
       var add_workorder = "";
       // horizontalthreat  横向威胁告警  lateral
       // externalthreat  外部威胁告警  outside
@@ -1681,7 +1681,7 @@ export default {
         .then((resp) => {
           this.loading = false;
           let { status, msg, data } = resp.data;
-          console.log(data);
+          // console.log(data);
           if (status == 0) {
             this.$message.success("添加成功");
             this.alert_detail();
@@ -1771,7 +1771,7 @@ export default {
         })
         .then((resp) => {
           console.log("*************8");
-          console.log(resp);
+          // console.log(resp);
           this.table_add_works.loading = false;
           let { status, data } = resp.data;
           let datas = data;
@@ -1793,15 +1793,15 @@ export default {
     //新加工单列表勾选某一条记录
     handle_sel_table_add_works (row) {
       // el-radio单选框,不需要这一步
-      console.log(row);
+      // console.log(row);
       if (row.length > 1) {
-        console.log('22222');
+        // console.log('22222');
         this.$refs.multipleTable_add.toggleRowSelection(row[0], false)
         // this.$refs.multipleTable_add.setCurrentRow(row[0], false)
         row.splice(0, 1)
       }
-      console.log("&&&&&3434");
-      console.log(row);
+      // console.log("&&&&&3434");
+      // console.log(row);
       this.table_add_works.multipleSelection = row;
     },
 
@@ -1824,7 +1824,7 @@ export default {
           type: "warning",
         });
       } else {
-        console.log("******************");
+        // console.log("******************");
         this.add_params.id = multipe[0].id;
         this.add_params.name = multipe[0].name;
         this.add_params.level = multipe[0].priority;
@@ -1840,15 +1840,15 @@ export default {
           ...this.add_params.old_as,
         ];
 
-        console.log(this.add_params.multiple);
+        // console.log(this.add_params.multiple);
         this.add_params.multiple = [...new Set(this.add_params.multiple)];
 
         var newArr = this.add_params.multiple.filter((item) => item);
 
         this.add_params.multiple = newArr;
 
-        console.log(this.add_params);
-        console.log(this.add_params.perator);
+        // console.log(this.add_params);
+        // console.log(this.add_params.perator);
         this.loading = true;
 
         var add_workorder = "";
@@ -1940,7 +1940,7 @@ export default {
 
     //经办人change处理
     select_changced (item) {
-      console.log(item);
+      // console.log(item);
       // this.new_worksheets_data.table_operator.tableData.push(item)
       let level_list = this.new_worksheets_data.table_operator.tableData;
       let selected_id_attr = level_list.map((x) => {
@@ -1962,8 +1962,8 @@ export default {
           return x.username;
         }
       );
-      console.log(selected_name_attr);
-      console.log(this.new_worksheets_data.table_operator.tableData);
+      // console.log(selected_name_attr);
+      // console.log(this.new_worksheets_data.table_operator.tableData);
       // this.task_params.new_operator = selected_name_attr;
     },
     //经办人页数点击
@@ -1980,7 +1980,7 @@ export default {
         return false;
       }
       if (pattern.test(this.new_worksheets_list.name)) {
-        console.log(true);
+        // console.log(true);
         this.$message.error("工单名称不能包含特殊字符");
         return false;
       }
@@ -1999,7 +1999,7 @@ export default {
       this.new_worksheets_data.new_contet = false;
       // this.handle.active = 0;
       this.new_worksheets_data.network_detail.push(this.detail_main);
-      console.log(this.detail_main);
+      // console.log(this.detail_main);
     },
     // 上一步
     prev_task_handle () {
@@ -2009,7 +2009,7 @@ export default {
     // 添加工单 选择告警列表
     select_alert_new (val) {
       this.new_worksheets_list.select_list = val;
-      console.log(val);
+      // console.log(val);
     },
     // 分配
     prev_task_handle_assign () {
@@ -2019,9 +2019,9 @@ export default {
       this.new_worksheets_data.table_operator.tableData.forEach((element) => {
         perator_list.push(element.username);
       });
-      console.log(te_alert);
-      console.log(perator_list);
-      console.log(this.new_worksheets_list);
+      // console.log(te_alert);
+      // console.log(perator_list);
+      // console.log(this.new_worksheets_list);
       var distribution_workorder = "";
       // horizontalthreat  横向威胁告警  lateral
       // externalthreat  外部威胁告警  outside
@@ -2061,7 +2061,7 @@ export default {
         .then((resp) => {
           this.loading = false;
           let { status, msg, data } = resp.data;
-          console.log(data);
+          // console.log(data);
           if (status == 0) {
             this.alert_detail();
             this.new_worksheets_data.pop = false;
@@ -2082,8 +2082,8 @@ export default {
         perator_list.push(element.username);
       });
       te_alert.push(this.detail_main.id * 1);
-      console.log(te_alert);
-      console.log(this.new_worksheets_list);
+      // console.log(te_alert);
+      // console.log(this.new_worksheets_list);
 
       var add_workorder = "";
       // horizontalthreat  横向威胁告警  lateral
@@ -2122,7 +2122,7 @@ export default {
         .then((resp) => {
           this.loading = false;
           let { status, msg, data } = resp.data;
-          console.log(data);
+          // console.log(data);
           if (status == 0) {
             this.new_worksheets_data.pop = false;
             this.$message.success("添加成功");
