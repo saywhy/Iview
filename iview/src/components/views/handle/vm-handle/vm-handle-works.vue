@@ -2650,7 +2650,8 @@ export default {
   }
 }
 
-/deep/ .pop_box {
+/deep/
+.pop_box {
   .el-dialog {
     background: #ffffff;
     border-radius: 4px;
