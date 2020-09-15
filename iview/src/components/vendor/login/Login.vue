@@ -15,7 +15,7 @@
       <div class="login-main">
         <div class="l-container">
           <img class="l-container_img"
-               src="static/image/logo.png"
+               src="@/assets/images/login/logo02.png"
                alt="logo" />
         </div>
         <!-- src="@/assets/images/login/logo.png" -->

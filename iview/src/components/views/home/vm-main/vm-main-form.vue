@@ -19,6 +19,11 @@
       drawGraph(){
 
         let data = this.options;
+        if (data.length > 0){
+          data = data.slice(0,5);
+        }else {
+          return false;
+        }
         //data = data.reverse();
         let xAxis = data.map(item => {return item.category});
 
