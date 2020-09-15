@@ -226,7 +226,7 @@ export default {
           is_deal: is_deal
         }
       }).then(resp => {
-        console.log(resp);
+        // console.log(resp);
         let { status, data } = resp.data;
         switch (is_deal) {
           case '0':

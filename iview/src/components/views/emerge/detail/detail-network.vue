@@ -69,6 +69,7 @@
               <div>
                 <el-menu class="el_menu_src"
                          mode="horizontal"
+                         menu-trigger='click'
                          @select="handleSelect_src">
                   <el-submenu :index="index+'0'"
                               :key="index"
@@ -790,8 +791,7 @@ export default {
       selectedOptions: "",
       more: {
         src: false,
-        src_name: "",
-        des_name: "",
+        name: "",
         des: false,
         IpDetails: [],
       },
@@ -1041,7 +1041,7 @@ export default {
 
     // 原地址和目的地址相关-----------------------------------------
     handleSelect_src (key, keyPath) {
-      // console.log(key, keyPath);
+      console.log(key, keyPath);
       switch (key.substr(key.length - 1, 1)) {
         // IP段详情
         case "4":
@@ -1055,7 +1055,9 @@ export default {
           break;
         // 添加到外部动态列表
         case "3":
-          this.JoinExternalDynamics(this.more.src_name);
+          setTimeout(() => {
+            this.JoinExternalDynamics(this.more.name);
+          }, 500);
           break;
 
         default:
@@ -1064,7 +1066,7 @@ export default {
     },
     //加入外部链接
     JoinExternalDynamics (ip_addr) {
-      // console.log(ip_addr);
+      console.log(ip_addr);
       this.$confirm(
         "本地址会被加入外部动态列表，第三方设备读取后可以对本地址进行告警提示或者拦截。",
         "提示",
@@ -1137,7 +1139,6 @@ export default {
         // IP段详情
         case "4":
           this.ipDes.pop = true;
-
           break;
         // 威胁追查-网络视角
         case "1":
@@ -1147,7 +1148,9 @@ export default {
           break;
         // 添加到外部动态列表
         case "3":
-          this.JoinExternalDynamics(this.more.des_name);
+          setTimeout(() => {
+            this.JoinExternalDynamics(this.more.name);
+          }, 500);
           break;
 
         default:
@@ -1155,8 +1158,8 @@ export default {
       }
     },
     select_src_name (item) {
-      // console.log(item);
-      this.more.src_name = item;
+      console.log(item);
+      this.more.name = item;
       var url_ipdetail = "";
       switch (this.$route.query.type) {
         case "alert":
@@ -1197,8 +1200,8 @@ export default {
         });
     },
     select_des_name (item) {
-      // console.log(item);
-      this.more.des_name = item;
+      console.log(item);
+      this.more.name = item;
       var url_ipdetail_des = "";
       switch (this.$route.query.type) {
         case "alert":

@@ -105,11 +105,11 @@ export default {
           if (response.data.status == 0) {
             this.rule_data.file_size = response.data.data.file_size
             this.rule_data.update_time = response.data.data.update_time
-            this.rule_data.name = '替换'
-          } else if (response.data.status == 1) {
-            this.rule_data.file_size = response.data.msg.file_size
-            this.rule_data.update_time = response.data.msg.update_time
-            this.rule_data.name = '上传'
+            if (response.data.data.file_size == '' && response.data.data.update_time == '') {
+              this.rule_data.name = '上传'
+            } else {
+              this.rule_data.name = '替换'
+            }
           }
           setTimeout(() => {
             this.loading = false

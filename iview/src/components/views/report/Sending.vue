@@ -115,8 +115,8 @@ export default {
     }
   },
   mounted () {
-    //this.get_data()
-    //this.check_passwd()
+    this.get_data()
+    this.check_passwd()
   },
   methods: {
     // 测试密码过期
@@ -140,7 +140,7 @@ export default {
         })
     },
     get_data () {
-      this.$axios.get('/yiiapi/report/get-config')
+      this.$axios.get('/yiiapi/report/GetConfig')
         .then(response => {
           let { status, data } = response.data;
           this.send_config.status = data.status + '';
@@ -186,7 +186,7 @@ export default {
           this.send_config.receiver_edit.push(item.name)
         }
       });
-      this.$axios.post('/yiiapi/report/set-config', {
+      this.$axios.post('/yiiapi/report/SetConfig', {
         status: this.send_config.status,
         cycle: this.send_config.cycle,
         report_type: this.send_config.report_type,
@@ -196,7 +196,7 @@ export default {
           let { status, data } = response.data;
           console.log(data);
           console.log(status);
-          if (status == 'success') {
+          if (status == 0) {
             this.get_data();
             this.$message(
               {

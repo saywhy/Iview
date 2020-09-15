@@ -120,17 +120,6 @@
         </el-col>
       </el-row>
     </div>
-    <div class="echarts">
-      <!-- 未处理告警 -->
-      <div id="untreatedalarm_report"></div>
-      <!-- // 柱状图-威胁应用协议 -->
-      <div id="application_protocol"></div>
-      <!-- 告警趋势 -->
-      <div id="alert_trend"></div>
-      <!-- 威胁类型 -->
-      <div id="alert_type"></div>
-      <div id="demo"></div>
-    </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -152,33 +141,12 @@ export default {
         rows: 10
       },
       report_lsit: {},
-      untreatedAlarm_data: {
-        low_total_count: 0,
-        medium_total_count: 0,
-        high_total_count: 0,
-        base64: ''
-      },
-      application_protocol_data: {
-        application_protocol_name: [],
-        application_protocol_value: [],
-        base64: ''
-      },
-      alert_trend_data: {
-        alert_trend_name: [],
-        alert_trend_value: [],
-        base64: '',
-      },
-      alert_type_data: {
-        alert_type_name: [],
-        alert_type_value: [],
-        base64: '',
-      },
     }
   },
   components: { VmEmergePicker },
   mounted () {
-    this.demo()
-    //this.check_passwd()
+    this.get_data()
+    this.check_passwd()
   },
   methods: {
     // 测试密码过期
@@ -217,471 +185,41 @@ export default {
       if (this.report.start_time == '' || this.report.end_time == '') {
         this.$message(
           {
-            message: '请选择时间范围！',
+            message: '请选择时间范围',
             type: 'warning',
           }
         );
         return false
       }
       this.report.loading = true
-      if (this.report.type == 'doc') {
-        this.$axios.get('/yiiapi/report/create-echarts-img', {
-          params: {
-            stime: this.report.start_time,
-            etime: this.report.end_time,
-            report_name: this.report.name,
-            report_type: 'doc',
-          }
-        })
-          .then(response => {
-            let { status, data } = response.data;
-            console.log(data);
-            // 未处理告警
-            if (data.threat_level) {
-              this.untreatedAlarm(data.threat_level);
-            }
-            //威胁使用应用协议
-            if (data.threat_protocol) {
-              this.application_protocol(data.threat_protocol);
-            }
-            //告警趋势
-            if (data.alert_trend) {
-              this.alert_trend(data.alert_trend);
-            }
-            //告警类型
-            if (data.alert_type) {
-              this.alert_type(data.alert_type);
-            }
-            setTimeout(() => {
-              this.$axios.post('/yiiapi/report/reports', {
-                stime: this.report.start_time,
-                etime: this.report.end_time,
-                report_name: this.report.name,
-                report_type: 'doc',
-                threat_level: this.untreatedAlarm_data.base64,
-                threat_protocol: this.application_protocol_data.base64,
-                alert_type: this.alert_type_data.base64,
-                alert_trend: this.alert_trend_data.base64,
-              })
-                .then(response => {
-                  this.report.loading = false
-                  let { status, data, msg } = response.data;
-                  if (status == 0) {
-                    this.get_data();
-                    this.$message(
-                      {
-                        message: '报表生成成功',
-                        type: 'success',
-                      }
-                    );
-                  } else {
-                    this.$message(
-                      {
-                        message: msg,
-                        type: 'warning',
-                      }
-                    );
-                  }
 
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            }, 100);
-          })
-          .catch(error => {
-            console.log(error);
-          })
-      }
-      if (this.report.type == 'pdf') {
-        this.$axios.get('/yiiapi/report/create-echarts-img', {
-          params: {
-            stime: this.report.start_time,
-            etime: this.report.end_time,
-            report_name: this.report.name,
-            report_type: 'pdf',
-          }
-        })
-          .then(response => {
-            let { status, data } = response.data;
-            console.log(data);
-            // 未处理告警
-            if (data.threat_level) {
-              this.untreatedAlarm(data.threat_level);
-            }
-            //威胁使用应用协议
-            if (data.threat_protocol) {
-              this.application_protocol(data.threat_protocol);
-            }
-            //告警趋势
-            if (data.alert_trend) {
-              this.alert_trend(data.alert_trend);
-            }
-            //告警类型
-            if (data.alert_type) {
-              this.alert_type(data.alert_type);
-            }
-            setTimeout(() => {
-              this.$axios.post('/yiiapi/report/create-report', {
-                stime: this.report.start_time,
-                etime: this.report.end_time,
-                report_name: this.report.name,
-                report_type: 'pdf',
-                threat_level: this.untreatedAlarm_data.base64,
-                threat_protocol: this.application_protocol_data.base64,
-                alert_type: this.alert_type_data.base64,
-                alert_trend: this.alert_trend_data.base64,
-              })
-                .then(response => {
-                  this.report.loading = false
-                  let { status, data, msg } = response.data;
-                  if (status == 0) {
-                    this.get_data();
-                    this.$message(
-                      {
-                        message: '报表生成成功',
-                        type: 'success',
-                      }
-                    );
-                  } else {
-                    this.$message(
-                      {
-                        message: msg,
-                        type: 'warning',
-                      }
-                    );
-                  }
-                })
-                .catch(error => {
-                  console.log(error);
-                })
-            }, 100);
-          })
-          .catch(error => {
-            console.log(error);
-          })
-      }
-      if (this.report.type == 'csv') {
-        this.$axios.post('/yiiapi/report/create-report', {
+      // reports
+      this.$axios.post('/yiiapi/reports', {
+        Report: {
+          report_type: this.report.type,
           stime: this.report.start_time,
           etime: this.report.end_time,
           report_name: this.report.name,
-          report_type: 'csv',
+        }
+      })
+        .then(response => {
+          this.report.loading = false
+          let { status, data } = response.data;
+          console.log(data);
+          if (status == 0) {
+            this.$message(
+              {
+                message: '生成成功',
+                type: 'success',
+              }
+            );
+            this.get_data()
+          }
+
         })
-          .then(response => {
-            this.report.loading = false
-            let { status, data, msg } = response.data;
-            if (status == 0) {
-              this.get_data();
-              this.$message(
-                {
-                  message: '报表生成成功!',
-                  type: 'success',
-                }
-              );
-            } else {
-              this.$message(
-                {
-                  message: msg,
-                  type: 'warning',
-                }
-              );
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          })
-      }
-    },
-    untreatedAlarm (params) {
-      if (params.length == 0) {
-        this.untreatedAlarm_data.low_total_count = 0;
-        this.untreatedAlarm_data.medium_total_count = 0;
-        this.untreatedAlarm_data.high_total_count = 0;
-      } else {
-        params.forEach(element => {
-          if (element.degree == "low") {
-            this.untreatedAlarm_data.low_total_count = element.total_count
-          } else if (element.degree == "medium") {
-            this.untreatedAlarm_data.medium_total_count = element.total_count
-          } else if (element.degree == "high") {
-            this.untreatedAlarm_data.high_total_count = element.total_count
-          }
-        });
-      }
-      var myChart = this.$echarts.init(document.getElementById("untreatedalarm_report"));
-      var option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: "{b}:{c}({d}%)"
-        },
-        grid: {
-          show: true,
-          left: 'center',
-          right: 'center',
-          top: 'center',
-          bottom: 'center'
-        },
-        series: [{
-          name: '未处理告警',
-          type: 'pie',
-          animation: false,
-          radius: '60%',
-          center: ['50%', '50%'],
-          hoverAnimation: false, //是否开启 hover 在扇区上的放大动画效果。
-          hoverOffset: 0, //高亮扇区的偏移距离。
-          selectedMode: 'single',
-          data: [{
-            value: this.untreatedAlarm_data.high_total_count,
-            name: '高危',
-            itemStyle: {
-              normal: {
-                color: '#962116'
-              }
-            }
-          },
-          {
-            value: this.untreatedAlarm_data.medium_total_count,
-            name: '中危',
-            itemStyle: {
-              normal: {
-                color: '#F5BF41'
-              }
-            }
-          },
-          {
-            value: this.untreatedAlarm_data.low_total_count,
-            name: '低危',
-            itemStyle: {
-              normal: {
-                color: '#4AA46E'
-              }
-            }
-          }
-          ],
-          itemStyle: {
-            normal: {
-              label: {
-                show: true,
-                formatter: '{b} : {c} \n ({d}%)'
-              },
-              labelLine: {
-                show: true
-              }
-            },
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }]
-      };
-      myChart.setOption(option);
-      this.untreatedAlarm_data.base64 = myChart.getDataURL();
-    },
-    application_protocol (params) {
-      this.application_protocol_data.application_protocol_name = [];
-      this.application_protocol_data.application_protocol_value = [];
-      params.forEach(element => {
-        this.application_protocol_data.application_protocol_name.push(element.application);
-        this.application_protocol_data.application_protocol_value.push(element.count);
-      });
-      var myChart = this.$echarts.init(document.getElementById("application_protocol"));
-      var option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          top: '5%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          data: this.application_protocol_data.application_protocol_name,
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            interval: 0,
-            rotate: '60',
-            margin: 5,
-            textStyle: {
-              fontSize: 16
-            }
-          }
-        },
-        yAxis: [{
-          type: 'value',
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            margin: 3,
-            textStyle: {
-              fontSize: 16
-            }
-          }
-        }],
-        series: [{
-          // name: '高危',
-          type: 'bar',
-          barWidth: 20,
-          animation: false,
-          stack: '搜索引擎',
-          itemStyle: {
-            normal: {
-              barBorderRadius: [4, 4, 4, 4], //柱形图圆角，初始化效果
-              color: 'rgba(150,33,22,.8)'
-            }
-          },
-          data: this.application_protocol_data.application_protocol_value
-        }]
-      };
-      myChart.setOption(option);
-      this.application_protocol_data.base64 = myChart.getDataURL();
-    },
-    alert_trend (params) {
-      console.log(params);
-      this.alert_trend_data.alert_trend_name = [];
-      this.alert_trend_data.alert_trend_value = [];
-      params.forEach(element => {
-        this.alert_trend_data.alert_trend_name.push(element.date_time);
-        this.alert_trend_data.alert_trend_value.push(element.count - 0);
-      });
-      console.log(this.alert_trend_data);
-      var myChart = this.$echarts.init(document.getElementById("alert_trend"));
-      var option_file = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          top: '5%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          data: this.alert_trend_data.alert_trend_name,
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            interval: 0,
-            rotate: '60',
-            margin: 5,
-            textStyle: {
-              fontSize: 16
-            }
-          }
-        },
-        yAxis: [{
-          type: 'value',
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            margin: 5,
-            textStyle: {
-              fontSize: 16
-            }
-          }
-        }],
-        series: [{
-          // name: '高危',
-          type: 'bar',
-          barWidth: 20,
-          animation: false,
-          stack: '搜索引擎',
-          itemStyle: {
-            normal: {
-              barBorderRadius: [4, 4, 4, 4], //柱形图圆角，初始化效果
-              color: 'rgba(150,33,22,.8)'
-            }
-          },
-          data: this.alert_trend_data.alert_trend_value
-        }]
-      };
-      myChart.setOption(option_file);
-      this.alert_trend_data.base64 = myChart.getDataURL();
-    },
-    alert_type (params) {
-      this.alert_type_data.alert_type_name = [];
-      this.alert_type_data.alert_type_value = [];
-      params.forEach(element => {
-        this.alert_type_data.alert_type_name.push(element.alert_type);
-        this.alert_type_data.alert_type_value.push(element.alert_count);
-      });
-      var myChart = this.$echarts.init(document.getElementById("alert_type"));
-      var option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          top: '5%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          data: this.alert_type_data.alert_type_name,
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            interval: 0,
-            rotate: '60',
-            margin: 5,
-            textStyle: {
-              fontSize: 16
-            }
-          }
-        },
-        yAxis: [{
-          type: 'value',
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            margin: 5,
-            textStyle: {
-              fontSize: 16
-            }
-          }
-        }],
-        series: [{
-          // name: '高危',
-          type: 'bar',
-          barWidth: 20,
-          animation: false,
-          stack: '搜索引擎',
-          itemStyle: {
-            normal: {
-              barBorderRadius: [4, 4, 4, 4], //柱形图圆角，初始化效果
-              color: 'rgba(150,33,22,.8)'
-            }
-          },
-          data: this.alert_type_data.alert_type_value
-        }]
-      };
-      myChart.setOption(option);
-      this.alert_type_data.base64 = myChart.getDataURL();
+        .catch(error => {
+          console.log(error);
+        })
     },
     demo () {
       var myChart = this.$echarts.init(document.getElementById("demo"));
@@ -739,7 +277,7 @@ export default {
 
     // 获取列表
     get_data () {
-      this.$axios.get('/yiiapi/report/list', {
+      this.$axios.get('/yiiapi/reports', {
         params: {
           page: this.report_data.page,
           rows: this.report_data.rows,
@@ -759,19 +297,8 @@ export default {
     },
     // 下载
     download (item) {
-      this.$axios.get('/yiiapi/site/CheckAuthExist', {
-        params: {
-          pathInfo: 'yararule/download',
-          method: 'GET',
-        }
-      })
-        .then(response => {
-          var url1 = '/yiiapi/report/download-report?id=' + item.id;
-          window.location.href = url1;
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      var url1 = '/yiiapi/report/DownloadReport?id=' + item.id;
+      window.location.href = url1;
     },
     // 删除
     del_box (item) {
@@ -780,26 +307,21 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.delete('/yiiapi/report/delete', {
-          data: {
-            id: item.id,
-            report_name: item.report_name
-          }
-        })
+        this.$axios.delete('/yiiapi/reports/' + item.id)
           .then(response => {
             let { status, data } = response.data;
             if (status == 0) {
               this.get_data();
               this.$message(
                 {
-                  message: '删除成功!',
+                  message: '删除成功',
                   type: 'success',
                 }
               );
             } else {
               this.$message(
                 {
-                  message: '删除失败!',
+                  message: '删除失败',
                   type: 'error',
                 }
               );
@@ -963,18 +485,6 @@ export default {
   .img_icon {
     cursor: pointer;
     margin-right: 10px;
-  }
-  .echarts {
-    // display: none;
-  }
-  #untreatedalarm_report,
-  #application_protocol,
-  #alert_trend,
-  #demo,
-  #alert_type {
-    border: 1px solid red;
-    width: 1000px;
-    height: 600px;
   }
 }
 </style>

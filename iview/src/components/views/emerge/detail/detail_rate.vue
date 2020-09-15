@@ -30,7 +30,7 @@ export default {
   },
   watch: {
     detailArray: function (val) {
-      console.log(this.detailArray);
+      // console.log(this.detailArray);
       this.line_list = []
       this.detailArray.map(item => {
         var obj = {
@@ -39,14 +39,6 @@ export default {
         }
         this.line_list.push(obj)
       })
-
-      //       value = value.toString();
-      // if (value.length == 10) {
-      //   value = value * 1000;
-      // } else {
-      //   value = parseInt(value / 1000) * 1000
-      // }
-      // return moment(value).format('YYYY-MM-DD HH:mm:ss')
       this.drawLine();
     }
   },

@@ -124,7 +124,7 @@
                 </div>
                 <div class="complete_item"
                      v-for="(val, key, index) in complete_log"
-                     v-if="key!='message'&& JSON.stringify(complete_log) != '{}'">
+                     v-if="key!='message'&&key!='time'&& JSON.stringify(complete_log) != '{}'">
                   <p class="complete_item_title">{{key}}</p>
                   <div class="complete_item_content"
                        v-if="typeof(val)=='string'">{{val}}</div>

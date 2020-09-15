@@ -222,7 +222,7 @@ export default {
           }
         })
       })
-      console.log(this.attack_stage_list);
+      // console.log(this.attack_stage_list);
     }
   },
 }

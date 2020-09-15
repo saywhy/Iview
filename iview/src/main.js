@@ -10,7 +10,7 @@ import 'nprogress/nprogress.css' // progress bar style
 
 // 引入element-UI
 import ElementUI from 'element-ui'
-// import 'element-ui/lib/theme-chalk/index.css'
+import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/theme/index.css'
 Vue.use(ElementUI);
 import '@/assets/js/common.js'
