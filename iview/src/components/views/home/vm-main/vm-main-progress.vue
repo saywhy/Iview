@@ -55,7 +55,7 @@
     }
     &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
       border-radius: 6px;
-      background: #0070FF;
+      background: #a8a8a8;
       /*background: red;*/
     }
     &::-webkit-scrollbar-track {/*滚动条里面轨道*/

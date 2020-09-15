@@ -518,13 +518,18 @@
             <el-table class="common-table"
                       align="center"
                       border
-                      highlight-current-row
                       v-loading="table_add_works.loading"
                       :data="table_add_works.tableData"
+                      @row-click="handle_sel_table_row_works"
                       @selection-change="handle_sel_table_add_works">
-              <el-table-column type="selection"
+              <!--<el-table-column type="selection"
                                align="center"
-                               width="50"></el-table-column>
+                               width="50"></el-table-column>-->
+              <el-table-column width="50">
+                <template slot-scope="scope">
+                  <el-checkbox v-model="scope.row.checked" @change.native.stop="check_box_change(scope.row.id)"></el-checkbox>
+                </template>
+              </el-table-column>
               <el-table-column prop="name"
                                align="center"
                                label="工单名称"
@@ -592,6 +597,8 @@ export default {
   },
   data () {
     return {
+      //单选id
+      checked: null,
       search_flag: false,
       //頂部數據
       data_top: {},
@@ -1355,12 +1362,14 @@ export default {
         this.table_add_works.loading = false;
         let { status, data } = resp.data;
         let datas = data;
+
         if (status == 0) {
           let { data, count, maxPage, pageNow } = datas;
           data.map(function (v, k) {
             v.new_perator = (JSON.parse(v.perator)).join(',');
             v.checked = false;
           });
+
           this.table_add_works.tableData = data;
           this.table_add_works.count = count;
           this.table_add_works.maxPage = maxPage;
@@ -1389,6 +1398,21 @@ export default {
     //新加工单列表勾选某一条记录
     handle_sel_table_add_works (row) {
       this.table_add_works.multipleSelection = row;
+    },
+
+    //单选
+    handle_sel_table_row_works(row){
+      this.table_add_works.tableData.forEach(item => {
+        // 排他,每次选择时把其他选项都清除
+        if (item.id !== row.id) {
+          item.checked = false
+        }else {
+          item.checked = true;
+        }
+      });
+
+      console.log(row);
+
     },
 
     //新加到工单确定
@@ -1471,6 +1495,11 @@ export default {
       this.table_add_works.pageNow = val;
       this.get_table_works_list();
     },
+
+    //checkBox勾选事件
+    check_box_change(id){
+      console.log(id)
+    }
   }
 };
 </script>

@@ -59,12 +59,12 @@ export default {
         /* border-radius: 6px;*/
       }
       &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-        border-radius: 6px;
+        border-radius: 10px;
         background: #a8a8a8;
         /*background: red;*/
       }
       &::-webkit-scrollbar-track {/*滚动条里面轨道*/
-        border-radius: 6px;
+        border-radius: 10px;
         background: #f4f4f4;
       }
     }

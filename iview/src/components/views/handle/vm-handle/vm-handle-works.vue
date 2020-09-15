@@ -1707,8 +1707,7 @@ export default {
           let { status, data } = resp.data;
           if (status == 0) {
             console.log('console.log(this.edit);')
-           console.log(this.edit);
-            console.log(this.edit.operator_list)
+            console.log(this.edit);
             this.edit.operator_list = data;
 
             if (this.edit.data.perator && this.edit.data.perator.length != 0) {
@@ -1719,18 +1718,23 @@ export default {
                   }
                 });
               });
+              //ycl添加（09/14）去重
+              this.edit.table_operator = [...new Set(this.edit.table_operator)];
+
+              //ycl添加（09/14）
+              if(this.edit.table_operator.length == 1){
+                this.task_params.operator = this.edit.data.perator[0];
+              }else {
+                this.task_params.operator = '';
+              }
+              //ycl添加（09/14）
             } else {
               this.edit.table_operator = []
             }
 
-            //ycl添加（09/14）
-            this.task_params.operator = this.edit.data.new_perator;
-            //ycl添加（09/14）
-
             //console.log(this.edit.operator_list);
             this.edit.pop = true
             this.edit.task.frist = true;
-
 
           }
         })
@@ -1767,6 +1771,7 @@ export default {
       }
       if (sel_table_data[0].status != '0') {
         this.$message({ message: '工单状态只有‘待分配’可以被编辑！', type: 'warning' });
+        this.$refs.multipleTable.clearSelection();
         return false;
       }
 
@@ -1985,7 +1990,7 @@ export default {
         handle_sel_list.push(element.id)
       });
 
-      this.selected_list.map(v => {
+      this.selected_list = this.selected_list.map(v => {
         if(isRealNum(v)){
           v = v.toString();
         }
@@ -1993,6 +1998,12 @@ export default {
       });
       handle_sel_list = handle_sel_list.concat(this.selected_list);
       handle_sel_list = [...new Set(handle_sel_list)];
+
+
+      //ycl添加（09/14）
+      this.edit.perator = [...new Set(this.edit.perator)];
+
+
       let all_params = {
         workorder_edit: '1',
         id: this.edit.data.id,
@@ -2016,14 +2027,17 @@ export default {
         // }
         all_params.te_alert = handle_sel_list
       }
-      this.handle.save = true
+
+      console.log(all_params)
+
+      this.handle.save = true;
       this.$axios.post('/yiiapi/workorders', all_params)
         .then((resp) => {
           this.handle.save = false
           let { status, msg, data } = resp.data;
           // "存在已被创建工单的资产"
           if (resp.data.status == 0) {
-            this.$message.success('修改成功');
+            this.$message.success('保存成功');
             this.get_list_works();
             this.edit.pop = false
           } else {
@@ -2044,7 +2058,8 @@ export default {
       this.edit.handle_sel.forEach(element => {
         handle_sel_list.push(element.id)
       });
-      this.selected_list.map(v => {
+
+      this.selected_list = this.selected_list.map(v => {
         if(isRealNum(v)){
           v = v.toString();
         }
@@ -2052,6 +2067,11 @@ export default {
       });
       handle_sel_list = handle_sel_list.concat(this.selected_list);
       handle_sel_list = [...new Set(handle_sel_list)];
+
+      //ycl添加（09/14）
+      this.edit.perator = [...new Set(this.edit.perator)];
+
+      console.log( this.edit.data.perator)
 
       let all_params = {
         workorder_edit: '1',
