@@ -60,7 +60,7 @@ export default {
           type: 'warning'
         });
       }
-      let fileFlag = false;
+      let fileFlag = true;
       if (file.size > 1024 * 1024 * 100) {
         this.$message({
           message: "单个文件 " + file.name + " 不能大于100M",
@@ -74,12 +74,19 @@ export default {
         })
         fileFlag = false;
       }
-      return (extension || extension2) && fileFlag
+     /* console.log('tishi')
+      console.log((extension || extension2) && fileFlag)
+      console.log((extension || extension2) )
+      console.log(extension)
+      console.log(extension2)
+      console.log(fileFlag)*/
+      return (extension || extension2) && fileFlag;
     },
     onFileSuccess (rootFile, file, response, chunk) {
       console.log('成功');
       console.log(response)
-     // this.$emit('titleChanged',false);
+      this.$refs.upload.clearFiles();
+      this.$emit('titleChanged',false);
       this.$message({
         message: '导入成功！',
         type: 'success'
@@ -90,7 +97,8 @@ export default {
     },
     onFileError () {
       console.log('失败')
-      //this.$emit('titleChanged',false);
+      this.$refs.upload.clearFiles();
+      this.$emit('titleChanged',false);
       this.$message({
         message: '导入失败！',
         type: 'error'
@@ -112,6 +120,7 @@ export default {
     },
     //取消
     closed_exp_box(){
+      this.$refs.upload.clearFiles();
       this.$emit('titleChanged',false);
     }
   }
