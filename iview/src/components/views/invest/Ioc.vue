@@ -172,7 +172,7 @@ export default {
       },
       // 修改上传插件
       options: {
-        target: '/yiiapi/investigate/upload-file',
+        target: '/yiiapi/investigate/UploadFile',
         chunkSize: '10048000',   //分块大小
         singleFile: true,
         testChunks: false,     //是否开启服务器分片校验
@@ -205,9 +205,10 @@ export default {
   methods: {
     // 测试600专用
     test () {
-      this.$axios.get('/yiiapi/investigate/ioc-scanning-list', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/host-network-investigation',
+          pathInfo: 'investigate/IocScanningList',
+          method: 'GET',
         }
       })
         .then(response => {
@@ -240,7 +241,7 @@ export default {
     // 获取列表
     get_data () {
       this.ioc_data.loading = true
-      this.$axios.get('/yiiapi/investigate/ioc-scanning-list', {
+      this.$axios.get('/yiiapi/investigate/IocScanningList', {
         params: {
           page: this.ioc_data.page,
           rows: this.ioc_data.rows,
@@ -280,61 +281,40 @@ export default {
 
       console.log(params_response);
       console.log(chunk);
-      this.$axios.get('/yiiapi/site/CheckAuthExist', {
-        params: {
-          pathInfo: 'yararule/download',
-           method: 'GET',
-        }
-      })
-        .then(response => {
-          if (JSON.parse(params_response).status == 1) {
-            // rootFile.ignored = true
-            file.cancel()
-            this.$message(
-              {
-                message: JSON.parse(params_response).msg,
-                type: 'error',
-              }
-            );
-          } else if (JSON.parse(params_response).status == 0) {
-            this.$message(
-              {
-                message: '上传成功！',
-                type: 'success',
-              }
-            );
-            setTimeout(() => {
-              this.get_data();
-            }, 100);
-            // file.cancel()
+      if (JSON.parse(params_response).status == 1) {
+        // rootFile.ignored = true
+        file.cancel()
+        this.$message(
+          {
+            message: JSON.parse(params_response).msg,
+            type: 'error',
           }
-        })
-        .catch(error => {
-          console.log(error);
-        })
+        );
+      } else if (JSON.parse(params_response).status == 0) {
+        this.$message(
+          {
+            message: '上传成功！',
+            type: 'success',
+          }
+        );
+        setTimeout(() => {
+          this.get_data();
+        }, 100);
+        // file.cancel()
+      }
+
       console.log(chunk);
     },
     onFileError (params, file) {
       console.log(params);
       console.log(file);
       file.ignored = true
-      this.$axios.get('/yiiapi/site/CheckAuthExist', {
-        params: {
-          pathInfo: 'yararule/download',
-           method: 'GET',
+      this.$message(
+        {
+          message: '上传失败!',
+          type: 'error',
         }
-      })
-        .then(response => {
-          this.$message(
-            {
-              message: '上传失败!',
-              type: 'error',
-            }
-          );
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      );
     },
 
     // 全选择
@@ -371,12 +351,12 @@ export default {
           } else {
             this.$axios.get('/yiiapi/site/CheckAuthExist', {
               params: {
-                pathInfo: 'yararule/download',
-                 method: 'GET',
+                pathInfo: 'investigate/DownloadIocTemplate',
+                method: 'GET',
               }
             })
               .then(response => {
-                var url1 = "/yiiapi/investigate/download-ioc-template";
+                var url1 = "/yiiapi/investigate/DownloadIocTemplate";
                 window.location.href = url1;
               })
               .catch(error => {
@@ -409,12 +389,12 @@ export default {
       var id_list_str = JSON.stringify(id_list)
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'yararule/download',
-           method: 'GET',
+          pathInfo: 'investigate/IocScanningDownload',
+          method: 'GET',
         }
       })
         .then(response => {
-          var url1 = "/yiiapi/investigate/ioc-scanning-download?id=" + id_list_str;
+          var url1 = "/yiiapi/investigate/IocScanningDownload?id=" + id_list_str;
           window.location.href = url1;
         })
         .catch(error => {

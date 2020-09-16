@@ -234,21 +234,14 @@ export default {
         });
         return false
       }
-      // if (this.flow_list.count > 1000) {
-      //   this.$message({
-      //     type: 'warning',
-      //     message: '下载数据不能超出1000条！'
-      //   });
-      //   return false
-      // }
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'yararule/download',
+          pathInfo: 'investigate/FlowDirectionInvestigationExport',
           method: 'GET',
         }
       })
         .then(response => {
-          var url1 = "/yiiapi/investigate/flow-direction-investigation-export?host_ip=" + this.flow_search.host_ip +
+          var url1 = "/yiiapi/investigate/FlowDirectionInvestigationExport?host_ip=" + this.flow_search.host_ip +
             '&flow_direction=' + this.flow_search.direction +
             '&start_time=' + this.flow_search.start_time +
             '&end_time=' + this.flow_search.end_time +

@@ -174,13 +174,6 @@ export default {
           if (status == '602') {
             return false
           }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
           this.user_list = data
           this.user_list_data = data.data
           this.user_list_data.data.forEach((item, index) => {
@@ -209,21 +202,14 @@ export default {
         });
         return false
       }
-      // if (this.user_list.count > 1000) {
-      //   this.$message({
-      //     type: 'warning',
-      //     message: '下载数据不能超出1000条！'
-      //   });
-      //   return false
-      // }
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'yararule/download',
+          pathInfo: 'investigate/UserInvestigationExport',
           method: 'GET',
         }
       })
         .then(response => {
-          var url1 = "/yiiapi/investigate/user-investigation-export?username=" + this.user_search.username +
+          var url1 = "/yiiapi/investigate/UserInvestigationExport?username=" + this.user_search.username +
             '&host_ip=' + this.user_search.host_ip +
             '&start_time=' + this.user_search.start_time +
             '&end_time=' + this.user_search.end_time +

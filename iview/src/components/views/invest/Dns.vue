@@ -246,21 +246,14 @@ export default {
         });
         return false
       }
-      // if (this.dns_list.count > 1000) {
-      //   this.$message({
-      //     type: 'warning',
-      //     message: '下载数据不能超出1000条！'
-      //   });
-      //   return false
-      // }
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'yararule/download',
+          pathInfo: 'investigate/DnsInvestigationExport',
           method: 'GET',
         }
       })
         .then(response => {
-          var url2 = "/yiiapi/investigate/dns-investigation-export?host_ip=" + this.dns_search.host_ip + "&dns_ip=" + this.dns_search.dns_ip + '&domain=' + this.dns_search.domain + '&resolve_ip=' + this.dns_search.resolve_ip + '&ttl=' + this.dns_search.ttl + '&resolve_result=' + this.dns_search.resolve_result + '&start_time=' + this.dns_search.start_time + '&end_time=' + this.dns_search.end_time + '&current_page=0&per_page_count=0';
+          var url2 = "/yiiapi/investigate/DnsInvestigationExport?host_ip=" + this.dns_search.host_ip + "&dns_ip=" + this.dns_search.dns_ip + '&domain=' + this.dns_search.domain + '&resolve_ip=' + this.dns_search.resolve_ip + '&ttl=' + this.dns_search.ttl + '&resolve_result=' + this.dns_search.resolve_result + '&start_time=' + this.dns_search.start_time + '&end_time=' + this.dns_search.end_time + '&current_page=0&per_page_count=0';
           window.location.href = url2;
         })
         .catch(error => {

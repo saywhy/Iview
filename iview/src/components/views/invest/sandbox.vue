@@ -153,9 +153,10 @@ export default {
   methods: {
     // 测试600专用
     test () {
-      this.$axios.get('/yiiapi/sandbox/list', {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/host-network-investigation',
+          pathInfo: 'sandbox/list',
+          method: 'GET',
         }
       })
         .then(response => {
@@ -222,7 +223,7 @@ export default {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
-           method: 'GET',
+          method: 'GET',
         }
       })
         .then(response => {
@@ -276,7 +277,7 @@ export default {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
-           method: 'GET',
+          method: 'GET',
         }
       })
         .then(response => {
@@ -290,7 +291,7 @@ export default {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'yararule/download',
-           method: 'GET',
+          method: 'GET',
         }
       })
         .then(response => {
@@ -339,12 +340,12 @@ export default {
     download (item) {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'yararule/download',
-           method: 'GET',
+          pathInfo: 'sandbox/DownloadFile',
+          method: 'GET',
         }
       })
         .then(response => {
-          var url1 = '/yiiapi/sandbox/download-file?id=' + item.id;
+          var url1 = '/yiiapi/sandbox/DownloadFile?id=' + item.id;
           window.location.href = url1;
         })
         .catch(error => {

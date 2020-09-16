@@ -238,12 +238,12 @@ export default {
       // }
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'yararule/download',
+          pathInfo: 'investigate/FlowsizeTimelengthInvestigationExport',
           method: 'GET',
         }
       })
         .then(response => {
-          var url1 = "/yiiapi/investigate/flowsize-timelength-investigation-export?flow_size=" + this.data_search.flow_size +
+          var url1 = "/yiiapi/investigate/FlowsizeTimelengthInvestigationExport?flow_size=" + this.data_search.flow_size +
             '&flow_duration=' + this.data_search.flow_duration +
             '&host_ip=' + this.data_search.host_ip +
             '&start_time=' + this.data_search.start_time +

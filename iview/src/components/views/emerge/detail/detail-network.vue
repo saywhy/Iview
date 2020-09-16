@@ -1042,6 +1042,7 @@ export default {
     // 原地址和目的地址相关-----------------------------------------
     handleSelect_src (key, keyPath) {
       console.log(key, keyPath);
+      console.log(key.substr(key.length - 1, 1));
       switch (key.substr(key.length - 1, 1)) {
         // IP段详情
         case "4":
@@ -1049,6 +1050,9 @@ export default {
           break;
         // 威胁追查-网络视角
         case "1":
+          setTimeout(() => {
+            this.$router.push({ path: "/invest/url", query: { src_ip: this.more.name, dest_ip: '' } });
+          }, 100);
           break;
         // 威胁追查-端点视角
         case "2":
@@ -1142,6 +1146,9 @@ export default {
           break;
         // 威胁追查-网络视角
         case "1":
+          setTimeout(() => {
+            this.$router.push({ path: "/invest/url", query: { src_ip: '', dest_ip: this.more.name } });
+          }, 100);
           break;
         // 威胁追查-端点视角
         case "2":

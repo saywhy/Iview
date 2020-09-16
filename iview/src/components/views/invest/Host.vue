@@ -428,21 +428,14 @@ export default {
             });
             return false
           }
-          // if (this.host_network.count > 1000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '下载数据不能超出1000条！'
-          //   });
-          //   return false
-          // }
           this.$axios.get('/yiiapi/site/CheckAuthExist', {
             params: {
-              pathInfo: 'yararule/download',
+              pathInfo: 'investigate/HostNetworkInvestigationExport',
               method: 'GET',
             }
           })
             .then(response => {
-              var url1 = "/yiiapi/investigate/host-network-investigation-export?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
+              var url1 = "/yiiapi/investigate/HostNetworkInvestigationExport?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
               window.location.href = url1;
             })
             .catch(error => {
@@ -458,21 +451,14 @@ export default {
             });
             return false
           }
-          // if (this.host_file.count > 1000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '下载数据不能超出1000条！'
-          //   });
-          //   return false
-          // }
           this.$axios.get('/yiiapi/site/CheckAuthExist', {
             params: {
-              pathInfo: 'yararule/download',
+              pathInfo: 'investigate/HostFileInvestigationExport',
               method: 'GET',
             }
           })
             .then(response => {
-              var url2 = "/yiiapi/investigate/host-file-investigation-export?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
+              var url2 = "/yiiapi/investigate/HostFileInvestigationExport?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
               window.location.href = url2;
             })
             .catch(error => {
@@ -488,22 +474,14 @@ export default {
             });
             return false
           }
-          // if (this.host_user.count > 1000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '下载数据不能超出1000条！'
-          //   });
-          //   return false
-          // }
-
           this.$axios.get('/yiiapi/site/CheckAuthExist', {
             params: {
-              pathInfo: 'yararule/download',
+              pathInfo: 'investigate/HostUserInvestigationExport',
               method: 'GET',
             }
           })
             .then(response => {
-              var url3 = "/yiiapi/investigate/host-user-investigation-export?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
+              var url3 = "/yiiapi/investigate/HostUserInvestigationExport?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
               window.location.href = url3;
             })
             .catch(error => {
