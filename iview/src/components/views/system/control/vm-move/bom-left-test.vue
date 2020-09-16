@@ -75,12 +75,21 @@ export default {
           },
           axisLabel: {
             textStyle: {
-              color: "#666666"
+              color: "#666666",
+            },
+            formatter: function (val) {
+              var strs = val.split(' '); //字符串数组
+              let str = ''
+              if (val != '0') {
+                str = strs[0] + '\n' + strs[1]+':00';
+              }
+              return str;
             }
           },
           axisTick: {
             show: false
           },
+
           data: xdata
         },
         yAxis: {
