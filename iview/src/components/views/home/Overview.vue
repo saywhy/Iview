@@ -23,7 +23,7 @@
          <div class="vam-title">威胁类型 TOP5（7天）</div>
          <vm-main-form :options="top_mid"
                        v-if="top_mid_show"></vm-main-form>
-        <!-- <vm-main-time></vm-main-time>-->
+        <!--<vm-main-time></vm-main-time>-->
        </div>
      </el-col>
      <el-col :span="6">

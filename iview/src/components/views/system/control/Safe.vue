@@ -54,7 +54,15 @@
           <el-table-column align="center"
                            label="状态"
                            show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.status | statusSafe }}</template>
+            <!--<template slot-scope="scope">{{ scope.row.status | statusSafe }}</template>-->
+            <template slot-scope="scope">
+               <span class="btn_safe_background"
+                       :title="scope.row.status|statusSafe"
+                       :class="{'mormal_background':scope.row.status =='0',
+                      'alert_background':scope.row.status =='1',
+                      'offline_background':scope.row.status =='2'}">
+            <!--{{ scope.row.status | statusSafe }}--></span>
+            </template>
           </el-table-column>
           <el-table-column label="操作"
                            align="center">
@@ -390,15 +398,13 @@
       //取消
       closed_cancel_box () {
         this.monitor_state.tab = false;
+        this.$refs.multipleTable.clearSelection();
       },
 
       //添加确定
       submit_add_box () {
         var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
-
        // var pattern1 = /^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$/
-
-
         if (this.monitor_add.name == '') {
           this.$message(
             {
@@ -688,7 +694,7 @@
           attr = '正常';
         }else if(value == 1) {
           attr = '告警';
-        }else {
+        }else if(value == 2){
           attr = '离线';
         }
         return attr;
@@ -864,6 +870,21 @@
           width: 72px;
           height: 30px;
           font-size: 14px;
+        }
+        .btn_safe_background{
+          width: 16px;
+          height: 16px;
+          border-radius: 100%;
+          display: inline-block;
+          &.mormal_background{
+            background-color: #4caf50;
+          }
+          &.alert_background{
+            background-color: #dc5f5f;
+          }
+          &.offline_background{
+            background-color: #a8a8a8;
+          }
         }
       }
     }

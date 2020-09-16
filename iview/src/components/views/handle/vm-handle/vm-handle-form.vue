@@ -20,6 +20,11 @@
     created(){
       let legendAttr = [];
       let that = this;
+      if(this.form_data.length > 0){
+        this.form_data = this.form_data.slice(0,5);
+      }else {
+        return false;
+      }
       this.form_data.filter(function (v,k) {
         legendAttr.push(v.category);
         that.data_attr.push({value:v.count, name:v.category});
@@ -67,7 +72,7 @@
               center: ['70%', '50%'],
               radius: ['45%', '60%'],
               avoidLabelOverlap: false,
-              hoverOffset: 5,
+              hoverOffset: 2,
               label: {
                 normal: {
                   show: false,

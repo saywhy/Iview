@@ -261,7 +261,7 @@ export default {
           } = resp.data;
           if (status == 0) {
             this.top_left = data;
-            console.log(data)
+            //console.log(data)
             this.top_left_show = true;
           }
         })
@@ -292,7 +292,7 @@ export default {
             data
           } = resp.data;
           if (status == 0) {
-            if(data.length == 0){
+            if(data instanceof Array && data.length == 0){
               data = {};
             }
             this.top_right = data;
@@ -329,6 +329,9 @@ export default {
           } = resp.data;
           if (status == 0) {
             //console.log(data)
+            if(data instanceof Array && data.length == 0){
+              data = {};
+            }
             this.bom_mid = data;
             this.bom_mid_show = true;
           }
