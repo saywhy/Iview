@@ -32,13 +32,13 @@
       :on-remove="handleRemove"
       :on-error="onFileError"
       :file-list="fileList"
-      accept=".xls"
+      accept=".xls,.xlsx文件格式"
       action="/yiiapi/intelligence/Upload"
       multiple>
 
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">导入支持的文件格式<em>&nbsp;&nbsp;点击此处</em></div>
-      <div class="el-upload__tip" slot="tip">只支持xls，xlsx文件格式</div>
+      <div class="el-upload__tip" slot="tip">支持xls，xlsx文件格式</div>
     </el-upload>
     <div class="btn_box_group">
       <el-button @click="closed_exp_box"
@@ -127,6 +127,8 @@ export default {
     },*/
     onFileSuccess (rootFile, file, response, chunk) {
       console.log('成功');
+
+      console.log(response)
       this.$emit('titleChanged',false);
       this.$message({
         message: '导入成功！',
