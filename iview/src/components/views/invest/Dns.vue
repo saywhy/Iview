@@ -151,7 +151,7 @@ export default {
     test () {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/dns-investigation',
+          pathInfo: 'investigate/DnsInvestigation',
           method: 'GET',
         }
       })
@@ -189,7 +189,7 @@ export default {
     },
     get_data () {
       this.dns_search.loading = true
-      this.$axios.get('/yiiapi/investigate/dns-investigation', {
+      this.$axios.get('/yiiapi/investigate/DnsInvestigation', {
         params: {
           host_ip: this.dns_search.host_ip,
           dns_ip: this.dns_search.dns_ip,

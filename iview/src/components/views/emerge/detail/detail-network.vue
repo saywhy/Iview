@@ -79,8 +79,8 @@
                       <template slot="title">威胁追查</template>
                       <el-menu-item :index="index+'1'"
                                     @click="select_src_name(item)">网络视角</el-menu-item>
-                      <el-menu-item :index="index+'2'"
-                                    @click="select_src_name(item)">端点视角</el-menu-item>
+                      <!-- <el-menu-item :index="index+'2'"
+                                    @click="select_src_name(item)">端点视角</el-menu-item> -->
                     </el-submenu>
                     <el-menu-item :index="index+'3'"
                                   @click="select_src_name(item)">添加到外部动态列表</el-menu-item>
@@ -110,8 +110,8 @@
                       <template slot="title">威胁追查</template>
                       <el-menu-item :index="index+'1'"
                                     @click="select_des_name(item)">网络视角</el-menu-item>
-                      <el-menu-item :index="index+'2'"
-                                    @click="select_des_name(item)">端点视角</el-menu-item>
+                      <!-- <el-menu-item :index="index+'2'"
+                                    @click="select_des_name(item)">端点视角</el-menu-item> -->
                     </el-submenu>
                     <el-menu-item :index="index+'3'"
                                   @click="select_des_name(item)">添加到外部动态列表</el-menu-item>

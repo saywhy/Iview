@@ -1,8 +1,7 @@
 
 <template>
   <div id="custom_invest"
-       class="custom_invest"
-      >
+       class="custom_invest">
     <div class="invest_box">
       打算大苏打
       <el-input placeholder="请输入内容"
@@ -28,9 +27,6 @@
 import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: "custom_invest",
-  components: {
-    VmEmergePicker
-  },
   data () {
     return {
     };

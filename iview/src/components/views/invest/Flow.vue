@@ -144,7 +144,7 @@ export default {
     test () {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/flow-direction-investigation',
+          pathInfo: 'investigate/FlowDirectionInvestigation',
           method: 'GET',
         }
       })
@@ -183,7 +183,7 @@ export default {
     get_data () {
       this.flow_search.loading = true
       console.log(this.flow_search);
-      this.$axios.get('/yiiapi/investigate/flow-direction-investigation', {
+      this.$axios.get('/yiiapi/investigate/FlowDirectionInvestigation', {
         params: {
           flow_direction: this.flow_search.direction,
           host_ip: this.flow_search.host_ip,

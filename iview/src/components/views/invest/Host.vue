@@ -254,7 +254,7 @@ export default {
     test () {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/host-network-investigation',
+          pathInfo: 'investigate/HostNetworkInvestigation',
           method: 'GET',
         }
       })
@@ -306,7 +306,7 @@ export default {
     // 网络通讯
     get_data_network () {
       this.host_search.loading = true
-      this.$axios.get('/yiiapi/investigate/host-network-investigation', {
+      this.$axios.get('/yiiapi/investigate/HostNetworkInvestigation', {
         params: {
           host_ip: this.host_search.host_ip,
           start_time: this.host_search.start_time,
@@ -341,7 +341,7 @@ export default {
     // 文件
     get_data_file () {
       this.host_search.loading = true
-      this.$axios.get('/yiiapi/investigate/host-file-investigation', {
+      this.$axios.get('/yiiapi/investigate/HostFileInvestigation', {
         params: {
           host_ip: this.host_search.host_ip,
           start_time: this.host_search.start_time,
@@ -376,7 +376,7 @@ export default {
     // 用户
     get_data_user () {
       this.host_search.loading = true
-      this.$axios.get('/yiiapi/investigate/host-user-investigation', {
+      this.$axios.get('/yiiapi/investigate/HostUserInvestigation', {
         params: {
           host_ip: this.host_search.host_ip,
           start_time: this.host_search.start_time,

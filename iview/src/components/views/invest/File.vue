@@ -137,7 +137,7 @@ export default {
     test () {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/file-investigation',
+          pathInfo: 'investigate/FileInvestigation',
           method: 'GET',
         }
       })
@@ -175,7 +175,7 @@ export default {
     },
     get_data () {
       this.file_search.loading = true
-      this.$axios.get('/yiiapi/investigate/file-investigation', {
+      this.$axios.get('/yiiapi/investigate/FileInvestigation', {
         params: {
           file_name: this.file_search.file_name,
           md5: this.file_search.md5,

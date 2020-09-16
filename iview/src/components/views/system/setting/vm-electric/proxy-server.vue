@@ -161,13 +161,15 @@ export default {
         verify_passwd = 'no'
       }
       this.$axios.put('/yiiapi/network/SetProxyServer', {
-        proxy_switch: proxy_switch,
-        type: this.proxy.type,
-        ip: this.proxy.ip,
-        port: this.proxy.port,
-        verify_passwd: verify_passwd,
-        user: this.proxy.user,
-        password: this.proxy.password
+        ProxyServer: {
+          proxy_switch: proxy_switch,
+          type: this.proxy.type,
+          ip: this.proxy.ip,
+          port: this.proxy.port,
+          verify_passwd: verify_passwd,
+          user: this.proxy.user,
+          password: this.proxy.password
+        }
       })
         .then(response => {
           let { status, data } = response.data;
@@ -182,12 +184,11 @@ export default {
           } else {
             this.$message(
               {
-                message: response.data.msg,
+                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
                 type: 'error',
               }
             );
           }
-          console.log(data.data);
         })
         .catch(error => {
           console.log(error);

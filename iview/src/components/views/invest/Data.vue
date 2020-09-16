@@ -137,7 +137,7 @@ export default {
     test () {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/flowsize-timelength-investigation',
+          pathInfo: 'investigate/FlowsizeTimelengthInvestigation',
           method: 'GET',
         }
       })
@@ -176,7 +176,7 @@ export default {
     },
     get_data () {
       this.data_search.loading = true
-      this.$axios.get('/yiiapi/investigate/flowsize-timelength-investigation', {
+      this.$axios.get('/yiiapi/investigate/FlowsizeTimelengthInvestigation', {
         params: {
           flow_size: this.data_search.flow_size,
           flow_duration: this.data_search.flow_duration,

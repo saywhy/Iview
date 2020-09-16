@@ -151,7 +151,7 @@ export default {
     test () {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/ipurl-communication-investigation',
+          pathInfo: 'investigate/IpurlCommunicationInvestigation',
           method: 'GET',
         }
       })
@@ -189,7 +189,7 @@ export default {
     },
     get_data () {
       this.url_search.loading = true
-      this.$axios.get('/yiiapi/investigate/ipurl-communication-investigation', {
+      this.$axios.get('/yiiapi/investigate/IpurlCommunicationInvestigation', {
         params: {
           src_ip: this.url_search.src_ip,
           dst_ip: this.url_search.dst_ip,

@@ -120,7 +120,7 @@ export default {
     test () {
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
-          pathInfo: 'investigate/user-investigation',
+          pathInfo: 'investigate/UserInvestigation',
           method: 'GET',
         }
       })
@@ -158,7 +158,7 @@ export default {
     },
     get_data () {
       this.user_search.loading = true
-      this.$axios.get('/yiiapi/investigate/user-investigation', {
+      this.$axios.get('/yiiapi/investigate/UserInvestigation', {
         params: {
           username: this.user_search.username,
           host_ip: this.user_search.host_ip,
