@@ -649,8 +649,14 @@ export const asyncRouterMap = [
             path: '/system/setting/wizard',
             name: 'wizard',
             meta: {
-              title: '配置向导',
+              /*title: '配置向导',
               auth: '32',
+              icon: 'e-aside-none',
+              parentAuth: '31',
+              rootAuth: '27',
+              deep: 2,*/
+              title: '配置向导',
+              auth: '999',
               icon: 'e-aside-none',
               parentAuth: '31',
               rootAuth: '27',

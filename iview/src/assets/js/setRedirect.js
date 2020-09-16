@@ -82,7 +82,10 @@ export function setRedirect(per) {
         redirect = '/system/control/safe';
       }
     }else if(per.includes('31')){
-      if(per.includes('32')){
+      /*if(per.includes('32')){
+        redirect = '/system/setting/wizard';
+      }*/
+      if(per.includes('999')){
         redirect = '/system/setting/wizard';
       }else if(per.includes('33')){
         redirect = '/system/setting/electric';
