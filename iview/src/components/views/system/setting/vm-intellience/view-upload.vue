@@ -1,32 +1,14 @@
 <template>
   <div class="view-upload"
        v-cloak>
-   <!-- <uploader class="uploader-example"
-              ref="upload"
-              :options="options"
-              :autoStart='false'
-              :auto-upload="true"
-              :fileStatusText='fileStatusText'
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              >
-      <uploader-unsupport></uploader-unsupport>
-      <div class="upload_cont">
-        <uploader-btn class="select_btn"></uploader-btn>
-      </div>
-      <uploader-drop>
-        <span class="tips">请点击选择要导入的文件</span><br/>
-        <span class="tips">PDF、DOCX、XLS、XLSX、TXT</span>
-      </uploader-drop>
-      <uploader-list></uploader-list>
-    </uploader>-->
-   <!-- action="https://jsonplaceholder.typicode.com/posts/"-->
     <el-upload
       class="uploader-example"
       drag
+      :limit="5"
       ref="upload"
       :autoStart='false'
       :auto-upload="false"
+      :on-exceed="handleExceed"
       :before-upload="beforeUpload"
       :on-success="onFileSuccess"
       :on-remove="handleRemove"
@@ -46,21 +28,6 @@
       <el-button class="ok_btn"
                  @click="submit_exp_box">确定</el-button>
     </div>
-   <!-- <el-upload
-      class="uploader-example"
-      ref="upload"
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      :on-success="onFileSuccess"
-      :auto-upload="false">
-      <div class="upload_cont">
-        <uploader-btn class="select_btn"></uploader-btn>
-      </div>
-&lt;!&ndash;<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>&ndash;&gt;
-      <div slot="tip" class="el-upload__tip">PDF、DOCX、XLS、XLSX、TXTb</div>
-    </el-upload>
-    -->
   </div>
 </template>
 
@@ -71,17 +38,10 @@ export default {
     return {
       options: {
         target: '/yiiapi/intelligence/Upload',
-        chunkSize: '10048000',   //分块大小
-        testChunks: false     //是否开启服务器分片校验
+        chunkSize: '10048000',
+        testChunks: false
       },
-      fileList:[],
-      fileStatusText: {
-        success: '成功',
-        error: '错误',
-        uploading: '上传中',
-        paused: '暂停',
-        waiting: '等待'
-      },
+      fileList:[]
     }
   },
   methods: {
@@ -89,47 +49,37 @@ export default {
       return "/yiiapi/intelligence/Upload";
     },
     beforeUpload(file) {
+      console.log('beforeUpload')
       console.log(file)
       var testmsg=file.name.substring(file.name.lastIndexOf('.')+1)
       const extension = testmsg === 'xls'
       const extension2 = testmsg === 'xlsx'
-      const isLt2M = file.size / 1024 / 1024 < 100;
       if(!extension && !extension2) {
         this.$message({
           message: '上传文件只能是 xls、xlsx格式!',
           type: 'warning'
         });
       }
-       if(!isLt2M) {
-           this.$message({
-               message: '上传文件大小不能超过 100MB!',
-               type: 'warning'
-           });
-       }
-      return (extension || extension2) && isLt2M
-    },
-    // 上传
-    /*onFileAdded (file) {
-      file.pause()
-      if (file.size > 100 * 1024 * 1024) {
+      let fileFlag = false;
+      if (file.size > 1024 * 1024 * 100) {
         this.$message({
-          message: '上传文件大小不能超过 100MB!',
-          type: 'warning'
-        });
-        setTimeout(() => {
-          file.cancel()
-        }, 100)
-      } else {
-        setTimeout(() => {
-          file.resume();
-        }, 100)
+          message: "单个文件 " + file.name + " 不能大于100M",
+          type: "warning"
+        })
+        fileFlag = false;
+      } else if (file.size <= 0) {
+        this.$message({
+          message: "文件 " + file.name + " 不能为空",
+          type: "warning"
+        })
+        fileFlag = false;
       }
-    },*/
+      return (extension || extension2) && fileFlag
+    },
     onFileSuccess (rootFile, file, response, chunk) {
       console.log('成功');
-
       console.log(response)
-      this.$emit('titleChanged',false);
+     // this.$emit('titleChanged',false);
       this.$message({
         message: '导入成功！',
         type: 'success'
@@ -146,19 +96,19 @@ export default {
         type: 'error'
       });
     },
-    //
+    // 上传文件个数超过定义的数量
+    handleExceed (files, fileList) {
+      this.$message.warning('最多只能同时上传五个文件！');
+    },
+    //移除
     handleRemove(file, fileList) {
+      console.log('handleRemove')
       console.log(file, fileList);
     },
-    handlePreview(file) {
-      console.log(file);
-    },
-
-
     //确定
     submit_exp_box() {
       this.$refs.upload.submit();
-      this.$refs.upload.clearFiles();
+     // this.$refs.upload.clearFiles();
     },
     //取消
     closed_exp_box(){
