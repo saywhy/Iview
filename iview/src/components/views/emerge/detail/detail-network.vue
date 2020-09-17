@@ -69,7 +69,7 @@
               <div>
                 <el-menu class="el_menu_src"
                          mode="horizontal"
-                         menu-trigger='click'
+                         @mouseover="mouseover(item)"
                          @select="handleSelect_src">
                   <el-submenu :index="index+'0'"
                               :key="index"
@@ -104,6 +104,7 @@
                          @select="handleSelect_des">
                   <el-submenu :index="index+'0'"
                               :key="index"
+                              @mouseover="mouseover(item)"
                               v-for="(item,index) in detail_main.dest_ip">
                     <template slot="title">{{item}}</template>
                     <el-submenu :index="index+'1-1'">
@@ -966,17 +967,26 @@ export default {
           }
           this.detail_main.label = JSON.parse(this.detail_main.label);
           this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
-          this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
           this.detail_main.description = JSON.parse(this.detail_main.description);
-
-          this.detail_main.description_list = JSON.parse(this.detail_main.description_list);
+          if (this.detail_main.description_list) {
+            this.detail_main.description_list = JSON.parse(this.detail_main.description_list);
+          }
+          if (this.detail_main.category_list) {
+            this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
+          }
+          if (this.detail_main.dest_label_list) {
+            this.detail_main.dest_label_list = JSON.parse(this.detail_main.dest_label_list);
+          }
+          if (this.detail_main.src_label_list) {
+            this.detail_main.src_label_list = JSON.parse(this.detail_main.src_label_list);
+          }
+          if (this.detail_main.security_domain_list) {
+            this.detail_main.security_domain_list = JSON.parse(this.detail_main.security_domain_list);
+          }
           this.detail_main.dest_ip = JSON.parse(this.detail_main.dest_ip);
           this.detail_main.dest_label = JSON.parse(this.detail_main.dest_label);
-          this.detail_main.dest_label_list = JSON.parse(this.detail_main.dest_label_list);
-          this.detail_main.security_domain_list = JSON.parse(this.detail_main.security_domain_list);
           this.detail_main.src_ip = JSON.parse(this.detail_main.src_ip);
           this.detail_main.src_label = JSON.parse(this.detail_main.src_label);
-          this.detail_main.src_label_list = JSON.parse(this.detail_main.src_label_list);
           this.detail_main.user = JSON.parse(this.detail_main.user);
           this.detail_main.json_description = this.detail_main.description.join(",");
           if (this.detail_main.workorder_id == "0") {
@@ -1068,75 +1078,11 @@ export default {
           break;
       }
     },
-    //加入外部链接
-    JoinExternalDynamics (ip_addr) {
-      console.log(ip_addr);
-      this.$confirm(
-        "本地址会被加入外部动态列表，第三方设备读取后可以对本地址进行告警提示或者拦截。",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      )
-        .then(() => {
-          var join = "";
-          // horizontalthreat  横向威胁告警  lateral
-          // externalthreat  外部威胁告警  outside
-          // outreachthreat  外联威胁告警  outreath
-          switch (this.$route.query.type) {
-            case "alert":
-              join = "/yiiapi/alert/JoinExternalDynamics";
-              break;
-            case "asset":
-              join = "/yiiapi/asset/JoinExternalDynamics";
-              break;
-            case "lateral":
-              join = "/yiiapi/horizontalthreat/JoinExternalDynamics";
-              break;
-            case "outside":
-              join = "/yiiapi/externalthreat/JoinExternalDynamics";
-              break;
-            case "outreath":
-              join = "/yiiapi/outreachthreat/JoinExternalDynamics";
-              break;
-            default:
-              break;
-          }
-          this.loading = true;
-          this.$axios
-            .post(join, {
-              addr: ip_addr,
-              type: 1,
-            })
-            .then((response) => {
-              this.loading = false;
-              let { status, data } = response.data;
-              // console.log(data);
-              if (status == 0) {
-                this.$message({
-                  message: "加入外部动态列表成功!",
-                  type: "success",
-                });
-              } else {
-                this.$message({
-                  message: data.msg,
-                  type: "error",
-                });
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消操作",
-          });
-        });
+    mouseover (item) {
+      this.more.name = item
+      console.log(item);
     },
+
     handleSelect_des (key, keyPath) {
       // console.log(key, keyPath);
       switch (key.substr(key.length - 1, 1)) {
@@ -1247,6 +1193,75 @@ export default {
           console.log(error);
         });
     },
+    //加入外部链接
+    JoinExternalDynamics (ip_addr) {
+      console.log(ip_addr);
+      this.$confirm(
+        "本地址会被加入外部动态列表，第三方设备读取后可以对本地址进行告警提示或者拦截。",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          var join = "";
+          // horizontalthreat  横向威胁告警  lateral
+          // externalthreat  外部威胁告警  outside
+          // outreachthreat  外联威胁告警  outreath
+          switch (this.$route.query.type) {
+            case "alert":
+              join = "/yiiapi/alert/JoinExternalDynamics";
+              break;
+            case "asset":
+              join = "/yiiapi/asset/JoinExternalDynamics";
+              break;
+            case "lateral":
+              join = "/yiiapi/horizontalthreat/JoinExternalDynamics";
+              break;
+            case "outside":
+              join = "/yiiapi/externalthreat/JoinExternalDynamics";
+              break;
+            case "outreath":
+              join = "/yiiapi/outreachthreat/JoinExternalDynamics";
+              break;
+            default:
+              break;
+          }
+          this.loading = true;
+          this.$axios
+            .post(join, {
+              addr: ip_addr,
+              type: 1,
+            })
+            .then((response) => {
+              this.loading = false;
+              let { status, data } = response.data;
+              // console.log(data);
+              if (status == 0) {
+                this.$message({
+                  message: "加入外部动态列表成功!",
+                  type: "success",
+                });
+              } else {
+                this.$message({
+                  message: data.msg,
+                  type: "error",
+                });
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消操作",
+          });
+        });
+    },
     show_more_active_src () {
       this.more.src = !this.more.src;
     },
@@ -1272,16 +1287,16 @@ export default {
           alarm = "/yiiapi/alerts/";
           break;
         case "asset":
-          alarm = "/yiiapi/asset/do-alarm";
+          alarm = "/yiiapi/assets/";
           break;
         case "lateral":
-          alarm = "/yiiapi/horizontalthreat/do-alarm";
+          alarm = "/yiiapi/horizontalthreats/";
           break;
         case "outside":
-          alarm = "/yiiapi/externalthreat/do-alarm";
+          alarm = "/yiiapi/externalthreats/";
           break;
         case "outreath":
-          alarm = "/yiiapi/outreachthreat/do-alarm";
+          alarm = "/yiiapi/outreachthreats/";
           break;
         default:
           break;

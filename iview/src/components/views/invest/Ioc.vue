@@ -299,7 +299,7 @@ export default {
         );
         setTimeout(() => {
           this.get_data();
-        }, 100);
+        }, 500);
         // file.cancel()
       }
 
@@ -422,7 +422,7 @@ export default {
           id_list.push(element.id)
         });
         console.log(id_list);
-        this.$axios.delete('/yiiapi/investigate/ioc-scanning-del', {
+        this.$axios.delete('/yiiapi/investigate/IocScanningDel', {
           data: {
             id: id_list
           }

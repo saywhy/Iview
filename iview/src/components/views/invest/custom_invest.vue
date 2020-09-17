@@ -1,40 +1,55 @@
-
 <template>
-  <div id="custom_invest"
-       class="custom_invest">
+  <div id="common_invest"
+       class="common_invest">
     <div class="invest_box">
-      打算大苏打
-      <el-input placeholder="请输入内容"
-                v-model="input3"
-                class="input-with-select">
-        <el-select v-model="select"
-                   slot="prepend"
-                   placeholder="请选择">
-          <el-option label="餐厅名"
-                     value="1"></el-option>
-          <el-option label="订单号"
-                     value="2"></el-option>
-          <el-option label="用户电话"
-                     value="3"></el-option>
-        </el-select>
-        <el-button slot="append"
-                   icon="el-icon-search"></el-button>
-      </el-input>
+      <el-tabs v-model="activeName"
+               class="reset_tab">
+        <el-tab-pane label="自定义追查"
+                     class="tabs-item"
+                     name="first">
+          adadsad
+
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
+import vmEmergePicker from "@/components/common/vm-emerge-picker";
 import { eventBus } from '@/components/common/eventBus.js';
 export default {
-  name: "custom_invest",
+  name: "common_invest",
+  components: {
+    vmEmergePicker,
+  },
   data () {
     return {
+      activeName: 'first',
     };
+  },
+  computed: {
+
   },
   mounted () {
     this.check_passwd();
+    this.test()
   },
   methods: {
+    // 测试600专用
+    test () {
+      this.$axios.get('/yiiapi/site/CheckAuthExist', {
+        params: {
+          pathInfo: 'investigate/DnsInvestigation',
+          method: 'GET',
+        }
+      })
+        .then(response => {
+
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
     // 测试密码过期
     check_passwd () {
       this.$axios.get('/yiiapi/site/CheckPasswdReset')
@@ -55,26 +70,64 @@ export default {
           }
         })
     },
+    get_data () {
+      this.dns_search.loading = true
+      this.$axios.get('/yiiapi/investigate/DnsInvestigation', {
+        params: {
+          host_ip: this.dns_search.host_ip,
+          dns_ip: this.dns_search.dns_ip,
+          domain: this.dns_search.domain,
+          resolve_ip: this.dns_search.resolve_ip,
+          ttl: this.dns_search.ttl,
+          resolve_result: this.dns_search.resolve_result,
+          start_time: this.dns_search.start_time,
+          end_time: this.dns_search.end_time,
+          current_page: this.dns_search.page,
+          per_page_count: this.dns_search.rows
+        }
+      })
+        .then(response => {
+          this.dns_search.loading = false
+          let { status, data } = response.data;
+          if (status == '602') {
+            return false
+          }
+          this.dns_list = data
+          this.dns_list.data.forEach((item, index) => {
+            item.index_cn = index + 1
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
 
-  },
-  filters: {
-    filterType: function (val) {
-      if (val == '') return;
-      if (val == undefined) return;
-      if (val == 0) return '0B';
-      var k = 1024;
-      var size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-        i = Math.floor(Math.log(val) / Math.log(k));
-      return (val / Math.pow(k, i)).toPrecision(3) + ' ' + size[i]
-    }
+    // 分页
+    handleSizeChange (val) {
+      this.dns_search.rows = val;
+      this.dns_search.page = 1
+      this.get_data();
+    },
+    handleCurrentChange (val) {
+      console.log(val);
+      this.dns_search.page = val
+      this.get_data();
+    },
+    changeTime (data) {
+      console.log(data);
+      if (data) {
+        this.dns_search.start_time = parseInt(data[0].valueOf() / 1000);
+        this.dns_search.end_time = parseInt(data[1].valueOf() / 1000)
+      } else {
+        this.dns_search.start_time = ''
+        this.dns_search.end_time = ''
+      }
+    },
   }
 }
 </script>
-<style lang="less">
+<style  lang="less">
 @import '../../../assets/css/less/reset_css/reset_table.less';
 @import '../../../assets/css/less/reset_css/reset_invest.less';
 @import '../../../assets/css/less/reset_css/reset_tab.less';
 </style>
-
-
-

@@ -100,7 +100,7 @@ Vue.filter('network_event', function (value) {
 Vue.filter('ip_whois', function (value) {
   switch (value) {
     case 'MX':
-      return '时间'
+      return '邮件服务器'
       break;
     case 'MX_ips':
       return '邮件服务器IP'
