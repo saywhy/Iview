@@ -80,13 +80,21 @@ export default {
       console.log('成功');
       console.log(resp);
 
+      let {status,msg,data} = resp[0].response;
 
-      this.$refs.upload.clearFiles();
-      this.$emit('titleChanged',false);
-      this.$message({
-        message: '导入成功！',
-        type: 'success'
-      });
+      if(status == 0){
+        this.$refs.upload.clearFiles();
+        this.$emit('titleChanged',false);
+        this.$message({
+          message: '导入成功！',
+          type: 'success'
+        });
+      }else {
+        this.$message({
+          message: msg[Object.keys(msg)[0]][0],
+          type: 'error',
+        });
+      }
     },
     onFileProgress (file) {
       console.log('333')
