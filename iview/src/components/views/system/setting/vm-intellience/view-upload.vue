@@ -74,17 +74,13 @@ export default {
         })
         fileFlag = false;
       }
-     /* console.log('tishi')
-      console.log((extension || extension2) && fileFlag)
-      console.log((extension || extension2) )
-      console.log(extension)
-      console.log(extension2)
-      console.log(fileFlag)*/
       return (extension || extension2) && fileFlag;
     },
-    onFileSuccess (rootFile, file, response, chunk) {
+    onFileSuccess (rootFile, file, resp, chunk) {
       console.log('成功');
-      console.log(response)
+      console.log(resp);
+
+
       this.$refs.upload.clearFiles();
       this.$emit('titleChanged',false);
       this.$message({

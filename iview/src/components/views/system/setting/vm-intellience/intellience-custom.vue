@@ -567,21 +567,6 @@
       },
       //批量导出
       exp_box_2() {
-        /*this.$confirm('是否确定导出自定义情报?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$axios.get('/yiiapi/intelligence/Template')
-            .then(resp => {
-
-            })
-            .catch(error => {
-              console.log(error);
-            })
-        }).catch(() => {
-          this.$message({ type: 'info', message: '已取消' });
-        });*/
         var url1 = "/yiiapi/intelligence/Export";
         window.location.href = url1;
       },

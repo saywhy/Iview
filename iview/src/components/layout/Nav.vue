@@ -264,17 +264,15 @@ export default {
 
     closed_edit_box () {
       this.pass_state = false;
-      this.user_edit = {
-        password: "",
-        Re_password: "",
-        old_password: "",
-        department: "",
-        mobile: "",
-        email_addr: "",
-        role: "",
-        id: "",
-        allow_ip: ''
-      };
+      this.user_edit.password = '';
+      this.user_edit.Re_password = '';
+      this.user_edit.old_password = '';
+      this.user_edit.department = '';
+      this.user_edit.mobile = '';
+      this.user_edit.email_addr = '';
+      this.user_edit.role = '';
+      this.user_edit.id = '';
+      this.user_edit.allow_ip = '';
     },
     edit_user () {
       if (this.user_edit.password != this.user_edit.Re_password) {
@@ -304,19 +302,19 @@ export default {
         );
         return false
       }
-      if (this.user_edit.mobile == '') {
+      if (this.user_edit.email_addr == '') {
         this.$message(
           {
-            message: '手机号不能为空',
+            message: '邮箱不能为空',
             type: 'error',
           }
         );
         return false
       }
-      if (this.user_edit.email_addr == '') {
+      if (this.user_edit.mobile == '') {
         this.$message(
           {
-            message: '邮箱不能为空',
+            message: '手机号不能为空',
             type: 'error',
           }
         );
@@ -366,7 +364,7 @@ export default {
             );
           }
 
-          this.user_edit = {
+          /*this.user_edit = {
             password: "",
             Re_password: "",
             old_password: "",
@@ -376,7 +374,8 @@ export default {
             role: "",
             id: "",
             allow_ip: ''
-          };
+          };*/
+
         })
         .catch(error => {
           console.log(error);
