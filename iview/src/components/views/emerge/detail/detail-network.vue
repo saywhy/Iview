@@ -777,18 +777,6 @@ export default {
     return {
       loading: false,
       title_name: "告警详情",
-      options: [
-        {
-          value: "zhinan",
-          label: "指南",
-          children: [
-            {
-              value: "shejiyuanze",
-              label: "设计原则",
-            },
-          ],
-        },
-      ],
       selectedOptions: "",
       more: {
         src: false,
@@ -946,102 +934,248 @@ export default {
     activeIndex (item) { },
     alert_detail () {
       this.loading = true;
-      this.$axios
-        .get("/yiiapi/alerts/" + this.$route.query.detail)
-        .then((resp) => {
-          this.loading = false;
-          let { status, data, msg } = resp.data;
-          if (status == 1) {
-            this.$message({
-              message: msg,
-              type: "error",
-            });
-            return false;
-          }
-          this.detailArray = [];
-          this.detail_main = data;
-          // this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
-          // this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
-          if (this.detail_main.detect_engine != 'LOGDF') {
-            this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
-          }
-          this.detail_main.label = JSON.parse(this.detail_main.label);
-          this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
-          this.detail_main.description = JSON.parse(this.detail_main.description);
-          if (this.detail_main.description_list) {
-            this.detail_main.description_list = JSON.parse(this.detail_main.description_list);
-          }
-          if (this.detail_main.category_list) {
-            this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
-          }
-          if (this.detail_main.dest_label_list) {
-            this.detail_main.dest_label_list = JSON.parse(this.detail_main.dest_label_list);
-          }
-          if (this.detail_main.src_label_list) {
-            this.detail_main.src_label_list = JSON.parse(this.detail_main.src_label_list);
-          }
-          if (this.detail_main.security_domain_list) {
-            this.detail_main.security_domain_list = JSON.parse(this.detail_main.security_domain_list);
-          }
-          this.detail_main.dest_ip = JSON.parse(this.detail_main.dest_ip);
-          this.detail_main.dest_label = JSON.parse(this.detail_main.dest_label);
-          this.detail_main.src_ip = JSON.parse(this.detail_main.src_ip);
-          this.detail_main.src_label = JSON.parse(this.detail_main.src_label);
-          this.detail_main.user = JSON.parse(this.detail_main.user);
-          this.detail_main.json_description = this.detail_main.description.join(",");
-          if (this.detail_main.workorder_id == "0") {
-            this.detail_main.work_order_status = "未关联工单";
-            this.detail_main.work_name = "";
-          } else {
-            switch (this.detail_main.workorder_status + "") {
-              case "0":
-                this.detail_main.work_order_status = "待分配";
-                break;
-              case "1":
-                this.detail_main.work_order_status = "已分配";
-                break;
-              case "2":
-                this.detail_main.work_order_status = "处置中";
-                break;
-              case "3":
-                this.detail_main.work_order_status = "已处置";
-                break;
-              case "4":
-                this.detail_main.work_order_status = "已取消";
-                break;
-              default:
-                break;
+      var join = "";
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      // locality  本机威胁告警  outreath
+      console.log(this.$route.query.type);
+      switch (this.$route.query.type) {
+        case "alert":
+          join = "/yiiapi/alerts/";
+          alert_detail(join)
+          break;
+        case "asset":
+          join = "/yiiapi/riskasset/AlertDetails/";
+          alert_detail_risk(join)
+          break;
+        case "lateral":
+          join = "/yiiapi/horizontalthreats/";
+          alert_detail(join)
+          break;
+        case "locality":
+          join = "/yiiapi/nativethreats/";
+          alert_detail(join)
+          break;
+        case "outside":
+          join = "/yiiapi/externalthreats/";
+          alert_detail(join)
+          break;
+        case "outreath":
+          join = "/yiiapi/outreachthreats/";
+          alert_detail(join)
+          break;
+        default:
+          break;
+      }
+      function alert_detail (join) {
+        this.$axios
+          .get(join + this.$route.query.detail)
+          .then((resp) => {
+            this.loading = false;
+            let { status, data, msg } = resp.data;
+            if (status == 1) {
+              this.$message({
+                message: msg,
+                type: "error",
+              });
+              return false;
             }
-            this.detail_main.work_name = this.detail_main.workorder_name;
-          }
-          this.detail_main.selected = true;
-          this.detailArray.push(this.detail_main);
-          this.detail_main.alarm_merger.map((item) => {
-            item.selected = false;
-            this.detailArray.push(item);
+            this.detailArray = [];
+            this.detail_main = data;
+            // this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
+            // this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
+            if (this.detail_main.detect_engine != 'LOGDF') {
+              this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
+            }
+            this.detail_main.label = JSON.parse(this.detail_main.label);
+            this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
+            this.detail_main.description = JSON.parse(this.detail_main.description);
+            if (this.detail_main.description_list) {
+              this.detail_main.description_list = JSON.parse(this.detail_main.description_list);
+            }
+            if (this.detail_main.category_list) {
+              this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
+            }
+            if (this.detail_main.dest_label_list) {
+              this.detail_main.dest_label_list = JSON.parse(this.detail_main.dest_label_list);
+            }
+            if (this.detail_main.src_label_list) {
+              this.detail_main.src_label_list = JSON.parse(this.detail_main.src_label_list);
+            }
+            if (this.detail_main.security_domain_list) {
+              this.detail_main.security_domain_list = JSON.parse(this.detail_main.security_domain_list);
+            }
+            this.detail_main.dest_ip = JSON.parse(this.detail_main.dest_ip);
+            this.detail_main.dest_label = JSON.parse(this.detail_main.dest_label);
+            this.detail_main.src_ip = JSON.parse(this.detail_main.src_ip);
+            this.detail_main.src_label = JSON.parse(this.detail_main.src_label);
+            this.detail_main.user = JSON.parse(this.detail_main.user);
+            this.detail_main.json_description = this.detail_main.description.join(",");
+            if (this.detail_main.workorder_id == "0") {
+              this.detail_main.work_order_status = "未关联工单";
+              this.detail_main.work_name = "";
+            } else {
+              switch (this.detail_main.workorder_status + "") {
+                case "0":
+                  this.detail_main.work_order_status = "待分配";
+                  break;
+                case "1":
+                  this.detail_main.work_order_status = "已分配";
+                  break;
+                case "2":
+                  this.detail_main.work_order_status = "处置中";
+                  break;
+                case "3":
+                  this.detail_main.work_order_status = "已处置";
+                  break;
+                case "4":
+                  this.detail_main.work_order_status = "已取消";
+                  break;
+                default:
+                  break;
+              }
+              this.detail_main.work_name = this.detail_main.workorder_name;
+            }
+            this.detail_main.selected = true;
+            this.detailArray.push(this.detail_main);
+            this.detail_main.alarm_merger.map((item) => {
+              item.selected = false;
+              this.detailArray.push(item);
+            });
+            this.table_alerts.tableData.push(this.detail_main)
+            this.get_Workorders();
+
+          })
+          .catch((error) => {
+            console.log(error);
           });
-          // console.log(this.detail_main);
+      }
+      function alert_detail_risk (join) {
+        this.$axios
+          .get(join, {
+            params: {
+              id: this.$route.query.detail
+            }
+          })
+          .then((resp) => {
+            this.loading = false;
+            let { status, data, msg } = resp.data;
+            if (status == 1) {
+              this.$message({
+                message: msg,
+                type: "error",
+              });
+              return false;
+            }
+            this.detailArray = [];
+            this.detail_main = data;
+            // this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
+            // this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
+            if (this.detail_main.detect_engine != 'LOGDF') {
+              this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
+            }
+            this.detail_main.label = JSON.parse(this.detail_main.label);
+            this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
+            this.detail_main.description = JSON.parse(this.detail_main.description);
+            if (this.detail_main.description_list) {
+              this.detail_main.description_list = JSON.parse(this.detail_main.description_list);
+            }
+            if (this.detail_main.category_list) {
+              this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
+            }
+            if (this.detail_main.dest_label_list) {
+              this.detail_main.dest_label_list = JSON.parse(this.detail_main.dest_label_list);
+            }
+            if (this.detail_main.src_label_list) {
+              this.detail_main.src_label_list = JSON.parse(this.detail_main.src_label_list);
+            }
+            if (this.detail_main.security_domain_list) {
+              this.detail_main.security_domain_list = JSON.parse(this.detail_main.security_domain_list);
+            }
+            this.detail_main.dest_ip = JSON.parse(this.detail_main.dest_ip);
+            this.detail_main.dest_label = JSON.parse(this.detail_main.dest_label);
+            this.detail_main.src_ip = JSON.parse(this.detail_main.src_ip);
+            this.detail_main.src_label = JSON.parse(this.detail_main.src_label);
+            this.detail_main.user = JSON.parse(this.detail_main.user);
+            this.detail_main.json_description = this.detail_main.description.join(",");
+            if (this.detail_main.workorder_id == "0") {
+              this.detail_main.work_order_status = "未关联工单";
+              this.detail_main.work_name = "";
+            } else {
+              switch (this.detail_main.workorder_status + "") {
+                case "0":
+                  this.detail_main.work_order_status = "待分配";
+                  break;
+                case "1":
+                  this.detail_main.work_order_status = "已分配";
+                  break;
+                case "2":
+                  this.detail_main.work_order_status = "处置中";
+                  break;
+                case "3":
+                  this.detail_main.work_order_status = "已处置";
+                  break;
+                case "4":
+                  this.detail_main.work_order_status = "已取消";
+                  break;
+                default:
+                  break;
+              }
+              this.detail_main.work_name = this.detail_main.workorder_name;
+            }
+            this.detail_main.selected = true;
+            this.detailArray.push(this.detail_main);
+            this.detail_main.alarm_merger.map((item) => {
+              item.selected = false;
+              this.detailArray.push(item);
+            });
+            this.table_alerts.tableData.push(this.detail_main)
+            this.get_Workorders();
 
-          this.table_alerts.tableData.push(this.detail_main)
-          this.get_Workorders();
-
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
     // 获取告警工单状态
     get_Workorders () {
+      var join = "";
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      // locality  本机威胁告警  outreath
+      console.log(this.$route.query.type);
+      switch (this.$route.query.type) {
+        case "alert":
+          join = "/yiiapi/alert/Workorders";
+          break;
+        case "asset":
+          join = "/yiiapi/riskasset/Workorders";
+          break;
+        case "lateral":
+          join = "/yiiapi/horizontalthreat/Workorders";
+          break;
+        case "locality":
+          join = "/yiiapi/nativethreat/Workorders";
+          break;
+        case "outside":
+          join = "/yiiapi/externalthreat/Workorders";
+          break;
+        case "outreath":
+          join = "/yiiapi/outreachthreat/Workorders";
+          break;
+        default:
+          break;
+      }
       this.$axios
-        .get("/yiiapi/alert/Workorders", {
+        .get(join, {
           params: {
             id: this.detail_main.id
           }
         })
         .then((resp) => {
-          // console.log(resp);
-
-
         })
         .catch((error) => {
           console.log(error);
@@ -1210,15 +1344,20 @@ export default {
           // horizontalthreat  横向威胁告警  lateral
           // externalthreat  外部威胁告警  outside
           // outreachthreat  外联威胁告警  outreath
+          // locality  本机威胁告警  outreath
+          console.log(this.$route.query.type);
           switch (this.$route.query.type) {
             case "alert":
               join = "/yiiapi/alert/JoinExternalDynamics";
               break;
             case "asset":
-              join = "/yiiapi/asset/JoinExternalDynamics";
+              join = "/yiiapi/riskasset/JoinExternalDynamics";
               break;
             case "lateral":
               join = "/yiiapi/horizontalthreat/JoinExternalDynamics";
+              break;
+            case "locality":
+              join = "/yiiapi/nativethreat/JoinExternalDynamics";
               break;
             case "outside":
               join = "/yiiapi/externalthreat/JoinExternalDynamics";
@@ -1278,55 +1417,93 @@ export default {
       // console.log(item);
       var id_list = [];
       id_list.push(this.$route.query.detail);
-      var alarm = "";
+      var join = "";
       // horizontalthreat  横向威胁告警  lateral
       // externalthreat  外部威胁告警  outside
       // outreachthreat  外联威胁告警  outreath
+      // locality  本机威胁告警  outreath
+      console.log(this.$route.query.type);
       switch (this.$route.query.type) {
         case "alert":
-          alarm = "/yiiapi/alerts/";
+          join = "/yiiapi/alerts/";
+          changeState(join)
           break;
         case "asset":
-          alarm = "/yiiapi/assets/";
+          join = "/yiiapi/riskasset/DoAlarm";
+          changeStateRisk(join)
           break;
         case "lateral":
-          alarm = "/yiiapi/horizontalthreats/";
+          join = "/yiiapi/horizontalthreats/";
+          changeState(join)
+          break;
+        case "locality":
+          join = "/yiiapi/nativethreats/";
+          changeState(join)
           break;
         case "outside":
-          alarm = "/yiiapi/externalthreats/";
+          join = "/yiiapi/externalthreats/";
+          changeState(join)
           break;
         case "outreath":
-          alarm = "/yiiapi/outreachthreats/";
+          join = "/yiiapi/outreachthreats/";
+          changeState(join)
           break;
         default:
           break;
       }
-      this.loading = true;
-      this.$axios
-        .put(alarm + id_list.join(","), {
-          status: item,
-        })
-        .then((response) => {
-          this.loading = false;
-          let { status, data } = response.data;
-          // console.log(data);
-          // console.log(response);
-          if (status == 0) {
-            this.alert_detail();
-            this.$message({
-              message: "修改状态成功!",
-              type: "success",
-            });
-          } else {
-            this.$message({
-              message: response.data.msg,
-              type: "error",
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      function changeState (join) {
+        this.loading = true;
+        this.$axios
+          .put(join + id_list.join(","), {
+            status: item,
+          })
+          .then((response) => {
+            this.loading = false;
+            let { status, data } = response.data;
+            if (status == 0) {
+              this.alert_detail();
+              this.$message({
+                message: "修改状态成功!",
+                type: "success",
+              });
+            } else {
+              this.$message({
+                message: response.data.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      function changeStateRisk (join) {
+        this.loading = true;
+        this.$axios
+          .put(join, {
+            id: id_list,
+            status: item,
+          })
+          .then((response) => {
+            this.loading = false;
+            let { status, data } = response.data;
+            if (status == 0) {
+              this.alert_detail();
+              this.$message({
+                message: "修改状态成功!",
+                type: "success",
+              });
+            } else {
+              this.$message({
+                message: response.data.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
 
     closed_task_new () {
@@ -1418,32 +1595,37 @@ export default {
           label_list.push(element.name);
         }
       });
-      var label = "";
+      var join = "";
       // horizontalthreat  横向威胁告警  lateral
       // externalthreat  外部威胁告警  outside
       // outreachthreat  外联威胁告警  outreath
+      // locality  本机威胁告警  outreath
+      console.log(this.$route.query.type);
       switch (this.$route.query.type) {
         case "alert":
-          label = "/yiiapi/alert/LabelEdit";
+          join = "/yiiapi/alert/LabelEdit";
           break;
         case "asset":
-          label = "/yiiapi/asset/LabelEdit";
+          join = "/yiiapi/riskasset/LabelEdit";
           break;
         case "lateral":
-          label = "/yiiapi/horizontalthreat/LabelEdit";
+          join = "/yiiapi/horizontalthreat/LabelEdit";
+          break;
+        case "locality":
+          join = "/yiiapi/nativethreat/LabelEdit";
           break;
         case "outside":
-          label = "/yiiapi/externalthreat/LabelEdit";
+          join = "/yiiapi/externalthreat/LabelEdit";
           break;
         case "outreath":
-          label = "/yiiapi/outreachthreat/LabelEdit";
+          join = "/yiiapi/outreachthreat/LabelEdit";
           break;
         default:
           break;
       }
       this.loading = true;
       this.$axios
-        .put(label, {
+        .put(join, {
           id: this.$route.query.detail,
           label: label_list,
         })
@@ -1511,6 +1693,42 @@ export default {
 
     // 跳转到工单详情
     Goto_workorder () {
+      var join = "";
+      // horizontalthreat  横向威胁告警  lateral
+      // externalthreat  外部威胁告警  outside
+      // outreachthreat  外联威胁告警  outreath
+      // locality  本机威胁告警  outreath
+      console.log(this.$route.query.type);
+      switch (this.$route.query.type) {
+        case "alert":
+          join = "/yiiapi/alerts/";
+          changeState(join)
+          break;
+        case "asset":
+          join = "/yiiapi/riskasset/DoAlarm";
+          changeStateRisk(join)
+          break;
+        case "lateral":
+          join = "/yiiapi/horizontalthreats/";
+          changeState(join)
+          break;
+        case "locality":
+          join = "/yiiapi/nativethreats/";
+          changeState(join)
+          break;
+        case "outside":
+          join = "/yiiapi/externalthreats/";
+          changeState(join)
+          break;
+        case "outreath":
+          join = "/yiiapi/outreachthreats/";
+          changeState(join)
+          break;
+        default:
+          break;
+      }
+
+
       switch (this.$route.query.type) {
         case "alert":
           this.$router.push({
@@ -1527,6 +1745,15 @@ export default {
             query: {
               id: this.detail_main.workorder_id,
               type: "asset",
+            },
+          });
+          break;
+        case "locality":
+          this.$router.push({
+            path: "/detail/works",
+            query: {
+              id: this.detail_main.workorder_id,
+              type: "locality",
             },
           });
           break;
@@ -1561,164 +1788,12 @@ export default {
           break;
       }
     },
-
-    // 添加到工单
-    //获取工单列表
-    get_worksheets_list () {
-      var workorder_list = "";
-      var workorder_type = "";
-      // horizontalthreat  横向威胁告警  lateral
-      // externalthreat  外部威胁告警  outside
-      // outreachthreat  外联威胁告警  outreath
-      switch (this.$route.query.type) {
-        case "alert":
-          workorder_list = "/yiiapi/alert/workorder-list";
-          workorder_type = "alert";
-          break;
-        case "asset":
-          workorder_list = "/yiiapi/asset/workorder-list";
-          workorder_type = "asset";
-          break;
-        case "lateral":
-          workorder_list = "/yiiapi/horizontalthreat/workorder-list";
-          workorder_type = "alert";
-          break;
-        case "outside":
-          workorder_list = "/yiiapi/externalthreat/workorder-list";
-          workorder_type = "alert";
-          break;
-        case "outreath":
-          workorder_list = "/yiiapi/outreachthreat/workorder-list";
-          workorder_type = "alert";
-          break;
-        default:
-          break;
-      }
-
-      this.$axios
-        .get(workorder_list, {
-          params: {
-            page: this.worksheets_data.page,
-            rows: this.worksheets_data.rows,
-            type: workorder_type,
-          },
-        })
-        .then((resp) => {
-          let { status, data } = resp.data;
-          // console.log(data);
-          // console.log(status);
-          if (status == 0) {
-            // console.log(data);
-            this.worksheets_list = data;
-            this.worksheets_list.pageNow = data.pageNow * 1;
-            this.worksheets_data.pop = true;
-            this.worksheets_list.data.forEach((element) => {
-              element.perator_cn = JSON.parse(element.perator).join(",");
-              this.worksheets_data.level_list.forEach((item) => {
-                if (element.priority == item.value) {
-                  element.priority_cn = item.label;
-                }
-              });
-              this.worksheets_data.status_type.forEach((ele, index) => {
-                if (element.status == index) {
-                  element.status_cn = this.worksheets_data.status_type[index];
-                }
-              });
-            });
-          }
-        });
-    },
-    handleSizeChange_add (val) {
-      this.worksheets_data.rows = val;
-      this.worksheets_data.page = 1;
-      this.worksheets_data.tableRadio = {};
-      this.get_worksheets_list();
-    },
-    handleCurrentChange_add (val) {
-      this.worksheets_data.page = val;
-      this.worksheets_data.tableRadio = {};
-      this.get_worksheets_list();
-    },
-
     // -新加到工单取消状态
     add_closed_state () {
       this.worksheets_data.pop = false;
       this.table_add_works.multipleSelection = []
-
     },
 
-    //新加到工单确定
-    add_ok_worksheets () {
-      // console.log(this.worksheets_data.tableRadio);
-      if (Object.keys(this.worksheets_data.tableRadio).length == 0) {
-        this.$message({
-          message: "请选择工单！",
-          type: "warning",
-        });
-        return false;
-      }
-      // this.worksheets_data.tableRadio
-      var te_alert = [];
-      JSON.parse(this.worksheets_data.tableRadio.te_alert).forEach(
-        (element) => {
-          if (element != "") {
-            te_alert.push(element * 1);
-          }
-        }
-      );
-      te_alert.push(this.$route.query.detail * 1);
-      // console.log(te_alert);
-      var add_workorder = "";
-      // horizontalthreat  横向威胁告警  lateral
-      // externalthreat  外部威胁告警  outside
-      // outreachthreat  外联威胁告警  outreath
-      switch (this.$route.query.type) {
-        case "alert":
-          add_workorder = "/yiiapi/alert/AddWorkorder";
-          break;
-        case "asset":
-          add_workorder = "/yiiapi/asset/AddWorkorder";
-          break;
-        case "lateral":
-          add_workorder = "/yiiapi/horizontalthreat/AddWorkorder";
-          break;
-        case "outside":
-          add_workorder = "/yiiapi/externalthreat/AddWorkorder";
-          break;
-        case "outreath":
-          add_workorder = "/yiiapi/outreachthreat/AddWorkorder";
-          break;
-        default:
-          break;
-      }
-      this.loading = true;
-      this.$axios
-        .post(add_workorder, {
-          id: this.worksheets_data.tableRadio.id,
-          type: "alert",
-          name: this.worksheets_data.tableRadio.name,
-          perator: JSON.parse(this.worksheets_data.tableRadio.perator),
-          priority: this.worksheets_data.tableRadio.priority,
-          remind: JSON.parse(this.worksheets_data.tableRadio.remind),
-          remarks: this.worksheets_data.tableRadio.remarks,
-          te_alert: te_alert,
-        })
-        .then((resp) => {
-          this.loading = false;
-          let { status, msg, data } = resp.data;
-          // console.log(data);
-          if (status == 0) {
-            this.$message.success("添加成功");
-            this.alert_detail();
-          } else if (status == 1) {
-            this.$message.error(msg);
-          }
-          this.add_closed_state();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     ///----------------------------------------------新建工单
     /***************新加到工单*****************/
 
@@ -1767,8 +1842,12 @@ export default {
           workorder_type = "alert";
           break;
         case "asset":
-          workorder_list = "/yiiapi/asset/WorkorderList";
+          workorder_list = "/yiiapi/riskasset/WorkorderList";
           workorder_type = "asset";
+          break;
+        case "locality":
+          workorder_list = "/yiiapi/nativethreat/WorkorderList";
+          workorder_type = "alert";
           break;
         case "lateral":
           workorder_list = "/yiiapi/horizontalthreat/WorkorderList";
@@ -1876,32 +1955,37 @@ export default {
         // console.log(this.add_params.perator);
         this.loading = true;
 
-        var add_workorder = "";
+
+        var join = "";
         // horizontalthreat  横向威胁告警  lateral
         // externalthreat  外部威胁告警  outside
         // outreachthreat  外联威胁告警  outreath
+        // locality  本机威胁告警  outreath
         switch (this.$route.query.type) {
           case "alert":
-            add_workorder = "/yiiapi/alert/AddWorkorder";
+            join = "/yiiapi/alert/AddWorkorder";
             break;
           case "asset":
-            add_workorder = "/yiiapi/asset/AddWorkorder";
+            join = "/yiiapi/riskasset/AddWorkorder";
+            break;
+          case "locality":
+            join = "/yiiapi/nativethreat/AddWorkorder";
             break;
           case "lateral":
-            add_workorder = "/yiiapi/horizontalthreat/AddWorkorder";
+            join = "/yiiapi/horizontalthreat/AddWorkorder";
             break;
           case "outside":
-            add_workorder = "/yiiapi/externalthreat/AddWorkorder";
+            join = "/yiiapi/externalthreat/AddWorkorder";
             break;
           case "outreath":
-            add_workorder = "/yiiapi/outreachthreat/AddWorkorder";
+            join = "/yiiapi/outreachthreat/AddWorkorder";
             break;
           default:
             break;
         }
         this.loading = true;
         this.$axios
-          .post(add_workorder, {
+          .post(join, {
             id: this.add_params.id,
             type: "alert",
             name: this.add_params.name,
@@ -2056,7 +2140,10 @@ export default {
           distribution_workorder = "/yiiapi/alert/DistributionWorkorder";
           break;
         case "asset":
-          distribution_workorder = "/yiiapi/asset/DistributionWorkorder";
+          distribution_workorder = "/yiiapi/riskasset/DistributionWorkorder";
+          break;
+        case "locality":
+          distribution_workorder = "/yiiapi/nativethreat/DistributionWorkorder";
           break;
         case "lateral":
           distribution_workorder =
@@ -2119,7 +2206,10 @@ export default {
           add_workorder = "/yiiapi/alert/AddWorkorder";
           break;
         case "asset":
-          add_workorder = "/yiiapi/asset/AddWorkorder";
+          add_workorder = "/yiiapi/riskasset/AddWorkorder";
+          break;
+        case "locality":
+          add_workorder = "/yiiapi/nativethreat/AddWorkorder";
           break;
         case "lateral":
           add_workorder = "/yiiapi/horizontalthreat/AddWorkorder";
