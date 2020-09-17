@@ -80,7 +80,7 @@ export default {
               var strs = val.split(' '); //字符串数组
               let str = ''
               if (val != '0') {
-                str = strs[0] + '\n' + strs[1]+':00';
+                str = strs[0].substring(5,strs[0].length) + '\n' + strs[1];
               }
               return str;
             }
