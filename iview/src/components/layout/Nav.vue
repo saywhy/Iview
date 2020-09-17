@@ -240,7 +240,7 @@ export default {
               } else {
                 this.$message(
                   {
-                    message: response.data.msg[Object.keys(response.data.msg)[0]][0],
+                    message: response.data.msg,
                     type: 'error',
                   }
                 );
@@ -320,7 +320,7 @@ export default {
         );
         return false
       }
-      this.$axios.put('/yiiapi/site/reset-self-password?token=' + localStorage.getItem("token"), {
+      this.$axios.put('/yiiapi/site/ResetSelfPassword?token=' + localStorage.getItem("token"), {
         ResetPasswordForm: {
           password: this.user_edit.password,
           email_addr: this.user_edit.email_addr,
@@ -330,14 +330,14 @@ export default {
         old_password: this.user_edit.old_password
       })
         .then(response => {
-          this.pass_state = false;
+          //this.pass_state = false;
 
           console.log('**********')
           console.log(response);
 
-
           localStorage.removeItem("token");
           if (response.data.status == 0) {
+            this.pass_state = false;
             this.$message({
               message: '修改用户成功',
               type: 'success'
@@ -357,13 +357,24 @@ export default {
                     console.log(error);
                   })
                 // location.reload();
+
+                this.user_edit.password = '';
+                this.user_edit.Re_password = '';
+                this.user_edit.old_password = '';
+                this.user_edit.department = '';
+                this.user_edit.mobile = '';
+                this.user_edit.email_addr = '';
+                this.user_edit.role = '';
+                this.user_edit.id = '';
+                this.user_edit.allow_ip = '';
+
               }, 500);
             }
 
           } else {
             this.$message(
               {
-                message: response.data.msg[Object.keys(response.data.msg)[0]][0],
+                message: response.data.msg,
                 type: 'error',
               }
             );
@@ -380,7 +391,6 @@ export default {
             id: "",
             allow_ip: ''
           };*/
-
         })
         .catch(error => {
           console.log(error);

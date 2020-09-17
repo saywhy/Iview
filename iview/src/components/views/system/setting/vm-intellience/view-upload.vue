@@ -90,6 +90,7 @@ export default {
           type: 'success'
         });
       }else {
+        this.$refs.upload.clearFiles();
         this.$message({
           message: msg[Object.keys(msg)[0]][0],
           type: 'error',
