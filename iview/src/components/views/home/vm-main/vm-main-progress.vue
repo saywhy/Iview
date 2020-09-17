@@ -2,8 +2,7 @@
   <div class="vm-progress-list" v-cloak>
     <div class="item" v-for="(item,$index) in proData" :key="$index">
       <span class="vam-progress-title" :title="item.name">{{item.name}}</span>
-      <el-progress color="#5389E0"  v-if="parseInt(item.count)" :text-inside="true"
-                   :stroke-width="20" :percentage="parseInt(item.count)"></el-progress>
+      <el-progress color="#5389E0" :text-inside="true" :stroke-width="20" :percentage="item.count"></el-progress>
     </div>
   </div>
 </template>
@@ -22,6 +21,7 @@
       return {}
     },
     computed: {
+
       proData() {
 
         if(!this.options.RiskAsset){
@@ -29,12 +29,10 @@
         }else {
           let data = this.options.RiskAsset;
 
-          console.log(data)
-
           let dataAttr = [];
 
           for (let key in data) {
-            dataAttr.push({name:key,count: data[key] * 1});
+            dataAttr.push({name:key,count:data[key] * 1});
           }
           //console.log(dataAttr);
           return dataAttr;
