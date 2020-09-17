@@ -690,11 +690,11 @@
     filters: {
       statusSafe:function(value){
         let attr = '';
-        if(value == 0){
+        if(value == '0'){
           attr = '正常';
-        }else if(value == 1) {
+        }else if(value == '1') {
           attr = '告警';
-        }else if(value == 2){
+        }else if(value == '2'){
           attr = '离线';
         }
         return attr;
