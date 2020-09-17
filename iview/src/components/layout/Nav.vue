@@ -224,15 +224,18 @@ export default {
     getPwdLength () {
       this.$axios.get('/yiiapi/site/GetPasswdLength')
         .then(response => {
+
           this.user_data.password = response.data.data
           this.user_data.placeholder = '请输入包含大写、小写、数字和特殊字符其中三项,' + response.data.data.min_passwd_len + '-' + response.data.data.max_passwd_len + '位密码'
           //!@#QWEasd123 Lele#easy123 Lele@19930901
           this.$axios.get('/yiiapi/site/getSelfPasswordResetToken')
             .then(response => {
               let { status, msg, data } = response.data;
+              console.log('343434')
+              console.log(response)
               if (status == 0) {
                 // console.log(data.data)
-                localStorage.setItem("token", data.data.token);
+                localStorage.setItem("token",data.data.token);
                 let datas = data.data;
                 this.user_edit.department = datas.department;
                 this.user_edit.mobile = datas.mobile;
@@ -258,6 +261,15 @@ export default {
 
     //修改个人信息
     modifyPassword () {
+      this.user_edit.password = '';
+      this.user_edit.Re_password = '';
+      this.user_edit.old_password = '';
+      this.user_edit.department = '';
+      this.user_edit.mobile = '';
+      this.user_edit.email_addr = '';
+      this.user_edit.role = '';
+      this.user_edit.id = '';
+      this.user_edit.allow_ip = '';
       this.getPwdLength();
       this.pass_state = true;
     },
@@ -331,7 +343,6 @@ export default {
       })
         .then(response => {
           //this.pass_state = false;
-
           console.log('**********')
           console.log(response);
 
