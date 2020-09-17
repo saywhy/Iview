@@ -88,7 +88,7 @@
       let options = this.options;
 
       options = options.map((v,k)=>{
-        return {...v,index: k+1,categorys:JSON.parse(v.category_arr).join(',')};
+        return {...v,index: k+1,categorys:v.category_arr.join(',')};
       });
 
       if (this.split != 0){
