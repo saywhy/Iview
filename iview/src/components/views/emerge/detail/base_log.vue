@@ -236,14 +236,15 @@
   </div>
 </template>
 <script>
+import moment from "moment"
 export default {
   name: "baseLog",
   data () {
     return {
-      b_hh: "",
-      b_mm: "",
-      a_hh: "",
-      a_mm: "",
+      b_hh: 0,
+      b_mm: 0,
+      a_hh: 0,
+      a_mm: 0,
       log_list: {
         data: {
           hits: {
@@ -373,19 +374,31 @@ export default {
     },
     // 更多日志搜索
     serch_more_log () {
+      var time = new Date('2020-07-01 12:12:12')
+      console.log(time.getTime());
+      var srcTime = time.getTime() - this.b_hh * 60 * 60 * 1000 - this.b_mm * 60 * 1000
+      var destTime = time.getTime() + this.a_hh * 60 * 60 * 1000 + this.a_mm * 60 * 1000
+      console.log(moment(srcTime).format('YYYY-MM-DD HH:mm:ss'));
+      console.log(moment(destTime).format('YYYY-MM-DD HH:mm:ss'));
+
+
       this.asset_list.map(item => {
         if (item.icon == true) {
-          this.search_log_item.srcTime = '2010-01-01 12:12:12';
-          this.search_log_item.destTime = '2030-01-01 12:12:12';
+          this.search_log_item.srcTime = srcTime;
+          this.search_log_item.destTime = destTime;
           if (item.key == 'src') {
-            this.search_log_item.ip = 'srcIp:127.0.0.1';
+            this.search_log_item.ip = item.ip;
+            this.search_log_item.type = 'src';
           }
           if (item.key == 'des') {
-            this.search_log_item.ip = 'desIp:127.0.0.1';
+            this.search_log_item.ip = item.ip;
+            this.search_log_item.type = 'des';
           }
           this.search_log_item.server_name = '我是测试1';
         }
       })
+      console.log(this.search_log_item);
+      // this.$router.push({ name: "custom_invest", params: { search: this.search_log_item } });
       this.$axios
         .get("/yiiapi/alert/MoreLog", {
           params: {

@@ -198,10 +198,15 @@ export default {
           this.mail.host = data.host
           this.mail.username = data.username
           this.mail.send = data.send
+          console.log(data.encryption);
+
           if (data.encryption == 'ssl') {
-            this.ssl_switch = true
+            console.log('1111');
+
+            this.mail.ssl_switch = true
           } else {
-            this.ssl_switch = false
+            console.log('2222');
+            this.mail.ssl_switch = false
           }
           if (data.alertEmail.length == 0) {
             this.mail.alertEmail_list = []

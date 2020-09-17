@@ -264,6 +264,12 @@ export default {
           console.log(error);
         })
     },
+    onFilestart () {
+
+    },
+    onFileProgress () {
+
+    },
     // 上传
     onFileAdded (file) {
       console.log(file);
