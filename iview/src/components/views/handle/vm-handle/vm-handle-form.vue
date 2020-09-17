@@ -20,12 +20,13 @@
     created(){
       let legendAttr = [];
       let that = this;
+      let datas = [];
       if(this.form_data.length > 0){
-        this.form_data = this.form_data.slice(0,5);
+        datas = this.form_data.slice(0,5);
       }else {
         return false;
       }
-      this.form_data.filter(function (v,k) {
+      datas.filter(function (v,k) {
         legendAttr.push(v.category);
         that.data_attr.push({value:v.count, name:v.category});
       });
