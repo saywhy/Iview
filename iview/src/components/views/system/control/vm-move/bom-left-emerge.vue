@@ -116,7 +116,7 @@ export default {
         },
         series: [
           {
-            name: "告警",
+            name: "告警日志",
             type: "line",
             symbol: "none",
             cursor: "pointer",

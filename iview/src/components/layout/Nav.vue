@@ -331,6 +331,11 @@ export default {
       })
         .then(response => {
           this.pass_state = false;
+
+          console.log('**********')
+          console.log(response);
+
+
           localStorage.removeItem("token");
           if (response.data.status == 0) {
             this.$message({

@@ -232,7 +232,7 @@
         init_top_left () {
           this.$axios.get('/yiiapi/overview/Last7DaysAlarm')
             .then((resp) => {
-              // console.log(resp)
+               //console.log(resp)
               let {
                 status,
                 data

@@ -29,7 +29,7 @@ export default {
         options.offline_count = 0;
       }
 
-      console.log(options)
+      //console.log(options)
       let datas = [
         { value: options.total_count, name: "设备总数"},
         { value: options.alert_count, name: "告警总数"},

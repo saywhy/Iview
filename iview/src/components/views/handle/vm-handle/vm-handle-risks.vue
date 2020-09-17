@@ -1045,6 +1045,7 @@ export default {
             if(v.description){
               v.description = JSON.parse(v.description).join(',');
             }
+            v.labels = v.labels.join(',');
           });
           this.table.tableData = data;
           this.table.count = count;

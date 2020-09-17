@@ -118,7 +118,7 @@ export default {
         },
         series: [
           {
-            name: "实验",
+            name: "实时日志",
             type: "line",
             symbol: "none",
             cursor: "pointer",

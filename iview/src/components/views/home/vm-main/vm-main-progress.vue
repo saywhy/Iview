@@ -2,7 +2,8 @@
   <div class="vm-progress-list" v-cloak>
     <div class="item" v-for="(item,$index) in proData" :key="$index">
       <span class="vam-progress-title" :title="item.name">{{item.name}}</span>
-      <el-progress color="#5389E0" :text-inside="true" :stroke-width="20" :percentage="item.count"></el-progress>
+      <el-progress color="#5389E0" :text-inside="true" :stroke-width="20"
+                   :percentage="item.count"></el-progress>
     </div>
   </div>
 </template>
@@ -65,7 +66,7 @@
     .item {
       display: flex;
       line-height: 60px;
-
+      margin-right: 5px;
       .vam-progress-title {
         width: 90px;
         padding-right: 10px;

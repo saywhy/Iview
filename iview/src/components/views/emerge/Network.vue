@@ -211,8 +211,8 @@
                                show-overflow-tooltip
                                :prop="dropCol[index].prop"
                                :label="item.label">
-                <template slot-scope="scope">{{ scope.row.detect_engine }}</template>
-                <!-- <template slot-scope="scope">{{ scope.row.alert_time | time }}</template> -->
+                <!--<template slot-scope="scope">{{ scope.row.alert_time | time }}</template>-->
+                 <template slot-scope="scope">{{ scope.row.alert_time | time }}</template>
               </el-table-column>
 
               <!--威胁等级-->
@@ -1029,6 +1029,7 @@ export default {
             if (v.description) {
               v.description = JSON.parse(v.description).join(',');
             }
+            v.labels = v.labels.join(',');
           });
 
           this.table.tableData = data;
