@@ -457,9 +457,7 @@ export default {
       if (typeof (val.network_event) == 'string' && val.network_event != '') {
         this.selectItem.network_event = JSON.parse(val.network_event)
       }
-      if (typeof (val.alert_description) == 'string') {
-        this.selectItem.alert_description = JSON.parse(val.alert_description)
-      }
+      console.log(this.selectItem);
       this.selectItem.whois_list = [];
       this.selectItem.sample_list = [];
       if (this.selectItem.description) {

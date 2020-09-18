@@ -977,6 +977,8 @@ export default {
         .then((resp) => {
           this.loading = false;
           let { status, data, msg } = resp.data;
+          console.log(resp);
+
           if (status == 1) {
             this.$message({
               message: msg,
@@ -985,9 +987,8 @@ export default {
             return false;
           }
           this.detailArray = [];
-          this.detail_main = data;
-          // this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
-          // this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
+          this.detail_main = JSON.parse(JSON.stringify(data));
+          console.log(data);
           if (this.detail_main.detect_engine != 'LOGDF') {
             this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
           }
@@ -1073,8 +1074,7 @@ export default {
           }
           this.detailArray = [];
           this.detail_main = data;
-          // this.detail_main.alert_description = JSON.parse(this.detail_main.alert_description);
-          // this.detail_main.alarm_merger = JSON.parse(this.detail_main.alarm_merger);
+
           if (this.detail_main.detect_engine != 'LOGDF') {
             this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
           }

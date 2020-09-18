@@ -295,6 +295,10 @@ export default {
               id: 22,
               label: 'IOC扫描器',
             },
+            {
+              id: 297,
+              label: '自定义追查',
+            },
 
           ]
         },
