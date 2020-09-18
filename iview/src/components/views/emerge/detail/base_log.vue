@@ -338,7 +338,7 @@ export default {
         server_name: this.complete_log.server_name,
         type: "源地址",
         icon: true,
-        key: "src",
+        key: "srcIp",
       };
       let des_obj = {
         ip: this.complete_log.destIp,
@@ -346,7 +346,7 @@ export default {
         server_name: this.complete_log.server_name,
         type: "目的地址",
         icon: false,
-        key: "des",
+        key: "destIp",
       };
       this.asset_list.push(src_obj);
       this.asset_list.push(des_obj);
@@ -374,36 +374,53 @@ export default {
     },
     // 更多日志搜索
     serch_more_log () {
-      var time = new Date('2020-07-01 12:12:12')
+      this.asset_list.map(item => {
+        if (item.icon == true) {
+          this.search_log_item.srcTime = srcTime;
+          this.search_log_item.destTime = destTime;
+          if (item.key == 'srcIp') {
+            this.search_log_item.ip = item.ip;
+            this.search_log_item.type = 'srcIp';
+          }
+          if (item.key == 'destIp') {
+            this.search_log_item.ip = item.ip;
+            this.search_log_item.type = 'destIp';
+          }
+          this.search_log_item.server_name = '我是测试1';
+        }
+      })
+      var time = new Date(this.search_time)
       console.log(time.getTime());
       var srcTime = time.getTime() - this.b_hh * 60 * 60 * 1000 - this.b_mm * 60 * 1000
       var destTime = time.getTime() + this.a_hh * 60 * 60 * 1000 + this.a_mm * 60 * 1000
       console.log(moment(srcTime).format('YYYY-MM-DD HH:mm:ss'));
       console.log(moment(destTime).format('YYYY-MM-DD HH:mm:ss'));
-
-
-      this.asset_list.map(item => {
-        if (item.icon == true) {
-          this.search_log_item.srcTime = srcTime;
-          this.search_log_item.destTime = destTime;
-          if (item.key == 'src') {
-            this.search_log_item.ip = item.ip;
-            this.search_log_item.type = 'src';
-          }
-          if (item.key == 'des') {
-            this.search_log_item.ip = item.ip;
-            this.search_log_item.type = 'des';
-          }
-          this.search_log_item.server_name = '我是测试1';
-        }
-      })
-      console.log(this.search_log_item);
+      this.search_log_item.srcTime = moment(srcTime).format('YYYY-MM-DD HH:mm:ss')
+      this.search_log_item.destTime = moment(destTime).format('YYYY-MM-DD HH:mm:ss')
       // this.$router.push({ name: "custom_invest", params: { search: this.search_log_item } });
       this.$axios
         .get("/yiiapi/alert/MoreLog", {
           params: {
-            srcTime: this.search_log_item.srcTime,
-            destTime: this.search_log_item.destTime,
+            srcTime: srcTime,
+            destTime: destTime,
+            ip: this.search_log_item.ip,
+            server_name: this.search_log_item.server_name,
+          },
+        })
+        .then((resp) => {
+          console.log(resp);
+
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.$axios
+        .get("/yiiapi/site/HoursLogs", {
+          params: {
+            // srcIp或者destIp
+            ip_type: 'srcIp',
+            srcTime: moment(srcTime).format('YYYY-MM-DD HH:mm:ss'),
+            destTime: moment(destTime).format('YYYY-MM-DD HH:mm:ss'),
             ip: this.search_log_item.ip,
             server_name: this.search_log_item.server_name,
           },

@@ -449,14 +449,9 @@ export default {
       }
       window.open(window_open + value.MD5 + '&id=' + value.taskID);
     },
-
-
   },
   watch: {
     selectItem: function (val) {
-      if (typeof (val.network_event) == 'string' && val.network_event != '') {
-        this.selectItem.network_event = JSON.parse(val.network_event)
-      }
       console.log(this.selectItem);
       this.selectItem.whois_list = [];
       this.selectItem.sample_list = [];
