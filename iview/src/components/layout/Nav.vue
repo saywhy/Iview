@@ -314,6 +314,9 @@ export default {
         );
         return false
       }
+      var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+
+
       if (this.user_edit.email_addr == '') {
         this.$message(
           {
@@ -323,6 +326,20 @@ export default {
         );
         return false
       }
+
+      if (!reg.test(this.user_edit.email_addr)) {
+        this.$message(
+          {
+            message: '邮箱验证错误',
+            type: 'error',
+          }
+        );
+        return false
+      }
+
+      var reg1 = /^1[3456789]\d{9}$/;
+
+
       if (this.user_edit.mobile == '') {
         this.$message(
           {
@@ -332,6 +349,16 @@ export default {
         );
         return false
       }
+      if (!reg1.test(this.user_edit.mobile)) {
+        this.$message(
+          {
+            message: '手机号验证错误',
+            type: 'error',
+          }
+        );
+        return false
+      }
+
       this.$axios.put('/yiiapi/site/ResetSelfPassword?token=' + localStorage.getItem("token"), {
         ResetPasswordForm: {
           password: this.user_edit.password,
@@ -345,6 +372,8 @@ export default {
           //this.pass_state = false;
           console.log('**********')
           console.log(response);
+
+          console.log()
 
           localStorage.removeItem("token");
           if (response.data.status == 0) {
@@ -380,25 +409,22 @@ export default {
               }, 500);
             }
           } else {
-            this.$message(
-              {
-                message: response.data.msg,
-                type: 'error',
-              }
-            );
-          }
+            let msg = response.data.msg;
+            if(typeof(msg) == 'string'){
+              this.$message({
+                  message: msg,
+                  type: 'error',
+                }
+              );
+            }else {
+              this.$message({
+                message: msg[Object.keys(msg)[0]][0],
+                  type: 'error',
+                }
+              );
+            }
 
-          /*this.user_edit = {
-            password: "",
-            Re_password: "",
-            old_password: "",
-            department: "",
-            mobile: "",
-            email_addr: "",
-            role: "",
-            id: "",
-            allow_ip: ''
-          };*/
+          }
         })
         .catch(error => {
           console.log(error);
