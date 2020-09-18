@@ -94,7 +94,7 @@
           font-size: 48px;
           color: #333;
           text-align: right;
-          right: 25px;
+          right: 20px;
         }
       }
       &:nth-child(1){

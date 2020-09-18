@@ -684,7 +684,7 @@ export default {
         status: '',
         domain: '',
         sort: '3',
-        order: 'update_time'
+        order: ''
       },
       options_degrees: [
         {
