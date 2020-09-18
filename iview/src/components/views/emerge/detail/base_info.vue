@@ -19,7 +19,7 @@
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">描述</span>
-          <span class="info_top_item_content">{{selectItem.description_list}}</span>
+          <span class="info_top_item_content">{{selectItem.json_description}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">检测引擎</span>
@@ -455,11 +455,12 @@ export default {
       console.log(this.selectItem);
       this.selectItem.whois_list = [];
       this.selectItem.sample_list = [];
+
       if (this.selectItem.description) {
         if (typeof (this.selectItem.description) == 'string') {
-          this.selectItem.description_list = JSON.parse(this.selectItem.description).join(',')
+          this.selectItem.json_description = JSON.parse(this.selectItem.description).join(',')
         } else {
-          this.selectItem.description_list = this.selectItem.description.join(',')
+          this.selectItem.json_description = this.selectItem.description.join(",");
         }
       }
       this.selectItem.safety_suggestion = this.selectItem.safety_suggestion - 0

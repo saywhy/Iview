@@ -988,16 +988,13 @@ export default {
           }
           this.detailArray = [];
           this.detail_main = JSON.parse(JSON.stringify(data));
-          console.log(data);
+          console.log(this.detail_main);
           if (this.detail_main.detect_engine != 'LOGDF') {
             this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
           }
           this.detail_main.label = JSON.parse(this.detail_main.label);
           this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
           this.detail_main.description = JSON.parse(this.detail_main.description);
-          if (this.detail_main.description_list) {
-            this.detail_main.description_list = JSON.parse(this.detail_main.description_list);
-          }
           if (this.detail_main.category_list) {
             this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
           }
@@ -1073,17 +1070,14 @@ export default {
             return false;
           }
           this.detailArray = [];
-          this.detail_main = data;
-
+          this.detail_main = JSON.parse(JSON.stringify(data));
+          console.log(this.detail_main);
           if (this.detail_main.detect_engine != 'LOGDF') {
             this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
           }
           this.detail_main.label = JSON.parse(this.detail_main.label);
           this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
           this.detail_main.description = JSON.parse(this.detail_main.description);
-          if (this.detail_main.description_list) {
-            this.detail_main.description_list = JSON.parse(this.detail_main.description_list);
-          }
           if (this.detail_main.category_list) {
             this.detail_main.category_list = JSON.parse(this.detail_main.category_list);
           }
