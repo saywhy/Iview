@@ -860,7 +860,6 @@ export default {
     this.get_list_source_top5();
     this.get_list_threat_top5();
     this.get_list_threat();
-
     this.column_deploy();
   },
   methods: {
@@ -922,7 +921,6 @@ export default {
                 }
               });
             }
-
             this.fieldList.forEach(item => {
               if(config.includes(item.alias)){
                 item.checked = true;

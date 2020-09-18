@@ -373,8 +373,6 @@ export default {
           console.log('**********')
           console.log(response);
 
-          console.log()
-
           localStorage.removeItem("token");
           if (response.data.status == 0) {
             this.pass_state = false;
@@ -397,17 +395,22 @@ export default {
                     console.log(error);
                   })
                 // location.reload();
-                this.user_edit.password = '';
-                this.user_edit.Re_password = '';
-                this.user_edit.old_password = '';
-                this.user_edit.department = '';
-                this.user_edit.mobile = '';
-                this.user_edit.email_addr = '';
-                this.user_edit.role = '';
-                this.user_edit.id = '';
-                this.user_edit.allow_ip = '';
               }, 500);
+            }else {
+              this.$message({
+                message: '修改用户成功',
+                type: 'success'
+              });
             }
+            this.user_edit.password = '';
+            this.user_edit.Re_password = '';
+            this.user_edit.old_password = '';
+            this.user_edit.department = '';
+            this.user_edit.mobile = '';
+            this.user_edit.email_addr = '';
+            this.user_edit.role = '';
+            this.user_edit.id = '';
+            this.user_edit.allow_ip = '';
           } else {
             let msg = response.data.msg;
             if(typeof(msg) == 'string'){

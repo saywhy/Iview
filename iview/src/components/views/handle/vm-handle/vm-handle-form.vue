@@ -3,6 +3,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  require('../../../../../static/js/echarts-auto-tooltip');
   export default {
     name: 'threatForm',
     props:{
@@ -41,15 +42,19 @@
         let legendAttr = this.legend_attr;
         let dataAttr = this.data_attr;
 
-        let index = 0;
+       // console.log(dataAttr);
+
+        if(dataAttr.length == 0){
+          return false;
+        }
 
         // 基于准备好的dom，初始化echarts实例
         let myChart = this.$echarts.init(document.getElementById('threatForm'))
         // 绘制图表
-
         myChart.showLoading({ text: '正在加载数据...' });
         myChart.clear();
-        myChart.setOption({
+
+        let option = {
           grid: {
             top: '0%',
             left: '5%',
@@ -103,11 +108,12 @@
               data: dataAttr
             }
           ]
-        });
+        };
+        myChart.setOption(option);
 
         myChart.hideLoading();
 
-        myChart.dispatchAction({type: 'highlight',seriesIndex: 0,dataIndex: 0});//设置默认选中高亮部分
+        /*myChart.dispatchAction({type: 'highlight',seriesIndex: 0,dataIndex: 0});//设置默认选中高亮部分
         myChart.on('mouseover',function(e){
           if(e.dataIndex != index){
             myChart.dispatchAction({type: 'downplay', seriesIndex: 0, dataIndex: index  });
@@ -116,7 +122,9 @@
         myChart.on('mouseout',function(e){
           index = e.dataIndex;
           myChart.dispatchAction({type: 'highlight',seriesIndex: 0,dataIndex: e.dataIndex});
-        });
+        });*/
+
+        tools.loopShowTooltip(myChart, option, {loopSeries: true});
 
         window.addEventListener("resize", () => {
           myChart.resize();
