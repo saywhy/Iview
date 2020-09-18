@@ -349,15 +349,15 @@ export default {
           localStorage.removeItem("token");
           if (response.data.status == 0) {
             this.pass_state = false;
-            this.$message({
-              message: '修改用户成功',
-              type: 'success'
-            });
             if (this.user_edit.password != '') {
               setTimeout(() => {
                 removeToken();
                 this.$axios.get('/yiiapi/site/logout')
                   .then(response => {
+                    this.$message({
+                      message: '修改用户成功',
+                      type: 'success'
+                    });
                     if (response.data.status == 0) {
                       console.log('退出');
                       location.reload();
@@ -368,7 +368,6 @@ export default {
                     console.log(error);
                   })
                 // location.reload();
-
                 this.user_edit.password = '';
                 this.user_edit.Re_password = '';
                 this.user_edit.old_password = '';
@@ -378,10 +377,8 @@ export default {
                 this.user_edit.role = '';
                 this.user_edit.id = '';
                 this.user_edit.allow_ip = '';
-
               }, 500);
             }
-
           } else {
             this.$message(
               {
