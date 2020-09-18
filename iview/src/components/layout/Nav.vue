@@ -426,7 +426,6 @@ export default {
                 }
               );
             }
-
           }
         })
         .catch(error => {

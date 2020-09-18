@@ -673,10 +673,10 @@
             if (this.detail_click_val.id) {
               console.log('点击详情');
               if (Object.keys(this.detail_click_column).length != 0 && this.detail_click_column.type != 'selection') {
-                this.$router.push({
+               /* this.$router.push({
                   path: '/detail/safe', name: 'detail_safe',
                   query: { id: '0'}
-                });
+                });*/
               }
             } else {
               console.log('点击头部');
