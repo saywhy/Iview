@@ -214,7 +214,6 @@
                 <!--<template slot-scope="scope">{{ scope.row.alert_time | time }}</template>-->
                  <template slot-scope="scope">{{ scope.row.alert_time | time }}</template>
               </el-table-column>
-
               <!--威胁等级-->
               <el-table-column align="center"
                                v-else-if="dropCol[index].prop == 'degree'"
@@ -228,7 +227,6 @@
                     {{ scope.row.degree | degree_sino }}</span>
                 </template>
               </el-table-column>
-
               <!--失陷确定性-->
               <el-table-column align="center"
                                v-else-if="dropCol[index].prop == 'fall_certainty'"
@@ -240,7 +238,6 @@
                     {{ scope.row.fall_certainty | certainty }}</span>
                 </template>
               </el-table-column>
-
               <!--状态-->
               <el-table-column align="center"
                                v-else-if="dropCol[index].prop == 'status'"
@@ -249,7 +246,6 @@
                                :label="item.label">
                 <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
               </el-table-column>
-
               <!--工单状态-->
               <el-table-column align="center"
                                v-else-if="dropCol[index].prop == 'workorder_status'"
@@ -258,7 +254,6 @@
                                :label="item.label">
                 <template slot-scope="scope">{{ scope.row.workorder_status | work_status }}</template>
               </el-table-column>
-
               <!--风险指数-->
               <el-table-column align="center"
                                v-else-if="dropCol[index].prop == 'risk_num'"
@@ -268,7 +263,6 @@
                                :label="item.label">
                 <template slot-scope="scope">{{ scope.row.risk_num }}</template>
               </el-table-column>
-
               <!--更新时间-->
               <el-table-column align="center"
                                v-else-if="dropCol[index].prop == 'update_time'"
@@ -278,7 +272,6 @@
                                :label="item.label">
                 <template slot-scope="scope">{{ scope.row.update_time | time }}</template>
               </el-table-column>
-
               <!--安全域-->
               <el-table-column align="center"
                                v-else-if="dropCol[index].prop == 'security_domain'"
@@ -287,7 +280,6 @@
                                :label="item.label">
                 <template slot-scope="scope">{{ scope.row.security_domain | securityDomain }}</template>
               </el-table-column>
-
               <!--其他-->
               <el-table-column align="center"
                                v-else
@@ -929,7 +921,6 @@ export default {
                 }
               });
             }
-
             this.fieldList.forEach(item => {
               if (config.includes(item.alias)) {
                 item.checked = true;
@@ -938,7 +929,7 @@ export default {
               }
             });
 
-            this.columnDrop();
+           // this.columnDrop();
           }
 
         });
@@ -965,7 +956,6 @@ export default {
         animation: 180,
         delay: 0,
         onEnd: evt => {
-
           let newIndex = evt.newIndex - 2;
           let oldIndex = evt.oldIndex - 2;
           const oldItem = this.dropCol[oldIndex];
