@@ -1105,18 +1105,31 @@ export default {
     },
     //列排序
     header_cell (val) {
-      if (val.prop == 'update_time') {
-        this.params.order = 'update_time';
-      } else {
-        this.params.order = 'risk_num';
-      }
+      //console.log(val);
 
-      if (val.order == 'descending') {
-        this.params.sort = '4';
-      } else {
-        this.params.sort = '3';
+      if(val.prop == 'update_time'){
+        this.params.order = 'update_time';
+        if(val.order == 'ascending'){
+          this.params.sort = '3';
+        }else if(val.order == 'descending'){
+          this.params.sort = '4';
+        }else {
+          this.params.order = '';
+          this.params.sort = '3';
+        }
+      }else if(val.prop == 'risk_num'){
+        this.params.order = 'risk_num';
+        if(val.order == 'ascending'){
+          this.params.sort = '3';
+        }else if(val.order == 'descending'){
+          this.params.sort = '4';
+        }else {
+          this.params.order = '';
+          this.params.sort = '3';
+        }
       }
       this.get_list_risk();
+
     },
     mousedown (event) {
       this.oldPositon = {
