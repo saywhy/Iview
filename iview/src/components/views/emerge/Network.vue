@@ -886,10 +886,9 @@ export default {
 
           if (status == 0) {
             this.$refs.messageDrop.hide();
-
             this.column_deploy();
             this.get_list_risk();
-            this.columnDrop();
+            //this.columnDrop();
           } else {
             this.$message({
               /* message: msg[Object.keys(msg)[0]][0],*/
@@ -928,7 +927,6 @@ export default {
                 item.checked = false;
               }
             });
-
            // this.columnDrop();
           }
 
@@ -1602,7 +1600,20 @@ export default {
       this.get_table_works_list();
     },
 
-    /***************************导出*****************************/
+    /***************************导出**************
+     *
+     *  {
+        key: "",
+        certainty: "",
+        startTime: '',
+        endTime: '',
+        degree: '',
+        status: '',
+        domain: '',
+        sort: '3',
+        order: ''
+      },
+     * **************/
     //导出
     export_box () {
       this.$confirm('是否确定导出告警列表?', '提示', {
@@ -1614,7 +1625,7 @@ export default {
         this.$axios.get('/yiiapi/alert/ExportAlertsTest')
           .then(response => {
             var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.params.status + '&degree=' + this.params.degree + '&start_time=' + this.params.startTime
-              + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&category=' + this.params.domain;
+              + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&category=' + this.params.domain + '&key='+this.params.key;
             window.location.href = url1;
           })
           .catch(error => {
