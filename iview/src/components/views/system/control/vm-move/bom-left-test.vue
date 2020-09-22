@@ -22,7 +22,6 @@ export default {
       // 基于准备好的dom，初始化echarts实例
 
       let data = this.options.log;
-
       var xdata = [];
       var ydata = [];
       if(data){
@@ -35,9 +34,9 @@ export default {
       // 绘制图表
       myChart.setOption({
         grid: {
-          top: "10%",
+          top: "20%",
           left: 0,
-          right: "5%",
+          right: "2%",
           bottom: "5%",
           containLabel: true
         },
@@ -53,7 +52,11 @@ export default {
             lineStyle: {
               color: "#ccc"
             }
-          }
+          },
+          /*formatter: function (params, ticket, callback) {
+            console.log(params);
+            return '44';
+          }*/
         },
         color: ["#47CAD9"],
         xAxis: {
@@ -93,6 +96,8 @@ export default {
           data: xdata
         },
         yAxis: {
+          /*name:'EPS',
+          nameLocation:'end',*/
           splitLine: {
             show: true,
             lineStyle: {
@@ -160,5 +165,6 @@ export default {
 <style scoped lang="less">
 #test {
   height: 100%;
+  border: 1px solid red;
 }
 </style>
