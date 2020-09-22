@@ -54,8 +54,11 @@ export default {
             }
           },
           formatter: function (params) {
-            console.log(params);
-            return '44';
+            var relVal = params[0].name;
+            for (var i = 0, l = params.length; i < l; i++) {
+              relVal += '<br/>' + params[i].seriesName + ' : ' + params[i].value+" EPS";
+            }
+            return relVal;
           }
         },
         color: ["#47CAD9"],
@@ -165,6 +168,5 @@ export default {
 <style scoped lang="less">
 #test {
   height: 100%;
-  border: 1px solid red;
 }
 </style>
