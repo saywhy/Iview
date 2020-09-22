@@ -35,7 +35,10 @@
             <p class="title">TOP 日志类型</p>
             <div class="item_box">
               <div class="right">
-                <div id="classification"></div>
+                <p class="tips"
+                   v-if="!DimensionAggregation.classification_show">暂无数据分类</p>
+                <div v-if="DimensionAggregation.classification_show"
+                     id="classification"></div>
               </div>
             </div>
           </div>
@@ -45,7 +48,11 @@
             <p class="title">TOP 事件类型</p>
             <div class="item_box">
               <div class="right">
-                <div id="eventtype"></div>
+                <p class="tips"
+                   v-if="!DimensionAggregation.eventtype_show">暂无数据分类</p>
+                <div v-if="DimensionAggregation.eventtype_show"
+                     id="eventtype"></div>
+                <!-- <div id="eventtype"></div> -->
               </div>
             </div>
           </div>
@@ -55,7 +62,10 @@
             <p class="title">关联资产</p>
             <div class="item_box">
               <div class="right">
-                <div id="server_name"></div>
+                <p class="tips"
+                   v-if="!DimensionAggregation.server_name_show">暂无数据分类</p>
+                <div v-if="DimensionAggregation.server_name_show"
+                     id="server_name"></div>
               </div>
             </div>
           </div>
@@ -65,7 +75,10 @@
             <p class="title">账号</p>
             <div class="item_box">
               <div class="right">
-                <div id="account"></div>
+                <p class="tips"
+                   v-if="!DimensionAggregation.account_show">暂无数据分类</p>
+                <div v-if="DimensionAggregation.account_show"
+                     id="account"></div>
               </div>
             </div>
           </div>
@@ -75,7 +88,10 @@
             <p class="title">国家</p>
             <div class="item_box">
               <div class="right">
-                <div id="city_name"></div>
+                <p class="tips"
+                   v-if="!DimensionAggregation.city_name_show">暂无数据分类</p>
+                <div v-if="DimensionAggregation.city_name_show"
+                     id="city_name"></div>
               </div>
             </div>
           </div>
@@ -85,7 +101,10 @@
             <p class="title">TOP 应用</p>
             <div class="item_box">
               <div class="right">
-                <div id="app"></div>
+                <p class="tips"
+                   v-if="!DimensionAggregation.app_show">暂无数据分类</p>
+                <div v-if="DimensionAggregation.app_show"
+                     id="app"></div>
               </div>
             </div>
           </div>
@@ -99,7 +118,7 @@
     <div class="log_content"
          v-if="searchShow">
       <div class="export_box">
-        <span class="export_i">导出归一化日志</span>
+        <!-- <span class="export_i">导出归一化日志</span> -->
         <span class="export_o">导出原始日志</span>
       </div>
       <!-- 日志列表 -->
@@ -315,11 +334,17 @@ export default {
       // 维度聚合数据
       DimensionAggregation: {
         classification: [],
+        classification_show: true,
         eventtype: [],
+        eventtype_show: true,
         account: [],
+        account_show: true,
         city_name: [],
+        city_name_show: true,
         server_name: [],
+        server_name_show: true,
         app: [],
+        app_show: true,
       }
     };
   },
@@ -465,7 +490,6 @@ export default {
           smooth: true,
           showSymbol: false,
           symbolSize: 0,
-          animation: true,
           lineStyle: {
             normal: {
               width: 2,
@@ -553,7 +577,13 @@ export default {
     eventtype_echarts () {
       var xAxis_data = []
       var yAxis_data = []
+
       this.DimensionAggregation.eventtype.map(item => {
+        if (item.key == '') {
+          this.DimensionAggregation.eventtype_show = false
+        }
+        item.key = item.key == '' ? '其他' : item.key
+
         yAxis_data.push(item.key)
         xAxis_data.push(item.doc_count)
       })
@@ -629,6 +659,10 @@ export default {
       var xAxis_data = []
       var yAxis_data = []
       this.DimensionAggregation.classification.map(item => {
+        if (item.key == '') {
+          this.DimensionAggregation.classification_show = false
+        }
+        item.key = item.key == '' ? '其他' : item.key
         yAxis_data.push(item.key)
         xAxis_data.push(item.doc_count)
       })
@@ -702,6 +736,10 @@ export default {
       var xAxis_data = []
       var yAxis_data = []
       this.DimensionAggregation.account.map(item => {
+        if (item.key == '') {
+          this.DimensionAggregation.account_show = false
+        }
+        item.key = item.key == '' ? '其他' : item.key
         yAxis_data.push(item.key)
         xAxis_data.push(item.doc_count)
       })
@@ -775,9 +813,15 @@ export default {
       var xAxis_data = []
       var yAxis_data = []
       this.DimensionAggregation.city_name.map(item => {
+        if (item.key == '') {
+          console.log(item.key);
+          this.DimensionAggregation.city_name_show = false
+        }
+        item.key = item.key == '' ? '其他' : item.key
         yAxis_data.push(item.key)
         xAxis_data.push(item.doc_count)
       })
+      console.log(this.$echarts.init(document.getElementById("city_name")));
       let myChart = this.$echarts.init(document.getElementById("city_name"));
       myChart.setOption(
         {
@@ -848,6 +892,10 @@ export default {
       var xAxis_data = []
       var yAxis_data = []
       this.DimensionAggregation.server_name.map(item => {
+        if (item.key != '') {
+          this.DimensionAggregation.server_name_show = true
+        }
+        item.key = item.key == '' ? '其他' : item.key
         yAxis_data.push(item.key)
         xAxis_data.push(item.doc_count)
       })
@@ -921,6 +969,9 @@ export default {
       var xAxis_data = []
       var yAxis_data = []
       this.DimensionAggregation.app.map(item => {
+        if (item.key == '') {
+          this.DimensionAggregation.app_show = false
+        }
         item.key = item.key == '' ? '其他' : item.key
         yAxis_data.push(item.key)
         xAxis_data.push(item.doc_count)
@@ -1029,6 +1080,11 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           this.DimensionAggregation.account = resp.data.data.aggregations.server_count.buckets
+          this.DimensionAggregation.account.map(item => {
+            if (item.key == '') {
+              this.DimensionAggregation.account_show = false
+            }
+          })
           this.account_echarts()
         })
         .catch((error) => {
@@ -1065,7 +1121,7 @@ export default {
             srcTime: this.query_data.srcTime,
             destTime: this.query_data.destTime,
             server_name: this.query_data.server_name,
-            field: 'geoip.city_name',
+            field: 'geoip.country_name',
           },
         })
         .then((resp) => {
@@ -1349,6 +1405,7 @@ export default {
             .right {
               // border: 1px solid red;
               flex: 1;
+              display: flex;
               height: 300px;
               #classification,
               #account,
@@ -1356,9 +1413,16 @@ export default {
               #server_name,
               #app,
               #eventtype {
-                width: 100%;
-                height: 100%;
+                flex: 1;
+                height: 300px;
                 // border: 1px solid red;
+              }
+              .tips {
+                flex: 1;
+                text-align: center;
+                font-size: 18px;
+                margin-top: 130px;
+                color: #0070ff;
               }
             }
           }

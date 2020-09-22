@@ -96,11 +96,11 @@
         <el-pagination class="pagination_box"
                        @size-change="handleSizeChange"
                        @current-change="handleCurrentChange"
-                       :current-page="monitor_data.pageNow"
+                       :current-page="monitor_data.pageNow*1"
                        :page-sizes="[10,20,50,100]"
                        :page-size="10"
                        layout="total, sizes, prev, pager, next"
-                       :total="monitor_data.count">
+                       :total="monitor_data.count*1">
         </el-pagination>
       </div>
       <!-- 新增 -->
@@ -150,11 +150,12 @@
               </p>
               <div class="item_addrs"
                    v-for="(item,index) in monitor_add.tag_list">
-                <el-input class="select_box"
-                          placeholder="请输入标签"
-                          v-model="item.name"
-                          clearable>
-                </el-input>
+                <el-autocomplete class="inline-input select_box"
+                                 v-model="item.name"
+                                 :fetch-suggestions="querySearch"
+                                 placement='bottom'
+                                 placeholder="请输入标签"
+                                 @select="handleSelect"></el-autocomplete>
                 <img src="@/assets/images/common/add.png"
                      alt=""
                      class="img_box"
@@ -283,11 +284,17 @@
               </p>
               <div class="item_addrs"
                    v-for="(item,index) in monitor_edit.label_list">
-                <el-input class="select_box"
+                <!-- <el-input class="select_box"
                           placeholder="请输入标签"
                           v-model="item.name"
                           clearable>
-                </el-input>
+                </el-input> -->
+                <el-autocomplete class="inline-input select_box"
+                                 v-model="item.name"
+                                 :fetch-suggestions="querySearch"
+                                 placement='bottom'
+                                 placeholder="请输入标签"
+                                 @select="handleSelect"></el-autocomplete>
                 <img src="@/assets/images/common/add.png"
                      alt=""
                      class="img_box"
@@ -472,13 +479,15 @@ export default {
         }
       },
       select_list: [],
-      fileList: []
+      fileList: [],
+      restaurants: []
     };
   },
   mounted () {
     this.test()
     this.get_data()
     this.check_passwd()
+    this.GetLabels();
     var options = []
     // 遍历省级
     Object.keys(pca[86]).forEach(function (key) {
@@ -538,6 +547,44 @@ export default {
             eventBus.$emit('reset')
           }
         })
+    },
+    GetLabels () {
+      this.$axios
+        .get("/yiiapi/site/GetLabels", {
+          params: {
+            label_name: '',
+          },
+        })
+        .then((resp) => {
+          console.log(resp);
+          this.restaurants = []
+          resp.data.data.map(item => {
+            this.restaurants.push({
+              value: item.label_name,
+              id: item.id
+            })
+          })
+
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    handleSelect () { },
+    querySearch (queryString, cb) {
+      console.log(queryString);
+      var restaurants = this.restaurants;
+      console.log(restaurants);
+      var results = queryString != '' ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      console.log(results);
+      cb(results);
+    },
+    createFilter (queryString) {
+      console.log(queryString);
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
     },
     init () {
       var options = []
