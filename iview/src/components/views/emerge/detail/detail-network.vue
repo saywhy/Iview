@@ -243,8 +243,8 @@
       <detail-stage class="mid_item"
                     :detailArray="detailArray"></detail-stage>
       <div class="mid_space"></div>
-      <detail-rate :detailArray="detailArray"
-                   v-if="detail_main.security_domain!='terminal'"
+      <detail-rate v-if="detail_main.security_domain!='terminal'"
+                   :detailArray="detailArray"
                    class="mid_item"></detail-rate>
     </div>
     <!-- 攻击频率视图 -->
@@ -396,10 +396,16 @@
         <div class="content_item">
           <div class="item_addrs"
                v-for="(item,index) in edit_tag.tag_list">
-            <el-input class="select_box"
+
+            <el-autocomplete class="inline-input select_box"
+                             v-model="item.name"
+                             :fetch-suggestions="querySearch"
+                             placeholder="请输入标签，最多可以设置5个标签"
+                             @select="handleSelect"></el-autocomplete>
+            <!-- <el-input class="select_box"
                       placeholder="请输入标签，最多可以设置5个标签"
                       v-model="item.name"
-                      clearable></el-input>
+                      clearable></el-input> -->
             <img src="@/assets/images/common/add.png"
                  alt
                  class="img_box"
@@ -778,6 +784,7 @@ export default {
       loading: false,
       title_name: "告警详情",
       selectedOptions: "",
+      detailArrayShow: false,
       more: {
         src: false,
         name: "",
@@ -922,6 +929,7 @@ export default {
         multiple: [],
         old_as: [],
       },
+      restaurants: []
     };
   },
   components: {
@@ -932,6 +940,46 @@ export default {
   },
   methods: {
     activeIndex (item) { },
+    querySearch (queryString, cb) {
+      console.log(queryString);
+      var restaurants = this.restaurants;
+      console.log(restaurants);
+      var results = queryString != '' ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+      // 调用 callback 返回建议列表的数据
+      console.log(results);
+      cb(results);
+    },
+    createFilter (queryString) {
+      console.log(queryString);
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    handleSelect (item) {
+      console.log(item);
+    },
+    GetLabels () {
+      this.$axios
+        .get("/yiiapi/site/GetLabels", {
+          params: {
+            label_name: '',
+          },
+        })
+        .then((resp) => {
+          console.log(resp);
+          this.restaurants = []
+          resp.data.data.map(item => {
+            this.restaurants.push({
+              value: item.label_name,
+              id: item.id
+            })
+          })
+
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     alert_detail () {
       var join = "";
       // horizontalthreat  横向威胁告警  lateral
@@ -992,7 +1040,7 @@ export default {
           if (this.detail_main.detect_engine != 'LOGDF') {
             this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
           }
-          this.detail_main.label = JSON.parse(this.detail_main.label);
+          // this.detail_main.label = JSON.parse(this.detail_main.label);
           this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
           this.detail_main.description = JSON.parse(this.detail_main.description);
           if (this.detail_main.category_list) {
@@ -1044,6 +1092,7 @@ export default {
             item.selected = false;
             this.detailArray.push(item);
           });
+          this.detailArrayShow = true
           this.table_alerts.tableData.push(this.detail_main)
           this.get_Workorders();
 
@@ -1573,11 +1622,12 @@ export default {
         default:
           break;
       }
+      console.log(label_list);
       this.loading = true;
       this.$axios
         .put(join, {
           id: this.$route.query.detail,
-          label: label_list,
+          label_name: label_list,
         })
         .then((response) => {
           this.loading = false;
@@ -2171,6 +2221,7 @@ export default {
   mounted () {
     // this.alert()
     this.alert_detail();
+    this.GetLabels();
   },
 };
 </script>
@@ -2459,14 +2510,14 @@ export default {
   // 弹窗编辑标签
   /deep/.add_tag {
     .el-dialog {
-      width: 440px;
+      width: 540px;
 
       .el-dialog__body {
-        width: 440px;
+        width: 540px;
 
         .content {
           padding: 24px 5px;
-          height: 120px;
+          height: 200px;
           overflow-y: auto;
 
           &::-webkit-scrollbar {

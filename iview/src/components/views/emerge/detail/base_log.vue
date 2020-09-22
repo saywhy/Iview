@@ -116,34 +116,25 @@
                          class="tabs-item"
                          name="1">
               <div class="reset_item_box">
-                <div v-if="JSON.stringify(complete_log) == '{}'">
+                <div v-if="complete_log.length == 0">
                   <img src="@/assets/images/emerge/log_space.png"
                        class="img_box"
                        alt />
                   <p class="space_title">未选择日志</p>
                 </div>
                 <div class="complete_item"
-                     v-for="(val, key, index) in complete_log"
-                     v-if="key!='message'&&key!='time'&& JSON.stringify(complete_log) != '{}'">
-                  <p class="complete_item_title">{{key}}</p>
-                  <div class="complete_item_content"
-                       v-if="typeof(val)=='string'">{{val}}</div>
-                  <div class="complete_item_content"
-                       v-if="typeof(val)=='object'&&!val.concat">
-                    <p v-for="(v, k, i) in val">
-                      <span>{{k}}</span>
-                      <span>{{v}}</span>
+                     v-for="item in complete_log"
+                     v-if="complete_log.length != 0">
+                  <p class="complete_item_title">{{item.name}}</p>
+                  <div class="complete_item_content">{{item.value}}</div>
+
+                  <!-- <div class="complete_item_content"
+                       v-if="item.name =='hash'">
+                    <p v-for="key in item.value">
+                      <span>{{key}}</span>
                     </p>
-                  </div>
-                  <div class="complete_item_content"
-                       v-if="typeof(val)=='object'&&val.concat">
-                    <div v-for="(item, x) in val">
-                      <p v-for="(value, key, s) in item">
-                        <span>{{key}}</span>
-                        <span>{{value}}</span>
-                      </p>
-                    </div>
-                  </div>
+                  </div> -->
+
                 </div>
               </div>
             </el-tab-pane>
@@ -151,13 +142,13 @@
                          class="tabs-item"
                          name="2">
               <div class="reset_item_box">
-                <div v-if="JSON.stringify(complete_log) == '{}'">
+                <div v-if="complete_log.length == 0">
                   <img src="@/assets/images/emerge/log_space.png"
                        class="img_box"
                        alt />
                   <p class="space_title">未选择日志</p>
                 </div>
-                <p v-if="JSON.stringify(complete_log) != '{}'"
+                <p v-if="complete_log.length != 0"
                    class="original_log">{{original_log}}</p>
               </div>
             </el-tab-pane>
@@ -165,13 +156,13 @@
                          class="tabs-item"
                          name="3">
               <div class="reset_item_box">
-                <div v-if="JSON.stringify(complete_log) == '{}'">
+                <div v-if="complete_log.length == 0">
                   <img src="@/assets/images/emerge/log_space.png"
                        class="img_box"
                        alt />
                   <p class="space_title">未选择日志</p>
                 </div>
-                <div v-if="JSON.stringify(complete_log) != '{}'">
+                <div v-if="complete_log.length != 0">
                   <div class="more_title">
                     <p class="more_title_item">IP地址</p>
                     <p class="more_title_item">资产名</p>
@@ -260,7 +251,7 @@ export default {
       tableRowClassName: "",
       activeName: "1",
       original_log: "",
-      complete_log: {},
+      complete_log: [],
       search_time: "",
       search_log_item: {},
       asset_list: [
@@ -298,7 +289,7 @@ export default {
       console.log("11121212");
       console.log(this.selectItem.src_ip);
       this.original_log = '';
-      this.complete_log = {};
+      this.complete_log = [];
       this.$axios
         .get("/yiiapi/alert/LogList", {
           params: {
@@ -331,19 +322,65 @@ export default {
       console.log(row);
       this.original_log = row._source.message;
       this.complete_log = row._source;
+      this.complete_log = [
+        {
+          name: 'srcIp',
+          value: row._source.srcIp
+        },
+        {
+          name: 'src_name',
+          value: row._source.src_name
+        },
+        {
+          name: 'src_port',
+          value: row._source.src_port
+        },
+        {
+          name: 'src_account',
+          value: row._source.src_account
+        },
+        {
+          name: 'destIp',
+          value: row._source.destIp
+        },
+        {
+          name: 'dst_account',
+          value: row._source.dst_account
+        },
+        {
+          name: 'dst_port',
+          value: row._source.dst_port
+        },
+        {
+          name: 'proto',
+          value: row._source.proto
+        },
+        {
+          name: 'app',
+          value: row._source.app
+        },
+        {
+          name: 'url',
+          value: row._source.url
+        },
+        {
+          name: 'hash',
+          value: row._source.hash
+        },
+      ]
       this.asset_list = [];
       let src_obj = {
-        ip: this.complete_log.srcIp,
-        asset: this.complete_log.src_name,
-        server_name: this.complete_log.server_name,
+        ip: row._source.srcIp,
+        asset: row._source.src_name,
+        server_name: row._source.server_name,
         type: "源地址",
         icon: true,
         key: "srcIp",
       };
       let des_obj = {
-        ip: this.complete_log.destIp,
-        asset: this.complete_log.dst_name,
-        server_name: this.complete_log.server_name,
+        ip: row._source.destIp,
+        asset: row._source.dst_name,
+        server_name: row._source.server_name,
         type: "目的地址",
         icon: false,
         key: "destIp",
@@ -395,9 +432,11 @@ export default {
       var destTime = time.getTime() + this.a_hh * 60 * 60 * 1000 + this.a_mm * 60 * 1000
       console.log(moment(srcTime).format('YYYY-MM-DD HH:mm:ss'));
       console.log(moment(destTime).format('YYYY-MM-DD HH:mm:ss'));
-      this.search_log_item.srcTime = moment(srcTime).format('YYYY-MM-DD HH:mm:ss')
-      this.search_log_item.destTime = moment(destTime).format('YYYY-MM-DD HH:mm:ss')
-      // this.$router.push({ name: "custom_invest", params: { search: this.search_log_item } });
+      this.search_log_item.srcTime = srcTime
+      this.search_log_item.destTime = destTime
+      this.$router.push({        path: '/invest/custom_invest', query: {
+          search: JSON.stringify(this.search_log_item)
+        }      });
       this.$axios
         .get("/yiiapi/alert/MoreLog", {
           params: {
@@ -419,8 +458,8 @@ export default {
           params: {
             // srcIp或者destIp
             ip_type: 'srcIp',
-            srcTime: moment(srcTime).format('YYYY-MM-DD HH:mm:ss'),
-            destTime: moment(destTime).format('YYYY-MM-DD HH:mm:ss'),
+            srcTime: srcTime,
+            destTime: destTime,
             ip: this.search_log_item.ip,
             server_name: this.search_log_item.server_name,
           },

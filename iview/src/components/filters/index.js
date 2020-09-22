@@ -21,6 +21,13 @@ Vue.filter('time', function (value) {
     return moment(value).format('YYYY-MM-DD HH:mm:ss')
   }
 });
+Vue.filter('type', function (value) {
+  if (value == '') {
+    return '其他'
+  } else {
+    return value
+  }
+});
 
 Vue.filter('network_event', function (value) {
   switch (value) {

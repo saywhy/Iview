@@ -103,6 +103,10 @@
           <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
         </li>
         <li class="info_top_item">
+          <span class="info_top_item_title">检测规则</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+        <li class="info_top_item">
           <span class="info_top_item_title">参考信息</span>
           <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
         </li>
@@ -129,6 +133,10 @@
         <li class="info_top_item">
           <span class="info_top_item_title">描述</span>
           <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">检测规则</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">文件</span>
