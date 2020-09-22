@@ -1,248 +1,247 @@
 <template>
-  <div id="common_invest"
-       class="common_invest">
-    <div class="invest_box">
-      <el-tabs v-model="activeName"
-               class="reset_tab">
-        <el-tab-pane label="自定义追查"
-                     class="tabs-item"
-                     name="first">
+  <div id="common_invest">
+    <div class="common_invest_top">
+      <p class="title">提问</p>
+      <div class="search_box">
+        <el-input class="search_box_left"
+                  placeholder="请输入内容"
+                  v-model="search_data.name">
+          <template slot="append">
+            <el-date-picker v-model="time_list"
+                            class="vm_emerge_picker"
+                            type="datetimerange"
+                            :picker-options="pickerOptions"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            align="right">
+            </el-date-picker>
+          </template>
+        </el-input>
+        <div class="search_box_right">
+          搜索
+        </div>
+      </div>
+    </div>
 
-          <div class="search_box">
-            <el-input class="search_box_left"
-                      placeholder="请输入内容"
-                      v-model="search_data.name">
-              <template slot="append">
-                <el-date-picker v-model="time_list"
-                                class="vm_emerge_picker"
-                                type="datetimerange"
-                                :picker-options="pickerOptions"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                align="right">
-                </el-date-picker>
-                <!-- <vm-emerge-picker @changeTime='changeTime'
-                                  :option='time_list'></vm-emerge-picker> -->
+    <div class="log_content"
+         v-if="searchShow">
+      <div class="line"
+           id="emergeLine"></div>
+      <!-- 维度统计 -->
+      <div class="DimensionAggregation">
+        <div class="DimensionFlexBox">
+          <div class="DimensionFlexItem">
+            <p class="title">TOP 日志类型</p>
+            <div class="item_box">
+              <div class="right">
+                <div id="classification"></div>
+              </div>
+            </div>
+          </div>
+          <div class="space_div">
+          </div>
+          <div class="DimensionFlexItem">
+            <p class="title">TOP 事件类型</p>
+            <div class="item_box">
+              <div class="right">
+                <div id="eventtype"></div>
+              </div>
+            </div>
+          </div>
+          <div class="space_div">
+          </div>
+          <div class="DimensionFlexItem">
+            <p class="title">关联资产</p>
+            <div class="item_box">
+              <div class="right">
+                <div id="server_name"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="DimensionFlexBox">
+          <div class="DimensionFlexItem">
+            <p class="title">账号</p>
+            <div class="item_box">
+              <div class="right">
+                <div id="account"></div>
+              </div>
+            </div>
+          </div>
+          <div class="space_div">
+          </div>
+          <div class="DimensionFlexItem">
+            <p class="title">国家</p>
+            <div class="item_box">
+              <div class="right">
+                <div id="city_name"></div>
+              </div>
+            </div>
+          </div>
+          <div class="space_div">
+          </div>
+          <div class="DimensionFlexItem">
+            <p class="title">TOP 应用</p>
+            <div class="item_box">
+              <div class="right">
+                <div id="app"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div v-if="searchShow">
+      <p class="list_title">日志</p>
+    </div>
+    <div class="log_content"
+         v-if="searchShow">
+      <div class="export_box">
+        <span class="export_i">导出归一化日志</span>
+        <span class="export_o">导出原始日志</span>
+      </div>
+      <!-- 日志列表 -->
+      <div class="log_table_box">
+        <div class="log_table_left">
+          <el-table class="reset_table"
+                    ref="multipleTable"
+                    align="center"
+                    border
+                    height="90%"
+                    :data="log_list.data.hits.hits"
+                    tooltip-effect="dark"
+                    style="width: 100%"
+                    :row-style="selectedHighlight"
+                    @row-click="rowClick"
+                    :highlight-current-row="true"
+                    :row-class-name="tableRowClassName"
+                    @selection-change="handleSelectionChange">
+            <el-table-column label="日志时间"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row._source.time | timestamp}}</span>
+                <!-- <span>{{ scope.row._source.time}}</span> -->
               </template>
-            </el-input>
-            <div class="search_box_right">
-              搜索
-            </div>
-          </div>
-          <div class="log_content"
-               v-if="searchShow">
-            <div class="line"
-                 id="emergeLine"></div>
-            <!-- 维度统计 -->
-            <div class="DimensionAggregation">
-              <p class="title">维度统计</p>
-              <div class="DimensionFlexBox">
-                <div class="DimensionFlexItem">
-                  <div class="item_box">
-                    <p>日志类型</p>
-                    <p class="for_item"
-                       v-for="item in DimensionAggregation.classification">
-                      <span>{{item.key |type}}</span>
-                      <span>{{item.doc_count}}</span>
-                    </p>
-                  </div>
+            </el-table-column>
+            <el-table-column prop="_source.server_name"
+                             label="日志来源"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.classification"
+                             label="日志类型"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.eventtype"
+                             label="事件类型"
+                             align="center"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.direction"
+                             label="方向"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.srcIp"
+                             label="源地址"
+                             align="center"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.src_name"
+                             label="源资产名"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.src_port"
+                             label="源端口"
+                             align="center"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.src_account"
+                             label="源账号"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.destIp"
+                             label="目的地址"
+                             align="center"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.dst_name"
+                             label="目的资产名"
+                             align="center"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.dst_port"
+                             label="目的端口"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.dst_account"
+                             label="目的账号"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.proto"
+                             label="协议"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+            <el-table-column prop="_source.app"
+                             label="应用"
+                             align="center"
+                             width="150"
+                             show-overflow-tooltip></el-table-column>
+          </el-table>
+          <el-pagination class="handle_pagination"
+                         @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange"
+                         :page-sizes="[10,20,50,100]"
+                         :page-size="log_list.rows*1"
+                         :current-page="log_list.pageNow*1"
+                         :total="log_list.data.hits.total.value*1"
+                         layout="total, sizes, prev, pager, next">
+          </el-pagination>
+        </div>
+        <div class="log_table_right">
+          <el-tabs v-model="activelog"
+                   @tab-click="handleClick"
+                   class="reset_tab">
+            <el-tab-pane label="完整日志"
+                         class="tabs-item"
+                         name="1">
+              <div class="reset_item_box">
+                <div v-if="complete_log.length == 0">
+                  <img src="@/assets/images/emerge/log_space.png"
+                       class="img_box"
+                       alt />
+                  <p class="space_title">未选择日志</p>
                 </div>
-                <div class="DimensionFlexItem">
-                  <div class="item_box">
-                    <p>事件类型</p>
-                    <p class="for_item"
-                       v-for="item in DimensionAggregation.eventtype">
-                      <span>{{item.key |type}}</span>
-                      <span>{{item.doc_count}}</span>
-                    </p>
-                  </div>
-                </div>
-                <div class="DimensionFlexItem">
-                  <div class="item_box">
-                    <p>资产</p>
-                    <p class="for_item"
-                       v-for="item in DimensionAggregation.server_name">
-                      <span>{{item.key |type}}</span>
-                      <span>{{item.doc_count}}</span>
-                    </p>
-                  </div>
-                </div>
-                <div class="DimensionFlexItem">
-                  <div class="item_box">
-                    <p>账号</p>
-                    <p class="for_item"
-                       v-for="item in DimensionAggregation.account">
-                      <span>{{item.key |type}}</span>
-                      <span>{{item.doc_count}}</span>
-                    </p>
-                  </div>
-                </div>
-                <div class="DimensionFlexItem">
-                  <div class="item_box">
-                    <p>国家</p>
-                    <p class="for_item"
-                       v-for="item in DimensionAggregation.city_name">
-                      <span>{{item.key |type}}</span>
-                      <span>{{item.doc_count}}</span>
-                    </p>
-                  </div>
-                </div>
-                <div class="DimensionFlexItem">
-                  <div class="item_box">
-                    <p>应用</p>
-                    <p class="for_item"
-                       v-for="item in DimensionAggregation.app">
-                      <span>{{item.key |type}}</span>
-                      <span>{{item.doc_count}}</span>
-                    </p>
-                  </div>
+                <div class="complete_item"
+                     v-for="item in complete_log"
+                     v-if="complete_log.length != 0">
+                  <p class="complete_item_title">{{item.name}}</p>
+                  <div class="complete_item_content">{{item.value}}</div>
                 </div>
               </div>
-            </div>
-            <!-- 日志列表 -->
-            <div class="log_table_box">
-              <div class="log_table_left">
-                <el-table class="reset_table"
-                          ref="multipleTable"
-                          align="center"
-                          border
-                          height="90%"
-                          :data="log_list.data.hits.hits"
-                          tooltip-effect="dark"
-                          style="width: 100%"
-                          :row-style="selectedHighlight"
-                          @row-click="rowClick"
-                          :highlight-current-row="true"
-                          :row-class-name="tableRowClassName"
-                          @selection-change="handleSelectionChange">
-                  <el-table-column label="日志时间"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip>
-                    <template slot-scope="scope">
-                      <span>{{ scope.row._source.time | timestamp}}</span>
-                      <!-- <span>{{ scope.row._source.time}}</span> -->
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="_source.server_name"
-                                   label="日志来源"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.classification"
-                                   label="日志类型"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.eventtype"
-                                   label="事件类型"
-                                   align="center"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.direction"
-                                   label="方向"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.srcIp"
-                                   label="源地址"
-                                   align="center"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.src_name"
-                                   label="源资产名"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.src_port"
-                                   label="源端口"
-                                   align="center"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.src_account"
-                                   label="源账号"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.destIp"
-                                   label="目的地址"
-                                   align="center"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.dst_name"
-                                   label="目的资产名"
-                                   align="center"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.dst_port"
-                                   label="目的端口"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.dst_account"
-                                   label="目的账号"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.proto"
-                                   label="协议"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="_source.app"
-                                   label="应用"
-                                   align="center"
-                                   width="150"
-                                   show-overflow-tooltip></el-table-column>
-                </el-table>
-                <el-pagination class="handle_pagination"
-                               @size-change="handleSizeChange"
-                               @current-change="handleCurrentChange"
-                               :page-sizes="[10,20,50,100]"
-                               :page-size="log_list.rows*1"
-                               :current-page="log_list.pageNow*1"
-                               :total="log_list.data.hits.total.value*1"
-                               layout="total, sizes, prev, pager, next">
-                </el-pagination>
+            </el-tab-pane>
+            <el-tab-pane label="原始日志"
+                         class="tabs-item"
+                         name="2">
+              <div class="reset_item_box">
+                <div v-if="complete_log.length == 0">
+                  <img src="@/assets/images/emerge/log_space.png"
+                       class="img_box"
+                       alt />
+                  <p class="space_title">未选择日志</p>
+                </div>
+                <p v-if="complete_log.length != 0"
+                   class="original_log">{{original_log}}</p>
               </div>
-              <div class="log_table_right">
-                <el-tabs v-model="activelog"
-                         @tab-click="handleClick"
-                         class="reset_tab">
-                  <el-tab-pane label="完整日志"
-                               class="tabs-item"
-                               name="1">
-                    <div class="reset_item_box">
-                      <div v-if="complete_log.length == 0">
-                        <img src="@/assets/images/emerge/log_space.png"
-                             class="img_box"
-                             alt />
-                        <p class="space_title">未选择日志</p>
-                      </div>
-                      <div class="complete_item"
-                           v-for="item in complete_log"
-                           v-if="complete_log.length != 0">
-                        <p class="complete_item_title">{{item.name}}</p>
-                        <div class="complete_item_content">{{item.value}}</div>
-                      </div>
-                    </div>
-                  </el-tab-pane>
-                  <el-tab-pane label="原始日志"
-                               class="tabs-item"
-                               name="2">
-                    <div class="reset_item_box">
-                      <div v-if="complete_log.length == 0">
-                        <img src="@/assets/images/emerge/log_space.png"
-                             class="img_box"
-                             alt />
-                        <p class="space_title">未选择日志</p>
-                      </div>
-                      <p v-if="complete_log.length != 0"
-                         class="original_log">{{original_log}}</p>
-                    </div>
-                  </el-tab-pane>
-                </el-tabs>
-              </div>
-            </div>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -350,6 +349,7 @@ export default {
       this.city_name()
       this.server_name()
       this.app()
+
     }
   },
   methods: {
@@ -392,6 +392,7 @@ export default {
           bottom: "18%",
           containLabel: true
         },
+        color: '#0070FF',
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -402,7 +403,7 @@ export default {
           backgroundColor: "rgba(255,255,255,1)",
           padding: [5, 10],
           textStyle: {
-            color: "#7588E4",
+            color: "#0070FF",
           },
           extraCssText: "box-shadow: 0 0 5px rgba(0,0,0,0.3)",
         },
@@ -416,7 +417,6 @@ export default {
             }
           },
           axisLabel: {
-
             textStyle: {
               color: "#666666",
             },
@@ -469,13 +469,13 @@ export default {
           lineStyle: {
             normal: {
               width: 2,
-              color: "#DC5F5F",
+              color: "#0070FF",
               opacity: 0.5
             },
           },
           symbol: "circle",
           areaStyle: {
-            color: "#DC5F5F",
+            color: "#0070FF",
             opacity: 0.12
           },
           data: this.ecarts_data.count
@@ -550,6 +550,447 @@ export default {
           }
         })
     },
+    eventtype_echarts () {
+      var xAxis_data = []
+      var yAxis_data = []
+      this.DimensionAggregation.eventtype.map(item => {
+        yAxis_data.push(item.key)
+        xAxis_data.push(item.doc_count)
+      })
+      let myChart = this.$echarts.init(document.getElementById("eventtype"));
+      myChart.setOption(
+        {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          grid: {
+            left: 0,
+            right: 50,
+            bottom: 0,
+            top: 0,
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            // interval: 'auto',
+            // splitNumber: 5,
+            boundaryGap: false,
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            axisLine: { //y轴
+              show: false
+            },
+          },
+          yAxis: {
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            // axisLabel: {
+            //   align: 'left'
+            // },
+            axisLine: { //y轴
+              show: false
+            },
+            type: 'category',
+            data: yAxis_data
+          },
+          color: ['#5389E0'],
+          series: [
+            {
+              itemStyle: {
+                normal: {
+                  label: {
+                    show: true,		//开启显示
+                    position: 'right',	//在上方显示
+                    textStyle: {	    //数值样式
+                      color: '#5389E0',
+                      fontSize: 14
+                    }
+                  }
+                }
+              },
+              name: '日志数量',
+              type: 'bar',
+              barWidth: '20',
+              data: xAxis_data
+            }
+          ]
+        }
+      );
+      window.addEventListener("resize", () => {
+        myChart.resize();
+      });
+    },
+    classification_echarts () {
+      var xAxis_data = []
+      var yAxis_data = []
+      this.DimensionAggregation.classification.map(item => {
+        yAxis_data.push(item.key)
+        xAxis_data.push(item.doc_count)
+      })
+      let myChart = this.$echarts.init(document.getElementById("classification"));
+      myChart.setOption(
+        {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          grid: {
+            left: 0,
+            right: 50,
+            bottom: 0,
+            top: 0,
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            boundaryGap: false,
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            axisLine: { //y轴
+              show: false
+            },
+          },
+          yAxis: {
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            // axisLabel: {
+            //   align: 'left'
+            // },
+            axisLine: { //y轴
+              show: false
+            },
+            type: 'category',
+            data: yAxis_data
+          },
+          color: ['#5389E0'],
+          series: [
+            {
+              itemStyle: {
+                normal: {
+                  label: {
+                    show: true,		//开启显示
+                    position: 'right',	//在上方显示
+                    textStyle: {	    //数值样式
+                      color: '#5389E0',
+                      fontSize: 14
+                    }
+                  }
+                }
+              },
+              name: '日志数量',
+              type: 'bar',
+              barWidth: '20',
+              data: xAxis_data
+            }
+          ]
+        }
+      );
+      window.addEventListener("resize", () => {
+        myChart.resize();
+      });
+    },
+    account_echarts () {
+      var xAxis_data = []
+      var yAxis_data = []
+      this.DimensionAggregation.account.map(item => {
+        yAxis_data.push(item.key)
+        xAxis_data.push(item.doc_count)
+      })
+      let myChart = this.$echarts.init(document.getElementById("account"));
+      myChart.setOption(
+        {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          grid: {
+            left: 0,
+            right: 50,
+            bottom: 0,
+            top: 0,
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            boundaryGap: false,
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            axisLine: { //y轴
+              show: false
+            },
+          },
+          yAxis: {
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            // axisLabel: {
+            //   align: 'left'
+            // },
+            axisLine: { //y轴
+              show: false
+            },
+            type: 'category',
+            data: yAxis_data
+          },
+          color: ['#5389E0'],
+          series: [
+            {
+              itemStyle: {
+                normal: {
+                  label: {
+                    show: true,		//开启显示
+                    position: 'right',	//在上方显示
+                    textStyle: {	    //数值样式
+                      color: '#5389E0',
+                      fontSize: 14
+                    }
+                  }
+                }
+              },
+              name: '日志数量',
+              type: 'bar',
+              barWidth: '20',
+              data: xAxis_data
+            }
+          ]
+        }
+      );
+      window.addEventListener("resize", () => {
+        myChart.resize();
+      });
+    },
+    city_name_echarts () {
+      var xAxis_data = []
+      var yAxis_data = []
+      this.DimensionAggregation.city_name.map(item => {
+        yAxis_data.push(item.key)
+        xAxis_data.push(item.doc_count)
+      })
+      let myChart = this.$echarts.init(document.getElementById("city_name"));
+      myChart.setOption(
+        {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          grid: {
+            left: 0,
+            right: 50,
+            bottom: 0,
+            top: 0,
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            boundaryGap: false,
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            axisLine: { //y轴
+              show: false
+            },
+          },
+          yAxis: {
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            // axisLabel: {
+            //   align: 'left'
+            // },
+            axisLine: { //y轴
+              show: false
+            },
+            type: 'category',
+            data: yAxis_data
+          },
+          color: ['#5389E0'],
+          series: [
+            {
+              itemStyle: {
+                normal: {
+                  label: {
+                    show: true,		//开启显示
+                    position: 'right',	//在上方显示
+                    textStyle: {	    //数值样式
+                      color: '#5389E0',
+                      fontSize: 14
+                    }
+                  }
+                }
+              },
+              name: '日志数量',
+              type: 'bar',
+              barWidth: '15',
+              data: xAxis_data
+            }
+          ]
+        }
+      );
+      window.addEventListener("resize", () => {
+        myChart.resize();
+      });
+    },
+    server_name_echarts () {
+      var xAxis_data = []
+      var yAxis_data = []
+      this.DimensionAggregation.server_name.map(item => {
+        yAxis_data.push(item.key)
+        xAxis_data.push(item.doc_count)
+      })
+      let myChart = this.$echarts.init(document.getElementById("server_name"));
+      myChart.setOption(
+        {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          grid: {
+            left: 0,
+            right: 50,
+            bottom: 0,
+            top: 0,
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            boundaryGap: false,
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            axisLine: { //y轴
+              show: false
+            },
+          },
+          yAxis: {
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            // axisLabel: {
+            //   align: 'left'
+            // },
+            axisLine: { //y轴
+              show: false
+            },
+            type: 'category',
+            data: yAxis_data
+          },
+          color: ['#5389E0'],
+          series: [
+            {
+              itemStyle: {
+                normal: {
+                  label: {
+                    show: true,		//开启显示
+                    position: 'right',	//在上方显示
+                    textStyle: {	    //数值样式
+                      color: '#5389E0',
+                      fontSize: 14
+                    }
+                  }
+                }
+              },
+              name: '日志数量',
+              type: 'bar',
+              barWidth: '20',
+              data: xAxis_data
+            }
+          ]
+        }
+      );
+      window.addEventListener("resize", () => {
+        myChart.resize();
+      });
+    },
+    app_echarts () {
+      var xAxis_data = []
+      var yAxis_data = []
+      this.DimensionAggregation.app.map(item => {
+        item.key = item.key == '' ? '其他' : item.key
+        yAxis_data.push(item.key)
+        xAxis_data.push(item.doc_count)
+      })
+      let myChart = this.$echarts.init(document.getElementById("app"));
+      myChart.setOption(
+        {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          grid: {
+            left: 0,
+            right: 50,
+            bottom: 0,
+            top: 0,
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            boundaryGap: false,
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            axisLine: { //y轴
+              show: false
+            },
+          },
+          yAxis: {
+            axisTick: { //y轴刻度线
+              show: false
+            },
+            // axisLabel: {
+            //   align: 'left'
+            // },
+            axisLine: { //y轴
+              show: false
+            },
+            type: 'category',
+            data: yAxis_data
+          },
+          color: ['#5389E0'],
+          series: [
+            {
+              itemStyle: {
+                normal: {
+                  label: {
+                    show: true,		//开启显示
+                    position: 'right',	//在上方显示
+                    textStyle: {	    //数值样式
+                      color: '#5389E0',
+                      fontSize: 14
+                    }
+                  }
+                }
+              },
+              name: '日志数量',
+              type: 'bar',
+              barWidth: '20',
+              data: xAxis_data
+            }
+          ]
+        }
+      );
+      window.addEventListener("resize", () => {
+        myChart.resize();
+      });
+    },
     classification () {
       this.$axios
         .get("/yiiapi/investigate/DimensionAggregation", {
@@ -565,6 +1006,7 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           this.DimensionAggregation.classification = resp.data.data.aggregations.server_count.buckets
+          this.classification_echarts()
         })
         .catch((error) => {
           console.log(error);
@@ -587,6 +1029,7 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           this.DimensionAggregation.account = resp.data.data.aggregations.server_count.buckets
+          this.account_echarts()
         })
         .catch((error) => {
           console.log(error);
@@ -607,6 +1050,7 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           this.DimensionAggregation.eventtype = resp.data.data.aggregations.server_count.buckets
+          this.eventtype_echarts()
         })
         .catch((error) => {
           console.log(error);
@@ -627,6 +1071,7 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           this.DimensionAggregation.city_name = resp.data.data.aggregations.server_count.buckets
+          this.city_name_echarts()
         })
         .catch((error) => {
           console.log(error);
@@ -647,6 +1092,7 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           this.DimensionAggregation.server_name = resp.data.data.aggregations.server_count.buckets
+          this.server_name_echarts()
         })
         .catch((error) => {
           console.log(error);
@@ -667,6 +1113,7 @@ export default {
         .then((resp) => {
           console.log(resp.data);
           this.DimensionAggregation.app = resp.data.data.aggregations.server_count.buckets
+          this.app_echarts()
         })
         .catch((error) => {
           console.log(error);
@@ -759,27 +1206,47 @@ export default {
 @import '../../../assets/css/less/reset_css/reset_invest.less';
 @import '../../../assets/css/less/reset_css/reset_tab.less';
 #common_invest {
+  // border: 1px solid red;
+  margin: 24px;
+  background: #fff;
   text-align: center;
+  .common_invest_top {
+    padding: 24px;
+    padding-bottom: 0;
+    text-align: left;
+    .title {
+      font-size: 14px;
+      color: #999999;
+    }
+    .search_box {
+      .el-input {
+        height: 48px;
+      }
+      .el-input-group > .el-input__inner {
+        height: 48px;
+      }
+      margin: 8px 0 0 0;
+      display: flex;
+      .search_box_left {
+        flex: 1;
+      }
+      .search_box_right {
+        padding: 0;
+        width: 164px;
+        height: 48px;
+        text-align: center;
+        line-height: 48px;
+        background: #0070ff;
+        font-size: 16px;
+        color: #ffffff;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+    }
+  }
+
   .el-input-group__append {
     border: 0;
-  }
-  .search_box {
-    margin: 24px 0;
-    display: flex;
-    .search_box_left {
-      flex: 1;
-    }
-    .search_box_right {
-      padding: 0;
-      width: 102px;
-      height: 38px;
-      text-align: center;
-      line-height: 38px;
-      background: #0070ff;
-      color: #fff;
-      border-radius: 3px;
-      cursor: pointer;
-    }
   }
 
   .vm_emerge_picker {
@@ -790,7 +1257,7 @@ export default {
     }
     /deep/ .el-range-separator {
       padding: 0 3px;
-      line-height: 32px;
+      // line-height: 48px;
       width: auto;
       color: #303133;
     }
@@ -803,13 +1270,51 @@ export default {
       border-color: #0070ff;
     }
   }
+  .list_title {
+    text-align: left;
+    height: 48px;
+    line-height: 48px;
+    font-size: 16px;
+    color: #333333;
+    padding-left: 24px;
+    border-bottom: 1px solid #ececec;
+  }
   .log_content {
+    padding: 0 24px;
+    .export_box {
+      text-align: left;
+      margin: 24px 0;
+      .export_i {
+        cursor: pointer;
+        display: inline-block;
+        width: 148px;
+        height: 38px;
+        line-height: 38px;
+        background: #0070ff;
+        color: #fff;
+        font-size: 14px;
+        text-align: center;
+        border: 1px solid #0070ff;
+        margin-right: 8px;
+      }
+      .export_o {
+        cursor: pointer;
+        display: inline-block;
+        width: 148px;
+        height: 38px;
+        line-height: 38px;
+        font-size: 14px;
+        color: #0070ff;
+        border: 1px solid #0070ff;
+        text-align: center;
+      }
+    }
     #emergeLine {
       width: 100%;
-
-      height: 276px;
+      height: 200px;
     }
     .DimensionAggregation {
+      // border: 1px solid red;
       text-align: left;
       margin: 24px 0;
       .title {
@@ -818,19 +1323,48 @@ export default {
         margin-bottom: 10px;
       }
       .DimensionFlexBox {
+        margin-bottom: 48px;
         display: flex;
         // border: 1px solid red;
         .DimensionFlexItem {
-          display: flex;
           flex: 1;
           // border: 1px solid red;
-          .item_box {
-            flex: 1;
-            .for_item {
-              margin: 8px 0;
-            }
-            // border: 1px solid red;
+          .title {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 24px;
           }
+          .item_box {
+            display: flex;
+            .left {
+              width: 150px;
+              // border: 1px solid red;
+              padding-bottom: 20px;
+              .item_p {
+                height: 20px;
+                margin-bottom: 16px;
+                // border-bottom: 1px solid red;
+              }
+            }
+            .right {
+              // border: 1px solid red;
+              flex: 1;
+              height: 300px;
+              #classification,
+              #account,
+              #city_name,
+              #server_name,
+              #app,
+              #eventtype {
+                width: 100%;
+                height: 100%;
+                // border: 1px solid red;
+              }
+            }
+          }
+        }
+        .space_div {
+          width: 100px;
         }
       }
     }

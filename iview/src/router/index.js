@@ -283,8 +283,7 @@ export const asyncRouterMap = [
       role: ['admin']
     },
     component: Layout,
-    children: [
-      {
+    children: [{
         path: '/handle/assets',
         name: 'assets',
         meta: {
@@ -309,8 +308,7 @@ export const asyncRouterMap = [
           deep: 1
         },
         component: () => import('@/components/views/handle/Risks'),
-        children: [
-          {
+        children: [{
             path: '/handle/risks/outside',
             name: 'outside',
             meta: {
@@ -505,6 +503,19 @@ export const asyncRouterMap = [
         component: () => import('@/components/views/invest/Flow')
       },
       {
+        path: '/invest/custom_invest',
+        name: 'custom_invest',
+        meta: {
+          title: '自定义追查',
+          auth: '297',
+          icon: 'e-aside-custom',
+          parentAuth: '14',
+          rootAuth: '14',
+          deep: 1
+        },
+        component: () => import('@/components/views/invest/custom_invest')
+      },
+      {
         path: '/invest/ioc',
         name: 'ioc',
         meta: {
@@ -516,19 +527,6 @@ export const asyncRouterMap = [
           deep: 1
         },
         component: () => import('@/components/views/invest/Ioc')
-      },
-      {
-        path: '/invest/custom_invest',
-        name: 'custom_invest',
-        meta: {
-          title: '自定义追查',
-          auth: '297',
-          icon: 'e-aside-ioc',
-          parentAuth: '14',
-          rootAuth: '14',
-          deep: 1
-        },
-        component: () => import('@/components/views/invest/custom_invest')
       },
       {
         path: '/invest/sandbox',

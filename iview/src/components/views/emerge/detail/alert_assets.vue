@@ -162,11 +162,13 @@ export default {
         ]
       },
       table_old: {
+        data: [],
         pageNow: '1',
         rows: '10',
         count: '0',
       },
       table_new: {
+        data: [],
         pageNow: '1',
         rows: '10',
         count: '0',
@@ -189,6 +191,7 @@ export default {
       console.log('val监听selectIndicator:', val)
       this.get_alert_list('2', '1', this.table_old.rows);
       this.get_alert_list('0', '1', this.table_new.rows);
+      console.log(this.table_new.rows);
     }
   },
   methods: {
@@ -209,15 +212,21 @@ export default {
     //每頁多少條切換
     handleSizeChange_new (val) {
       this.table_new.rows = val;
+      console.log(this.table_new.rows);
       this.table_new.pageNow = 1;
       this.get_alert_list('0', '1', val);
     },
     //頁數點擊切換
     handleCurrentChange_new (val) {
+      console.log(this.table_new.rows);
       this.table_new.pageNow = val;
+      console.log(this.table_new.rows);
       this.get_alert_list('0', val, this.table_new.rows);
     },
     get_alert_list (is_deal, page, rows) {
+      console.log(this.table_new.rows);
+      console.log(rows);
+
       this.$axios.get('/yiiapi/alert/GetSameIndicatorAlert', {
         params: {
           page: page,
@@ -230,10 +239,14 @@ export default {
         let { status, data } = resp.data;
         switch (is_deal) {
           case '0':
-            this.table_new = data
+            this.table_new.data = data.data
+            this.table_new.pageNow = data.pageNow
+            this.table_new.count = data.count
             break;
           case '2':
-            this.table_old = data
+            this.table_old.data = data.data
+            this.table_old.pageNow = data.pageNow
+            this.table_old.count = data.count
             break;
           default:
             break;
@@ -244,7 +257,9 @@ export default {
         })
     }
   },
-  computed: {}
+  computed: {
+
+  }
 }
 </script>
 <style scoped lang="less">
