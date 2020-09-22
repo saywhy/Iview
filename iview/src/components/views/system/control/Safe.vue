@@ -465,10 +465,10 @@
           );
           return false
         }
-        var pattern0 = /^[a-zA-Z0-9]{6,16}$/;
+        var pattern0 = /^[0-9a-zA-Z\d!@#$%^&*]{6,16}$/;
         if (!pattern0.test(this.monitor_add.character)) {
           this.$message({
-            message: '字符串为6-16个数字或字母！',
+            message: '字符串为6-16个数字或字母或!@#$%^&*等特殊字符！',
             type: 'warning',
           });
           return false;
@@ -569,7 +569,7 @@
         }
         if (pattern.test(this.monitor_add.name)) {
           this.$message({
-            message: '设备名称不能包含特殊字符！',
+            message: '字符串为6-16个数字或字母或!@#$%^&*等特殊字符！',
             type: 'warning',
           });
           return false
@@ -584,7 +584,7 @@
           );
           return false
         }
-        var pattern0 = /^[a-zA-Z0-9]{6,16}$/;
+        var pattern0 = /^[0-9a-zA-Z\d!@#$%^&*]{6,16}$/;
         if (!pattern0.test(this.monitor_add.character)) {
           this.$message({
             message: '字符串为6-16个数字或字母！',

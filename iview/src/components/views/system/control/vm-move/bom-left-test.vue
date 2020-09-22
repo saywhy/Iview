@@ -34,7 +34,7 @@ export default {
       // 绘制图表
       myChart.setOption({
         grid: {
-          top: "20%",
+          top: "10%",
           left: 0,
           right: "2%",
           bottom: "5%",
@@ -53,10 +53,10 @@ export default {
               color: "#ccc"
             }
           },
-          /*formatter: function (params, ticket, callback) {
+          formatter: function (params) {
             console.log(params);
             return '44';
-          }*/
+          }
         },
         color: ["#47CAD9"],
         xAxis: {
