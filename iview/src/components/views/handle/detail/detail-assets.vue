@@ -389,11 +389,10 @@
                              width="150"
                              show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="application"
-                             align="center"
+            <el-table-column align="center"
                              label="应用"
-                             width="100"
                              show-overflow-tooltip>
+              <template slot-scope="scope">{{ scope.row.application | applite }}</template>
             </el-table-column>
             <el-table-column label="威胁等级"
                              align="center"

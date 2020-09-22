@@ -408,3 +408,14 @@ Vue.filter('alarm', function (args) {
   }
   return str;
 });
+
+//告警应用特殊处理
+Vue.filter('applite', function (args) {
+  let str = '';
+  if (args != 'None') {
+    str = args;
+  } else {
+    str == '';
+  }
+  return str;
+});

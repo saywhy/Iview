@@ -152,10 +152,11 @@
                                align="center"
                                label="目的地址"
                                show-overflow-tooltip></el-table-column>
-              <el-table-column prop="application"
-                               align="center"
+              <el-table-column align="center"
                                label="应用"
-                               show-overflow-tooltip></el-table-column>
+                               show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.application | applite }}</template>
+              </el-table-column>
               <el-table-column label="威胁等级"
                                align="center"
                                width="100"
