@@ -231,7 +231,7 @@
               this.loading = false;
               let {status,data} = resp.data;
 
-              console.log(data)
+              //console.log(data)
 
               if(status == 0){
 
@@ -262,7 +262,7 @@
                 }
 
                 this.label_data = labelAttr;
-                console.log(labelAttr)
+                //console.log(labelAttr)
               }
             })
             .catch(error => {
