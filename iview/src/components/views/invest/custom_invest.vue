@@ -2060,7 +2060,6 @@ export default {
   text-align: center;
   .common_invest_top {
     padding: 24px;
-    padding-bottom: 0;
     text-align: left;
     .title {
       font-size: 14px;
