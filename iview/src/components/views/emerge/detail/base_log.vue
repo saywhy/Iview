@@ -176,7 +176,7 @@
                        :class="item.icon?'text_color':''"
                        @click="select_asset(item,index)">
                     <p class="more_item_text">{{item.ip}}</p>
-                    <p class="more_item_text">{{item.asset}}</p>
+                    <p class="more_item_text">{{item.server_name}}</p>
                     <p class="more_item_text">{{item.type}}</p>
                     <div class="img_more_box"
                          v-if="item.icon">
@@ -426,7 +426,7 @@ export default {
             this.search_log_item.ip = item.ip;
             this.search_log_item.type = 'destIp';
           }
-          this.search_log_item.server_name = '我是测试1';
+          this.search_log_item.server_name = item.server_name;
         }
       })
       var time = new Date(this.search_time)
