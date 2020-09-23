@@ -151,7 +151,10 @@
               <div class="item_addrs"
                    v-for="(item,index) in monitor_add.tag_list">
                 <el-autocomplete class="inline-input select_box"
-                                 v-model="item.name"
+                                 :value="item.name"
+                                 @input="e => item.name = validSe(e)"
+                                 :maxlength='maxlength_num'
+                                 show-word-limit
                                  :fetch-suggestions="querySearch"
                                  placement='bottom'
                                  placeholder="请输入标签"
@@ -290,9 +293,12 @@
                           clearable>
                 </el-input> -->
                 <el-autocomplete class="inline-input select_box"
-                                 v-model="item.name"
                                  :fetch-suggestions="querySearch"
                                  placement='bottom'
+                                 :value="item.name"
+                                 @input="e => item.name = validSe(e)"
+                                 :maxlength='maxlength_num'
+                                 show-word-limit
                                  placeholder="请输入标签"
                                  @select="handleSelect"></el-autocomplete>
                 <img src="@/assets/images/common/add.png"
@@ -433,6 +439,7 @@ export default {
   name: "system_control_monitor",
   data () {
     return {
+      maxlength_num: 25,
       area_array: [],
       monitor_data: {},
       cascader_add_if: false,
@@ -556,7 +563,6 @@ export default {
           },
         })
         .then((resp) => {
-          console.log(resp);
           this.restaurants = []
           resp.data.data.map(item => {
             this.restaurants.push({
@@ -572,16 +578,12 @@ export default {
     },
     handleSelect () { },
     querySearch (queryString, cb) {
-      console.log(queryString);
       var restaurants = this.restaurants;
-      console.log(restaurants);
       var results = queryString != '' ? restaurants.filter(this.createFilter(queryString)) : restaurants;
       // 调用 callback 返回建议列表的数据
-      console.log(results);
       cb(results);
     },
     createFilter (queryString) {
-      console.log(queryString);
       return (restaurant) => {
         return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };

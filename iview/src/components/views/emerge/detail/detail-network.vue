@@ -396,10 +396,13 @@
         <div class="content_item">
           <div class="item_addrs"
                v-for="(item,index) in edit_tag.tag_list">
-
             <el-autocomplete class="inline-input select_box"
-                             v-model="item.name"
+                             :value="item.name"
+                             @input="e => item.name = validSe(e)"
                              :fetch-suggestions="querySearch"
+                             :maxlength='25'
+                             :debounce='500'
+                             show-word-limit
                              placeholder="请输入标签，最多可以设置5个标签"
                              @select="handleSelect"></el-autocomplete>
             <!-- <el-input class="select_box"
@@ -941,16 +944,12 @@ export default {
   methods: {
     activeIndex (item) { },
     querySearch (queryString, cb) {
-      console.log(queryString);
       var restaurants = this.restaurants;
-      console.log(restaurants);
       var results = queryString != '' ? restaurants.filter(this.createFilter(queryString)) : restaurants;
       // 调用 callback 返回建议列表的数据
-      console.log(results);
       cb(results);
     },
     createFilter (queryString) {
-      console.log(queryString);
       return (restaurant) => {
         return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
@@ -966,7 +965,6 @@ export default {
           },
         })
         .then((resp) => {
-          console.log(resp);
           this.restaurants = []
           resp.data.data.map(item => {
             this.restaurants.push({
@@ -1260,6 +1258,14 @@ export default {
     mouseover (item) {
       this.more.name = item
       console.log(item);
+    },
+    spance_pattern (item) {
+      var pattern = new RegExp("[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]");
+      if (pattern.test(item)) {
+        return 'false'
+      } else {
+        return 'true'
+      }
     },
 
     handleSelect_des (key, keyPath) {
@@ -1610,6 +1616,18 @@ export default {
         });
         return false
       }
+      label_list.map(item => {
+        console.log(this.spance_pattern(item));
+
+        if (this.spance_pattern(item) == 'false') {
+          console.log('12312312');
+          this.$message({
+            message: '标签类型名不能包含特殊字符！',
+            type: 'warning',
+          });
+          return false
+        }
+      })
       var join = "";
       // horizontalthreat  横向威胁告警  lateral
       // externalthreat  外部威胁告警  outside
