@@ -44,6 +44,7 @@
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.eventtype"
                              label="事件类型"
+                             width="150"
                              align="center"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.direction"
@@ -53,6 +54,7 @@
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.srcIp"
                              label="源地址"
+                             width='150'
                              align="center"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.src_name"
@@ -71,6 +73,7 @@
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.destIp"
                              label="目的地址"
+                             width='150'
                              align="center"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.dst_name"
@@ -80,7 +83,6 @@
             <el-table-column prop="_source.dst_port"
                              label="目的端口"
                              align="center"
-                             width="150"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.dst_account"
                              label="目的账号"

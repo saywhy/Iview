@@ -158,6 +158,7 @@
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.eventtype"
                              label="事件类型"
+                             width="150"
                              align="center"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.direction"
@@ -166,6 +167,7 @@
                              width="150"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.srcIp"
+                             width='150'
                              label="源地址"
                              align="center"
                              show-overflow-tooltip></el-table-column>
@@ -185,16 +187,17 @@
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.destIp"
                              label="目的地址"
+                             width='150'
                              align="center"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.dst_name"
                              label="目的资产名"
+                             width='150'
                              align="center"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.dst_port"
                              label="目的端口"
                              align="center"
-                             width="150"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.dst_account"
                              label="目的账号"
@@ -2158,7 +2161,7 @@ export default {
     }
     #emergeLine {
       width: 100%;
-      height: 200px;
+      height: 300px;
     }
     .DimensionAggregation {
       // border: 1px solid red;
