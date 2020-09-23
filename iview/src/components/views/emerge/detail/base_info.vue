@@ -228,8 +228,7 @@
                       <span>首次发现时间</span>
                     </p>
                     <p class="left_item_content">
-                      <!-- 2017-03-23 -->
-                      {{selectItem.alert_description.first_seen | time}}
+                      {{selectItem.alert_description.first_seen }}
                     </p>
                   </div>
                   <div class="base_left_item">
@@ -239,8 +238,7 @@
                       <span>最近发现时间</span>
                     </p>
                     <p class="left_item_content">
-                      {{selectItem.alert_description.last_seen | time}}
-                      <!-- 2019-04-16 -->
+                      {{selectItem.alert_description.last_seen }}
                     </p>
                   </div>
                 </div>

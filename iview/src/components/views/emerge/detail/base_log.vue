@@ -116,7 +116,8 @@
                          class="tabs-item"
                          name="1">
               <div class="reset_item_box">
-                <div v-if="complete_log.length == 0">
+                <div class="reset_img_box"
+                     v-if="complete_log.length == 0">
                   <img src="@/assets/images/emerge/log_space.png"
                        class="img_box"
                        alt />
@@ -142,7 +143,8 @@
                          class="tabs-item"
                          name="2">
               <div class="reset_item_box">
-                <div v-if="complete_log.length == 0">
+                <div class="reset_img_box"
+                     v-if="complete_log.length == 0">
                   <img src="@/assets/images/emerge/log_space.png"
                        class="img_box"
                        alt />
@@ -156,7 +158,8 @@
                          class="tabs-item"
                          name="3">
               <div class="reset_item_box">
-                <div v-if="complete_log.length == 0">
+                <div class="reset_img_box"
+                     v-if="complete_log.length == 0">
                   <img src="@/assets/images/emerge/log_space.png"
                        class="img_box"
                        alt />
@@ -564,6 +567,10 @@ export default {
         flex: 1;
         border-left: 1px solid #f0f7ff;
         .reset_item_box {
+          .reset_img_box {
+            text-align: center;
+          }
+          text-align: left;
           height: 432px;
           background: #f0f7ff;
           padding: 16px;
