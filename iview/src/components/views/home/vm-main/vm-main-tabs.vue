@@ -6,7 +6,9 @@
         <div class="va-tabs-item" @click="tabsData.activeIndex = index">
           <i class="vat-img"></i>
           <span class="vat-title">{{item.title}}</span>
-          <span class="vat-count">{{item.count}}</span>
+          <span class="vat-count" >{{item.count}}</span>
+         <!-- <span class="vat-count" :class="{'cla0':countClass == 'cl0',
+          'cla1':countClass == 'cl0','cla2':countClass == 'cl2'}">{{item.count}}</span>-->
         </div>
       </el-col>
     </el-row>
@@ -26,6 +28,7 @@
       return {
         tabsData: {
           activeIndex: 0,
+          countClass:'cl0',
           data: [
             {title: '综合评分', count: 88},
             {title: '告警总数', count: 167},
@@ -40,7 +43,11 @@
       dataInfo () {
         let datas = this.mountain;
 
+        let class_attr = [];
+
         for (let key in datas) {
+          class_attr.push(datas[key]);
+
           if(key == 'safety_score'){
             this.tabsData.data[0].count = datas[key];
           }else if(key == 'untreated_alarm_count_total'){
@@ -53,9 +60,32 @@
             this.tabsData.data[4].count = datas[key];
           }
         }
+
+       /* switch (true) {
+          case ss.length < 4:
+            this.countClass = 'cl0';
+            break;
+          case ss.length >= 4 && ss.length < 6:
+            this.countClass = 'cl1';
+            break;
+          case ss.length >= 6:
+            this.countClass = 'cl2';
+            break;
+        }*/
+
         return this.tabsData.data;
       }
     },
+    methods:{
+      /*f(value, index, ar) {
+
+        if (value % 2 == 0) {
+          return true;
+        }else {
+          return false;
+        }
+      }*/
+    }
   }
 </script>
 

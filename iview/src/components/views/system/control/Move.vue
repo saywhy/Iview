@@ -98,14 +98,16 @@
                         </div>
                         <div class="legend" v-if="bom_mid_show">
                             <!--<span class="legend_icon color7"></span>-->
-                            <span>设备总数：</span>
+                            <span>总数：</span>
                             <span class="num">{{this.bom_mid.total_count}}</span>
-                            <!--<span class="legend_icon color4"></span>-->
-                            <span>告警总数：</span>
-                            <span class="num">{{this.bom_mid.alert_count}}</span>
                             <!--<span class="legend_icon color8"></span>-->
-                            <span>离线设备：</span>
-                            <span class="num num_last">{{this.bom_mid.offline_count}}</span>
+                            <span>正常：</span>
+                            <span class="num">{{this.bom_mid.online_count}}</span>
+                            <span>离线：</span>
+                            <span class="num">{{this.bom_mid.offline_count}}</span>
+                            <!--<span class="legend_icon color4"></span>-->
+                            <span>告警：</span>
+                            <span class="num num_last">{{this.bom_mid.alert_count}}</span>
                         </div>
                         <div class="bom_mid_content">
                           <bom-mid :options="bom_mid" v-if="bom_mid_show"></bom-mid>

@@ -28,14 +28,16 @@ export default {
       if(!options.offline_count){
         options.offline_count = 0;
       }
+      if(!options.online_count){
+        options.online_count = 0;
+      }
 
       //console.log(options)
       let datas = [
-        { value: options.total_count, name: "设备总数"},
-        { value: options.alert_count, name: "告警总数"},
-        { value: options.offline_count, name: "离线设备"}
+        { value: options.online_count, name: "正常"},
+        { value: options.offline_count, name: "离线"},
+        { value: options.alert_count, name: "告警"}
       ];
-
 
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("safe"));
@@ -49,7 +51,7 @@ export default {
           containLabel: true
         },
         //["#47CAD9", "#2f4554", "#D53A35"]
-        color: ["#47CAD9", "#D53A35", "#CDDC39"],
+        color: ["#4CAF50","#47CAD9","#D53A35"],
         series: [
           {
             name: "来源",
