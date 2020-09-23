@@ -428,6 +428,9 @@ Vue.filter('applite', function (args) {
 });
 // 对应国家翻译
 Vue.filter('country_code', function (args) {
+  if (!args) {
+    return ''
+  }
   args = args.toUpperCase()
   let country_cn = ''
   switch (args) {
