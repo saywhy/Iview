@@ -186,7 +186,7 @@
                     </p>
                     <p class="left_item_content">
                       <!-- 中国 · 上海 -->
-                      {{selectItem.alert_description.geo}}
+                      {{selectItem.alert_description.ip_geo | country_code}}
                     </p>
                   </div>
                   <div class="base_left_item">
