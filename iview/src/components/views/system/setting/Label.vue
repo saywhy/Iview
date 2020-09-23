@@ -106,7 +106,8 @@
               <img class="lab_item_icon" alt=""
                    src="@/assets/images/system/set/label_triangle_down.png">
               <el-autocomplete
-                v-model="label.category_name"
+                :value="label.category_name"
+                @input="e => label.category_name = validSe(e)"
                 :fetch-suggestions="querySearchAsync"
                 @select="handleSelect"
                 :disabled="label.category_flag"
@@ -122,7 +123,9 @@
                      placeholder="请输入标签名称(长度限制为25个字),不允许输入特殊字符"
                      ng-model="label.label_name" required>-->
               <el-input  placeholder="请输入标签名称(长度限制为25个字),不允许输入特殊字符"
-                         v-model="label.name" maxlength="25" required></el-input>
+                         :value="label.name"
+                         @input="e => label.name = validSe(e)"
+                         maxlength="25" required></el-input>
             </div>
           </div>
           <div class="lab_bom">
@@ -161,7 +164,9 @@
           <div class="lab_mid">
             <p class="lab_name">标签类别名称<span class="lab_tab">*</span></p>
             <div class="lab_item">
-              <el-input v-model="label_category.name" placeholder="请输入标签类别" required></el-input>
+              <el-input :value="label_category.name"
+                        @input="e => label_category.name = validSe(e)"
+                        placeholder="请输入标签类别" required></el-input>
             </div>
           </div>
         </div>
@@ -226,7 +231,7 @@
               this.loading = false;
               let {status,data} = resp.data;
 
-              //console.log(data)
+              console.log(data)
 
               if(status == 0){
 
@@ -246,7 +251,7 @@
                     });
                   } else {
                     labelAttr.push({
-                      name: value,
+                      name: '未分类标签',
                       label: key,
                       status: true
                     });
@@ -257,9 +262,7 @@
                 }
 
                 this.label_data = labelAttr;
-
-                //console.log(labelAttr)
-
+                console.log(labelAttr)
               }
             })
             .catch(error => {
@@ -280,6 +283,10 @@
           this.label.id  = '';
 
           this.label.types = type;
+
+
+          console.log('****');
+          console.log(item);
 
           //编辑时禁止去选择标签类型，不然会报错
           if(item == ''){
@@ -383,7 +390,6 @@
 
         //新增保存标签
         add_label_ok(){
-
           this.$axios.post('/yiiapi/labels',{
             Label: {
               category_name: this.label.category_name,
