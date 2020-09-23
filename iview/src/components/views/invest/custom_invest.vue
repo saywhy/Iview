@@ -2283,6 +2283,8 @@ export default {
               flex: 1;
             }
             .original_log {
+              word-wrap: break-word;
+              word-break: break-all;
               line-height: 36px;
               text-align: left;
               font-size: 14px;
