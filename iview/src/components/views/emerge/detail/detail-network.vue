@@ -1585,6 +1585,15 @@ export default {
       }
       this.edit_tag.pop = true;
     },
+    isRepeat (arr) {
+      let hash = {};
+      for (let i in arr) {
+        if (hash[arr[i]]) {
+          return true;        }
+        hash[arr[i]] = true;
+      }
+      return false;
+    },
     edit_tag_true () {
       // console.log(this.edit_tag.tag_list);
       // /alert/label-edit
@@ -1594,6 +1603,13 @@ export default {
           label_list.push(element.name);
         }
       });
+      if (this.isRepeat(label_list)) {
+        this.$message({
+          message: "标签有重复项",
+          type: "warning",
+        });
+        return false
+      }
       var join = "";
       // horizontalthreat  横向威胁告警  lateral
       // externalthreat  外部威胁告警  outside
