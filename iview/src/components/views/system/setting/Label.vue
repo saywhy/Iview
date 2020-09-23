@@ -585,10 +585,10 @@
               let {status,msg,data} = resp.data;
               if(status == 0){
                 this.get_data();
-                this.$message({
+                /*this.$message({
                   message: '标签拖拽成功！',
                   type: 'success',
-                });
+                });*/
               }else{
                 this.$message({
                   message: '标签拖拽失败',
@@ -615,10 +615,10 @@
             let {status,msg,data} = resp.data;
             if(status == 0){
               this.get_data();
-              this.$message({
+            /*  this.$message({
                 message: '标签类别拖拽成功！',
                 type: 'success',
-              });
+              });*/
             }else{
               this.$message({
                 message: '标签类别拖拽失败',
