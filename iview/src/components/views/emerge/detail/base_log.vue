@@ -601,15 +601,15 @@ export default {
               color: #666666;
               flex: 1;
             }
-            .original_log {
-              word-wrap: break-word;
-              word-break: break-all;
-              line-height: 36px;
-              text-align: left;
-              font-size: 14px;
-              color: #666666;
-              flex: 1;
-            }
+          }
+          .original_log {
+            word-wrap: break-word;
+            word-break: break-all;
+            line-height: 36px;
+            text-align: left;
+            font-size: 14px;
+            color: #666666;
+            flex: 1;
           }
           // 更多日志
           .more_title {
