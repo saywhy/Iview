@@ -54,8 +54,7 @@
             </el-select>
           </el-col>
           <!--2-->
-          <el-col :span="24"
-                  class="common_box_list common_box_list_network">
+          <el-col :span="24" class="common_box_list common_box_list_network">
             <!--威胁等级-->
             <el-select class="s_key_network"
                        v-model="params.degree"
@@ -172,7 +171,7 @@
           <el-table ref="multipleTable"
                     align="center"
                     border
-                    class="common-table"
+                    class="common-table common-table_alert"
                     v-loading="table.loading"
                     :data="table.tableData"
                     :row-style="{cursor:'pointer'}"
@@ -888,7 +887,7 @@ export default {
             this.$refs.messageDrop.hide();
             this.column_deploy();
             this.get_list_risk();
-            //this.columnDrop();
+            this.columnDrop();
           } else {
             this.$message({
               /* message: msg[Object.keys(msg)[0]][0],*/
@@ -927,7 +926,7 @@ export default {
                 item.checked = false;
               }
             });
-           // this.columnDrop();
+            this.columnDrop();
           }
 
         });
@@ -949,7 +948,7 @@ export default {
     },
     // 列拖拽
     columnDrop () {
-      const wrapperTr = document.querySelector('.el-table__header-wrapper tr');
+      const wrapperTr = document.querySelector('.common-table_alert .el-table__header-wrapper tr');
       this.sortable = Sortable.create(wrapperTr, {
         animation: 180,
         delay: 0,
@@ -970,7 +969,6 @@ export default {
         }
       });
     },
-
     //配置列弹窗关闭事件
     dropdown_hide (val) {
       if (!val) {

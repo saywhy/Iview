@@ -174,7 +174,7 @@
               <el-table ref="multipleTable"
                         align="center"
                         border
-                        class="common-table"
+                        class="common-table common-table_alert"
                         v-loading="table.loading"
                         :data="table.tableData"
                         :row-style="{cursor:'pointer'}"
@@ -950,7 +950,7 @@ export default {
     },
     // 列拖拽
     columnDrop () {
-      const wrapperTr = document.querySelector('.el-table__header-wrapper tr');
+      const wrapperTr = document.querySelector('.common-table_alert .el-table__header-wrapper tr');
       this.sortable = Sortable.create(wrapperTr, {
         animation: 180,
         delay: 0,
