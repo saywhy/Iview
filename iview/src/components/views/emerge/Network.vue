@@ -67,6 +67,7 @@
                          :value="item.value">
               </el-option>
             </el-select>
+
             <!--处理状态-->
             <el-select class="s_key_network1"
                        v-model="params.status"
@@ -74,6 +75,19 @@
                        placeholder="处理状态"
                        :popper-append-to-body="false">
               <el-option v-for="item in options_status"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
+            </el-select>
+
+            <!--攻击阶段-->
+            <el-select class="s_key_network2"
+                       v-model="params.attack_stage"
+                       clearable
+                       placeholder="攻击阶段"
+                       :popper-append-to-body="false">
+              <el-option v-for="item in options_attack_stages"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -674,6 +688,7 @@ export default {
         degree: '',
         status: '',
         domain: '',
+        attack_stage:'',
         sort: '3',
         order: ''
       },
@@ -743,6 +758,61 @@ export default {
         {
           value: "5",
           label: "误报"
+        }
+      ],
+      //攻击阶段
+      options_attack_stages:[
+        {
+          value: "all",
+          label: "所有"
+        },
+        {
+          value: "Initial Access",
+          label: "初始访问"
+        },
+        {
+          value: "Execution",
+          label: "执行"
+        },
+        {
+          value: "Persistence",
+          label: "持久化"
+        },
+        {
+          value: "Privilege Escalation",
+          label: "提权"
+        },
+        {
+          value: "Defense Evasion",
+          label: "防御逃逸"
+        },
+        {
+          value: "Credential Access",
+          label: "凭证访问"
+        },
+        {
+          value: "Discovery",
+          label: "信息发现"
+        },
+        {
+          value: "Lateral Movement",
+          label: "横向移动"
+        },
+        {
+          value: "Collection",
+          label: "信息收集"
+        },
+        {
+          value: "Command and Control",
+          label: "命令控制"
+        },
+        {
+          value: "Exfiltration",
+          label: "信息泄露"
+        },
+        {
+          value: "Impact",
+          label: "毁坏"
         }
       ],
       edit_tag: {
@@ -853,6 +923,11 @@ export default {
         y: ''
       },
     };
+  },
+  created(){
+    var stage = this.$route.query.stage;
+    if (!!stage) this.params.attack_stage  =  stage;
+    else this.params.attack_stage  =  '';
   },
   mounted () {
     // this.check_passwd();
@@ -980,10 +1055,17 @@ export default {
     get_list_risk () {
       this.table.loading = true;
       let params_alert = {
-        certainty: ''
+        certainty: '',
+        attack_stage:''
       };
       if (this.params.certainty == 1) {
         params_alert.certainty = 1;
+      }
+      //攻击阶段
+      if (this.params.attack_stage == 'all') {
+        params_alert.attack_stage = '';
+      }else {
+        params_alert.attack_stage = this.params.attack_stage;
       }
 
       this.$axios.get('/yiiapi/alerts', {
@@ -995,6 +1077,7 @@ export default {
           status: this.params.status,
           degree: this.params.degree,
           security_domain: this.params.domain,
+          attack_stage:params_alert.attack_stage,
           order: this.params.order,
           sort: this.params.sort,
           page: this.table.pageNow,
@@ -1071,6 +1154,7 @@ export default {
       this.params.certainty = '';
       this.params.degree = '';
       this.params.status = '';
+      this.params.attack_stage = '';
       $(document.querySelector('.el-button--text')).trigger('click');
       this.get_list_risk();
     },
@@ -1636,7 +1720,8 @@ export default {
         this.$axios.get('/yiiapi/alert/ExportAlertsTest')
           .then(resp => {
             var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.params.status + '&degree=' + this.params.degree + '&start_time=' + this.params.startTime
-              + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&security_domain=' + this.params.domain + '&key_word='+this.params.key;
+              + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&security_domain=' + this.params.domain
+              + '&key_word=' +this.params.key + '&attack_stage=' + this.params.attack_stage;
             window.location.href = url1;
           })
           .catch(error => {

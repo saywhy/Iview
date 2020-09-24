@@ -3,7 +3,7 @@
 
     <div class="attack_stage_bom">
 
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[0].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[0].count>1">
             {{attack_stage_list[0].count}}
@@ -14,7 +14,7 @@
         <img src="@/assets/images/emerge/detail_jiantou.png"
              alt="">
       </div>
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[1].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[1].count>1">
             {{attack_stage_list[1].count}}
@@ -25,7 +25,7 @@
         <img src="@/assets/images/emerge/detail_jiantou.png"
              alt="">
       </div>
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[2].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[2].count>1">
             {{attack_stage_list[2].count}}
@@ -36,7 +36,7 @@
         <img src="@/assets/images/emerge/detail_jiantou.png"
              alt="">
       </div>
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[3].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[3].count>1">
             {{attack_stage_list[3].count}}
@@ -47,7 +47,7 @@
         <img src="@/assets/images/emerge/detail_jiantou.png"
              alt="">
       </div>
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[4].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[4].count>1">
             {{attack_stage_list[4].count}}
@@ -60,7 +60,7 @@
     </div>
 
     <div class="attack_stage_bom">
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[9].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[9].count>1">
             {{attack_stage_list[9].count}}
@@ -71,8 +71,7 @@
         <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
-
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[8].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[8].count>1">
             {{attack_stage_list[8].count}}
@@ -83,7 +82,7 @@
         <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[7].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[7].count>1">
             {{attack_stage_list[7].count}}
@@ -94,7 +93,7 @@
         <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[6].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[6].count>1">
             {{attack_stage_list[6].count}}
@@ -105,7 +104,7 @@
         <img src="@/assets/images/emerge/detail_jiantou_left.png"
              alt="">
       </div>
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[5].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[5].count>1">
             {{attack_stage_list[5].count}}
@@ -119,7 +118,7 @@
     </div>
 
     <div class="attack_stage_bom attack_stage_bom_last">
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[10].name)">
         <span class="circle_box"
               v-if="attack_stage_list[10].count>1">
           {{attack_stage_list[10].count}}
@@ -130,7 +129,7 @@
         <img src="@/assets/images/emerge/detail_jiantou.png"
              alt="">
       </div>
-      <div class="stage_item_box">
+      <div class="stage_item_box" @click="router_risks(attack_stage_list[11].name)">
           <span class="circle_box"
                 v-if="attack_stage_list[11].count>1">
             {{attack_stage_list[11].count}}
@@ -232,6 +231,9 @@
               })
             }
           });
+        },
+        router_risks(name){
+          this.$router.push({path:'/emerge/network',query:{stage:name}});
         }
       }
     }
@@ -255,6 +257,7 @@
         color: #aaaaaa;
         text-align: center;
         position: relative;
+        cursor: pointer;
         .circle_box {
           font-size: 12px;
           box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.24);
