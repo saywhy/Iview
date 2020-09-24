@@ -43,7 +43,7 @@ export default {
         },
         tooltip: {
           trigger: "axis",
-          borderColor: "rgba(76,175,80,0.3)",
+          borderColor: "rgba(245,124,0,0.3)",
           borderWidth: 2,
           backgroundColor: "#fff",
           textStyle: {
