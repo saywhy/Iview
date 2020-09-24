@@ -27,20 +27,16 @@ export default {
     }
   },
   mounted () {
-  },
-  watch: {
-    detailArray: function (val) {
-      console.log(this.detailArray);
-      this.line_list = []
-      this.detailArray.map(item => {
-        var obj = {
-          alert_count: "1",
-          statistics_time: moment(item.alert_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-        }
-        this.line_list.push(obj)
-      })
-      this.drawLine();
-    }
+    console.log(this.detailArray);
+    this.line_list = []
+    this.detailArray.map(item => {
+      var obj = {
+        alert_count: "1",
+        statistics_time: moment(item.alert_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+      }
+      this.line_list.push(obj)
+    })
+    this.drawLine();
   },
   methods: {
     drawLine () {

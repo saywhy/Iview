@@ -610,7 +610,7 @@ export default {
           },
           xAxis: {
             type: 'value',
-            // interval: 'auto',
+            minInterval: 1,
             // splitNumber: 5,
             boundaryGap: false,
             axisTick: { //y轴刻度线
@@ -692,6 +692,7 @@ export default {
           },
           xAxis: {
             type: 'value',
+            minInterval: 1,
             boundaryGap: false,
             axisTick: { //y轴刻度线
               show: false
@@ -772,6 +773,7 @@ export default {
           },
           xAxis: {
             type: 'value',
+            minInterval: 1,
             boundaryGap: false,
             axisTick: { //y轴刻度线
               show: false
@@ -854,6 +856,7 @@ export default {
           },
           xAxis: {
             type: 'value',
+            minInterval: 1,
             boundaryGap: true,
             axisTick: { //y轴刻度线
               show: false
@@ -935,6 +938,7 @@ export default {
           },
           xAxis: {
             type: 'value',
+            minInterval: 1,
             boundaryGap: false,
             axisTick: { //y轴刻度线
               show: false
@@ -1015,6 +1019,7 @@ export default {
           },
           xAxis: {
             type: 'value',
+            minInterval: 1,
             boundaryGap: false,
             axisTick: { //y轴刻度线
               show: false

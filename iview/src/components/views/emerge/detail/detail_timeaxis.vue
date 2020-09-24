@@ -61,7 +61,10 @@ export default {
     baseLog,
     alertAssets,
   },
-  mounted () { },
+  mounted () {
+    this.timeaxis = JSON.parse(JSON.stringify(this.detailArray));
+    this.select_item = this.timeaxis[0];
+  },
   watch: {
     detailArray: function (val) {
       console.log('val监听:', val)

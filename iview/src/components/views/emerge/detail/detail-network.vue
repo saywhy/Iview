@@ -241,15 +241,18 @@
     <!-- 攻击阶段分布 -->
     <div class="detail_mid">
       <detail-stage class="mid_item"
+                    v-if="detailArray.length!=0"
                     :detailArray="detailArray"></detail-stage>
       <div class="mid_space"></div>
-      <detail-rate v-if="detail_main.security_domain!='terminal'"
+      <detail-rate class="mid_item"
                    :detailArray="detailArray"
-                   class="mid_item"></detail-rate>
+                   v-if="detailArray.length!=0 &&detail_main.security_domain!='terminal'"></detail-rate>
+
     </div>
     <!-- 攻击频率视图 -->
     <!-- 检测时间轴 -->
-    <detail-timeaxis :detailArray="detailArray"></detail-timeaxis>
+    <detail-timeaxis v-if="detailArray.length!=0"
+                     :detailArray="detailArray"></detail-timeaxis>
     <!-- 用户信息弹窗 -->
     <el-dialog class="pop_user_info pop_box"
                :close-on-click-modal="false"
@@ -473,7 +476,7 @@
                            width="300">
             <template slot-scope="scope">
               <span class="btn_tag_box"
-                    v-for="item in  JSON.parse(scope.row.label)">
+                    v-for="item in scope.row.label">
                 <el-button type="primary"
                            class="btn_tag">{{item}}</el-button>
               </span>
