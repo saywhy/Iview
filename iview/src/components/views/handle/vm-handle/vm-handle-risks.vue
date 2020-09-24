@@ -891,7 +891,7 @@ export default {
 
             this.column_deploy();
             this.get_list_threat();
-            //this.columnDrop();
+            this.columnDrop();
           } else {
             this.$message({
              /* message: msg[Object.keys(msg)[0]][0],*/
@@ -929,7 +929,7 @@ export default {
               }
             });
 
-            //this.columnDrop();
+            this.columnDrop();
           }
         });
     },
