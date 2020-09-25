@@ -1125,7 +1125,7 @@ export default {
           if (this.detail_main.detect_engine != 'LOGDF') {
             this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
           }
-          this.detail_main.label = JSON.parse(this.detail_main.label);
+          // this.detail_main.label = JSON.parse(this.detail_main.label);
           this.detail_main.asset_name = JSON.parse(this.detail_main.asset_name);
           this.detail_main.description = JSON.parse(this.detail_main.description);
           if (this.detail_main.category_list) {
