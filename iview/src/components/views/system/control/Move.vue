@@ -184,6 +184,9 @@ import bomLeftEmerge from "./vm-move/bom-left-emerge";
 import bomMid from "./vm-move/bom-mid";
 
 /*import bomRight from "./vm-move/bom-right";*/
+
+import {isSynthetical} from "../../../../assets/js/validate";
+
 export default {
   name: "system_control_move",
   components: {
@@ -262,9 +265,12 @@ export default {
             data
           } = resp.data;
           if (status == 0) {
-            this.top_left = data;
-            //console.log(data)
-            this.top_left_show = true;
+            if(!isSynthetical(data)){
+              return false;
+            }else {
+              this.top_left = data;
+              this.top_left_show = true;
+            }
           }
         })
     },
@@ -280,8 +286,12 @@ export default {
           } = resp.data;
 
           if (status == 0) {
-            this.top_mid = data;
-            this.top_mid_show = true;
+            if(!isSynthetical(data)){
+              return false;
+            }else {
+              this.top_mid = data;
+              this.top_mid_show = true;
+            }
           }
         })
     },
@@ -294,11 +304,12 @@ export default {
             data
           } = resp.data;
           if (status == 0) {
-            if(data instanceof Array && data.length == 0){
-              data = {};
+            if(!isSynthetical(data)){
+              return false;
+            }else {
+              this.top_right = data;
+              this.top_right_show = true;
             }
-            this.top_right = data;
-            this.top_right_show = true;
           }
         })
     },
@@ -314,8 +325,12 @@ export default {
           } = resp.data;
           if (status == 0) {
             //console.log(data)
-            this.bom_left = data;
-            this.bom_left_show = true;
+            if(!isSynthetical(data)){
+              return false;
+            }else {
+              this.bom_left = data;
+              this.bom_left_show = true;
+            }
           }
         })
     },
@@ -330,12 +345,12 @@ export default {
             data
           } = resp.data;
           if (status == 0) {
-            //console.log(data)
-            if(data instanceof Array && data.length == 0){
-              data = {};
+            if(!isSynthetical(data)){
+              return false;
+            }else {
+              this.bom_mid = data;
+              this.bom_mid_show = true;
             }
-            this.bom_mid = data;
-            this.bom_mid_show = true;
           }
         })
     },

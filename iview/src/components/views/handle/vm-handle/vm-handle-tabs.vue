@@ -34,6 +34,28 @@
           ]
         }
       }
+    },
+    created() {
+
+      let datas = this.tabsData.data;
+
+      datas.map(item => {
+        let number = Number(item.count);
+        if(number.toString().length >= 9){
+          number = (number/1000000000).toFixed(2);
+          number += 'G';
+        }else if(number.toString().length >= 6 && number.toString().length < 9){
+          number = (number/1000000).toFixed(2);
+          number += 'M';
+        }else if(number.toString().length >= 3 && number.toString().length < 6){
+          number = (number/1000).toFixed(2);
+          number += 'K';
+        }
+        item.count = number;
+      });
+
+      this.tabsData.data = datas;
+
     }
   }
 </script>

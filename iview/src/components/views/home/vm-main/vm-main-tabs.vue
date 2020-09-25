@@ -6,9 +6,9 @@
         <div class="va-tabs-item" @click="tabsData.activeIndex = index">
           <i class="vat-img"></i>
           <span class="vat-title">{{item.title}}</span>
-          <span class="vat-count" >{{item.count}}</span>
-         <!-- <span class="vat-count" :class="{'cla0':countClass == 'cl0',
-          'cla1':countClass == 'cl0','cla2':countClass == 'cl2'}">{{item.count}}</span>-->
+         <!-- <span class="vat-count" >{{item.count}}</span>-->
+          <span class="vat-count" :class="{'cl0':countClass == 'cl0',
+          'cl1':countClass == 'cl1'}">{{item.count}}</span>
         </div>
       </el-col>
     </el-row>
@@ -44,47 +44,50 @@
         let datas = this.mountain;
 
         let class_attr = [];
-
         for (let key in datas) {
-          class_attr.push(datas[key]);
+          let number = Number(datas[key]);
+          class_attr.push(number);
+
+          if(number.toString().length >= 9){
+            number = (number/1000000000).toFixed(2);
+            number += 'G';
+          }else if(number.toString().length >= 6 && number.toString().length < 9){
+            number = (number/1000000).toFixed(2);
+            number += 'M';
+          }else if(number.toString().length >= 3 && number.toString().length < 6){
+            number = (number/1000).toFixed(2);
+            number += 'K';
+          }
 
           if(key == 'safety_score'){
-            this.tabsData.data[0].count = datas[key];
+            this.tabsData.data[0].count = number;
           }else if(key == 'untreated_alarm_count_total'){
-            this.tabsData.data[1].count = datas[key];
+            this.tabsData.data[1].count = number;
           }else if(key == 'last7_alarm_count'){
-            this.tabsData.data[2].count = datas[key];
+            this.tabsData.data[2].count = number;
           }else if(key == 'risk_dev_count'){
-            this.tabsData.data[3].count = datas[key];
+            this.tabsData.data[3].count = number;
           }else if(key == 'last7_risk_dev_count'){
-            this.tabsData.data[4].count = datas[key];
+            this.tabsData.data[4].count = number;
           }
         }
 
-       /* switch (true) {
-          case ss.length < 4:
-            this.countClass = 'cl0';
-            break;
-          case ss.length >= 4 && ss.length < 6:
-            this.countClass = 'cl1';
-            break;
-          case ss.length >= 6:
-            this.countClass = 'cl2';
-            break;
-        }*/
+        var a = class_attr.some(function (val,index,arr) {
+          let len = val.toString().length;
+          return len > 3;
+        });
+
+        if(a){
+          this.countClass = 'cl1';
+        }else {
+          this.countClass = 'cl0';
+        }
 
         return this.tabsData.data;
       }
     },
     methods:{
-      /*f(value, index, ar) {
 
-        if (value % 2 == 0) {
-          return true;
-        }else {
-          return false;
-        }
-      }*/
     }
   }
 </script>
@@ -121,10 +124,15 @@
         .vat-count{
           position: absolute;
           font-family: PingFangSC-Medium;
-          font-size: 48px;
           color: #333;
           text-align: right;
           right: 20px;
+          &.cl0{
+            font-size: 48px;
+          }
+          &.cl1{
+            font-size: 32px;
+          }
         }
       }
       &:nth-child(1){

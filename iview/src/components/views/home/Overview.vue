@@ -140,6 +140,9 @@
     import vmMainRank from './vm-main/vm-main-rank'
     import vmMainStage from './vm-main/vm-main-stage'
     import vmMainThreat from './vm-main/vm-main-threat'
+
+    import {isSynthetical} from "../../../assets/js/validate";
+
     export default {
       name: "Overview",
       data(){
@@ -219,11 +222,14 @@
                 status,
                 data
               } = resp.data;
-             // console.log(resp);
 
               if (status == 0) {
-                this.mountain = data;
-                this.mountain_show = true;
+                if(!isSynthetical(data)){
+                  return false;
+                }else {
+                  this.mountain = data;
+                  this.mountain_show = true;
+                }
               }
             })
         },
@@ -238,8 +244,12 @@
                 data
               } = resp.data;
               if (status == 0) {
-                this.top_left = data;
-                this.top_left_show = true;
+                if(!isSynthetical(data)){
+                  return false;
+                }else {
+                  this.top_left = data;
+                  this.top_left_show = true;
+                }
               }
             })
         },
@@ -253,8 +263,12 @@
               } = resp.data;
 
               if (status == 0) {
-                this.top_mid = data;
-                this.top_mid_show = true;
+                if(!isSynthetical(data)){
+                   return false;
+                }else {
+                  this.top_mid = data;
+                  this.top_mid_show = true;
+                }
               }
             })
         },
@@ -268,8 +282,12 @@
               } = resp.data;
               //console.log(data)
               if (status == 0) {
-                this.top_right = data;
-                this.top_right_show = true;
+                if(!isSynthetical(data)){
+                  return false;
+                }else {
+                  this.top_right = data;
+                  this.top_right_show = true;
+                }
               }
             })
         },
@@ -284,8 +302,12 @@
               } = resp.data;
               //console.log(data)
               if (status == 0) {
-                this.mid_left = data;
-                this.mid_left_show = true;
+                if(!isSynthetical(data)){
+                  return false;
+                }else {
+                  this.mid_left = data;
+                  this.mid_left_show = true;
+                }
               }
             })
         },
@@ -301,8 +323,12 @@
               //console.log(data);
 
               if (status == 0) {
-                this.mid_right = data;
-                this.mid_right_show = true;
+                if(!isSynthetical(data)){
+                  return false;
+                }else {
+                  this.mid_right = data;
+                  this.mid_right_show = true;
+                }
               }
             })
         },
@@ -318,8 +344,12 @@
               } = resp.data;
 
               if (status == 0) {
-                this.bom_left = data;
-                this.bom_left_show = true;
+                if(!isSynthetical(data)){
+                  return false;
+                }else {
+                  this.bom_left = data;
+                  this.bom_left_show = true;
+                }
               }
             })
         },
@@ -335,8 +365,12 @@
              // console.log(data);
 
               if (status == 0) {
-                this.bom_right = data;
-                this.bom_right_show = true;
+                if(!isSynthetical(data)){
+                  return false;
+                }else {
+                  this.bom_right = data;
+                  this.bom_right_show = true;
+                }
               }
             })
         },
