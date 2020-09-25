@@ -2,9 +2,11 @@
   <!-- 详细信息 -->
   <div class="base_info">
     <p class="content_right_title">详细信息</p>
-    <div class="info_base">
+    <!-- 日志 -->
+    <div class="info_base"
+         v-if="selectItem.detect_engine =='LOGRULE' || selectItem.detect_engine =='LOGDF'">
       <div class="info_base_top"
-           v-if="selectItem.detect_engine !='LOGRULE'">
+           v-if="selectItem.detect_engine =='LOGDF'">
         <li class="info_top_item">
           <span class="info_top_item_title">日志来源</span>
           <span class="info_top_item_content">{{selectItem.log_source}}</span>
@@ -33,47 +35,12 @@
           <span class="info_top_item_title">威胁指标</span>
           <span class="info_top_item_content">{{selectItem.indicator}}</span>
         </li>
-        <!-- v-if="selectItem.detect_engine=='LOGDF'" -->
-        <li class="info_top_item"
-            v-if="selectItem.detect_engine == 'LOGDF'">
+        <li class="info_top_item">
           <span class="info_top_item_title">情报来源</span>
           <span class="info_top_item_content">
             {{selectItem.alert_description.sources.join(',')}}
           </span>
         </li>
-        <li class="info_top_item"
-            v-for="value in selectItem.info_list"
-            v-if="value.name !='文件行为'&&value.name !='taskID'">
-          <span class="info_top_item_title">{{value.name}}</span>
-          <span v-if="value.name=='文件大小'">
-            {{value.value | filterType }}
-          </span>
-          <span class="info_top_item_content"
-                v-if="value.name!='文件大小'"
-                :class="value.value=='点击下载'?'download_text':''">
-            <span @click="download(value,selectItem)">{{value.value}}</span>
-          </span>
-        </li>
-        <!-- 沙箱检测下载 -->
-        <li class="info_top_item"
-            v-for="value in selectItem.info_list"
-            v-if="value.name =='文件行为'">
-          <span class="info_top_item_title">{{value.name}}</span>
-          <span class="info_top_item_content"
-                :class="value.value=='点击下载'?'download_text':''">
-            <span @click="download_sandbox(value,item)"> {{value.value}}</span>
-          </span>
-        </li>
-        <!-- 新添加 -->
-        <div class="info_top_item"
-             v-for="value in selectItem.sample_list"
-             v-if="selectItem.sample_list.length!=0">
-          <span class="info_top_item_title">{{value.name}}</span>
-          <div class="info_top_item_content">
-            <p v-for="itemx in value.value"
-               style="padding-bottom: 5px;">{{itemx}}</p>
-          </div>
-        </div>
       </div>
       <!-- 安全域为“网络安全域”，检测引擎为“LOGRULE”的时候 -->
       <div class="info_base_top"
@@ -155,20 +122,9 @@
           <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
         </li>
       </div>
-      <!-- 网络事件 -->
-      <div class="info_base_mid"
-           v-if="selectItem.detect_engine != 'LOGDF'&& selectItem.detect_engine != 'LOGRULE'">
-        <p class="title">网络事件</p>
-        <div class="time_right_net">
-          <div class="time_right_net_item"
-               v-for="demo in selectItem.event_list">
-            <div class="title_net">{{demo.name |network_event}}</div>
-            <div class="value_net">{{demo.value}}</div>
-          </div>
-        </div>
-      </div>
-      <div class="info_base_bom"
-           v-if="selectItem.detect_engine !='LOGRULE'">
+
+      <div v-if="selectItem.detect_engine =='LOGDF'"
+           class="info_base_bom">
         <div class="base_bom_left">
           <el-tabs v-model="baseInfo.left_activeName"
                    @tab-click="handleClick"
@@ -177,7 +133,7 @@
                          class="tabs-item"
                          name="1">
               <div class="base_box">
-                <div v-if="selectItem.detect_engine == 'LOGDF'">
+                <div>
                   <div class="base_left_item">
                     <p class="left_item_title">
                       <img src="@/assets/images/emerge/base/base1.png"
@@ -242,7 +198,6 @@
                     </p>
                   </div>
                 </div>
-
               </div>
             </el-tab-pane>
             <el-tab-pane label="IP_whois信息"
@@ -283,7 +238,6 @@
                     {{key}}
                   </p>
                 </div>
-
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -338,6 +292,121 @@
         LOGRULE威胁安全建议
       </div>
     </div>
+    <!-- threateye -->
+    <div class="info_base"
+         v-if="selectItem.detect_engine !='LOGRULE' && selectItem.detect_engine !='LOGDF'">
+      <div class="info_base_top">
+        <li class="info_top_item">
+          <span class="info_top_item_title">日志来源</span>
+          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">威胁类型</span>
+          <span class="info_top_item_content">{{selectItem.category}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">应用</span>
+          <span class="info_top_item_content">{{selectItem.application}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">描述</span>
+          <span class="info_top_item_content">{{selectItem.json_description}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">检测引擎</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">攻击阶段</span>
+          <span class="info_top_item_content">{{selectItem.attack_stage|stage}}</span>
+        </li>
+        <li class="info_top_item"
+            v-for="value in selectItem.info_list"
+            v-if="value.name !='文件行为'&&value.name !='taskID'">
+          <span class="info_top_item_title">{{value.name}}</span>
+          <span v-if="value.name=='文件大小'">
+            {{value.value | filterType }}
+          </span>
+          <span class="info_top_item_content"
+                v-if="value.name!='文件大小'"
+                :class="value.value=='点击下载'?'download_text':''">
+            <span @click="download(value,selectItem)">{{value.value}}</span>
+          </span>
+        </li>
+      </div>
+      <div class="info_base_top"
+           style="padding-top:0">
+        <div class="info_top_item">
+          <div class="info_top_item_title">Whois信息</div>
+          <div class="whois_item_box">
+            <div class="whois_item"
+                 v-for="item in selectItem.whois_list">
+              <p class="whois_item_left">
+                {{item.name |ip_whois}}
+              </p>
+              <p class="whois_item_right">
+                {{item.value}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 网络事件 -->
+      <div class="info_base_mid">
+        <p class="title">网络事件</p>
+        <div class="time_right_net">
+          <div class="time_right_net_item"
+               v-for="demo in selectItem.event_list">
+            <div class="title_net">{{demo.name |network_event}}</div>
+            <div class="value_net">{{demo.value}}</div>
+          </div>
+        </div>
+      </div>
+      <!-- 安全建议 -->
+      <!-- 威胁及安全建议 -->
+      <div class="suggest_box">
+        <div class="suggest_top">
+          <img src="@/assets/images/emerge/detal_jianyi.png"
+               alt=""
+               class="icon_img">
+          <span class="suggest_title">威胁及安全建议</span>
+        </div>
+        <div class="suggest_bom">
+          <p class="suggest_bom_title">威胁描述</p>
+          <p class="suggest_bom_des"
+             v-for="(item,index) in suggest_list"
+             v-if="item.key==selectItem.safety_suggestion">{{ item.des}}</p>
+          <p class="suggest_bom_title">安全建议</p>
+          <p class="suggest_bom_list">
+            <img src="@/assets/images/emerge/detail_suggest.png"
+                 class="suggest_icon"
+                 alt="">
+            <span class="suggest_bom_title">处置建议</span>
+          </p>
+          <div v-for="(item,index)  in suggest_list"
+               v-if="item.key==selectItem.safety_suggestion">
+            <p class="suggest_bom_li"
+               v-for="it in item.handle">
+              {{it}}
+            </p>
+          </div>
+          <p class="suggest_bom_list">
+            <img src="@/assets/images/emerge/detail_suggest.png"
+                 class="suggest_icon"
+                 alt="">
+            <span class="suggest_bom_title">加固建议</span>
+          </p>
+          <div v-for="(item,index)  in suggest_list"
+               v-if="item.key==selectItem.safety_suggestion">
+            <p class="suggest_bom_li"
+               v-for="it in item.reinforce">
+              {{it}}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -1525,6 +1594,21 @@ export default {
           font-size: 16px;
           color: #666666;
         }
+        .whois_item_box {
+          flex: 1;
+          .whois_item {
+            display: flex;
+            word-break: break-all;
+            .whois_item_left {
+              width: 180px;
+              min-height: 38px;
+            }
+            .whois_item_right {
+              word-break: break-all;
+              flex: 1;
+            }
+          }
+        }
       }
     }
     // 网络事件
@@ -1564,6 +1648,49 @@ export default {
         }
       }
     }
+    // 威胁安全建议
+    .suggest_box {
+      text-align: left;
+      background: #fff;
+      .suggest_top {
+        height: 62px;
+        border-bottom: 1px solid #ececec;
+        .suggest_title {
+          font-size: 14px;
+          color: #333333;
+          line-height: 62px;
+        }
+        .icon_img {
+          width: 16px;
+          vertical-align: middle;
+        }
+      }
+      .suggest_bom {
+        padding-top: 16px;
+        .suggest_icon {
+          width: 13px;
+          height: 6px;
+          vertical-align: middle;
+        }
+        .suggest_bom_title {
+          font-size: 14px;
+          color: #333333;
+        }
+        .suggest_bom_des {
+          margin: 8px 0 24px 0;
+          font-size: 14px;
+          color: #666666;
+        }
+        .suggest_bom_li {
+          font-size: 14px;
+          color: #666666;
+        }
+        .suggest_bom_list {
+          margin: 12px 0 8px 0;
+        }
+      }
+    }
+
     .info_base_bom {
       display: flex;
       text-align: left;

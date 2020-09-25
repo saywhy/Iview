@@ -210,8 +210,21 @@ export default {
       default: () => { }
     }
   },
+  mounted () {
+    this.attack_stage_list.map(ele => {
+      ele.count = 0
+    })
+    this.detailArray.map(item => {
+      this.attack_stage_list.map(ele => {
+        if (item.attack_stage == ele.name) {
+          ele.count++
+        }
+      })
+    })
+  },
   watch: {
     detailArray: function (val) {
+      console.log('detail_stage');
       this.attack_stage_list.map(ele => {
         ele.count = 0
       })
