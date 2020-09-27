@@ -226,7 +226,8 @@ export default {
     get_alert_list (is_deal, page, rows) {
       console.log(this.table_new.rows);
       console.log(rows);
-
+      this.table_new.data = []
+      this.table_old.data = []
       this.$axios.get('/yiiapi/alert/GetSameIndicatorAlert', {
         params: {
           page: page,
