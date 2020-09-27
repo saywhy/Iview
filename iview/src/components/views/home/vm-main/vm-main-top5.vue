@@ -125,7 +125,14 @@
           setTimeout(() => {
             if (this.detail_click_val.id) {
               console.log('点击详情');
-              this.$router.push({ path: "/detail/network", query: { detail: this.detail_click_val.id, type: 'alert' } });
+
+              console.log(this.detail_click_val);
+             // this.$router.push({ path: "/detail/assets", query: { detail: this.detail_click_val.id, type: 'alert' } });
+
+              this.$router.push({
+                path: '/detail/assets', name: 'detail_assets',
+                query: { id:this.detail_click_val.id, asset_ip: this.detail_click_val.asset_ip, status: this.detail_click_val.status }
+              });
             } else {
               console.log('点击头部');
             }

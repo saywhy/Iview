@@ -1026,6 +1026,7 @@ export default {
         setTimeout(() => {
           if (this.detail_click_val.id) {
             console.log('点击详情');
+            console.log(this.detail_click_val);
             if (Object.keys(this.detail_click_column).length != 0 && this.detail_click_column.type != 'selection') {
               this.$router.push({
                 path: '/detail/assets', name: 'detail_assets',
