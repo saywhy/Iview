@@ -1296,6 +1296,8 @@ export default {
         this.query_data.type +
         "&ip=" +
         this.query_data.ip + "&server_name=" + this.query_data.server_name
+        + "&stime=" + this.query_data.srcTime
+        + "&etime=" + this.query_data.destTime
       );
     },
     filter_country (args) {
