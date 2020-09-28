@@ -1,5 +1,6 @@
 <template>
-  <div id="common_invest">
+  <div id="common_invest"
+       v-loading.fullscreen.lock="fullscreenLoading">
     <div class="common_invest_top">
       <p class="title">提问</p>
       <div class="search_box">
@@ -119,7 +120,8 @@
          v-if="searchShow">
       <div class="export_box">
         <!-- <span class="export_i">导出归一化日志</span> -->
-        <span class="export_o">导出原始日志</span>
+        <span class="export_o"
+              @click="OriginalLog">导出原始日志</span>
       </div>
       <!-- 日志列表 -->
       <div class="log_table_box">
@@ -280,6 +282,7 @@ export default {
   data () {
     return {
       activeName: 'first',
+      fullscreenLoading: false,
       activelog: '1',
       searchShow: false,
       query_data: {},
@@ -384,6 +387,7 @@ export default {
   },
   methods: {
     get_data () {
+      this.fullscreenLoading = true
       console.log(this.search_data);
       // 图表
       this.$axios
@@ -398,6 +402,7 @@ export default {
           },
         })
         .then((resp) => {
+          this.fullscreenLoading = false
           console.log(resp.data.data.aggregations.types_count.buckets);
           resp.data.data.aggregations.types_count.buckets.map(item => {
             this.ecarts_data.time.push(item.key_as_string)
@@ -1285,7 +1290,14 @@ export default {
         this.search_data.end_time = ''
       }
     },
-
+    OriginalLog () {
+      window.open(
+        "/yiiapi/investigate/OriginalLog?ip_type=" +
+        this.query_data.type +
+        "&ip=" +
+        this.query_data.ip + "&server_name=" + this.query_data.server_name
+      );
+    },
     filter_country (args) {
       let country_cn = ''
       switch (args) {
