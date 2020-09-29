@@ -1730,6 +1730,9 @@ export default {
             var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.params.status + '&degree=' + this.params.degree + '&start_time=' + this.params.startTime
               + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&security_domain=' + this.params.domain
               + '&key_word=' +this.params.key + '&attack_stage=' + JSON.stringify(this.params.attack_stage);
+
+           // url1 = this.URLencode(url1);
+            console.log(url1)
             window.location.href = url1;
           })
           .catch(error => {
@@ -1740,6 +1743,9 @@ export default {
 
         this.$refs.multipleTable.clearSelection();
       });
+    },
+    URLencode(sStr){
+      return escape(sStr).replace(/\+/g, '%2B');
     }
   }
 };
