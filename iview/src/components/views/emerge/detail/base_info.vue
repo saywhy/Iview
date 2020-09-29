@@ -289,7 +289,48 @@
         </div>
       </div>
       <div v-if="selectItem.detect_engine =='LOGRULE'">
-        LOGRULE威胁安全建议
+        <!-- 威胁及安全建议 -->
+        <div class="suggest_box">
+          <div class="suggest_top">
+            <img src="@/assets/images/emerge/detal_jianyi.png"
+                 alt=""
+                 class="icon_img">
+            <span class="suggest_title">威胁及安全建议</span>
+          </div>
+          <div class="suggest_bom">
+            <p class="suggest_bom_title">威胁描述</p>
+            <p class="suggest_bom_des"
+               v-for="(item,index) in suggest_list"
+               v-if="item.key==selectItem.safety_suggestion">{{ item.des}}</p>
+            <p class="suggest_bom_title">安全建议</p>
+            <p class="suggest_bom_list">
+              <img src="@/assets/images/emerge/detail_suggest.png"
+                   class="suggest_icon"
+                   alt="">
+              <span class="suggest_bom_title">处置建议</span>
+            </p>
+            <div v-for="(item,index)  in suggest_list"
+                 v-if="item.key==selectItem.safety_suggestion">
+              <p class="suggest_bom_li"
+                 v-for="it in item.handle">
+                {{it}}
+              </p>
+            </div>
+            <p class="suggest_bom_list">
+              <img src="@/assets/images/emerge/detail_suggest.png"
+                   class="suggest_icon"
+                   alt="">
+              <span class="suggest_bom_title">加固建议</span>
+            </p>
+            <div v-for="(item,index)  in suggest_list"
+                 v-if="item.key==selectItem.safety_suggestion">
+              <p class="suggest_bom_li"
+                 v-for="it in item.reinforce">
+                {{it}}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- threateye -->
