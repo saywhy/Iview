@@ -92,7 +92,7 @@
         .vat-count{
           position: absolute;
           font-family: PingFangMedium;
-          font-size: 48px;
+          font-size: 40px;
           color: #333;
           text-align: right;
           right: 10px;

@@ -128,10 +128,10 @@
           text-align: right;
           right: 20px;
           &.cl0{
-            font-size: 48px;
+            font-size: 36px;
           }
           &.cl1{
-            font-size: 32px;
+            font-size: 30px;
           }
         }
       }

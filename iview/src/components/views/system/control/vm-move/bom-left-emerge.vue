@@ -24,9 +24,12 @@ export default {
 
       var xdata = [];
       var ydata = [];
-      if(data){
+      if(data && data.aggregations && data.aggregations.types_count && data.aggregations.types_count.buckets ){
         xdata = data.aggregations.types_count.buckets.map(v => {return v.key_as_string});
         ydata = data.aggregations.types_count.buckets.map(v => {return v.doc_count});
+      }else {
+        xdata = [];
+        ydata = [];
       }
 
       // 基于准备好的dom，初始化echarts实例

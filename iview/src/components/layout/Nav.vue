@@ -234,7 +234,7 @@ export default {
               console.log('343434')
               console.log(response)
               if (status == 0) {
-                // console.log(data.data)
+                 console.log(data.data)
                 localStorage.setItem("token",data.data.token);
                 let datas = data.data;
                 this.user_edit.department = datas.department;
@@ -291,7 +291,7 @@ export default {
         this.$message(
           {
             message: '两次输入密码不一致',
-            type: 'error',
+            type: 'warning',
           }
         );
         return false
@@ -300,7 +300,7 @@ export default {
         this.$message(
           {
             message: '密码必须同时包含大写、小写、数字和特殊字符其中三项',
-            type: 'error',
+            type: 'warning',
           }
         );
         return false
@@ -309,19 +309,20 @@ export default {
         this.$message(
           {
             message: '旧密码不能为空',
-            type: 'error',
+            type: 'warning',
           }
         );
         return false
       }
-      var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+      //var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
 
+      var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
 
       if (this.user_edit.email_addr == '') {
         this.$message(
           {
             message: '邮箱不能为空',
-            type: 'error',
+            type: 'warning',
           }
         );
         return false
@@ -331,7 +332,7 @@ export default {
         this.$message(
           {
             message: '邮箱验证错误',
-            type: 'error',
+            type: 'warning',
           }
         );
         return false
@@ -344,7 +345,7 @@ export default {
         this.$message(
           {
             message: '手机号不能为空',
-            type: 'error',
+            type: 'warning',
           }
         );
         return false
@@ -353,11 +354,12 @@ export default {
         this.$message(
           {
             message: '手机号验证错误',
-            type: 'error',
+            type: 'warning',
           }
         );
         return false
       }
+
 
       this.$axios.put('/yiiapi/site/ResetSelfPassword?token=' + localStorage.getItem("token"), {
         ResetPasswordForm: {
