@@ -1721,11 +1721,15 @@ export default {
         type: 'warning'
       }).then(() => {
 
+       // this.params.attack_stage = JSON.stringify(this.params.attack_stage);
+
+        console.log(this.params.attack_stage);
+
         this.$axios.get('/yiiapi/alert/ExportAlertsTest')
           .then(resp => {
             var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.params.status + '&degree=' + this.params.degree + '&start_time=' + this.params.startTime
               + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&security_domain=' + this.params.domain
-              + '&key_word=' +this.params.key + '&attack_stage=' + this.params.attack_stage;
+              + '&key_word=' +this.params.key + '&attack_stage=' + JSON.stringify(this.params.attack_stage);
             window.location.href = url1;
           })
           .catch(error => {
