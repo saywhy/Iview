@@ -724,7 +724,7 @@ export default {
           &::-webkit-scrollbar-thumb {
             /*滚动条里面小方块*/
             border-radius: 4px;
-            background: #0070ff;
+            background: #a8a8a8;
             // background: red;
           }
           &::-webkit-scrollbar-track {
@@ -744,11 +744,11 @@ export default {
   }
   // 滚动条的滑块
   /deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {
-    background: #0070ff;
+    background: #a8a8a8;
     border-radius: 4px;
   }
   /deep/ .el-table__body tr.current-row > td {
-    color: #0070ff !important;
+    color: #a8a8a8 !important;
     background: #eef6ff !important;
   }
   /deep/ .reset_tab {

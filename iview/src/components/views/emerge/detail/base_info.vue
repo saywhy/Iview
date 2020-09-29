@@ -978,7 +978,7 @@ export default {
       }
 
 
-      if (this.selectItem.detect_engine != "LOGDF") {
+      if (this.selectItem.detect_engine != "LOGDF" && this.selectItem.detect_engine != "LOGRULE") {
         // 网络事件匹配
         switch (this.selectItem.network_event.event_type) {
           case 'fileinfo':

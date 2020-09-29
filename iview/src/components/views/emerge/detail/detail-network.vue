@@ -1038,7 +1038,7 @@ export default {
           this.detailArray = [];
           this.detail_main = JSON.parse(JSON.stringify(data));
           console.log(this.detail_main);
-          if (this.detail_main.detect_engine != 'LOGDF') {
+          if (this.detail_main.detect_engine != 'LOGDF' && this.detail_main.detect_engine != 'LOGRULE') {
             this.detail_main.network_event = JSON.parse(this.detail_main.network_event);
           }
           // this.detail_main.label = JSON.parse(this.detail_main.label);
