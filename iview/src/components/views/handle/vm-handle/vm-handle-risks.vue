@@ -214,82 +214,88 @@
                 </el-table-column>
                 <!--:key="`col_${index}`"-->
                 <template v-for="(item, index) in dropCol">
-
                   <!--告警时间-->
-                  <el-table-column align="center" v-if="dropCol[index].prop == 'alert_time'"
+                  <el-table-column align="center"
+                                   v-if="dropCol[index].prop == 'alert_time'"
                                    show-overflow-tooltip
+                                   min-width="150"
                                    :prop="dropCol[index].prop"
                                    :label="item.label">
+                    <!--<template slot-scope="scope">{{ scope.row.alert_time | time }}</template>-->
                     <template slot-scope="scope">{{ scope.row.alert_time | time }}</template>
                   </el-table-column>
-
                   <!--威胁等级-->
-                  <el-table-column align="center" v-else-if="dropCol[index].prop == 'degree'"
+                  <el-table-column align="center"
+                                   v-else-if="dropCol[index].prop == 'degree'"
                                    show-overflow-tooltip
                                    :prop="dropCol[index].prop"
                                    :label="item.label">
                     <template slot-scope="scope">
-                    <span class="btn_alert_background"
-                          :class="{'high_background':scope.row.degree =='高',
+                  <span class="btn_alert_background"
+                        :class="{'high_background':scope.row.degree =='高',
                         'mid_background':scope.row.degree =='中','low_background':scope.row.degree =='低'}">
                     {{ scope.row.degree | degree_sino }}</span>
                     </template>
                   </el-table-column>
-
                   <!--失陷确定性-->
-                  <el-table-column align="center" v-else-if="dropCol[index].prop == 'fall_certainty'"
+                  <el-table-column align="center"
+                                   v-else-if="dropCol[index].prop == 'fall_certainty'"
                                    show-overflow-tooltip
                                    :prop="dropCol[index].prop"
                                    :label="item.label">
                     <template slot-scope="scope">
-                   <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
+                  <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
                     {{ scope.row.fall_certainty | certainty }}</span>
                     </template>
                   </el-table-column>
                   <!--状态-->
-                  <el-table-column align="center" v-else-if="dropCol[index].prop == 'status'"
+                  <el-table-column align="center"
+                                   v-else-if="dropCol[index].prop == 'status'"
                                    show-overflow-tooltip
                                    :prop="dropCol[index].prop"
                                    :label="item.label">
                     <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
                   </el-table-column>
-
                   <!--工单状态-->
-                  <el-table-column align="center" v-else-if="dropCol[index].prop == 'workorder_status'"
+                  <el-table-column align="center"
+                                   v-else-if="dropCol[index].prop == 'workorder_status'"
                                    show-overflow-tooltip
                                    :prop="dropCol[index].prop"
                                    :label="item.label">
                     <template slot-scope="scope">{{ scope.row.workorder_status | work_status }}</template>
                   </el-table-column>
-
                   <!--风险指数-->
-                  <el-table-column align="center" v-else-if="dropCol[index].prop == 'risk_num'"
+                  <el-table-column align="center"
+                                   v-else-if="dropCol[index].prop == 'risk_num'"
                                    show-overflow-tooltip
                                    sortable="custom"
+                                   min-width="120"
                                    :prop="dropCol[index].prop"
                                    :label="item.label">
-                    <template slot-scope="scope">{{ scope.row.risk_num  }}</template>
+                    <template slot-scope="scope">{{ scope.row.risk_num }}</template>
                   </el-table-column>
-
                   <!--更新时间-->
-                  <el-table-column align="center" v-else-if="dropCol[index].prop == 'update_time'"
+                  <el-table-column align="center"
+                                   v-else-if="dropCol[index].prop == 'update_time'"
                                    show-overflow-tooltip
                                    sortable="custom"
+                                   min-width="150"
                                    :prop="dropCol[index].prop"
                                    :label="item.label">
-                    <template slot-scope="scope">{{ scope.row.update_time | time  }}</template>
+                    <template slot-scope="scope">{{ scope.row.update_time | time }}</template>
                   </el-table-column>
-
                   <!--安全域-->
-                  <el-table-column align="center" v-else-if="dropCol[index].prop == 'security_domain'"
+                  <el-table-column align="center"
+                                   v-else-if="dropCol[index].prop == 'security_domain'"
                                    show-overflow-tooltip
                                    :prop="dropCol[index].prop"
                                    :label="item.label">
-                    <template slot-scope="scope">{{ scope.row.security_domain | securityDomain  }}</template>
+                    <template slot-scope="scope">{{ scope.row.security_domain | securityDomain }}</template>
                   </el-table-column>
-
                   <!--其他-->
-                  <el-table-column align="center" v-else
+                  <el-table-column align="center"
+                                   v-else
+                                   min-width="100"
                                    show-overflow-tooltip
                                    :prop="dropCol[index].prop"
                                    :label="item.label">

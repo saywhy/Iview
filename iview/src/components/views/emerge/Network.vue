@@ -222,6 +222,7 @@
               <el-table-column align="center"
                                v-if="dropCol[index].prop == 'alert_time'"
                                show-overflow-tooltip
+                               min-width="150"
                                :prop="dropCol[index].prop"
                                :label="item.label">
                 <!--<template slot-scope="scope">{{ scope.row.alert_time | time }}</template>-->
@@ -272,6 +273,7 @@
                                v-else-if="dropCol[index].prop == 'risk_num'"
                                show-overflow-tooltip
                                sortable="custom"
+                               min-width="120"
                                :prop="dropCol[index].prop"
                                :label="item.label">
                 <template slot-scope="scope">{{ scope.row.risk_num }}</template>
@@ -281,6 +283,7 @@
                                v-else-if="dropCol[index].prop == 'update_time'"
                                show-overflow-tooltip
                                sortable="custom"
+                               min-width="150"
                                :prop="dropCol[index].prop"
                                :label="item.label">
                 <template slot-scope="scope">{{ scope.row.update_time | time }}</template>
@@ -296,6 +299,7 @@
               <!--其他-->
               <el-table-column align="center"
                                v-else
+                               min-width="100"
                                show-overflow-tooltip
                                :prop="dropCol[index].prop"
                                :label="item.label">
