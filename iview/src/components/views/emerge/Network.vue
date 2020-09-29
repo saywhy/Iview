@@ -1023,7 +1023,7 @@ export default {
     },
     // 列拖拽
     columnDrop () {
-      const wrapperTr = document.querySelector('.common-table_alert .el-table__header-wrapper tr');
+      const wrapperTr = document.querySelector('.common-table_alert tr');
       this.sortable = Sortable.create(wrapperTr, {
         animation: 180,
         delay: 0,
