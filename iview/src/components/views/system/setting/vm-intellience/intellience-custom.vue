@@ -572,6 +572,8 @@
       },
       getExpState(state){
         this.intel_state.exp = state;
+        //刷新一下
+        this.get_data();
       },
       closed_exp_box(){
         this.intel_state.exp = false;
