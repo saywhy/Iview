@@ -79,8 +79,8 @@ export default {
                   type: 'success',
                 }
               );
-              location.reload();
               this.$router.push('/login');
+              location.reload();
             }
           })
           .catch(error => {
@@ -111,8 +111,8 @@ export default {
                   type: 'success',
                 }
               );
-              location.reload();
               this.$router.push('/login');
+              location.reload();
             }
           })
           .catch(error => {

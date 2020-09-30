@@ -51,15 +51,15 @@
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">威胁类型</span>
-          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+          <span class="info_top_item_content">{{selectItem.category}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">应用</span>
-          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+          <span class="info_top_item_content">{{selectItem.application}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">描述</span>
-          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+          <span class="info_top_item_content">{{selectItem.json_description}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">检测引擎</span>
@@ -67,19 +67,21 @@
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">攻击阶段</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+          <span class="info_top_item_content">{{selectItem.attack_stage|stage}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">检测规则</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+          <span class="info_top_item_content">{{selectItem.alert_description.rule}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">参考信息</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+          <div class="info_top_item_content">
+            <p v-for="item in selectItem.alert_description.references">{{item}}</p>
+          </div>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">ATT&CK技术</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+          <span class="info_top_item_content">{{selectItem.alert_description.att}}</span>
         </li>
       </div>
       <!-- 安全域是“端点”，在检测引擎为“LOGRULE”的时候 -->
@@ -91,35 +93,42 @@
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">威胁类型</span>
-          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+          <span class="info_top_item_content">{{selectItem.category}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">检测引擎</span>
-          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">描述</span>
-          <span class="info_top_item_content">{{selectItem.log_source}}</span>
+          <span class="info_top_item_content">{{selectItem.json_description}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">检测规则</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+          <span class="info_top_item_content">{{selectItem.alert_description.rule}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">文件</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+          <span class="info_top_item_content">{{selectItem.alert_description.file}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">攻击阶段</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+          <span class="info_top_item_content">{{selectItem.attack_stage|stage}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">路径</span>
+          <span class="info_top_item_content">{{selectItem.alert_description.path}}</span>
+        </li>
+
+        <li class="info_top_item">
+          <span class="info_top_item_title">ATT&CK技术</span>
+          <span class="info_top_item_content">{{selectItem.alert_description.att}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">参考信息</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
-        </li>
-        <li class="info_top_item">
-          <span class="info_top_item_title">ATT&CK技术</span>
-          <span class="info_top_item_content">{{selectItem.detect_engine}}</span>
+          <div class="info_top_item_content">
+            <p v-for="item in selectItem.alert_description.references">{{item}}</p>
+          </div>
         </li>
       </div>
 
