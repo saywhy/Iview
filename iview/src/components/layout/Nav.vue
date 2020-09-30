@@ -379,14 +379,14 @@ export default {
           if (response.data.status == 0) {
             this.pass_state = false;
             if (this.user_edit.password != '') {
+              this.$message({
+                message: '修改用户成功',
+                type: 'success'
+              });
               setTimeout(() => {
                 removeToken();
                 this.$axios.get('/yiiapi/site/logout')
                   .then(response => {
-                    this.$message({
-                      message: '修改用户成功',
-                      type: 'success'
-                    });
                     if (response.data.status == 0) {
                       console.log('退出');
                       location.reload();

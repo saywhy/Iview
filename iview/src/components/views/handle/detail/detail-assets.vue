@@ -1527,7 +1527,7 @@ export default {
     },
     // 跳转列表详情
     detail_click (val) {
-      console.log(val);
+      //console.log(val);
       this.$router.push({ path: "/detail/network", query: { detail: val.id, type: 'asset' } });
 
       // this.$router.push({ path: "/detail/assets/alert", query: { detail: val.id, type: 'asset' } });
