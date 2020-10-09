@@ -75,12 +75,17 @@ export default {
             if (status == 0) {
               this.$message(
                 {
-                  message: '执行恢复出场设置成功',
+                  message: '正在执行恢复出场设置，请稍后...',
                   type: 'success',
+                  duration: 28000
                 }
               );
-              this.$router.push('/login');
-              location.reload();
+              this.loading = true
+              setTimeout(() => {
+                this.loading = false
+                this.$router.push('/login');
+                location.reload();
+              }, 30000);
             }
           })
           .catch(error => {
