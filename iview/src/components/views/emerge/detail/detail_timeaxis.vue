@@ -29,6 +29,7 @@
         <base-info :selectItem="select_item"></base-info>
         <!-- 日志 -->
         <base-log :selectItem='select_item'
+                  :iPAddr='iP_addr'
                   v-if='select_item.detect_engine=="LOGDF"'></base-log>
         <!-- <base-log :selectItem="select_item"></base-log> -->
         <!-- 告警资产 -->
@@ -48,6 +49,10 @@ export default {
     return {
       timeaxis: [],
       select_item: {},
+      iP_addr: {
+        src: '',
+        des: ''
+      },
     };
   },
   props: {
@@ -64,6 +69,8 @@ export default {
   mounted () {
     this.timeaxis = JSON.parse(JSON.stringify(this.detailArray));
     this.select_item = this.timeaxis[0];
+    this.iP_addr.src = this.select_item.src_ip[0]
+    this.iP_addr.des = this.select_item.dest_ip[0]
   },
   watch: {
     detailArray: function (val) {

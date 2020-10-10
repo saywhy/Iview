@@ -278,30 +278,36 @@ export default {
       type: Object,
       default: () => { },
     },
+    iPAddr: {
+      type: Object,
+      default: () => { },
+    },
   },
   watch: {
     selectItem: function (val) {
       console.log("222222:", val);
+      console.log('11111');
       this.LogList(val);
     },
   },
 
   mounted () {
+    console.log('2222');
     this.LogList();
   },
   methods: {
-    LogList () {
-      console.log("11121212");
-      console.log(this.selectItem.src_ip);
+    LogList (val) {
+      console.log(this.iPAddr.src);
+      console.log(this.iPAddr.des);
       this.original_log = '';
       this.complete_log = [];
       this.$axios
         .get("/yiiapi/alert/LogList", {
           params: {
-            srcIp: this.selectItem.src_ip[0],
+            srcIp: this.iPAddr.src,
             size: this.log_list.rows,
             from: this.log_list.rows * (this.log_list.pageNow - 1),
-            destIp: this.selectItem.dest_ip[0],
+            destIp: this.iPAddr.des,
           },
         })
         .then((resp) => {
@@ -483,20 +489,19 @@ export default {
     after_hh () { },
     after_mm () { },
     NormalizedLog () {
-      console.log(this.selectItem);
       window.open(
         "/yiiapi/alert/NormalizedLog?destIp=" +
-        this.selectItem.dest_ip[0] +
+        this.iPAddr.des +
         "&srcIp=" +
-        this.selectItem.src_ip[0]
+        this.iPAddr.src
       );
     },
     OriginalLog () {
       window.open(
         "/yiiapi/alert/OriginalLog?destIp=" +
-        this.selectItem.dest_ip[0] +
+        this.iPAddr.des +
         "&srcIp=" +
-        this.selectItem.src_ip[0]
+        this.iPAddr.src
       );
     },
   },
