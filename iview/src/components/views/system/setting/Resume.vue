@@ -18,11 +18,13 @@ export default {
   name: "system_control_resume",
   data () {
     return {
-      loading: false
+      loading: false,
+      messagebox: null
     }
   },
   mounted () {
     this.test()
+    this.get_menu()
     this.check_passwd()
   },
   methods: {
@@ -73,19 +75,17 @@ export default {
             this.loading = false
             let { status, data } = response.data;
             if (status == 0) {
-              this.$message(
+              this.messagebox = this.$message(
                 {
                   message: '正在执行恢复出场设置，请稍后...',
                   type: 'success',
-                  duration: 28000
+                  duration: 0
                 }
               );
               this.loading = true
-              setTimeout(() => {
-                this.loading = false
-                this.$router.push('/login');
-                location.reload();
-              }, 30000);
+              setInterval(() => {
+                this.get_menu()
+              }, 3000);
             }
           })
           .catch(error => {
@@ -97,6 +97,23 @@ export default {
           message: '已取消操作'
         });
       });
+    },
+    get_menu () {
+      this.$axios.get('/yiiapi/site/menu')
+        .then(response => {
+          console.log(response);
+          if (response.data.status == 0) {
+            setTimeout(() => {
+              this.messagebox.close()
+              this.loading = false
+              this.$router.push('/login');
+              location.reload();
+            }, 1000);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        })
     },
     reboot () {
       this.$confirm('此操作将重启平台, 是否继续?', '提示', {
