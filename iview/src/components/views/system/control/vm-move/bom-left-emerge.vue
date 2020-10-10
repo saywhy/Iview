@@ -57,7 +57,7 @@ export default {
             }
           }
         },
-        color: ["#DC5F5F "],
+        color: ["#DC5F5F"],
         xAxis: {
           boundaryGap: false,
           //网格样式
