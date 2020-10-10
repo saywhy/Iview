@@ -55,7 +55,11 @@ export default {
             lineStyle: {
               color: "#ccc"
             }
-          }
+          },
+         /* formatter:function (params) {
+            console.log(params[0].value);
+            return params[0].value;
+          }*/
         },
         color: ["#DC5F5F"],
         xAxis: {
@@ -76,6 +80,7 @@ export default {
             }
           },
           axisLabel: {
+            //interval:0,
             textStyle: {
               color: "#666666",
             },
