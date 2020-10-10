@@ -34,12 +34,16 @@ export default {
 
       //console.log(options)
       let datas = [
-        { value: options.online_count, name: "正常"},
-        { value: options.offline_count, name: "离线"},
-        { value: options.alert_count, name: "告警"}
+        { value: options.online_count, name: "正常", color:'#4CAF50'},
+        { value: options.offline_count, name: "离线", color:'#47CAD9'},
+        { value: options.alert_count, name: "告警", color:'#D53A35'}
       ];
 
-      //datas.splice(datas.findIndex(item => item.value == 0),1);
+      datas.splice(datas.findIndex(item => item.value == 0),1);
+
+      let colorAttr = datas.map(item => item.color);
+
+      console.log(colorAttr)
 
 
       // 基于准备好的dom，初始化echarts实例
@@ -54,7 +58,7 @@ export default {
           containLabel: true
         },
         //["#47CAD9", "#2f4554", "#D53A35"]
-        color: ["#4CAF50","#47CAD9","#D53A35"],
+        color: colorAttr,
         series: [
           {
             name: "来源",
