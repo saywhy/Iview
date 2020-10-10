@@ -108,7 +108,7 @@ export default {
               this.loading = false
               this.$router.push('/login');
               location.reload();
-            }, 1000);
+            }, 3000);
           }
         })
         .catch(error => {
