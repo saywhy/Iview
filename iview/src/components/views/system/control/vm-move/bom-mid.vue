@@ -39,6 +39,9 @@ export default {
         { value: options.alert_count, name: "告警"}
       ];
 
+      datas.splice(datas.findIndex(item => item.value == 0),1);
+
+
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("safe"));
       // 绘制图表
