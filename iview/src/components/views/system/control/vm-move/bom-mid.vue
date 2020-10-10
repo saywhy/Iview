@@ -19,6 +19,7 @@ export default {
     safe() {
 
       let options = this.options;
+
       if(!options.total_count){
         options.total_count = 0;
       }
@@ -39,11 +40,15 @@ export default {
         { value: options.alert_count, name: "告警", color:'#D53A35'}
       ];
 
+    /* datas.forEach((item,index) => {
+       if(item.value == 0){
+         datas.splice(index,1);
+       }
+     })*/
+
       datas.splice(datas.findIndex(item => item.value == 0),1);
 
       let colorAttr = datas.map(item => item.color);
-
-      console.log(colorAttr)
 
 
       // 基于准备好的dom，初始化echarts实例
