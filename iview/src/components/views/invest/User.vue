@@ -11,12 +11,12 @@
           <div class="invest_top">
             <el-input placeholder="用户名"
                       class="search_box"
-                      v-model="user_search.username"
+                      v-model="user_input.username"
                       clearable>
             </el-input>
             <el-input placeholder="主机地址"
                       class="search_box"
-                      v-model="user_search.host_ip"
+                      v-model="user_input.host_ip"
                       clearable>
             </el-input>
             <vm-emerge-picker @changeTime='changeTime'
@@ -70,7 +70,7 @@
                            @current-change="handleCurrentChange"
                            :current-page="user_list.pageNow"
                            :page-sizes="[10,20,50,100]"
-                           :page-size="10"
+                           :page-size="user_list.rows"
                            layout="total, sizes, prev, pager, next"
                            :total="user_list.count">
             </el-pagination>
@@ -103,9 +103,16 @@ export default {
         page: 1,
         rows: 10
       },
+      user_input: {
+        username: '',
+        host_ip: '',
+        start_time: "",
+        end_time: "",
+      },
       user_list: {
         count: 0,
         pageNow: 1,
+        rows: 10
       },
       user_list_data: {
       }
@@ -153,7 +160,13 @@ export default {
     },
     search () {
       this.user_search.page = 1
+      this.user_search.rows = 10
       this.user_list.pageNow = 1
+      this.user_list.rows = 10
+      this.user_search.username = this.user_input.username
+      this.user_search.host_ip = this.user_input.host_ip
+      this.user_search.start_time = this.user_input.start_time
+      this.user_search.end_time = this.user_input.end_time
       this.get_data();
     },
     get_data () {
@@ -186,10 +199,20 @@ export default {
     },
     // 重置
     reset () {
+      this.user_search.page = 1
+      this.user_search.rows = 10
+      this.user_list.pageNow = 1
+      this.user_list.rows = 10
       this.user_search.username = ''
       this.user_search.host_ip = ''
       this.user_search.start_time = ''
       this.user_search.end_time = ''
+
+      this.user_input.username = ''
+      this.user_input.host_ip = ''
+      this.user_input.start_time = ''
+      this.user_input.end_time = ''
+
       $(document.querySelector('.el-button--text')).trigger('click');
       this.get_data()
     },
@@ -235,11 +258,11 @@ export default {
     changeTime (data) {
       console.log(data);
       if (data) {
-        this.user_search.start_time = parseInt(data[0].valueOf() / 1000);
-        this.user_search.end_time = parseInt(data[1].valueOf() / 1000)
+        this.user_input.start_time = parseInt(data[0].valueOf() / 1000);
+        this.user_input.end_time = parseInt(data[1].valueOf() / 1000)
       } else {
-        this.user_search.start_time = ''
-        this.user_search.end_time = ''
+        this.user_input.start_time = ''
+        this.user_input.end_time = ''
       }
     }
   }

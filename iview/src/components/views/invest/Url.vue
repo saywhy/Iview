@@ -11,22 +11,22 @@
           <div class="invest_top">
             <el-input placeholder="源地址"
                       class="search_box"
-                      v-model="url_search.src_ip"
+                      v-model="url_input.src_ip"
                       clearable>
             </el-input>
             <el-input placeholder="源端口"
                       class="search_box"
-                      v-model="url_search.src_port"
+                      v-model="url_input.src_port"
                       clearable>
             </el-input>
             <el-input placeholder="目的地址"
                       class="search_box"
-                      v-model="url_search.dst_ip"
+                      v-model="url_input.dst_ip"
                       clearable>
             </el-input>
             <el-input placeholder="目的端口"
                       class="search_box"
-                      v-model="url_search.dst_port"
+                      v-model="url_input.dst_port"
                       clearable>
             </el-input>
             <vm-emerge-picker @changeTime='changeTime'
@@ -89,7 +89,7 @@
                            @current-change="handleCurrentChange"
                            :current-page="url_list.pageNow"
                            :page-sizes="[10,20,50,100]"
-                           :page-size="10"
+                           :page-size="url_list.rows"
                            layout="total, sizes, prev, pager, next"
                            :total="url_list.count">
             </el-pagination>
@@ -125,9 +125,19 @@ export default {
         page: 1,
         rows: 10
       },
+      url_input: {
+        src_ip: '',
+        dst_ip: '',
+        src_port: '',
+        dst_port: '',
+        email: "",
+        start_time: "",
+        end_time: "",
+      },
       url_list: {
         count: 0,
         pageNow: 1,
+        rows: 10
       },
       url_list_data: {
       }
@@ -184,7 +194,16 @@ export default {
     },
     search () {
       this.url_search.page = 1
+      this.url_search.rows = 10
       this.url_list.pageNow = 1
+      this.url_list.rows = 10
+      this.url_search.src_ip = this.url_input.src_ip
+      this.url_search.dst_ip = this.url_input.dst_ip
+      this.url_search.src_port = this.url_input.src_port
+      this.url_search.dst_port = this.url_input.dst_port
+      this.url_search.email = this.url_input.email
+      this.url_search.start_time = this.url_input.start_time
+      this.url_search.end_time = this.url_input.end_time
       this.get_data();
     },
     get_data () {
@@ -226,7 +245,17 @@ export default {
       this.url_search.dst_port = ''
       this.url_search.start_time = ''
       this.url_search.end_time = ''
+      this.url_input.src_ip = ''
+      this.url_input.dst_ip = ''
+      this.url_input.src_port = ''
+      this.url_input.dst_port = ''
+      this.url_input.start_time = ''
+      this.url_input.end_time = ''
       $(document.querySelector('.el-button--text')).trigger('click');
+      this.url_search.page = 1
+      this.url_search.rows = 10
+      this.url_list.pageNow = 1
+      this.url_list.rows = 10
       this.get_data()
     },
     // 下载
@@ -274,11 +303,11 @@ export default {
     changeTime (data) {
       console.log(data);
       if (data) {
-        this.url_search.start_time = parseInt(data[0].valueOf() / 1000);
-        this.url_search.end_time = parseInt(data[1].valueOf() / 1000)
+        this.url_input.start_time = parseInt(data[0].valueOf() / 1000);
+        this.url_input.end_time = parseInt(data[1].valueOf() / 1000)
       } else {
-        this.url_search.start_time = ''
-        this.url_search.end_time = ''
+        this.url_input.start_time = ''
+        this.url_input.end_time = ''
       }
     },
   }

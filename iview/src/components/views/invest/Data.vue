@@ -13,17 +13,17 @@
           <div class="invest_top">
             <el-input placeholder="流量超过(B)"
                       class="search_box"
-                      v-model="data_search.flow_size"
+                      v-model="data_input.flow_size"
                       clearable>
             </el-input>
             <el-input placeholder="链接时长超过(S)"
                       class="search_box"
-                      v-model="data_search.flow_duration"
+                      v-model="data_input.flow_duration"
                       clearable>
             </el-input>
             <el-input placeholder="主机地址"
                       class="search_box"
-                      v-model="data_search.host_ip"
+                      v-model="data_input.host_ip"
                       clearable>
             </el-input>
             <vm-emerge-picker @changeTime='changeTime'
@@ -86,7 +86,7 @@
                            @current-change="handleCurrentChange"
                            :current-page="data_list.pageNow"
                            :page-sizes="[10,20,50,100]"
-                           :page-size="10"
+                           :page-size="data_list.rows"
                            layout="total, sizes, prev, pager, next"
                            :total="data_list.count">
             </el-pagination>
@@ -120,9 +120,17 @@ export default {
         page: 1,
         rows: 10
       },
+      data_input: {
+        flow_size: '',
+        flow_duration: '',
+        host_ip: '',
+        start_time: "",
+        end_time: "",
+      },
       data_list: {
         count: 0,
         pageNow: 1,
+        rows: 10
       },
       data_list_data: {
       }
@@ -170,9 +178,19 @@ export default {
     },
     handleClick () { },
     search () {
-      this.get_data();
       this.data_search.page = 1
       this.data_list.pageNow = 1
+      this.data_search.rows = 10
+      this.data_list.rows = 1
+      this.data_search.flow_size = this.data_input.flow_size
+      this.data_search.flow_duration = this.data_input.flow_duration
+      this.data_search.host_ip = this.data_input.host_ip
+      this.data_search.start_time = this.data_input.start_time
+      this.data_search.end_time = this.data_input.end_time
+
+
+      this.get_data();
+
     },
     get_data () {
       this.data_search.loading = true
@@ -193,13 +211,6 @@ export default {
           if (status == '602') {
             return false
           }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
           this.data_list = data
           this.data_list_data = data.data
           this.data_list_data.data.forEach((item, index) => {
@@ -212,11 +223,20 @@ export default {
     },
     // 重置
     reset () {
+      this.data_search.page = 1
+      this.data_list.pageNow = 1
+      this.data_search.rows = 10
+      this.data_list.rows = 1
       this.data_search.flow_size = ''
       this.data_search.flow_duration = ''
       this.data_search.host_ip = '';
       this.data_search.start_time = '';
       this.data_search.end_time = '';
+      this.data_input.flow_size = ''
+      this.data_input.flow_duration = ''
+      this.data_input.host_ip = '';
+      this.data_input.start_time = '';
+      this.data_input.end_time = '';
       $(document.querySelector('.el-button--text')).trigger('click');
       this.get_data()
     },
@@ -229,13 +249,6 @@ export default {
         });
         return false
       }
-      // if (this.data_list.count > 1000) {
-      //   this.$message({
-      //     type: 'warning',
-      //     message: '下载数据不能超出1000条！'
-      //   });
-      //   return false
-      // }
       this.$axios.get('/yiiapi/site/CheckAuthExist', {
         params: {
           pathInfo: 'investigate/FlowsizeTimelengthInvestigationExport',
@@ -269,11 +282,11 @@ export default {
     changeTime (data) {
       console.log(data);
       if (data) {
-        this.data_search.start_time = parseInt(data[0].valueOf() / 1000);
-        this.data_search.end_time = parseInt(data[1].valueOf() / 1000)
+        this.data_input.start_time = parseInt(data[0].valueOf() / 1000);
+        this.data_input.end_time = parseInt(data[1].valueOf() / 1000)
       } else {
-        this.data_search.start_time = ''
-        this.data_search.end_time = ''
+        this.data_input.start_time = ''
+        this.data_input.end_time = ''
       }
     }
   },

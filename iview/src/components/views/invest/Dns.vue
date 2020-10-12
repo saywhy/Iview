@@ -11,22 +11,22 @@
           <div class="invest_top">
             <el-input placeholder="主机IP"
                       class="search_box"
-                      v-model="dns_search.host_ip"
+                      v-model="dns_input.host_ip"
                       clearable>
             </el-input>
             <el-input placeholder="DNS服务器IP"
                       class="search_box"
-                      v-model="dns_search.dns_ip"
+                      v-model="dns_input.dns_ip"
                       clearable>
             </el-input>
             <el-input placeholder="域名"
                       class="search_box"
-                      v-model="dns_search.domain"
+                      v-model="dns_input.domain"
                       clearable>
             </el-input>
             <el-input placeholder="TTL"
                       class="search_box"
-                      v-model="dns_search.ttl"
+                      v-model="dns_input.ttl"
                       clearable>
             </el-input>
             <vm-emerge-picker @changeTime='changeTime'
@@ -95,7 +95,7 @@
                            @current-change="handleCurrentChange"
                            :current-page="dns_list.pageNow"
                            :page-sizes="[10,20,50,100]"
-                           :page-size="10"
+                           :page-size="dns_list.rows"
                            layout="total, sizes, prev, pager, next"
                            :total="dns_list.count">
             </el-pagination>
@@ -133,9 +133,20 @@ export default {
         page: 1,
         rows: 10
       },
+      dns_input: {
+        host_ip: '',
+        dns_ip: '',
+        domain: '',
+        resolve_ip: '',
+        ttl: '',
+        resolve_result: '',
+        start_time: '',
+        end_time: '',
+      },
       dns_list: {
         count: 0,
         pageNow: 1,
+        rows: 10
       }
     };
   },
@@ -185,6 +196,16 @@ export default {
     search () {
       this.dns_list.pageNow = 1
       this.dns_search.page = 1
+      this.dns_search.rows = 10
+      this.dns_list.rows = 10
+      this.dns_search.host_ip = this.dns_input.host_ip
+      this.dns_search.dns_ip = this.dns_input.dns_ip
+      this.dns_search.domain = this.dns_input.domain
+      this.dns_search.resolve_ip = this.dns_input.resolve_ip
+      this.dns_search.resolve_result = this.dns_input.resolve_result
+      this.dns_search.ttl = this.dns_input.ttl
+      this.dns_search.start_time = this.dns_input.start_time
+      this.dns_search.end_time = this.dns_input.end_time
       this.get_data();
     },
     get_data () {
@@ -209,13 +230,7 @@ export default {
           if (status == '602') {
             return false
           }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
+
           this.dns_list = data
           this.dns_list.data.forEach((item, index) => {
             item.index_cn = index + 1
@@ -233,8 +248,19 @@ export default {
       this.dns_search.ttl = ''
       this.dns_search.start_time = ''
       this.dns_search.end_time = ''
+      this.dns_input.host_ip = ''
+      this.dns_input.dns_ip = ''
+      this.dns_input.domain = ''
+      this.dns_input.ttl = ''
+      this.dns_input.start_time = ''
+      this.dns_input.end_time = ''
       $(document.querySelector('.el-button--text')).trigger('click');
-      this.get_data()
+      this.dns_search.rows = 10
+      this.dns_list.rows = 10
+      this.handleSizeChange(10)
+      // this.get_data()
+      console.log(this.dns_list.rows);
+
     },
     // 下载
     download () {
@@ -262,6 +288,7 @@ export default {
     },
     // 分页
     handleSizeChange (val) {
+      console.log(val);
       this.dns_search.rows = val;
       this.dns_search.page = 1
       this.get_data();
@@ -274,11 +301,11 @@ export default {
     changeTime (data) {
       console.log(data);
       if (data) {
-        this.dns_search.start_time = parseInt(data[0].valueOf() / 1000);
-        this.dns_search.end_time = parseInt(data[1].valueOf() / 1000)
+        this.dns_input.start_time = parseInt(data[0].valueOf() / 1000);
+        this.dns_input.end_time = parseInt(data[1].valueOf() / 1000)
       } else {
-        this.dns_search.start_time = ''
-        this.dns_search.end_time = ''
+        this.dns_input.start_time = ''
+        this.dns_input.end_time = ''
       }
     },
   }

@@ -10,7 +10,7 @@
                      name="first">
           <div class="invest_top">
             <el-select class="select_box"
-                       v-model="flow_search.direction"
+                       v-model="flow_input.direction"
                        placeholder="流量方向">
               <el-option v-for="item in flow_search.direction_list"
                          :key="item.type"
@@ -20,7 +20,7 @@
             </el-select>
             <el-input placeholder="主机地址"
                       class="search_box"
-                      v-model="flow_search.host_ip"
+                      v-model="flow_input.host_ip"
                       clearable>
             </el-input>
             <vm-emerge-picker @changeTime='changeTime'
@@ -88,7 +88,7 @@
                            @current-change="handleCurrentChange"
                            :current-page="flow_list.pageNow"
                            :page-sizes="[10,20,50,100]"
-                           :page-size="10"
+                           :page-size="flow_list.rows"
                            layout="total, sizes, prev, pager, next"
                            :total="flow_list.count">
             </el-pagination>
@@ -127,9 +127,16 @@ export default {
         page: 1,
         rows: 10
       },
+      flow_input: {
+        direction: '0',
+        host_ip: '',
+        start_time: "",
+        end_time: "",
+      },
       flow_list: {
         count: 0,
         pageNow: 1,
+        rows: 10
       },
       flow_list_data: {
       }
@@ -178,6 +185,12 @@ export default {
     search () {
       this.flow_search.page = 1
       this.flow_list.pageNow = 1
+      this.flow_search.rows = 10
+      this.flow_list.rows = 10
+      this.flow_search.direction = this.flow_input.direction
+      this.flow_search.host_ip = this.flow_input.host_ip
+      this.flow_search.start_time = this.flow_input.start_time
+      this.flow_search.end_time = this.flow_input.end_time
       this.get_data();
     },
     get_data () {
@@ -199,13 +212,6 @@ export default {
           if (status == '602') {
             return false
           }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
           this.flow_list = data
           this.flow_list_data = data.data
           this.flow_list_data.data.forEach((item, index) => {
@@ -218,10 +224,18 @@ export default {
     },
     // 重置
     reset () {
+      this.flow_search.page = 1
+      this.flow_list.pageNow = 1
+      this.flow_search.rows = 10
+      this.flow_list.rows = 10
       this.flow_search.direction = '0'
       this.flow_search.host_ip = ''
       this.flow_search.start_time = ''
       this.flow_search.end_time = ''
+      this.flow_input.direction = '0'
+      this.flow_input.host_ip = ''
+      this.flow_input.start_time = ''
+      this.flow_input.end_time = ''
       $(document.querySelector('.el-button--text')).trigger('click');
       this.get_data()
     },
@@ -267,11 +281,11 @@ export default {
     changeTime (data) {
       console.log(data);
       if (data) {
-        this.flow_search.start_time = parseInt(data[0].valueOf() / 1000);
-        this.flow_search.end_time = parseInt(data[1].valueOf() / 1000)
+        this.flow_input.start_time = parseInt(data[0].valueOf() / 1000);
+        this.flow_input.end_time = parseInt(data[1].valueOf() / 1000)
       } else {
-        this.flow_search.start_time = ''
-        this.flow_search.end_time = ''
+        this.flow_input.start_time = ''
+        this.flow_input.end_time = ''
       }
     }
   },

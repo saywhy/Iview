@@ -12,17 +12,17 @@
           <div class="invest_top">
             <el-input placeholder="文件名"
                       class="search_box"
-                      v-model="file_search.file_name"
+                      v-model="file_input.file_name"
                       clearable>
             </el-input>
             <el-input placeholder="哈希值"
                       class="search_box"
-                      v-model="file_search.md5"
+                      v-model="file_input.md5"
                       clearable>
             </el-input>
             <el-input placeholder="主机地址"
                       class="search_box"
-                      v-model="file_search.host_ip"
+                      v-model="file_input.host_ip"
                       clearable>
             </el-input>
             <vm-emerge-picker @changeTime='changeTime'
@@ -86,7 +86,7 @@
                            @current-change="handleCurrentChange"
                            :current-page="file_list.pageNow"
                            :page-sizes="[10,20,50,100]"
-                           :page-size="10"
+                           :page-size="file_list.rows"
                            layout="total, sizes, prev, pager, next"
                            :total="file_list.count">
             </el-pagination>
@@ -120,9 +120,17 @@ export default {
         page: 1,
         rows: 10
       },
+      file_input: {
+        file_name: '',
+        md5: '',
+        host_ip: '',
+        start_time: "",
+        end_time: "",
+      },
       file_list: {
         count: 0,
         pageNow: 1,
+        rows: 10
       },
       file_list_data: {
       }
@@ -171,6 +179,13 @@ export default {
     search () {
       this.file_search.page = 1
       this.file_list.pageNow = 1
+      this.file_list.rows = 10
+      this.file_search.rows = 10
+      this.file_search.file_name = this.file_input.file_name
+      this.file_search.md5 = this.file_input.md5
+      this.file_search.host_ip = this.file_input.host_ip
+      this.file_search.start_time = this.file_input.start_time
+      this.file_search.end_time = this.file_input.end_time
       this.get_data();
     },
     get_data () {
@@ -192,14 +207,9 @@ export default {
           if (status == '602') {
             return false
           }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
           this.file_list = data
+          console.log(data);
+
           this.file_list_data = data.data
           this.file_list_data.data.forEach((item, index) => {
             item.index_cn = index + 1
@@ -216,6 +226,15 @@ export default {
       this.file_search.host_ip = ''
       this.file_search.start_time = ''
       this.file_search.end_time = ''
+      this.file_input.file_name = ''
+      this.file_input.md5 = ''
+      this.file_input.host_ip = ''
+      this.file_input.start_time = ''
+      this.file_input.end_time = ''
+      this.file_search.page = 1
+      this.file_list.pageNow = 1
+      this.file_list.rows = 10
+      this.file_search.rows = 10
       $(document.querySelector('.el-button--text')).trigger('click');
       this.get_data()
     },
@@ -261,11 +280,11 @@ export default {
     changeTime (data) {
       console.log(data);
       if (data) {
-        this.file_search.start_time = parseInt(data[0].valueOf() / 1000);
-        this.file_search.end_time = parseInt(data[1].valueOf() / 1000)
+        this.file_input.start_time = parseInt(data[0].valueOf() / 1000);
+        this.file_input.end_time = parseInt(data[1].valueOf() / 1000)
       } else {
-        this.file_search.start_time = ''
-        this.file_search.end_time = ''
+        this.file_input.start_time = ''
+        this.file_input.end_time = ''
       }
     }
   }

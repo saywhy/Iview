@@ -1,7 +1,7 @@
 <template>
   <div id="invest_host"
        class="common_invest"
-       v-loading.fullscreen.lock="host_search.loading">
+       v-loading.fullscreen.lock="host_input.loading">
     <div class="invest_box">
       <el-tabs v-model="activeName"
                class="reset_tab">
@@ -11,7 +11,7 @@
           <div class="invest_top">
             <el-input placeholder="主机地址"
                       class="search_box"
-                      v-model="host_search.host_ip"
+                      v-model="host_input.host_ip"
                       clearable>
             </el-input>
             <vm-emerge-picker @changeTime='changeTime'
@@ -45,7 +45,7 @@
                                  align="center"
                                  width="60">
                   <template slot-scope="scope">
-                    {{(host_network_page.page-1)*(host_network_page.rows) + scope.row.index_cn}}
+                    {{(host_network.pageNow-1)*(host_network.rows) + scope.row.index_cn}}
                   </template>
                 </el-table-column>
                 <el-table-column prop="timestamp"
@@ -90,7 +90,7 @@
                              @current-change="handleCurrentChange_network"
                              :current-page="host_network.pageNow"
                              :page-sizes="[10,20,50,100]"
-                             :page-size="10"
+                             :page-size="host_network.rows"
                              layout="total, sizes, prev, pager, next"
                              :total="host_network.count">
               </el-pagination>
@@ -108,7 +108,7 @@
                                  align="center"
                                  width="60">
                   <template slot-scope="scope">
-                    {{(host_file_page.page-1)*(host_file_page.rows) + scope.row.index_cn}}
+                    {{(host_file.pageNow-1)*(host_file.rows) + scope.row.index_cn}}
                   </template>
                 </el-table-column>
                 <el-table-column prop="file_name"
@@ -142,7 +142,7 @@
                              @current-change="handleCurrentChange_file"
                              :current-page="host_file.pageNow"
                              :page-sizes="[10,20,50,100]"
-                             :page-size="10"
+                             :page-size="host_file.rows"
                              layout="total, sizes, prev, pager, next"
                              :total="host_file.count">
               </el-pagination>
@@ -160,7 +160,7 @@
                                  align="center"
                                  width="60">
                   <template slot-scope="scope">
-                    {{(host_user_page.page-1)*(host_user_page.rows) + scope.row.index_cn}}
+                    {{(host_user.pageNow-1)*(host_user.rows) + scope.row.index_cn}}
                   </template>
                 </el-table-column>
                 <el-table-column prop="user_name"
@@ -184,7 +184,7 @@
                              @current-change="handleCurrentChange_user"
                              :current-page="host_user.pageNow"
                              :page-sizes="[10,20,50,100]"
-                             :page-size="10"
+                             :page-size="host_user.rows"
                              layout="total, sizes, prev, pager, next"
                              :total="host_user.count">
               </el-pagination>
@@ -207,7 +207,22 @@ export default {
       time_list: {
         time: []
       },
-      host_search: {
+      host_network_search: {
+        host_ip: '',
+        start_time: "",
+        end_time: "",
+      },
+      host_file_search: {
+        host_ip: '',
+        start_time: "",
+        end_time: "",
+      },
+      host_user_search: {
+        host_ip: '',
+        start_time: "",
+        end_time: "",
+      },
+      host_input: {
         loading: false,
         host_ip: '',
         start_time: "",
@@ -215,30 +230,27 @@ export default {
       },
       // 网络通讯
       host_network: {
+        count: 0,
+        pageNow: 1,
+        rows: 10,
       },
       host_network_data: {
       },
-      host_network_page: {
-        page: 1,
-        rows: 10
-      },
       // 文件
       host_file: {
+        count: 0,
+        pageNow: 1,
+        rows: 10,
       },
       host_file_data: {
       },
-      host_file_page: {
-        page: 1,
-        rows: 10
-      },
       // 用户
       host_user: {
+        count: 0,
+        pageNow: 1,
+        rows: 10,
       },
       host_user_data: {
-      },
-      host_user_page: {
-        page: 1,
-        rows: 10
       },
     };
   },
@@ -288,15 +300,27 @@ export default {
     search_data () {
       switch (this.activeButGroup) {
         case '1':
-          this.host_network_page.page = 1
+          this.host_network.pageNow = 1
+          this.host_network.rows = 10
+          this.host_network_search.host_ip = this.host_input.host_ip
+          this.host_network_search.start_time = this.host_input.start_time
+          this.host_network_search.end_time = this.host_input.end_time
           this.get_data_network()
           break;
         case '2':
-          this.host_file_page.page = 1
+          this.host_file.pageNow = 1
+          this.host_file.rows = 10
+          this.host_file_search.host_ip = this.host_input.host_ip
+          this.host_file_search.start_time = this.host_input.start_time
+          this.host_file_search.end_time = this.host_input.end_time
           this.get_data_file()
           break;
         case '3':
-          this.host_user_page.page = 1
+          this.host_user.pageNow = 1
+          this.host_user.rows = 10
+          this.host_user_search.host_ip = this.host_input.host_ip
+          this.host_user_search.start_time = this.host_input.start_time
+          this.host_user_search.end_time = this.host_input.end_time
           this.get_data_user()
           break;
         default:
@@ -305,29 +329,22 @@ export default {
     },
     // 网络通讯
     get_data_network () {
-      this.host_search.loading = true
+      this.host_input.loading = true
       this.$axios.get('/yiiapi/investigate/HostNetworkInvestigation', {
         params: {
-          host_ip: this.host_search.host_ip,
-          start_time: this.host_search.start_time,
-          end_time: this.host_search.end_time,
-          current_page: this.host_network_page.page,
-          per_page_count: this.host_network_page.rows
+          host_ip: this.host_network_search.host_ip,
+          start_time: this.host_network_search.start_time,
+          end_time: this.host_network_search.end_time,
+          current_page: this.host_network.pageNow,
+          per_page_count: this.host_network.rows
         }
       })
         .then(response => {
-          this.host_search.loading = false
+          this.host_input.loading = false
           let { status, data } = response.data;
           if (status == '602') {
             return false
           }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
           this.host_network = data
           this.host_network_data = data.data
           this.host_network_data.data.forEach((item, index) => {
@@ -340,29 +357,22 @@ export default {
     },
     // 文件
     get_data_file () {
-      this.host_search.loading = true
+      this.host_input.loading = true
       this.$axios.get('/yiiapi/investigate/HostFileInvestigation', {
         params: {
-          host_ip: this.host_search.host_ip,
-          start_time: this.host_search.start_time,
-          end_time: this.host_search.end_time,
-          current_page: this.host_file_page.page,
-          per_page_count: this.host_file_page.rows
+          host_ip: this.host_file_search.host_ip,
+          start_time: this.host_file_search.start_time,
+          end_time: this.host_file_search.end_time,
+          current_page: this.host_file.pageNow,
+          per_page_count: this.host_file.rows
         }
       })
         .then(response => {
-          this.host_search.loading = false
+          this.host_input.loading = false
           let { status, data } = response.data;
           if (status == '602') {
             return false
           }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
           this.host_file = data
           this.host_file_data = data.data
           this.host_file_data.data.forEach((item, index) => {
@@ -375,29 +385,23 @@ export default {
     },
     // 用户
     get_data_user () {
-      this.host_search.loading = true
+      this.host_input.loading = true
       this.$axios.get('/yiiapi/investigate/HostUserInvestigation', {
         params: {
-          host_ip: this.host_search.host_ip,
-          start_time: this.host_search.start_time,
-          end_time: this.host_search.end_time,
-          current_page: this.host_user_page.page,
-          per_page_count: this.host_user_page.rows
+          host_ip: this.host_user_search.host_ip,
+          start_time: this.host_user_search.start_time,
+          end_time: this.host_user_search.end_time,
+          current_page: this.host_user.pageNow,
+          per_page_count: this.host_user.rows
         }
       })
         .then(response => {
-          this.host_search.loading = false
+          this.host_input.loading = false
           let { status, data } = response.data;
           if (status == '602') {
             return false
           }
-          // if (data.count > 10000) {
-          //   this.$message({
-          //     type: 'warning',
-          //     message: '数据超过一万条,请缩小搜索条件!'
-          //   });
-          //   return false
-          // }
+
           console.log(data);
           this.host_user = data
           this.host_user_data = data.data
@@ -411,11 +415,38 @@ export default {
     },
     // 重置
     reset () {
-      this.host_search.host_ip = ''
-      this.host_search.start_time = ''
-      this.host_search.end_time = ''
+      this.host_input.host_ip = ''
+      this.host_input.start_time = ''
+      this.host_input.end_time = ''
       $(document.querySelector('.el-button--text')).trigger('click');
-      this.get_data()
+      switch (this.activeButGroup) {
+        case '1':
+          this.host_network.pageNow = 1
+          this.host_network.rows = 10
+          this.host_network_search.host_ip = ''
+          this.host_network_search.start_time = ''
+          this.host_network_search.end_time = ''
+          this.get_data_network()
+          break;
+        case '2':
+          this.host_file.pageNow = 1
+          this.host_file.rows = 10
+          this.host_file_search.host_ip = ''
+          this.host_file_search.start_time = ''
+          this.host_file_search.end_time = ''
+          this.get_data_file()
+          break;
+        case '3':
+          this.host_user.pageNow = 1
+          this.host_user.rows = 10
+          this.host_user_search.host_ip = ''
+          this.host_user_search.start_time = ''
+          this.host_user_search.end_time = ''
+          this.get_data_user();
+          break;
+        default:
+          break;
+      }
     },
     // 下载
     download () {
@@ -435,7 +466,7 @@ export default {
             }
           })
             .then(response => {
-              var url1 = "/yiiapi/investigate/HostNetworkInvestigationExport?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
+              var url1 = "/yiiapi/investigate/HostNetworkInvestigationExport?host_ip=" + this.host_network_search.host_ip + '&start_time=' + this.host_network_search.start_time + '&end_time=' + this.host_network_search.end_time + '&current_page=0&per_page_count=0';
               window.location.href = url1;
             })
             .catch(error => {
@@ -458,7 +489,7 @@ export default {
             }
           })
             .then(response => {
-              var url2 = "/yiiapi/investigate/HostFileInvestigationExport?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
+              var url2 = "/yiiapi/investigate/HostFileInvestigationExport?host_ip=" + this.host_file_search.host_ip + '&start_time=' + this.host_file_search.start_time + '&end_time=' + this.host_file_search.end_time + '&current_page=0&per_page_count=0';
               window.location.href = url2;
             })
             .catch(error => {
@@ -481,7 +512,7 @@ export default {
             }
           })
             .then(response => {
-              var url3 = "/yiiapi/investigate/HostUserInvestigationExport?host_ip=" + this.host_search.host_ip + '&start_time=' + this.host_search.start_time + '&end_time=' + this.host_search.end_time + '&current_page=0&per_page_count=0';
+              var url3 = "/yiiapi/investigate/HostUserInvestigationExport?host_ip=" + this.host_user_search.host_ip + '&start_time=' + this.host_user_search.start_time + '&end_time=' + this.host_user_search.end_time + '&current_page=0&per_page_count=0';
               window.location.href = url3;
             })
             .catch(error => {
@@ -497,32 +528,32 @@ export default {
 
     // 分页-网络
     handleSizeChange_network (val) {
-      this.host_network_page.rows = val;
-      this.host_network_page.page = 1
+      this.host_network.rows = val;
+      this.host_network.pageNow = 1
       this.get_data_network();
     },
     handleCurrentChange_network (val) {
-      this.host_network_page.page = val
+      this.host_network.pageNow = val
       this.get_data_network();
     },
     // 分页-文件
     handleSizeChange_file (val) {
-      this.host_file_page.rows = val;
-      this.host_file_page.page = 1
+      this.host_file.rows = val;
+      this.host_file.pageNow = 1
       this.get_data_file();
     },
     handleCurrentChange_file (val) {
-      this.host_file_page.page = val
+      this.host_file.pageNow = val
       this.get_data_file();
     },
     // 分页-用户
     handleSizeChange_user (val) {
-      this.host_user_page.rows = val;
-      this.host_user_page.page = 1
+      this.host_user.rows = val;
+      this.host_user.pageNow = 1
       this.get_data_user();
     },
     handleCurrentChange_user (val) {
-      this.host_user_page.page = val
+      this.host_user.pageNow = val
       this.get_data_user();
     },
 
@@ -531,11 +562,11 @@ export default {
     changeTime (data) {
       console.log(data);
       if (data) {
-        this.host_search.start_time = parseInt(data[0].valueOf() / 1000);
-        this.host_search.end_time = parseInt(data[1].valueOf() / 1000)
+        this.host_input.start_time = parseInt(data[0].valueOf() / 1000);
+        this.host_input.end_time = parseInt(data[1].valueOf() / 1000)
       } else {
-        this.host_search.start_time = ''
-        this.host_search.end_time = ''
+        this.host_input.start_time = ''
+        this.host_input.end_time = ''
       }
     },
   }
