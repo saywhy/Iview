@@ -107,22 +107,23 @@
           <span class="info_top_item_title">检测规则</span>
           <span class="info_top_item_content">{{selectItem.alert_description.rule}}</span>
         </li>
-        <li class="info_top_item">
-          <span class="info_top_item_title">文件</span>
-          <span class="info_top_item_content">{{selectItem.alert_description.file}}</span>
-        </li>
+
         <li class="info_top_item">
           <span class="info_top_item_title">攻击阶段</span>
           <span class="info_top_item_content">{{selectItem.attack_stage|stage}}</span>
         </li>
         <li class="info_top_item">
-          <span class="info_top_item_title">路径</span>
-          <span class="info_top_item_content">{{selectItem.alert_description.path}}</span>
+          <span class="info_top_item_title">文件</span>
+          <span class="info_top_item_content">{{selectItem.alert_description.file}}</span>
         </li>
 
         <li class="info_top_item">
           <span class="info_top_item_title">ATT&CK技术</span>
           <span class="info_top_item_content">{{selectItem.alert_description.att}}</span>
+        </li>
+        <li class="info_top_item">
+          <span class="info_top_item_title">路径</span>
+          <span class="info_top_item_content">{{selectItem.alert_description.path}}</span>
         </li>
         <li class="info_top_item">
           <span class="info_top_item_title">参考信息</span>
