@@ -908,8 +908,6 @@ export default {
         this.assets_all.tags.splice(index, 1);
         this.assets_all.base[$index].value[$idx].flag = false;
       }
-
-
       if (!this.search_flag) {
         this.params = {
           key: "",
@@ -957,6 +955,7 @@ export default {
     //搜索按鈕點擊事件
     submitClick () {
       this.search_flag = true;
+      this.table.pageNow = 1;
       this.get_list_risk();
     },
 
@@ -977,6 +976,7 @@ export default {
         degree: "",
         status: "",
       };
+      this.table.pageNow = 1;
       this.get_list_risk();
     },
 
