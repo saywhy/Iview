@@ -987,6 +987,10 @@ export default {
 
 
       if (this.selectItem.detect_engine != "LOGDF" && this.selectItem.detect_engine != "LOGRULE") {
+        function renderTime (date) {
+          var dateee = new Date(date).toJSON();
+          return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        }
         // 网络事件匹配
         switch (this.selectItem.network_event.event_type) {
           case 'fileinfo':
@@ -1011,7 +1015,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1094,7 +1098,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1134,7 +1138,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1178,7 +1182,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1217,7 +1221,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1261,7 +1265,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1296,7 +1300,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1336,7 +1340,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1369,7 +1373,7 @@ export default {
             }
             this.selectItem.event_list = [{
               name: 'Time',
-              value: this.selectItem.network_event.timestamp
+              value: renderTime(this.selectItem.network_event.timestamp)
             },
             {
               name: 'Source IP',
@@ -1408,7 +1412,7 @@ export default {
             }
             this.selectItem.event_list = [{
               name: 'Time',
-              value: this.selectItem.network_event.timestamp
+              value: renderTime(this.selectItem.network_event.timestamp)
             },
             {
               name: 'Source IP',
@@ -1452,7 +1456,7 @@ export default {
             }
             this.selectItem.event_list = [{
               name: 'Time',
-              value: this.selectItem.network_event.timestamp
+              value: renderTime(this.selectItem.network_event.timestamp)
             },
             {
               name: 'Source IP',
@@ -1512,7 +1516,7 @@ export default {
             }
             this.selectItem.event_list = [{
               name: 'Time',
-              value: this.selectItem.network_event.timestamp
+              value: renderTime(this.selectItem.network_event.timestamp)
             },
             {
               name: 'Source IP',
@@ -1555,7 +1559,7 @@ export default {
             }
             this.selectItem.event_list = [{
               name: 'Time',
-              value: this.selectItem.network_event.timestamp
+              value: renderTime(this.selectItem.network_event.timestamp)
             },
             {
               name: 'Source IP',
@@ -1652,7 +1656,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1747,7 +1751,7 @@ export default {
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
-                  value: this.selectItem.network_event.timestamp
+                  value: renderTime(this.selectItem.network_event.timestamp)
                 },
                 {
                   name: 'Source IP',
@@ -1784,7 +1788,7 @@ export default {
             }
             this.selectItem.event_list = [{
               name: 'Time',
-              value: this.selectItem.network_event.timestamp
+              value: renderTime(this.selectItem.network_event.timestamp)
             },
             {
               name: 'Source IP',

@@ -9,6 +9,10 @@ Vue.filter('timestamp', function (value) {
     .replace(/\.[\d]{3}Z/, "");
   return dateee
 });
+Vue.filter('renderTime', function (date) {
+  var dateee = new Date(date).toJSON();
+  return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+});
 
 Vue.filter('time', function (value) {
   if (value) {
