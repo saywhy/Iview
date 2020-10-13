@@ -12,7 +12,7 @@
           <span class="info_top_item_content">{{selectItem.log_source}}</span>
         </li>
         <li class="info_top_item">
-          <span class="info_top_item_title">威胁类型</span>
+          <span class="info_top_item_title">告警类型</span>
           <span class="info_top_item_content">{{selectItem.category}}</span>
         </li>
         <li class="info_top_item">
@@ -50,7 +50,7 @@
           <span class="info_top_item_content">{{selectItem.log_source}}</span>
         </li>
         <li class="info_top_item">
-          <span class="info_top_item_title">威胁类型</span>
+          <span class="info_top_item_title">告警类型</span>
           <span class="info_top_item_content">{{selectItem.category}}</span>
         </li>
         <li class="info_top_item">
@@ -92,7 +92,7 @@
           <span class="info_top_item_content">{{selectItem.log_source}}</span>
         </li>
         <li class="info_top_item">
-          <span class="info_top_item_title">威胁类型</span>
+          <span class="info_top_item_title">告警类型</span>
           <span class="info_top_item_content">{{selectItem.category}}</span>
         </li>
         <li class="info_top_item">
@@ -169,7 +169,7 @@
                     <p class="left_item_title">
                       <img src="@/assets/images/emerge/base/base3.png"
                            alt="">
-                      <span>威胁类型</span>
+                      <span>告警类型</span>
                     </p>
                     <p class="left_item_content">
                       <!-- 恶意IP -->
@@ -352,7 +352,7 @@
           <span class="info_top_item_content">{{selectItem.log_source}}</span>
         </li>
         <li class="info_top_item">
-          <span class="info_top_item_title">威胁类型</span>
+          <span class="info_top_item_title">告警类型</span>
           <span class="info_top_item_content">{{selectItem.category}}</span>
         </li>
         <li class="info_top_item">
@@ -388,7 +388,8 @@
       <div class="info_base_top"
            style="padding-top:0">
         <div class="info_top_item">
-          <div class="info_top_item_title">Whois信息</div>
+          <div class="info_top_item_title"
+               v-if="selectItem.whois_list.length!=0">Whois信息</div>
           <div class="whois_item_box">
             <div class="whois_item"
                  v-for="item in selectItem.whois_list">
@@ -969,18 +970,15 @@ export default {
           }
           break;
         case 'IDS':
-          this.selectItem.info_list = [{
-            name: "告警类型",
-            value: this.selectItem.alert_description.category,
-          },
-          {
-            name: "告警描述",
-            value: this.selectItem.alert_description.threat,
-          },
-          {
-            name: "PayLoad信息",
-            value: "点击下载",
-          },
+          this.selectItem.info_list = [
+            {
+              name: "告警描述",
+              value: this.selectItem.alert_description.threat,
+            },
+            {
+              name: "PayLoad信息",
+              value: "点击下载",
+            },
           ];
           break;
         default:
@@ -999,17 +997,29 @@ export default {
                     ","
                   );
                 }
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'Mail_from',
@@ -1024,19 +1034,32 @@ export default {
                   value: 'smtp'
                 },
                 ]
+
                 break;
               case 'http':
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Method',
                   value: this.selectItem.network_event.http.http_method
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'URL',
@@ -1057,17 +1080,29 @@ export default {
                 ]
                 break;
               case 'ftp-data':
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'User',
@@ -1085,17 +1120,29 @@ export default {
                     ","
                   );
                 }
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'Mail_from',
@@ -1117,17 +1164,29 @@ export default {
                     ","
                   );
                 }
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'Mail_from',
@@ -1144,17 +1203,29 @@ export default {
                 ]
                 break;
               case 'smb':
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'Domain',
@@ -1176,17 +1247,29 @@ export default {
                 } else if (this.selectItem.network_event.app_proto == 'failed') {
                   this.selectItem.network_event.app_proto = ''
                 }
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'Traffic',
@@ -1199,17 +1282,29 @@ export default {
           case 'flow':
             switch (this.selectItem.network_event.app_proto) {
               case 'ftp':
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'User',
@@ -1227,17 +1322,29 @@ export default {
                 } else if (this.selectItem.network_event.app_proto == 'failed') {
                   this.selectItem.network_event.app_proto = ''
                 }
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'Traffic',
@@ -1248,17 +1355,29 @@ export default {
             }
             break
           case 'smb':
+            var srcIP = ''
+            var desIP = ''
+            if (this.selectItem.network_event.src_port == 0) {
+              srcIP = this.selectItem.network_event.src_ip
+            } else {
+              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            }
+            if (this.selectItem.network_event.dest_port == 0) {
+              desIP = this.selectItem.network_event.dest_ip
+            } else {
+              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: this.selectItem.network_event.timestamp
             },
             {
               name: 'Source IP',
-              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+              value: srcIP
             },
             {
               name: 'Destination IP',
-              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+              value: desIP
             },
             {
               name: 'Domain',
@@ -1275,17 +1394,29 @@ export default {
             ]
             break
           case 'ssh':
+            var srcIP = ''
+            var desIP = ''
+            if (this.selectItem.network_event.src_port == 0) {
+              srcIP = this.selectItem.network_event.src_ip
+            } else {
+              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            }
+            if (this.selectItem.network_event.dest_port == 0) {
+              desIP = this.selectItem.network_event.dest_ip
+            } else {
+              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: this.selectItem.network_event.timestamp
             },
             {
               name: 'Source IP',
-              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+              value: srcIP
             },
             {
               name: 'Destination IP',
-              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+              value: desIP
             },
             {
               name: 'Tool',
@@ -1307,17 +1438,29 @@ export default {
                 this.selectItem.network_event.tls.subject.indexOf("CN=") + 3
               );
             }
+            var srcIP = ''
+            var desIP = ''
+            if (this.selectItem.network_event.src_port == 0) {
+              srcIP = this.selectItem.network_event.src_ip
+            } else {
+              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            }
+            if (this.selectItem.network_event.dest_port == 0) {
+              desIP = this.selectItem.network_event.dest_ip
+            } else {
+              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: this.selectItem.network_event.timestamp
             },
             {
               name: 'Source IP',
-              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+              value: srcIP
             },
             {
               name: 'Destination IP',
-              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+              value: desIP
             },
             {
               name: 'URL',
@@ -1355,17 +1498,29 @@ export default {
                 }
               });
             }
+            var srcIP = ''
+            var desIP = ''
+            if (this.selectItem.network_event.src_port == 0) {
+              srcIP = this.selectItem.network_event.src_ip
+            } else {
+              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            }
+            if (this.selectItem.network_event.dest_port == 0) {
+              desIP = this.selectItem.network_event.dest_ip
+            } else {
+              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: this.selectItem.network_event.timestamp
             },
             {
               name: 'Source IP',
-              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+              value: srcIP
             },
             {
               name: 'Destination IP',
-              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+              value: desIP
             },
             {
               name: 'SectianType',
@@ -1386,17 +1541,29 @@ export default {
             ]
             break
           case 'krb5':
+            var srcIP = ''
+            var desIP = ''
+            if (this.selectItem.network_event.src_port == 0) {
+              srcIP = this.selectItem.network_event.src_ip
+            } else {
+              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            }
+            if (this.selectItem.network_event.dest_port == 0) {
+              desIP = this.selectItem.network_event.dest_ip
+            } else {
+              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: this.selectItem.network_event.timestamp
             },
             {
               name: 'Source IP',
-              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+              value: srcIP
             },
             {
               name: 'Destination IP',
-              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+              value: desIP
             },
             {
               name: 'Msg_type',
@@ -1421,17 +1588,29 @@ export default {
             ]
             break
           case 'http':
+            var srcIP = ''
+            var desIP = ''
+            if (this.selectItem.network_event.src_port == 0) {
+              srcIP = this.selectItem.network_event.src_ip
+            } else {
+              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            }
+            if (this.selectItem.network_event.dest_port == 0) {
+              desIP = this.selectItem.network_event.dest_ip
+            } else {
+              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            }
             this.selectItem.event_list = [{
               name: 'Method',
               value: this.selectItem.network_event.http.http_method
             },
             {
               name: 'Source IP',
-              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+              value: srcIP
             },
             {
               name: 'Destination IP',
-              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+              value: desIP
             },
             {
               name: 'URL',
@@ -1459,17 +1638,29 @@ export default {
                     this.selectItem.network_event.tls.subject.indexOf("CN=") + 3
                   );
                 }
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'URL',
@@ -1494,17 +1685,29 @@ export default {
                 ]
                 break;
               case 'http':
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Method',
                   value: this.selectItem.network_event.http.http_method
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'URL',
@@ -1530,17 +1733,29 @@ export default {
                 } else if (this.selectItem.network_event.app_proto == 'failed') {
                   this.selectItem.network_event.app_proto = ''
                 }
+                var srcIP = ''
+                var desIP = ''
+                if (this.selectItem.network_event.src_port == 0) {
+                  srcIP = this.selectItem.network_event.src_ip
+                } else {
+                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                }
+                if (this.selectItem.network_event.dest_port == 0) {
+                  desIP = this.selectItem.network_event.dest_ip
+                } else {
+                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: this.selectItem.network_event.timestamp
                 },
                 {
                   name: 'Source IP',
-                  value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+                  value: srcIP
                 },
                 {
                   name: 'Destination IP',
-                  value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+                  value: desIP
                 },
                 {
                   name: 'Traffic',
@@ -1555,17 +1770,29 @@ export default {
             } else if (this.selectItem.network_event.app_proto == 'failed') {
               this.selectItem.network_event.app_proto = ''
             }
+            var srcIP = ''
+            var desIP = ''
+            if (this.selectItem.network_event.src_port == 0) {
+              srcIP = this.selectItem.network_event.src_ip
+            } else {
+              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+            }
+            if (this.selectItem.network_event.dest_port == 0) {
+              desIP = this.selectItem.network_event.dest_ip
+            } else {
+              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: this.selectItem.network_event.timestamp
             },
             {
               name: 'Source IP',
-              value: this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+              value: srcIP
             },
             {
               name: 'Destination IP',
-              value: this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+              value: desIP
             },
             {
               name: 'Traffic',
