@@ -420,6 +420,17 @@ Vue.filter('alarm', function (args) {
   return str;
 });
 
+//风险指数为0时候置空
+Vue.filter('risk_num', function (args) {
+  let str = '';
+  if (args == '0' || args == 0) {
+    str = '';
+  }else {
+    str = args;
+  }
+  return str;
+});
+
 //告警应用特殊处理
 Vue.filter('applite', function (args) {
   let str = '';

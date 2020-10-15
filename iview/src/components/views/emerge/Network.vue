@@ -276,7 +276,7 @@
                                min-width="120"
                                :prop="dropCol[index].prop"
                                :label="item.label">
-                <template slot-scope="scope">{{ scope.row.risk_num }}</template>
+                <template slot-scope="scope">{{ scope.row.risk_num | risk_num}}</template>
               </el-table-column>
               <!--更新时间-->
               <el-table-column align="center"
