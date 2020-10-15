@@ -949,18 +949,14 @@ export default {
     label_submit_click () {
 
       let fieldAttr = [];
-
       fieldAttr = this.dropCol.map(item => {
         return item.prop;
       });
-
       this.$axios.put('/yiiapi/alert/FieldEdit', {
         fields: fieldAttr
       })
         .then((resp) => {
-
           let { status, msg, data } = resp.data;
-
           if (status == 0) {
             this.$refs.messageDrop.hide();
             this.column_deploy();
@@ -975,7 +971,6 @@ export default {
           }
         });
     },
-
     //配置到
     column_deploy () {
       this.$axios.get('/yiiapi/alert/FieldList')
@@ -983,13 +978,9 @@ export default {
 
           this.dropCol = [];
           let { status, data } = resp.data;
-
           //console.log(data)
-
           if (status == 0) {
-
             let config = data.config;
-
             for (var key of config) {
               this.fieldList.forEach(item => {
                 if (item.alias == key) {
@@ -1009,14 +1000,11 @@ export default {
 
         });
     },
-
     //下拉框勾选事件
     fieldChange (alias, name) {
-
       let colAttr = this.dropCol.map((item) => {
         return item.prop;
       });
-
       if (colAttr.includes(alias)) {
         var index = colAttr.findIndex((element) => (element == alias));
         this.dropCol.splice(index, 1);
@@ -1024,7 +1012,7 @@ export default {
         this.dropCol.push({ label: name, prop: alias });
       }
     },
-    // 列拖拽
+    //列拖拽
     columnDrop () {
       const wrapperTr = document.querySelector('.common-table_alert tr');
       this.sortable = Sortable.create(wrapperTr, {
@@ -1036,11 +1024,8 @@ export default {
           const oldItem = this.dropCol[oldIndex];
           this.dropCol.splice(oldIndex, 1);
           this.dropCol.splice(newIndex, 0, oldItem);
-
           this.label_submit_click();
-
           this.randomKey += 1;
-
           setTimeout(() => {
             this.columnDrop();
           }, 500);
@@ -1053,7 +1038,6 @@ export default {
         this.label_cancel_Click();
       }
     },
-
     // 获取告警列表
     get_list_risk () {
       this.table.loading = true;
