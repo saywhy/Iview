@@ -472,7 +472,6 @@
               <el-table-column align="center"
                                v-else-if="item.prop == 'risk_num'"
                                show-overflow-tooltip
-                               sortable="custom"
                                min-width="120"
                                :prop="item.prop"
                                :label="item.label">
@@ -482,7 +481,6 @@
               <el-table-column align="center"
                                v-else-if="item.prop == 'update_time'"
                                show-overflow-tooltip
-                               sortable="custom"
                                min-width="150"
                                :prop="item.prop"
                                :label="item.label">
