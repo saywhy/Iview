@@ -150,11 +150,11 @@
               </template>
               <!-- 风险指数 -->
               <template v-if="item.pop =='risk_num'">
-                <el-table-column :prop="item.pop"
-                                 min-width="80"
+                <el-table-column min-width="80"
                                  :label="item.name"
                                  align="center"
                                  show-overflow-tooltip>
+                  <template slot-scope="scope">{{ scope.row.risk_num | risk_num }}</template>
                 </el-table-column>
               </template>
               <!-- 日志数量 -->
@@ -315,11 +315,11 @@
               </template>
               <!-- 风险指数 -->
               <template v-if="item.pop =='risk_num'">
-                <el-table-column :prop="item.pop"
-                                 min-width="80"
+                <el-table-column min-width="80"
                                  :label="item.name"
                                  align="center"
                                  show-overflow-tooltip>
+                  <template slot-scope="scope">{{ scope.row.risk_num | risk_num }}</template>
                 </el-table-column>
               </template>
               <!-- 日志数量 -->
@@ -564,8 +564,8 @@ export default {
   }
   // 滚动条的宽度
   /deep/ .el-table__body-wrapper::-webkit-scrollbar {
-    width: 4px; // 横向滚动条
-    height: 4px; // 纵向滚动条 必写
+    // width: 4px; // 横向滚动条
+    // height: 4px; // 纵向滚动条 必写
   }
   // 滚动条的滑块
   /deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {

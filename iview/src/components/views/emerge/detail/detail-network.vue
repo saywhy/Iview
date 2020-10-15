@@ -218,7 +218,7 @@
           <div class="content_item">
             <span class="item_title">风险指数：</span>
             <div class="item_right">
-              <span>{{detail_main.risk_num}}</span>
+              <span>{{detail_main.risk_num | risk_num}}</span>
             </div>
           </div>
           <div class="content_item">
