@@ -564,8 +564,8 @@ export default {
   }
   // 滚动条的宽度
   /deep/ .el-table__body-wrapper::-webkit-scrollbar {
-    // width: 4px; // 横向滚动条
-    // height: 4px; // 纵向滚动条 必写
+    width: 10px; // 横向滚动条
+    height: 10px; // 纵向滚动条 必写
   }
   // 滚动条的滑块
   /deep/ .el-table__body-wrapper::-webkit-scrollbar-thumb {

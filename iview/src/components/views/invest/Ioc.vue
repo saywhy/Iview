@@ -322,7 +322,6 @@ export default {
         }
       );
     },
-
     // 全选择
     handleSelectionChange (val) {
       this.select_list = val
