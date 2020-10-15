@@ -217,7 +217,6 @@
             </el-table-column>
             <!--:key="`col_${index}`"-->
             <template v-for="(item, index) in dropCol">
-
               <!--告警时间-->
               <el-table-column align="center"
                                v-if="dropCol[index].prop == 'alert_time'"
