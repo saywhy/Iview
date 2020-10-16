@@ -961,7 +961,7 @@ export default {
             this.$refs.messageDrop.hide();
             this.column_deploy();
             this.get_list_risk();
-            this.columnDrop();
+            //this.columnDrop();
           } else {
             this.$message({
               /* message: msg[Object.keys(msg)[0]][0],*/
@@ -995,7 +995,7 @@ export default {
                 item.checked = false;
               }
             });
-            this.columnDrop();
+            //this.columnDrop();
           }
 
         });
@@ -1027,7 +1027,7 @@ export default {
           this.label_submit_click();
           this.randomKey += 1;
           setTimeout(() => {
-            this.columnDrop();
+            //this.columnDrop();
           }, 500);
         }
       });
