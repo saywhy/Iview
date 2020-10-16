@@ -1026,6 +1026,7 @@ export default {
           const oldItem = this.dropCol[oldIndex];
           this.dropCol.splice(oldIndex, 1);
           this.dropCol.splice(newIndex, 0, oldItem);
+
           this.label_submit_click();
           this.randomKey += 1;
 
