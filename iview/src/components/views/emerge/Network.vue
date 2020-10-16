@@ -958,10 +958,12 @@ export default {
         .then((resp) => {
           let { status, msg, data } = resp.data;
           if (status == 0) {
+
             this.$refs.messageDrop.hide();
             this.column_deploy();
             this.get_list_risk();
-            //this.columnDrop();
+            this.columnDrop();
+
           } else {
             this.$message({
               /* message: msg[Object.keys(msg)[0]][0],*/
@@ -995,7 +997,7 @@ export default {
                 item.checked = false;
               }
             });
-            //this.columnDrop();
+            this.columnDrop();
           }
 
         });
@@ -1026,9 +1028,10 @@ export default {
           this.dropCol.splice(newIndex, 0, oldItem);
           this.label_submit_click();
           this.randomKey += 1;
-          setTimeout(() => {
-            //this.columnDrop();
-          }, 500);
+
+         /* setTimeout(() => {
+            this.columnDrop();
+          }, 500);*/
         }
       });
     },
@@ -1097,7 +1100,6 @@ export default {
         console.log(error);
       })
     },
-
     // 获取折现图表
     get_echarts () {
       this.$axios.get('/yiiapi/alert/AlertTrend')

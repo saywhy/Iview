@@ -966,10 +966,11 @@ export default {
 
             this.column_deploy();
             this.get_list_threat();
-            //this.columnDrop();
+            this.columnDrop();
+
           } else {
             this.$message({
-             /* message: msg[Object.keys(msg)[0]][0],*/
+             /*message: msg[Object.keys(msg)[0]][0],*/
               message: '修改错误！',
               type: 'error',
             });
@@ -1004,7 +1005,7 @@ export default {
               }
             });
 
-            //this.columnDrop();
+            this.columnDrop();
           }
         });
     },
@@ -1041,9 +1042,9 @@ export default {
 
           this.randomKey += 1;
 
-          setTimeout(()=>{
+          /*setTimeout(()=>{
             this.columnDrop();
-          },500);
+          },500);*/
         }
       });
     },
