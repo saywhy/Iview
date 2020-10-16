@@ -22,6 +22,9 @@
       let legendAttr = [];
       let that = this;
       let datas = [];
+
+      console.log(this.form_data)
+
       if(this.form_data.length > 0){
         datas = this.form_data.slice(0,5);
       }else {
@@ -31,6 +34,7 @@
         legendAttr.push(v.category);
         that.data_attr.push({value:v.count, name:v.category});
       });
+
       this.legend_attr = legendAttr;
     },
     mounted(){
@@ -47,7 +51,6 @@
         if(dataAttr.length == 0){
           return false;
         }
-
         // 基于准备好的dom，初始化echarts实例
         let myChart = this.$echarts.init(document.getElementById('threatForm'))
         // 绘制图表
@@ -78,7 +81,7 @@
               center: ['70%', '50%'],
               radius: ['45%', '60%'],
               avoidLabelOverlap: false,
-              hoverOffset: 2,
+              hoverOffset: 1,
               label: {
                 normal: {
                   show: false,

@@ -10,11 +10,11 @@
                             </p>
                         </div>
                         <div class="legend">
-                            <span class="legend_icon color2"></span>
+                            <span class="legend_icon1 color2"></span>
                             <span>预警:{{top_left.warning_count}}</span>
-                            <span class="legend_icon color5"></span>
+                            <span class="legend_icon1 color5"></span>
                             <span>健康:{{top_left.healthy_count}}</span>
-                            <span class="legend_icon color6"></span>
+                            <span class="legend_icon1 color6"></span>
                             <span>离线:{{top_left.offline_count}}</span>
                         </div>
                         <div class="top_left_content">
