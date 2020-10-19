@@ -952,18 +952,21 @@ export default {
       fieldAttr = this.dropCol.map(item => {
         return item.prop;
       });
+
+      this.handle.save = true;
+
       this.$axios.put('/yiiapi/alert/FieldEdit', {
         fields: fieldAttr
       })
         .then((resp) => {
+          this.handle.save = false;
+
           let { status, msg, data } = resp.data;
           if (status == 0) {
-
             this.$refs.messageDrop.hide();
-            this.column_deploy();
             this.get_list_risk();
+            //this.column_deploy();
             this.columnDrop();
-
           } else {
             this.$message({
               /* message: msg[Object.keys(msg)[0]][0],*/
@@ -977,7 +980,6 @@ export default {
     column_deploy () {
       this.$axios.get('/yiiapi/alert/FieldList')
         .then((resp) => {
-
           this.dropCol = [];
           let { status, data } = resp.data;
           //console.log(data)
@@ -1002,6 +1004,7 @@ export default {
 
         });
     },
+
     //下拉框勾选事件
     fieldChange (alias, name) {
       let colAttr = this.dropCol.map((item) => {
@@ -1018,6 +1021,7 @@ export default {
     columnDrop () {
       const wrapperTr = document.querySelector('.common-table_alert tr');
       this.sortable = Sortable.create(wrapperTr, {
+        //handle: '.common-table_alert',
         animation: 180,
         delay: 0,
         onEnd: evt => {
@@ -1030,12 +1034,11 @@ export default {
           this.label_submit_click();
           this.randomKey += 1;
 
-         /* setTimeout(() => {
-            this.columnDrop();
-          }, 500);*/
         }
       });
     },
+
+
     //配置列弹窗关闭事件
     dropdown_hide (val) {
       if (!val) {

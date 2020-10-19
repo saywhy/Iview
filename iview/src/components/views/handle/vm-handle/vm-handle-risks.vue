@@ -954,20 +954,21 @@ export default {
         return item.prop;
       });
 
+      this.handle.save = true;
       this.$axios.put('/yiiapi/' + this.threats + '/FieldEdit',{
         fields: fieldAttr
       })
         .then((resp) => {
 
+          this.handle.save = false;
+
           let { status,msg, data } = resp.data;
 
           if(status == 0){
             this.$refs.messageDrop.hide();
-
-            this.column_deploy();
+           // this.column_deploy();
             this.get_list_threat();
             this.columnDrop();
-
           } else {
             this.$message({
              /*message: msg[Object.keys(msg)[0]][0],*/
