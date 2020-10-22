@@ -815,11 +815,11 @@ export default {
           type: 'piecewise',
           seriesIndex: 2,
           pieces: [{
-            gt: 90,
+            gt: 80,
             color: '#dc5f5f'
           }, {
             gt: 0,
-            lte: 90,
+            lte: 80,
             color: "rgba(76,175,80,0.9)"
           }]
         }],
