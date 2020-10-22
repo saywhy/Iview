@@ -53,6 +53,9 @@
               lineStyle:{
                 color:'#ccc'
               }
+            },
+            textStyle:{
+              align:'left'
             }
           },
           xAxis: {

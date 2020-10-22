@@ -1,5 +1,5 @@
 <template>
-    <div id="system_control_move" v-cloak>
+    <div id="system_control_move" v-cloak v-loading.fullscreen.lock="loading">
         <div class="container">
             <el-row class="container_top container_item" :gutter="20">
                 <el-col :span="6">
@@ -31,7 +31,7 @@
                                 <span class="title_right">
                                     <span class="title_right_icon color1"></span>
                                     <span>流量(M/s)</span>
-                                    <span class="title_right_icon color2"></span>
+                                    <span class="title_right_icon color9"></span>
                                     <span>文件(个/s)</span>
                                 </span>
                             </p>
@@ -141,8 +141,7 @@
           <div class="mask"></div>
           <span class="title_name">拓扑图</span>
         </div>
-        <div id="graph">
-        </div>
+        <div id="graph"></div>
       </el-dialog>
       <el-dialog class="sys_detail"
                  width="840"
@@ -200,6 +199,7 @@ export default {
   },
   data() {
     return {
+      loading:false,
       top_left: {},
       top_left_show: false,
 
@@ -602,7 +602,7 @@ export default {
         }
       });
 
-      console.log(this.equipment.echart_array);
+      //console.log(this.equipment.echart_array);
 
       var myChart = this.$echarts.init(document.getElementById("graph"));
       // console.log(myChart);
@@ -611,8 +611,6 @@ export default {
         tooltip: {
           trigger: 'item',
           formatter: function (params, trigger) {
-            console.log(params);
-            console.log(trigger);
             if (params.dataType == 'node') {
               return '设备：' + params.data.dev_name + '</br>' + 'IP地址：' + params.data.dev_ip + '</br>' + '状态：' + params.data.status
             } else {
@@ -631,7 +629,7 @@ export default {
             edgeLength: 80
           },
           draggable: true,
-          roam: true,
+          roam: false,
           label: {
             normal: {
               show: false
@@ -673,17 +671,23 @@ export default {
       this.equipment_detail.title.type = params.names
       this.equipment_detail.title.ip = params.dev_ip
       this.equipment_detail.title.name = params.dev_name
+
+
+      this.loading = true;
       this.$axios.get('/yiiapi/monitor/DevState', {
         params: {
           ip: params.dev_ip
         }
       })
         .then(response => {
+          this.loading = false;
+
           let {
             status,
             data
           } = response.data;
           console.log(data);
+
           data.forEach(element => {
             this.equipment_detail.cpu.unshift(element.cpu)
             this.equipment_detail.mem.unshift(element.mem)
@@ -1069,6 +1073,8 @@ export default {
 
 <style scoped lang="less">
   @import "../../../../assets/css/less/system/control/move.less";
+
+
 </style>
 
 <style lang="less">
@@ -1180,4 +1186,9 @@ export default {
       }
     }
   }
+
+  .el-loading-mask{
+    z-index: 99999!important;
+  }
 </style>
+
