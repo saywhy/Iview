@@ -23,7 +23,7 @@
       let that = this;
       let datas = [];
 
-      console.log(this.form_data)
+      //console.log(this.form_data)
 
       if(this.form_data.length > 0){
         datas = this.form_data.slice(0,5);

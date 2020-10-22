@@ -937,8 +937,10 @@ export default {
     this.get_list_threat();
     this.column_deploy();
   },
+  beforeDestroy(){
+    this.sortable = null;
+  },
   methods: {
-
     //配置到取消
     label_cancel_Click(){
       this.$refs.messageDrop.hide();

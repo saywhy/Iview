@@ -938,6 +938,9 @@ export default {
     this.get_list_risk();
     this.column_deploy();
   },
+  beforeDestroy(){
+    this.sortable = null;
+  },
   methods: {
     //配置到取消
     label_cancel_Click () {
@@ -954,7 +957,6 @@ export default {
       });
 
       this.handle.save = true;
-
       this.$axios.put('/yiiapi/alert/FieldEdit', {
         fields: fieldAttr
       })
