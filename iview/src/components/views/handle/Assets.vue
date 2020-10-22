@@ -753,7 +753,7 @@ export default {
     };
   },
   created () {
-    //this.check_passwd();
+    this.check_passwd();
     //頂部
     this.get_list_top();
 

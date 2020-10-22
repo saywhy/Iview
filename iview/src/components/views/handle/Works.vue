@@ -63,7 +63,7 @@ export default {
     VmHandleWorks
   },
   created () {
-    //this.check_passwd();
+    this.check_passwd();
     this.init_tabs_info();
     this.get_top_num();
   },

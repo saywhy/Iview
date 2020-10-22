@@ -129,6 +129,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import { eventBus } from '@/components/common/eventBus.js';
     import vmMainTabs from './vm-main/vm-main-tabs'
     import vmMainEmerge from './vm-main/vm-main-emerge'
     import vmMainTarget from './vm-main/vm-main-target'
@@ -196,6 +197,7 @@
         vmMainThreat
       },
       created () {
+        this.check_passwd();
         //顶部
         this.init_mountain();
 
@@ -211,8 +213,30 @@
         //第三排
         this.init_bom_left();
         this.init_bom_right();
+
+
       },
       methods:{
+        // 测试密码过期
+        check_passwd () {
+          this.$axios.get('/yiiapi/site/CheckPasswdReset')
+            .then((resp) => {
+              let {
+                status,
+                msg,
+                data
+              } = resp.data;
+              if (status == '602') {
+                this.$message(
+                  {
+                    message: msg,
+                    type: 'warning',
+                  }
+                );
+                eventBus.$emit('reset')
+              }
+            })
+        },
         //顶部
         init_mountain() {
           this.$axios.get('/yiiapi/overview/tabs')

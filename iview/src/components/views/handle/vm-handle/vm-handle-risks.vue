@@ -653,6 +653,8 @@ import VmEmergePicker from "@/components/common/vm-emerge-picker";
 //拖拽
 import Sortable from 'sortablejs';
 
+import { eventBus } from '@/components/common/eventBus.js';
+
 export default {
   name: 'handle_threat_indicator',
   props: {
@@ -932,6 +934,7 @@ export default {
     VmEmergePicker
   },
   created () {
+    this.check_passwd();
     this.get_list_source_top5();
     this.get_list_threat_top5();
     this.get_list_threat();
@@ -941,6 +944,26 @@ export default {
     this.sortable = null;
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     //配置到取消
     label_cancel_Click(){
       this.$refs.messageDrop.hide();

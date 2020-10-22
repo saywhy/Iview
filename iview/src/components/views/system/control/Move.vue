@@ -183,9 +183,8 @@ import bomLeftTest from "./vm-move/bom-left-test";
 import bomLeftEmerge from "./vm-move/bom-left-emerge";
 import bomMid from "./vm-move/bom-mid";
 
-/*import bomRight from "./vm-move/bom-right";*/
-
 import {isSynthetical} from "../../../../assets/js/validate";
+import { eventBus } from '@/components/common/eventBus.js';
 
 export default {
   name: "system_control_move",
@@ -198,17 +197,6 @@ export default {
     bomLeftTest,
     bomLeftEmerge,
     bomMid
-  },
-  created () {
-    //第一排
-    this.init_top_left();
-    this.init_top_mid();
-    this.init_top_right();
-
-    //第二排
-    this.init_bom_left();
-    this.init_bom_mid();
-    //this.init_bom_right();
   },
   data() {
     return {
@@ -254,7 +242,39 @@ export default {
       },
     }
   },
+  created () {
+    this.check_passwd();
+    //第一排
+    this.init_top_left();
+    this.init_top_mid();
+    this.init_top_right();
+
+    //第二排
+    this.init_bom_left();
+    this.init_bom_mid();
+    //this.init_bom_right();
+  },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     //第一排（左）
     init_top_left () {
       this.$axios.get('/yiiapi/monitor/SystemState')

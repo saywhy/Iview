@@ -265,9 +265,30 @@
       };
     },
     mounted () {
+      this.check_passwd();
       this.get_data();
     },
     methods: {
+      // 测试密码过期
+      check_passwd () {
+        this.$axios.get('/yiiapi/site/CheckPasswdReset')
+          .then((resp) => {
+            let {
+              status,
+              msg,
+              data
+            } = resp.data;
+            if (status == '602') {
+              this.$message(
+                {
+                  message: msg,
+                  type: 'warning',
+                }
+              );
+              eventBus.$emit('reset')
+            }
+          })
+      },
       // 获取列表
       get_data () {
         this.loading = true;

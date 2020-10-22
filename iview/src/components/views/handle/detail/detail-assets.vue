@@ -855,6 +855,8 @@
 import backTitle from "@/components/common/back-title";
 import VmHanleRank from '../vm-handle/vm-handle-rank'
 import suggestJS from '@/assets/js/suggest.js'
+
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: "detail-assets",
   components: { backTitle, VmHanleRank },
@@ -1050,6 +1052,9 @@ export default {
   },
 
   created () {
+
+    this.check_passwd();
+
     this.suggest_list = JSON.parse(JSON.stringify(suggestJS));
 
     let asset_ip = this.$route.query.asset_ip;
@@ -1064,6 +1069,26 @@ export default {
   },
 
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     //获取资产详情顶部
     get_assets_detail_top () {
       this.suggest_flag = false;

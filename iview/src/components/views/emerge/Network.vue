@@ -933,7 +933,7 @@ export default {
     else this.params.attack_stage  =  '';
   },
   mounted () {
-    // this.check_passwd();
+    this.check_passwd();
     this.get_echarts();
     this.get_list_risk();
     this.column_deploy();
@@ -942,6 +942,26 @@ export default {
     this.sortable = null;
   },
   methods: {
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
     //配置到取消
     label_cancel_Click () {
       this.$refs.messageDrop.hide();

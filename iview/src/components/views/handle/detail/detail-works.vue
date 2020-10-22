@@ -231,6 +231,8 @@
 
 <script type="text/ecmascript-6">
 import backTitle from "@/components/common/back-title";
+
+import { eventBus } from '@/components/common/eventBus.js';
 export default {
   name: "detail-works",
   components: {
@@ -274,6 +276,7 @@ export default {
   },
 
   created () {
+    this.check_passwd();
     let newId = this.$route.query.id;
     this.id = newId;
     //this.loadlinks += newId;
@@ -286,6 +289,26 @@ export default {
 
     // this.$route.query.id
     //获取工单详情列表
+    // 测试密码过期
+    check_passwd () {
+      this.$axios.get('/yiiapi/site/CheckPasswdReset')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          if (status == '602') {
+            this.$message(
+              {
+                message: msg,
+                type: 'warning',
+              }
+            );
+            eventBus.$emit('reset')
+          }
+        })
+    },
 
     get_list_works_detail () {
       this.loading = true;
