@@ -786,6 +786,43 @@ export default {
           }
         }],
         color: ["rgba(2,136,209,0.9)", "rgba(205,220,57,0.9)", "rgba(76,175,80,0.9)"],
+        visualMap: [{
+          show: false,
+          type: 'piecewise',
+          seriesIndex: 0,
+          pieces: [{
+            gt: 85,
+            color: '#dc5f5f'
+          }, {
+            gt: 0,
+            lte: 85,
+            color: "rgba(2,136,209,0.9)"
+          }]
+        }, {
+          show: false,
+          type: 'piecewise',
+          seriesIndex: 1,
+          pieces: [{
+            gt: 85,
+            color: '#dc5f5f'
+          }, {
+            gt: 0,
+            lte: 85,
+            color: "rgba(205,220,57,0.9)"
+          }]
+        }, {
+          show: false,
+          type: 'piecewise',
+          seriesIndex: 2,
+          pieces: [{
+            gt: 90,
+            color: '#dc5f5f'
+          }, {
+            gt: 0,
+            lte: 90,
+            color: "rgba(76,175,80,0.9)"
+          }]
+        }],
         series: [
           {
             name: "CPU",
@@ -794,9 +831,6 @@ export default {
             cursor: "pointer",
             smooth: true,
             data: this.equipment_detail.cpu,
-            lineStyle: {
-              color: "rgba(2,136,209,0.9)"
-            },
             areaStyle: {
               color: {
                 type: "linear",
@@ -824,9 +858,6 @@ export default {
             cursor: "pointer",
             smooth: true,
             data: this.equipment_detail.mem,
-            lineStyle: {
-              color: "rgba(205,220,57,0.9)"
-            },
             areaStyle: {
               color: {
                 type: "linear",
@@ -854,9 +885,6 @@ export default {
             cursor: "pointer",
             smooth: true,
             data: this.equipment_detail.disk,
-            lineStyle: {
-              color: "rgba(76,175,80,0.9)"
-            },
             areaStyle: {
               color: {
                 type: "linear",
