@@ -30,6 +30,7 @@
         <!-- 日志 -->
         <base-log :selectItem='select_item'
                   :iPAddr='iP_addr'
+                  :timeaxis='timeaxis[0]'
                   v-if='select_item.detect_engine=="LOGDF"||select_item.detect_engine=="LOGRULE"'></base-log>
         <!-- <base-log :selectItem="select_item"></base-log> -->
         <!-- 告警资产 -->

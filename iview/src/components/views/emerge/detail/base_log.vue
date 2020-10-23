@@ -278,6 +278,10 @@ export default {
       type: Object,
       default: () => { },
     },
+    timeaxis: {
+      type: Object,
+      default: () => { },
+    },
     iPAddr: {
       type: Object,
       default: () => { },
@@ -294,11 +298,10 @@ export default {
   mounted () {
     console.log('2222');
     this.LogList();
+    console.log(this.timeaxis);
   },
   methods: {
     LogList (val) {
-      console.log(this.iPAddr.src);
-      console.log(this.iPAddr.des);
       this.original_log = '';
       this.complete_log = [];
       this.$axios
@@ -489,11 +492,20 @@ export default {
     after_hh () { },
     after_mm () { },
     NormalizedLog () {
+      console.log(this.timeaxis.alert_time);
+      console.log(this.timeaxis.update_time);
+      console.log(this.timeaxis.indicator);
       window.open(
         "/yiiapi/alert/NormalizedLog?destIp=" +
         this.iPAddr.des +
         "&srcIp=" +
-        this.iPAddr.src
+        this.iPAddr.src +
+        "&indicator=" +
+        this.timeaxis.indicator +
+        "&stime=" +
+        moment(this.timeaxis.alert_time * 1000).format('YYYY-MM-DDTHH:mm:ss') +
+        "&etime=" +
+        moment(this.timeaxis.update_time * 1000).format('YYYY-MM-DDTHH:mm:ss')
       );
     },
     OriginalLog () {
