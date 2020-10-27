@@ -675,6 +675,7 @@ export default {
       { checked: false, disabled: false, name: "工单状态", alias: 'workorder_status' },
       { checked: false, disabled: false, name: "日志数量", alias: 'log_count' },
       { checked: true, disabled: false, name: "状态", alias: 'status' }],
+      sortable:null,
       echarts_data: {},
       e_line: {
         loading: true,
@@ -1059,14 +1060,13 @@ export default {
         }
       });
     },
-
-
     //配置列弹窗关闭事件
     dropdown_hide (val) {
       if (!val) {
         this.label_cancel_Click();
       }
     },
+
     // 获取告警列表
     get_list_risk () {
       this.table.loading = true;

@@ -374,7 +374,7 @@
         <li class="info_top_item"
             v-for="value in selectItem.info_list"
             v-if="value.name !='文件行为'&&value.name !='taskID'">
-          <span class="info_top_item_title">{{value.name}}</span>
+          <span class="info_top_item_title" >{{value.name}}</span>
           <span v-if="value.name=='文件大小'">
             {{value.value | filterType }}
           </span>
@@ -611,6 +611,9 @@ export default {
       }
       this.event_obj = this.selectItem.network_event;
       // 情报类型匹配
+      console.log('**************************************');
+      console.log(this.selectItem.description_type);
+
       switch (this.selectItem.description_type) {
         case 'BotnetCAndCURL':
           // this.selectItem.sample_list = [];
@@ -884,6 +887,8 @@ export default {
               value: this.selectItem.alert_description.threat
             },
           ];
+          console.log('***')
+          console.log(this.selectItem.alert_description)
 
           if (this.selectItem.alert_description.category == '恶意程序') {
             this.selectItem.info_list.push({
