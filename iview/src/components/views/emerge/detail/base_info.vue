@@ -889,8 +889,8 @@ export default {
           ];
           console.log('***')
           console.log(this.selectItem.alert_description)
-
-          if (this.selectItem.alert_description.category == '恶意程序') {
+          if (this.selectItem.alert_description.category == '恶意程序' ||
+            this.selectItem.alert_description.category == 'malwarefile') {
             this.selectItem.info_list.push({
               name: "文件下载",
               value: '点击下载',
@@ -940,7 +940,8 @@ export default {
             }
           });
 
-          if (this.selectItem.alert_description.category == '恶意程序') {
+          if (this.selectItem.alert_description.category == '恶意程序' ||
+            this.selectItem.alert_description.category == "malwarefile") {
             this.selectItem.info_list.push({
               name: "文件下载",
               value: '点击下载',
@@ -966,7 +967,8 @@ export default {
             value: this.selectItem.alert_description.rule_name,
           },
           ];
-          if (this.selectItem.alert_description.category == '恶意程序') {
+          if (this.selectItem.alert_description.category == '恶意程序' ||
+            this.selectItem.alert_description.category == "malwarefile") {
             this.selectItem.info_list.push({
               name: "文件下载",
               value: '点击下载',

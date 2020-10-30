@@ -993,7 +993,7 @@ export default {
             this.$refs.messageDrop.hide();
            // this.column_deploy();
             this.get_list_threat();
-            this.columnDrop();
+
           } else {
             this.$message({
              /*message: msg[Object.keys(msg)[0]][0],*/
@@ -1161,6 +1161,8 @@ export default {
           this.table.count = count;
           this.table.maxPage = maxPage;
           this.table.pageNow = pageNow * 1;
+
+          this.columnDrop();
         }
       })
     },

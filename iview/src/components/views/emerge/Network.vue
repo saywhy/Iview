@@ -977,19 +977,19 @@ export default {
         return item.prop;
       });
 
-      this.handle.save = true;
+      //this.handle.save = true;
       this.$axios.put('/yiiapi/alert/FieldEdit', {
         fields: fieldAttr
       })
         .then((resp) => {
-          this.handle.save = false;
+          //this.handle.save = false;
 
           let { status, msg, data } = resp.data;
           if (status == 0) {
             this.$refs.messageDrop.hide();
             this.get_list_risk();
             //this.column_deploy();
-            this.columnDrop();
+
           } else {
             this.$message({
               /* message: msg[Object.keys(msg)[0]][0],*/
@@ -1027,7 +1027,6 @@ export default {
 
         });
     },
-
     //下拉框勾选事件
     fieldChange (alias, name) {
       let colAttr = this.dropCol.map((item) => {
@@ -1121,6 +1120,9 @@ export default {
           this.table.count = count;
           this.table.maxPage = maxPage;
           this.table.pageNow = pageNow;
+
+
+          this.columnDrop();
         }
       }).catch(error => {
         console.log(error);
