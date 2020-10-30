@@ -302,6 +302,8 @@ export default {
     LogList (val) {
       this.original_log = '';
       this.complete_log = [];
+      console.log(this.timeaxis.update_time * 1000)
+      console.log((Number(this.timeaxis.update_time) + 1) * 1000)
       this.$axios
         .get("/yiiapi/alert/LogList", {
           params: {
@@ -310,8 +312,8 @@ export default {
             size: this.log_list.rows,
             from: this.log_list.rows * (this.log_list.pageNow - 1),
             indicator:this.timeaxis.indicator,
-            stime:this.timeaxis.alert_time * 1000,
-            etime: this.timeaxis.update_time * 1000
+            stime: this.timeaxis.alert_time * 1000,
+            etime: (Number(this.timeaxis.update_time) + 1) * 1000
           },
         })
         .then((resp) => {

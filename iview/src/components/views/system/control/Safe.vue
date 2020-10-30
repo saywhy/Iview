@@ -49,7 +49,7 @@
                            align="center"
                            width="180"
                            show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.updated_at }}</template>
+            <template slot-scope="scope">{{ scope.row.created_at }}</template>
           </el-table-column>
           <el-table-column align="center"
                            label="状态"
