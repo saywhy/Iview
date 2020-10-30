@@ -410,7 +410,7 @@ export default {
           this.FieldList = []
           let { status, data } = resp.data;
           if (status == 0) {
-            console.log(data);
+           // console.log(data);
             data.config.map(item => {
               var obj = {
                 name: '',
@@ -470,7 +470,7 @@ export default {
               }
               this.FieldList.push(obj)
             })
-            console.log(this.FieldList);
+           // console.log(this.FieldList);
             this.get_alert_list('2', '1', this.table_old.rows);
             this.get_alert_list('0', '1', this.table_new.rows);
           }

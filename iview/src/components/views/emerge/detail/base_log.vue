@@ -289,16 +289,14 @@ export default {
   },
   watch: {
     selectItem: function (val) {
-      console.log("222222:", val);
-      console.log('11111');
       this.LogList(val);
     },
   },
 
   mounted () {
-    console.log('2222');
+   // console.log('2222');
     this.LogList();
-    console.log(this.timeaxis);
+   // console.log(this.timeaxis);
   },
   methods: {
     LogList (val) {
@@ -308,13 +306,18 @@ export default {
         .get("/yiiapi/alert/LogList", {
           params: {
             srcIp: this.iPAddr.src,
+            destIp: this.iPAddr.des,
             size: this.log_list.rows,
             from: this.log_list.rows * (this.log_list.pageNow - 1),
-            destIp: this.iPAddr.des,
+            indicator:this.timeaxis.indicator,
+            stime:this.timeaxis.alert_time * 1000,
+            etime: this.timeaxis.update_time * 1000
           },
         })
         .then((resp) => {
+
           this.log_list.data = resp.data.data;
+
           this.log_list.data.hits.hits.map(item => {
             for (var k in item._source) {
               if (k == "@timestamp") {
@@ -425,6 +428,11 @@ export default {
     },
     // 更多日志搜索
     serch_more_log () {
+
+      console.log(this.asset_list);
+
+
+
       this.asset_list.map(item => {
         if (item.icon == true) {
           this.search_log_item.srcTime = srcTime;
@@ -444,20 +452,22 @@ export default {
       console.log(time.getTime());
       var srcTime = time.getTime() - this.b_hh * 60 * 60 * 1000 - this.b_mm * 60 * 1000
       var destTime = time.getTime() + this.a_hh * 60 * 60 * 1000 + this.a_mm * 60 * 1000
-      console.log(moment(srcTime).format('YYYY-MM-DD HH:mm:ss'));
-      console.log(moment(destTime).format('YYYY-MM-DD HH:mm:ss'));
+      //console.log(moment(srcTime).format('YYYY-MM-DD HH:mm:ss'));
+      //console.log(moment(destTime).format('YYYY-MM-DD HH:mm:ss'));
       this.search_log_item.srcTime = srcTime
       this.search_log_item.destTime = destTime
       this.$router.push({        path: '/invest/custom_invest', query: {
           search: JSON.stringify(this.search_log_item)
         }      });
+
       this.$axios
         .get("/yiiapi/alert/MoreLog", {
           params: {
             srcTime: srcTime,
             destTime: destTime,
             ip: this.search_log_item.ip,
-            server_name: this.search_log_item.server_name,
+            indicator: this.timeaxis.indicator
+            //server_name: this.search_log_item.server_name,
           },
         })
         .then((resp) => {
@@ -485,16 +495,12 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-
     },
     before_hh () { },
     before_mm () { },
     after_hh () { },
     after_mm () { },
     NormalizedLog () {
-      console.log(this.timeaxis.alert_time);
-      console.log(this.timeaxis.update_time);
-      console.log(this.timeaxis.indicator);
       window.open(
         "/yiiapi/alert/NormalizedLog?destIp=" +
         this.iPAddr.des +
@@ -503,17 +509,30 @@ export default {
         "&indicator=" +
         this.timeaxis.indicator +
         "&stime=" +
-        moment(this.timeaxis.alert_time * 1000).format('YYYY-MM-DDTHH:mm:ss') +
+        moment(this.timeaxis.alert_time * 1000).format('YYYY-MM-DD HH:mm:ss') +
         "&etime=" +
-        moment(this.timeaxis.update_time * 1000).format('YYYY-MM-DDTHH:mm:ss')
+        moment(this.timeaxis.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
       );
     },
     OriginalLog () {
-      window.open(
+     /* window.open(
         "/yiiapi/alert/OriginalLog?destIp=" +
         this.iPAddr.des +
         "&srcIp=" +
         this.iPAddr.src
+      );*/
+
+      window.open(
+        "/yiiapi/alert/OriginalLog?destIp=" +
+        this.iPAddr.des +
+        "&srcIp=" +
+        this.iPAddr.src +
+        "&indicator=" +
+        this.timeaxis.indicator +
+        "&stime=" +
+        this.timeaxis.alert_time * 1000 +
+        "&etime=" +
+        this.timeaxis.update_time * 1000
       );
     },
   },

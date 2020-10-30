@@ -579,7 +579,7 @@ export default {
   },
   watch: {
     selectItem: function (val) {
-      console.log(this.selectItem);
+     // console.log(this.selectItem);
       this.selectItem.whois_list = [];
       this.selectItem.sample_list = [];
 
@@ -601,7 +601,7 @@ export default {
           })
         }
       } else if (this.selectItem.alert_description.ip_whois) {
-        console.log(this.selectItem.alert_description.ip_whois);
+      //  console.log(this.selectItem.alert_description.ip_whois);
         for (let key in this.selectItem.alert_description.ip_whois) {
           this.selectItem.whois_list.push({
             name: key,
@@ -611,8 +611,8 @@ export default {
       }
       this.event_obj = this.selectItem.network_event;
       // 情报类型匹配
-      console.log('**************************************');
-      console.log(this.selectItem.description_type);
+      //console.log('**************************************');
+     // console.log(this.selectItem.description_type);
 
       switch (this.selectItem.description_type) {
         case 'BotnetCAndCURL':

@@ -27,7 +27,7 @@ export default {
     }
   },
   mounted () {
-    console.log(this.detailArray);
+   // console.log(this.detailArray);
     this.line_list = []
     this.detailArray.map(item => {
       var obj = {
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     drawLine () {
-      console.log('11111111');
+     // console.log('11111111');
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("emergeLine"));
       // 绘制图表
