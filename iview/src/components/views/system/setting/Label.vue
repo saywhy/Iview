@@ -532,6 +532,15 @@
             });
             return false
           }
+
+          if(this.label_category.name == '未分类标签'){
+            this.$message({
+              message: '请重新输入标签类别，避免歧义！',
+              type: 'warning',
+            });
+            return false;
+          }
+
           this.$axios.put('/yiiapi/labelcates/'+this.label_category.id,{
             LabelCategory:{
               category_name:this.label_category.name
