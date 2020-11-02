@@ -20,6 +20,10 @@ export default {
 
       let options = this.options;
 
+      if(options == undefined || options == null || options == ''){
+        return false;
+      }
+
       if(!options.total_count){
         options.total_count = 0;
       }
@@ -33,23 +37,29 @@ export default {
         options.online_count = 0;
       }
 
-      //console.log(options)
+      if(options.alert_count == 0 &&
+        options.offline_count == 0 &&
+        options.online_count == 0){
+        return false;
+      }
+
       let datas = [
         { value: options.online_count, name: "正常", color:'#4CAF50'},
         { value: options.offline_count, name: "离线", color:'#47CAD9'},
         { value: options.alert_count, name: "告警", color:'#D53A35'}
       ];
 
-    /* datas.forEach((item,index) => {
-       if(item.value == 0){
-         datas.splice(index,1);
-       }
-     })*/
 
-      datas.splice(datas.findIndex(item => item.value == 0),1);
+      let newDatas = [];
+      datas.forEach(item => {
+        if(item.value != 0){
+          newDatas.push(item);
+        }
+      })
 
-      let colorAttr = datas.map(item => item.color);
 
+      //datas.splice(datas.findIndex(item => item.value == 0),1);
+      let colorAttr = newDatas.map(item => item.color);
 
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("safe"));
@@ -100,7 +110,7 @@ export default {
                 show: false
               }
             },
-            data: datas
+            data: newDatas
           }
         ]
       }
