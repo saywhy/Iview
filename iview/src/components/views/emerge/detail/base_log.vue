@@ -316,6 +316,9 @@ export default {
         })
         .then((resp) => {
 
+          console.log('*****')
+          console.log(resp.data)
+
           this.log_list.data = resp.data.data;
 
           this.log_list.data.hits.hits.map(item => {
@@ -431,8 +434,6 @@ export default {
 
       console.log(this.asset_list);
 
-
-
       this.asset_list.map(item => {
         if (item.icon == true) {
           this.search_log_item.srcTime = srcTime;
@@ -449,22 +450,21 @@ export default {
         }
       })
       var time = new Date(this.search_time)
-      console.log(time.getTime());
       var srcTime = time.getTime() - this.b_hh * 60 * 60 * 1000 - this.b_mm * 60 * 1000
       var destTime = time.getTime() + this.a_hh * 60 * 60 * 1000 + this.a_mm * 60 * 1000
       //console.log(moment(srcTime).format('YYYY-MM-DD HH:mm:ss'));
       //console.log(moment(destTime).format('YYYY-MM-DD HH:mm:ss'));
       this.search_log_item.srcTime = srcTime
       this.search_log_item.destTime = destTime
+
       this.$router.push({        path: '/invest/custom_invest', query: {
           search: JSON.stringify(this.search_log_item)
         }      });
-
       this.$axios
         .get("/yiiapi/alert/MoreLog", {
           params: {
             srcTime: srcTime,
-            destTime: destTime,
+            destTime: Number(destTime) + 1000,
             ip: this.search_log_item.ip,
             indicator: this.timeaxis.indicator
             //server_name: this.search_log_item.server_name,
@@ -477,13 +477,14 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+
       this.$axios
         .get("/yiiapi/site/HoursLogs", {
           params: {
             // srcIp或者destIp
             ip_type: 'srcIp',
             srcTime: srcTime,
-            destTime: destTime,
+            destTime: Number(destTime) + 1000,
             ip: this.search_log_item.ip,
             server_name: this.search_log_item.server_name,
           },
@@ -521,7 +522,8 @@ export default {
         "&srcIp=" +
         this.iPAddr.src
       );*/
-
+     // this.timeaxis.update_time * 1000
+     //
       window.open(
         "/yiiapi/alert/OriginalLog?destIp=" +
         this.iPAddr.des +
@@ -532,7 +534,7 @@ export default {
         "&stime=" +
         this.timeaxis.alert_time * 1000 +
         "&etime=" +
-        this.timeaxis.update_time * 1000
+        Number(this.timeaxis.update_time * 1000) + 1000
       );
     },
   },

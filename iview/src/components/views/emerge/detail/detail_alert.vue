@@ -75,7 +75,7 @@
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu slot="dropdown"
-                                  style="width200px;"
+                                  style="width:200px;"
                                   class="dropdown_ul_box_detail">
                   <el-dropdown-item command='1'
                                     class="select_item">威胁追查</el-dropdown-item>

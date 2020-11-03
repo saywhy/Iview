@@ -396,7 +396,7 @@ export default {
             // srcIp或者destIp
             ip_type: this.query_data.type,
             srcTime: this.query_data.srcTime,
-            destTime: this.query_data.destTime,
+            destTime: Number(this.query_data.destTime) + 1000,
             ip: this.query_data.ip,
             server_name: this.query_data.server_name,
           },
@@ -528,7 +528,7 @@ export default {
             ip_type: this.query_data.type,
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
-            destTime: this.query_data.destTime,
+            destTime: Number(this.query_data.destTime) + 1000,
             server_name: this.query_data.server_name,
             size: this.log_list.rows,
             from: this.log_list.rows * (this.log_list.pageNow - 1),
@@ -1079,13 +1079,16 @@ export default {
       });
     },
     classification () {
+
+      console.log('我要测试')
+      console.log(this.query_data.destTime)
       this.$axios
         .get("/yiiapi/investigate/DimensionAggregation", {
           params: {
             ip_type: this.query_data.type,
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
-            destTime: this.query_data.destTime,
+            destTime: Number(this.query_data.destTime) + 1000,
             server_name: this.query_data.server_name,
             field: 'classification',
           },
@@ -1108,7 +1111,7 @@ export default {
             ip_type: this.query_data.type,
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
-            destTime: this.query_data.destTime,
+            destTime: Number(this.query_data.destTime) + 1000,
             server_name: this.query_data.server_name,
             field: 'account',
           },
@@ -1134,7 +1137,7 @@ export default {
             ip_type: this.query_data.type,
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
-            destTime: this.query_data.destTime,
+            destTime: Number(this.query_data.destTime) + 1000,
             server_name: this.query_data.server_name,
             field: 'eventtype',
           },
@@ -1155,7 +1158,7 @@ export default {
             ip_type: this.query_data.type,
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
-            destTime: this.query_data.destTime,
+            destTime: Number(this.query_data.destTime) + 1000,
             server_name: this.query_data.server_name,
             field: 'geoip.country_code2',
           },
@@ -1176,7 +1179,7 @@ export default {
             ip_type: this.query_data.type,
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
-            destTime: this.query_data.destTime,
+            destTime: Number(this.query_data.destTime) + 1000,
             server_name: this.query_data.server_name,
             field: 'server_name',
           },
@@ -1191,13 +1194,15 @@ export default {
         });
     },
     app () {
+
+
       this.$axios
         .get("/yiiapi/investigate/DimensionAggregation", {
           params: {
             ip_type: this.query_data.type,
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
-            destTime: this.query_data.destTime,
+            destTime: Number(this.query_data.destTime) + 1000,
             server_name: this.query_data.server_name,
             field: 'app',
           },
@@ -1297,7 +1302,7 @@ export default {
         "&ip=" +
         this.query_data.ip + "&server_name=" + this.query_data.server_name
         + "&stime=" + this.query_data.srcTime
-        + "&etime=" + this.query_data.destTime
+        + "&etime=" + Number(this.query_data.destTime) + 1000
       );
     },
     filter_country (args) {
