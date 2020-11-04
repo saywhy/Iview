@@ -21,7 +21,7 @@
             <!--搜索关键词-->
             <el-input class="s_key_network"
                       placeholder="搜索关键词"
-                      v-model="params.key"
+                      v-model.trim="params.key"
                       clearable>
               <i slot="prefix"
                  class="el-input__icon el-icon-search"></i>
@@ -1120,7 +1120,6 @@ export default {
           this.table.count = count;
           this.table.maxPage = maxPage;
           this.table.pageNow = pageNow;
-
 
           this.columnDrop();
         }
