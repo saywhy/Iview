@@ -1097,6 +1097,9 @@ export default {
           this.table_alerts.tableData.push(this.detail_main)
           this.get_Workorders();
 
+          console.log('我要看到')
+          console.log(this.detailArray)
+
         })
         .catch((error) => {
           console.log(error);
@@ -1179,6 +1182,9 @@ export default {
           });
           this.table_alerts.tableData.push(this.detail_main)
           this.get_Workorders();
+
+          console.log('我要看到2')
+          console.log(this.detailArray)
 
         })
         .catch((error) => {

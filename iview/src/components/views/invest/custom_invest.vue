@@ -1296,13 +1296,19 @@ export default {
       }
     },
     OriginalLog () {
+      console.log( "/yiiapi/investigate/OriginalLog?ip_type=" +
+        this.query_data.type +
+        "&ip=" +
+        this.query_data.ip + "&server_name=" + this.query_data.server_name
+        + "&stime=" + this.query_data.srcTime
+        + "&etime=" + (Number(this.query_data.destTime) + 1000))
       window.open(
         "/yiiapi/investigate/OriginalLog?ip_type=" +
         this.query_data.type +
         "&ip=" +
         this.query_data.ip + "&server_name=" + this.query_data.server_name
         + "&stime=" + this.query_data.srcTime
-        + "&etime=" + Number(this.query_data.destTime) + 1000
+        + "&etime=" + (Number(this.query_data.destTime) + 1000)
       );
     },
     filter_country (args) {

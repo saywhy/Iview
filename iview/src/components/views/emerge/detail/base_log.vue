@@ -302,6 +302,9 @@ export default {
     LogList (val) {
       this.original_log = '';
       this.complete_log = [];
+
+      console.log('我要测试')
+      console.log(this.selectItem);
       this.$axios
         .get("/yiiapi/alert/LogList", {
           params: {
@@ -309,15 +312,12 @@ export default {
             destIp: this.iPAddr.des,
             size: this.log_list.rows,
             from: this.log_list.rows * (this.log_list.pageNow - 1),
-            indicator:this.timeaxis.indicator,
-            stime: this.timeaxis.alert_time * 1000,
+            indicator:this.selectItem.indicator,
+            stime: this.selectItem.alert_time * 1000,
             etime: (Number(this.timeaxis.update_time) + 1) * 1000
           },
         })
         .then((resp) => {
-
-          console.log('*****')
-          console.log(resp.data)
 
           this.log_list.data = resp.data.data;
 
@@ -339,7 +339,6 @@ export default {
       // console.log(rowIndex);
     },
     rowClick (row, event, column) {
-      console.log(row);
       this.original_log = row._source.message;
       this.complete_log = row._source;
       this.complete_log = [
@@ -432,8 +431,6 @@ export default {
     // 更多日志搜索
     serch_more_log () {
 
-      console.log(this.asset_list);
-
       this.asset_list.map(item => {
         if (item.icon == true) {
           this.search_log_item.srcTime = srcTime;
@@ -457,7 +454,7 @@ export default {
       this.search_log_item.srcTime = srcTime
       this.search_log_item.destTime = destTime
 
-      this.$router.push({        path: '/invest/custom_invest', query: {
+      this.$router.push({path: '/invest/custom_invest', query: {
           search: JSON.stringify(this.search_log_item)
         }      });
       this.$axios
@@ -466,7 +463,7 @@ export default {
             srcTime: srcTime,
             destTime: Number(destTime) + 1000,
             ip: this.search_log_item.ip,
-            indicator: this.timeaxis.indicator
+            indicator: this.selectItem.indicator
             //server_name: this.search_log_item.server_name,
           },
         })
@@ -502,15 +499,25 @@ export default {
     after_hh () { },
     after_mm () { },
     NormalizedLog () {
+      console.log( "/yiiapi/alert/NormalizedLog?destIp=" +
+        this.iPAddr.des +
+        "&srcIp=" +
+        this.iPAddr.src +
+        "&indicator=" +
+        this.selectItem.indicator +
+        "&stime=" +
+        moment(this.selectItem.alert_time * 1000).format('YYYY-MM-DD HH:mm:ss') +
+        "&etime=" +
+        moment(this.timeaxis.update_time * 1000).format('YYYY-MM-DD HH:mm:ss'));
       window.open(
         "/yiiapi/alert/NormalizedLog?destIp=" +
         this.iPAddr.des +
         "&srcIp=" +
         this.iPAddr.src +
         "&indicator=" +
-        this.timeaxis.indicator +
+        this.selectItem.indicator +
         "&stime=" +
-        moment(this.timeaxis.alert_time * 1000).format('YYYY-MM-DD HH:mm:ss') +
+        moment(this.selectItem.alert_time * 1000).format('YYYY-MM-DD HH:mm:ss') +
         "&etime=" +
         moment(this.timeaxis.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
       );
@@ -522,19 +529,28 @@ export default {
         "&srcIp=" +
         this.iPAddr.src
       );*/
-     // this.timeaxis.update_time * 1000
-     //
+     console.log("/yiiapi/alert/OriginalLog?destIp=" +
+       this.iPAddr.des +
+       "&srcIp=" +
+       this.iPAddr.src +
+       "&indicator=" +
+       this.selectItem.indicator +
+       "&stime=" +
+       this.selectItem.alert_time * 1000 +
+       "&etime=" +
+       (Number(this.timeaxis.update_time * 1000) + 1000));
+
       window.open(
         "/yiiapi/alert/OriginalLog?destIp=" +
         this.iPAddr.des +
         "&srcIp=" +
         this.iPAddr.src +
         "&indicator=" +
-        this.timeaxis.indicator +
+        this.selectItem.indicator +
         "&stime=" +
-        this.timeaxis.alert_time * 1000 +
+        this.selectItem.alert_time * 1000 +
         "&etime=" +
-        Number(this.timeaxis.update_time * 1000) + 1000
+        (Number(this.timeaxis.update_time * 1000) + 1000)
       );
     },
   },

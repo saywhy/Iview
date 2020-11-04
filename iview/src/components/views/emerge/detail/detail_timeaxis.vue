@@ -83,8 +83,6 @@ export default {
   },
   methods: {
     selected_time (item, index) {
-      console.log(item);
-      console.log(index);
       this.select_item = item;
       this.timeaxis.map((x) => {
         x.selected = false;
