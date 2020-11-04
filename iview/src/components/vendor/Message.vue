@@ -48,6 +48,7 @@
                 <span v-if="scope.row.type=='1'">密码</span>
                 <span v-if="scope.row.type=='2'">许可证</span>
                 <span v-if="scope.row.type=='3'">工单</span>
+                <span v-if="scope.row.type=='4'">系统状态监控</span>
               </template>
             </el-table-column>
             <el-table-column prop="content"
@@ -136,7 +137,7 @@ export default {
           console.log(error);
         });
     },
-    // 标记已读 
+    // 标记已读
     update (id, type) {
       this.$axios.put('/yiiapi/news/' + id)
         .then((resp) => {
@@ -158,6 +159,9 @@ export default {
                 case '3':
                   this.$router.push({ path: '/handle/works' });
                   break;
+                case '4':
+                  this.$router.push({ path: '/system/control/move' });
+                  break;
                 default:
                   break;
               }
@@ -173,7 +177,6 @@ export default {
     },
     // 批量标记
     batch_marking () {
-      console.log(this.multipleSelection);
       if (this.multipleSelection.length == 0) {
         this.$message({ message: '请选择需要标记的消息', type: 'warning' });
         return false
@@ -268,6 +271,10 @@ export default {
         // 工单
         case '3':
           this.update(row.id, '3')
+          break;
+        // 系统运行状态
+        case '4':
+          this.update(row.id, '4')
           break;
         default:
           break;
