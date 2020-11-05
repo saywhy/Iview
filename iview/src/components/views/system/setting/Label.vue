@@ -32,19 +32,19 @@
                   </div>
                   <div class="tog_list">
                     <div class="tog_edit_seat">
-                      <img v-if="item.name != ''" class="tog_img tog_img_edit tog_img_edit1" src="@/assets/images/system/set/label_remove.png"
+                      <img v-if="item.name != '' && item.name != '未分类标签'" class="tog_img tog_img_edit tog_img_edit1" src="@/assets/images/system/set/label_remove.png"
                            title="删除标签类别" @click="category_remove(item);"/>
                     </div>
                     <div class="tog_edit_seat">
-                      <img v-if="item.name != ''" class="tog_img tog_img_edit" src="@/assets/images/system/set/label_edit.png"
+                      <img v-if="item.name != '' && item.name != '未分类标签'" class="tog_img tog_img_edit" src="@/assets/images/system/set/label_edit.png"
                            title="编辑标签类别" @click="category_edit(item);"/>
                     </div>
                     <div class="tog_edit_seat">
-                      <img v-if="item.name != ''" class="tog_img tog_img_top"  src="@/assets/images/system/set/is_top.png"
+                      <img v-if="item.name != '' && item.name != '未分类标签'" class="tog_img tog_img_top"  src="@/assets/images/system/set/is_top.png"
                            title="置顶" @click="category_top($idx);"/>
                     </div>
                     <div class="tog_edit_seat" style="cursor: move;">
-                      <img v-if="item.name != ''" class="tog_img tog_img_drag" src="@/assets/images/system/set/label_drag_h.png"
+                      <img v-if="item.name != '' && item.name != '未分类标签'" class="tog_img tog_img_drag" src="@/assets/images/system/set/label_drag_h.png"
                            title="拖动"/>
                     </div>
                     <a class="tog_arrow" :class="{'active':item.status}" href="javascript:void(0);"
@@ -306,10 +306,6 @@
 
           this.label.types = type;
 
-
-          console.log('****');
-          console.log(item);
-
           //编辑时禁止去选择标签类型，不然会报错
           if(item == ''){
             this.label.category_flag = false;
@@ -535,7 +531,7 @@
 
           if(this.label_category.name == '未分类标签'){
             this.$message({
-              message: '请重新输入标签类别，避免歧义！',
+              message: '请重新输入标签类别，以避免歧义！',
               type: 'warning',
             });
             return false;
