@@ -130,6 +130,7 @@
               <!-- 失陷确定性 -->
               <template v-if="item.pop =='fall_certainty'">
                 <el-table-column align="center"
+                                 min-width="150"
                                  show-overflow-tooltip
                                  :label="item.name">
                   <template slot-scope="scope">
@@ -295,6 +296,7 @@
               <!-- 失陷确定性 -->
               <template v-if="item.pop =='fall_certainty'">
                 <el-table-column align="center"
+                                 min-width="150"
                                  show-overflow-tooltip
                                  :label="item.name">
                   <template slot-scope="scope">
@@ -410,7 +412,7 @@ export default {
           this.FieldList = []
           let { status, data } = resp.data;
           if (status == 0) {
-           // console.log(data);
+            // console.log(data);
             data.config.map(item => {
               var obj = {
                 name: '',
@@ -470,7 +472,7 @@ export default {
               }
               this.FieldList.push(obj)
             })
-           // console.log(this.FieldList);
+            // console.log(this.FieldList);
             this.get_alert_list('2', '1', this.table_old.rows);
             this.get_alert_list('0', '1', this.table_new.rows);
           }

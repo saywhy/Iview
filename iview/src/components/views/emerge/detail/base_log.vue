@@ -78,6 +78,7 @@
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.dst_name"
                              label="目的资产名"
+                             width="150"
                              align="center"
                              show-overflow-tooltip></el-table-column>
             <el-table-column prop="_source.dst_port"
@@ -294,9 +295,9 @@ export default {
   },
 
   mounted () {
-   // console.log('2222');
+    // console.log('2222');
     this.LogList();
-   // console.log(this.timeaxis);
+    // console.log(this.timeaxis);
   },
   methods: {
     LogList (val) {
@@ -312,7 +313,7 @@ export default {
             destIp: this.iPAddr.des,
             size: this.log_list.rows,
             from: this.log_list.rows * (this.log_list.pageNow - 1),
-            indicator:this.selectItem.indicator,
+            indicator: this.selectItem.indicator,
             stime: this.selectItem.alert_time * 1000,
             etime: (Number(this.timeaxis.update_time) + 1) * 1000
           },
@@ -454,7 +455,7 @@ export default {
       this.search_log_item.srcTime = srcTime
       this.search_log_item.destTime = destTime
 
-      this.$router.push({path: '/invest/custom_invest', query: {
+      this.$router.push({        path: '/invest/custom_invest', query: {
           search: JSON.stringify(this.search_log_item)
         }      });
       this.$axios
@@ -499,7 +500,7 @@ export default {
     after_hh () { },
     after_mm () { },
     NormalizedLog () {
-      console.log( "/yiiapi/alert/NormalizedLog?destIp=" +
+      console.log("/yiiapi/alert/NormalizedLog?destIp=" +
         this.iPAddr.des +
         "&srcIp=" +
         this.iPAddr.src +
@@ -523,22 +524,22 @@ export default {
       );
     },
     OriginalLog () {
-     /* window.open(
-        "/yiiapi/alert/OriginalLog?destIp=" +
+      /* window.open(
+         "/yiiapi/alert/OriginalLog?destIp=" +
+         this.iPAddr.des +
+         "&srcIp=" +
+         this.iPAddr.src
+       );*/
+      console.log("/yiiapi/alert/OriginalLog?destIp=" +
         this.iPAddr.des +
         "&srcIp=" +
-        this.iPAddr.src
-      );*/
-     console.log("/yiiapi/alert/OriginalLog?destIp=" +
-       this.iPAddr.des +
-       "&srcIp=" +
-       this.iPAddr.src +
-       "&indicator=" +
-       this.selectItem.indicator +
-       "&stime=" +
-       this.selectItem.alert_time * 1000 +
-       "&etime=" +
-       (Number(this.timeaxis.update_time * 1000) + 1000));
+        this.iPAddr.src +
+        "&indicator=" +
+        this.selectItem.indicator +
+        "&stime=" +
+        this.selectItem.alert_time * 1000 +
+        "&etime=" +
+        (Number(this.timeaxis.update_time * 1000) + 1000));
 
       window.open(
         "/yiiapi/alert/OriginalLog?destIp=" +

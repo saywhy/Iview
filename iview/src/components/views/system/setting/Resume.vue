@@ -102,7 +102,7 @@ export default {
       this.$axios.get('/yiiapi/site/menu')
         .then(response => {
           console.log(response);
-          if (response.data.status == 0) {
+          if (response.data.status == 0 || response.data.status == 1) {
             setTimeout(() => {
               this.messagebox.close()
               this.loading = false
