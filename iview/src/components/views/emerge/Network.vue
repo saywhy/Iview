@@ -98,7 +98,7 @@
             <el-link class="s_link"
                      @click="resetClick();">重置</el-link>
             <el-button class="s_btn_edit"
-                       @click="export_box">导出</el-button>
+                       @click="export_box()">导出</el-button>
           </el-col>
         </el-row>
         <!--按钮组-->
@@ -306,8 +306,7 @@
             </template>
           </el-table>
         </el-col>
-        <el-col :span="24"
-                class="e-pagination">
+        <el-col :span="24" class="e-pagination">
           <el-pagination class="handle-pagination"
                          @size-change="handleSizeChange"
                          @current-change="handleCurrentChange"
