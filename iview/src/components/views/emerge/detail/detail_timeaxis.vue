@@ -42,7 +42,6 @@
 <script>
 import baseInfo from "@/components/views/emerge/detail/base_info";
 import baseLog from "@/components/views/emerge/detail/base_log";
-import baseAssets from "@/components/views/emerge/detail/base_assets";
 import alertAssets from "@/components/views/emerge/detail/alert_assets";
 export default {
   name: "time_axis",

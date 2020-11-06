@@ -2325,7 +2325,7 @@ export default {
         margin-bottom: 10px;
 
         .item_title {
-          width: 100px;
+          width: 120px;
           font-size: 16px;
           text-align: right;
         }

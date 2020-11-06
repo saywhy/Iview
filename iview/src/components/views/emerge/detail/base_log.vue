@@ -475,25 +475,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-
-      this.$axios
-        .get("/yiiapi/site/HoursLogs", {
-          params: {
-            // srcIp或者destIp
-            ip_type: 'srcIp',
-            srcTime: srcTime,
-            destTime: Number(destTime) + 1000,
-            ip: this.search_log_item.ip,
-            server_name: this.search_log_item.server_name,
-          },
-        })
-        .then((resp) => {
-          console.log(resp);
-
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     },
     before_hh () { },
     before_mm () { },
