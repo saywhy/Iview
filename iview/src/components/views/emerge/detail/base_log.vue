@@ -458,23 +458,22 @@ export default {
       this.$router.push({        path: '/invest/custom_invest', query: {
           search: JSON.stringify(this.search_log_item)
         }      });
-      this.$axios
-        .get("/yiiapi/alert/MoreLog", {
-          params: {
-            srcTime: srcTime,
-            destTime: Number(destTime) + 1000,
-            ip: this.search_log_item.ip,
-            indicator: this.selectItem.indicator
-            //server_name: this.search_log_item.server_name,
-          },
-        })
-        .then((resp) => {
-          console.log(resp);
+      // this.$axios
+      //   .get("/yiiapi/alert/MoreLog", {
+      //     params: {
+      //       srcTime: srcTime,
+      //       destTime: Number(destTime) + 1000,
+      //       ip: this.search_log_item.ip,
+      //       indicator: this.selectItem.indicator
+      //     },
+      //   })
+      //   .then((resp) => {
+      //     console.log(resp);
 
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     },
     before_hh () { },
     before_mm () { },
