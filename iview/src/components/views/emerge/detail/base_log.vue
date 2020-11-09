@@ -179,7 +179,7 @@
                        :class="item.icon?'text_color':''"
                        @click="select_asset(item,index)">
                     <p class="more_item_text">{{item.ip}}</p>
-                    <p class="more_item_text">{{item.server_name}}</p>
+                    <p class="more_item_text">{{item.asset}}</p>
                     <p class="more_item_text">{{item.type}}</p>
                     <div class="img_more_box"
                          v-if="item.icon">

@@ -398,7 +398,6 @@ export default {
             srcTime: this.query_data.srcTime,
             destTime: Number(this.query_data.destTime) + 1000,
             ip: this.query_data.ip,
-            server_name: this.query_data.server_name,
           },
         })
         .then((resp) => {
@@ -529,7 +528,6 @@ export default {
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
             destTime: Number(this.query_data.destTime) + 1000,
-            server_name: this.query_data.server_name,
             size: this.log_list.rows,
             from: this.log_list.rows * (this.log_list.pageNow - 1),
           },
@@ -1089,7 +1087,6 @@ export default {
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
             destTime: Number(this.query_data.destTime) + 1000,
-            server_name: this.query_data.server_name,
             field: 'classification',
           },
         })
@@ -1112,7 +1109,6 @@ export default {
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
             destTime: Number(this.query_data.destTime) + 1000,
-            server_name: this.query_data.server_name,
             field: 'account',
           },
         })
@@ -1138,7 +1134,6 @@ export default {
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
             destTime: Number(this.query_data.destTime) + 1000,
-            server_name: this.query_data.server_name,
             field: 'eventtype',
           },
         })
@@ -1159,7 +1154,6 @@ export default {
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
             destTime: Number(this.query_data.destTime) + 1000,
-            server_name: this.query_data.server_name,
             field: 'geoip.country_code2',
           },
         })
@@ -1180,7 +1174,6 @@ export default {
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
             destTime: Number(this.query_data.destTime) + 1000,
-            server_name: this.query_data.server_name,
             field: 'server_name',
           },
         })
@@ -1203,7 +1196,6 @@ export default {
             ip: this.query_data.ip,
             srcTime: this.query_data.srcTime,
             destTime: Number(this.query_data.destTime) + 1000,
-            server_name: this.query_data.server_name,
             field: 'app',
           },
         })
@@ -1296,7 +1288,7 @@ export default {
       }
     },
     OriginalLog () {
-      console.log( "/yiiapi/investigate/OriginalLog?ip_type=" +
+      console.log("/yiiapi/investigate/OriginalLog?ip_type=" +
         this.query_data.type +
         "&ip=" +
         this.query_data.ip + "&server_name=" + this.query_data.server_name
