@@ -660,9 +660,6 @@ export default {
 
     },
     iot_detail_top (params) {
-      console.log(params.dev_ip);
-      console.log(params.dev_name);
-      console.log(params.names);
       this.equipment_detail.cpu = []
       this.equipment_detail.mem = []
       this.equipment_detail.disk = []
@@ -745,7 +742,8 @@ export default {
           borderWidth: 2,
           backgroundColor: "#fff",
           textStyle: {
-            color: "#ccc"
+            color: "#ccc",
+            align:'left'
           },
           axisPointer: {
             lineStyle: {
@@ -1073,8 +1071,6 @@ export default {
 
 <style scoped lang="less">
   @import "../../../../assets/css/less/system/control/move.less";
-
-
 </style>
 
 <style lang="less">
@@ -1186,7 +1182,6 @@ export default {
       }
     }
   }
-
   .el-loading-mask{
     z-index: 99999!important;
   }
