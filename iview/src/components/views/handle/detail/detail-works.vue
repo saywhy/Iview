@@ -130,7 +130,93 @@
                       class="reset_table"
                       :data="table.tableData"
                       tooltip-effect="dark">
-              <el-table-column label="告警时间"
+              <template v-for="(item, index) in dropCol">
+                <!--告警时间-->
+                <el-table-column align="center"
+                                 v-if="item.prop == 'alert_time'"
+                                 show-overflow-tooltip
+                                 min-width="150"
+                                 :prop="item.prop"
+                                 :label="item.label">
+                  <!--<template slot-scope="scope">{{ scope.row.alert_time | time }}</template>-->
+                  <template slot-scope="scope">{{ scope.row.alert_time | time }}</template>
+                </el-table-column>
+                <!--威胁等级-->
+                <el-table-column align="center"
+                                 v-else-if="item.prop == 'degree'"
+                                 show-overflow-tooltip
+                                 :prop="item.prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">
+                  <span class="btn_alert_background"
+                        :class="{'high_background':scope.row.degree =='高',
+                        'mid_background':scope.row.degree =='中','low_background':scope.row.degree =='低'}">
+                    {{ scope.row.degree | degree_sino }}</span>
+                  </template>
+                </el-table-column>
+                <!--失陷确定性-->
+                <el-table-column align="center"
+                                 v-else-if="item.prop == 'fall_certainty'"
+                                 show-overflow-tooltip
+                                 :prop="item.prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">
+                  <span :class="{'fall_certainty':scope.row.fall_certainty == '1'}">
+                    {{ scope.row.fall_certainty | certainty }}</span>
+                  </template>
+                </el-table-column>
+                <!--状态-->
+                <el-table-column align="center"
+                                 v-else-if="item.prop == 'status'"
+                                 show-overflow-tooltip
+                                 :prop="item.prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
+                </el-table-column>
+                <!--工单状态-->
+                <el-table-column align="center"
+                                 v-else-if="item.prop == 'workorder_status'"
+                                 show-overflow-tooltip
+                                 :prop="item.prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.workorder_status | work_status }}</template>
+                </el-table-column>
+                <!--风险指数-->
+                <el-table-column align="center"
+                                 v-else-if="item.prop == 'risk_num'"
+                                 show-overflow-tooltip
+                                 min-width="120"
+                                 :prop="item.prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.risk_num | risk_num}}</template>
+                </el-table-column>
+                <!--更新时间-->
+                <el-table-column align="center"
+                                 v-else-if="item.prop == 'update_time'"
+                                 show-overflow-tooltip
+                                 min-width="150"
+                                 :prop="item.prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.update_time | time }}</template>
+                </el-table-column>
+                <!--安全域-->
+                <el-table-column align="center"
+                                 v-else-if="item.prop == 'security_domain'"
+                                 show-overflow-tooltip
+                                 :prop="item.prop"
+                                 :label="item.label">
+                  <template slot-scope="scope">{{ scope.row.security_domain | securityDomain }}</template>
+                </el-table-column>
+                <!--其他-->
+                <el-table-column align="center"
+                                 v-else
+                                 min-width="100"
+                                 show-overflow-tooltip
+                                 :prop="item.prop"
+                                 :label="item.label">
+                </el-table-column>
+              </template>
+              <!--<el-table-column label="告警时间"
                                align="center"
                                width="180"
                                show-overflow-tooltip>
@@ -171,7 +257,7 @@
                                align="center"
                                width="80">
                 <template slot-scope="scope">{{ scope.row.status | alert_status }}</template>
-              </el-table-column>
+              </el-table-column>-->
             </el-table>
           </div>
           <el-pagination class="handle_pagination_box"
@@ -271,7 +357,25 @@ export default {
         multipleSelection: []
       },
       //回复内容
-      reply: ''
+      reply: '',
+      dropCol: [],
+      //告警列表
+      fieldList: [{ checked: true, disabled: true, name: "告警时间", alias: 'alert_time' },
+        { checked: true, disabled: true, name: "告警类型", alias: 'category' },
+        { checked: true, disabled: true, name: "威胁等级", alias: 'degree' },
+        { checked: true, disabled: false, name: "描述", alias: 'description' },
+        { checked: true, disabled: false, name: "安全域", alias: 'security_domain' },
+        { checked: true, disabled: false, name: "源地址", alias: 'src_ip' },
+        { checked: true, disabled: false, name: "目的地址", alias: 'dest_ip' },
+        { checked: false, disabled: false, name: "关联资产名", alias: 'asset_name' },
+        { checked: false, disabled: false, name: "用户", alias: 'user' },
+        { checked: false, disabled: false, name: "标签", alias: 'labels' },
+        { checked: false, disabled: false, name: "失陷确定性", alias: 'fall_certainty' },
+        { checked: false, disabled: false, name: "风险指数", alias: 'risk_num' },
+        { checked: true, disabled: false, name: "更新时间", alias: 'update_time' },
+        { checked: false, disabled: false, name: "工单状态", alias: 'workorder_status' },
+        { checked: false, disabled: false, name: "日志数量", alias: 'log_count' },
+        { checked: true, disabled: false, name: "状态", alias: 'status' }]
     };
   },
 
@@ -308,6 +412,26 @@ export default {
             eventBus.$emit('reset')
           }
         })
+    },
+
+    //获取列
+    column_deploy(){
+      this.$axios.get('/yiiapi/alert/FieldList')
+        .then((resp) => {
+          this.dropCol = [];
+          let { status, data } = resp.data;
+
+          if (status == 0) {
+            let config = data.config;
+            for (var key of config) {
+              this.fieldList.forEach(item => {
+                if (item.alias == key) {
+                  this.dropCol.push({ label: item.name, prop: item.alias })
+                }
+              });
+            }
+          }
+        });
     },
 
     get_list_works_detail () {
@@ -349,6 +473,7 @@ export default {
         })
         .then((resp) => {
           this.loading = true;
+
           let { status, msg, data } = resp.data;
           if (status == 0) {
 
@@ -394,6 +519,9 @@ export default {
               this.table.count = data.alerts.count;
               this.table.maxPage = data.alerts.maxPage;
               this.table.pageNow = data.alerts.pageNow;
+
+              //获取列
+              this.column_deploy();
             }
           } else {
             this.$message({

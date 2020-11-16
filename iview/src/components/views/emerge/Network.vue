@@ -989,7 +989,6 @@ export default {
         fields: fieldAttr
       })
         .then((resp) => {
-
           let { status, msg, data } = resp.data;
           if (status == 0) {
             this.$refs.messageDrop.hide();
@@ -1028,7 +1027,6 @@ export default {
             });
             this.columnDrop();
           }
-
         });
     },
     //下拉框勾选事件
@@ -1047,7 +1045,7 @@ export default {
     columnDrop () {
       const wrapperTr = document.querySelector('.common-table_alert tr');
       this.sortable = Sortable.create(wrapperTr, {
-        handle: '.common-table_alert',
+        //handle: '.common-table_alert',
         animation: 180,
         delay: 0,
         onEnd: evt => {
@@ -1059,7 +1057,6 @@ export default {
 
           this.label_submit_click();
           this.randomKey += 1;
-
         }
       });
     },
@@ -1069,7 +1066,6 @@ export default {
         this.label_cancel_Click();
       }
     },
-
     // 获取告警列表
     get_list_risk () {
       this.table.loading = true;

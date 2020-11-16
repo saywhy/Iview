@@ -851,7 +851,7 @@ export default {
         startTime: "",
         endTime: "",
         priority: "",
-        status: "",
+        status: "0",
       },
       params: {
         key: "",
@@ -1098,8 +1098,6 @@ export default {
               }
             });
             let that = this;
-            console.log('^^^^')
-            console.log(this.table_assets.multipleSelection)
             data.forEach(element => {
               this.table_assets.multipleSelection.forEach(function (item) {
                 if (element.asset_ip == item.asset_ip) {
@@ -1749,10 +1747,9 @@ export default {
         .then(resp => {
           let { status, data } = resp.data;
           if (status == 0) {
-            console.log('console.log(this.edit);')
+            //console.log('console.log(this.edit);')
             console.log(this.edit);
             this.edit.operator_list = data;
-
             if (this.edit.data.perator && this.edit.data.perator.length != 0) {
               this.edit.operator_list.forEach(element => {
                 this.edit.data.perator.forEach(item => {
@@ -1838,9 +1835,6 @@ export default {
               var obj = {
                 id: item
               }
-              // this.edit.handle_sel.push(obj)
-             // this.selected_list.push(obj)
-
               this.selected_list.push(item)
             })
           } else {
@@ -1857,15 +1851,17 @@ export default {
                 var obj = {
                   id: item
                 }
-                // this.edit.handle_sel.push(obj)
-               // this.selected_list.push(obj)
-
                 this.selected_list.push(item)
               });
             });
           } else {
             this.edit.data.risk_alert_cn = []
           }
+
+
+
+          console.log('*****')
+          console.log(this.selected_list)
         })
         .catch(err => {
           console.log(err);
@@ -1907,13 +1903,13 @@ export default {
         this.$message.error('经办人未选择');
       } else {
         this.task.new_contet = false;
+        console.log(this.edit.data.type)
         if (this.edit.data.type == 'asset') {
           this.get_list_assets()
         } else if (this.edit.data.type == 'alert') {
           this.get_list_alert()
         }
         this.edit.task.frist = false;
-
       }
     },
     //上一步
@@ -1947,7 +1943,7 @@ export default {
           this.$nextTick(() => {
             this.selected_list.forEach(element => {
               this.edit.asset_list.data.forEach((item, index) => {
-                if (element.id == item.id) {
+                if (element == item.id) {
                   this.$refs.assetTable.toggleRowSelection(item, true);
                 }
               });
@@ -1976,6 +1972,10 @@ export default {
             }
           });
 
+          console.log('this.edit.alert_list='+this.edit.alert_list)
+          console.log('this.edit.handle_sel='+this.edit.handle_sel)
+          console.log(this.selected_list)
+
           this.edit.alert_list = data;
           if (this.edit.handle_sel.length != 0) {
             this.selected_list.concat(this.edit.handle_sel)
@@ -1984,7 +1984,7 @@ export default {
           this.$nextTick(() => {
             this.selected_list.forEach(element => {
               this.edit.alert_list.data.forEach((item, index) => {
-                if (element.id == item.id) {
+                if (element == item.id) {
                   this.$refs.alertTable.toggleRowSelection(item, true);
                 }
               });

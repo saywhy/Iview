@@ -1014,7 +1014,6 @@ export default {
           }
         });
     },
-
     //配置到
     column_deploy() {
       this.$axios.get('/yiiapi/' + this.threats + '/FieldList')
@@ -1065,7 +1064,7 @@ export default {
     columnDrop () {
       const wrapperTr = document.querySelector('.common-table_alert tr');
       this.sortable = Sortable.create(wrapperTr, {
-        handle: '.common-table_alert',
+       // handle: '.common-table_alert',
         animation: 180,
         delay: 0,
         onEnd: evt => {
