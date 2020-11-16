@@ -1767,11 +1767,29 @@ export default {
 
         console.log(JSON.stringify(this.params.attack_stage))
 
+
+        /*
+        *
+        *    this.old_params.key = this.params.key;
+      this.old_params.startTime = this.params.startTime;
+      this.old_params.endTime = this.params.endTime;
+      this.old_params.domain = this.params.domain;
+      this.old_params.certainty = this.params.certainty;
+      this.old_params.status = this.params.status;
+      this.old_params.degree = this.params.degree;
+      this.old_params.attack_stage = this.params.attack_stage;
+        *
+        * */
         this.$axios.get('/yiiapi/alert/ExportAlertsTest')
           .then(resp => {
-            var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.params.status + '&degree=' + this.params.degree + '&start_time=' + this.params.startTime
-              + '&end_time=' + this.params.endTime + '&fall_certainty=' + this.params.certainty + '&security_domain=' + this.params.domain
-              + '&key_word=' +this.params.key + '&attack_stage=' + this.params.attack_stage;
+            var url1 = "/yiiapi/alert/ExportAlerts?status=" + this.old_params.status +
+              '&degree=' + this.old_params.degree +
+              '&start_time=' + this.old_params.startTime +
+              '&end_time=' + this.old_params.endTime +
+              '&fall_certainty=' + this.old_params.certainty +
+              '&security_domain=' + this.old_params.domain +
+              '&key_word=' +this.old_params.key +
+              '&attack_stage=' + this.old_params.attack_stage;
 
            // url1 = this.URLencode(url1);
             console.log(url1)
