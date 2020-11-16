@@ -172,6 +172,9 @@ export default {
     // 生成报表
     create () {
       console.log(this.report);
+      var pattern = new RegExp(
+        "[`~!#%$^&*()=|{}':;',\\[\\]<>《》/?~！#￥……&*（）|{}【】‘；：”“'。，、？]"
+      );
 
       if (this.report.name == '') {
         this.$message(
@@ -181,6 +184,10 @@ export default {
           }
         );
         return false
+      }
+      if (pattern.test(this.report.name)) {
+        this.$message.error("报表名称不能包含特殊字符");
+        return false;
       }
       if (this.report.start_time == '' || this.report.end_time == '') {
         this.$message(
