@@ -683,14 +683,24 @@ export default {
       picker_data: {
         time: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)]
       },
-      params: {
+      old_params:{
         key: "",
-        certainty: "",
         startTime: '',
         endTime: '',
+        domain: '',
+        certainty: '',
+        status: '',
+        degree: '',
+        attack_stage:''
+      },
+      params: {
+        key: "",
+        startTime: '',
+        endTime: '',
+        domain: '',
+        certainty: '',
         degree: '',
         status: '',
-        domain: '',
         attack_stage:'',
         sort: '3',
         order: ''
@@ -975,23 +985,18 @@ export default {
       fieldAttr = this.dropCol.map(item => {
         return item.prop;
       });
-
-      //this.handle.save = true;
       this.$axios.put('/yiiapi/alert/FieldEdit', {
         fields: fieldAttr
       })
         .then((resp) => {
-          //this.handle.save = false;
 
           let { status, msg, data } = resp.data;
           if (status == 0) {
             this.$refs.messageDrop.hide();
             this.get_list_risk();
-            //this.column_deploy();
 
           } else {
             this.$message({
-              /* message: msg[Object.keys(msg)[0]][0],*/
               message: '修改错误！',
               type: 'error',
             });
@@ -1042,7 +1047,7 @@ export default {
     columnDrop () {
       const wrapperTr = document.querySelector('.common-table_alert tr');
       this.sortable = Sortable.create(wrapperTr, {
-        //handle: '.common-table_alert',
+        handle: '.common-table_alert',
         animation: 180,
         delay: 0,
         onEnd: evt => {
@@ -1072,26 +1077,27 @@ export default {
         certainty: '',
         attack_stage:''
       };
-      if (this.params.certainty == 1) {
+      if (this.old_params.certainty == 1) {
         params_alert.certainty = 1;
       }
       //攻击阶段
-      if (this.params.attack_stage == 'all') {
+      if (this.old_params.attack_stage == 'all') {
         params_alert.attack_stage = '';
       }else {
-        params_alert.attack_stage = this.params.attack_stage;
+        params_alert.attack_stage = this.old_params.attack_stage;
       }
 
       this.$axios.get('/yiiapi/alerts', {
         params: {
-          start_time: this.params.startTime,
-          end_time: this.params.endTime,
-          key_word: this.params.key,
+          key_word: this.old_params.key,
+          start_time: this.old_params.startTime,
+          end_time: this.old_params.endTime,
+          security_domain: this.old_params.domain,
           fall_certainty: params_alert.certainty,
-          status: this.params.status,
-          degree: this.params.degree,
-          security_domain: this.params.domain,
+          status: this.old_params.status,
+          degree: this.old_params.degree,
           attack_stage:params_alert.attack_stage,
+
           order: this.params.order,
           sort: this.params.sort,
           page: this.table.pageNow,
@@ -1158,11 +1164,23 @@ export default {
     //搜索按鈕點擊事件
     submitClick () {
       this.table.pageNow = 1;
+
+      this.old_params.key = this.params.key;
+      this.old_params.startTime = this.params.startTime;
+      this.old_params.endTime = this.params.endTime;
+      this.old_params.domain = this.params.domain;
+      this.old_params.certainty = this.params.certainty;
+      this.old_params.status = this.params.status;
+      this.old_params.degree = this.params.degree;
+      this.old_params.attack_stage = this.params.attack_stage;
+
       this.get_list_risk();
     },
 
     //重置按鈕點擊事件
     resetClick () {
+      this.table.pageNow = 1;
+
       this.params.key = '';
       this.params.startTime = '';
       this.params.endTime = '';
@@ -1171,8 +1189,17 @@ export default {
       this.params.degree = '';
       this.params.status = '';
       this.params.attack_stage = '';
+
+      this.old_params.key = this.params.key;
+      this.old_params.startTime = this.params.startTime;
+      this.old_params.endTime = this.params.endTime;
+      this.old_params.domain = this.params.domain;
+      this.old_params.certainty = this.params.certainty;
+      this.old_params.status = this.params.status;
+      this.old_params.degree = this.params.degree;
+      this.old_params.attack_stage = this.params.attack_stage;
+
       $(document.querySelector('.el-button--text')).trigger('click');
-      this.table.pageNow = 1;
       this.get_list_risk();
     },
 
