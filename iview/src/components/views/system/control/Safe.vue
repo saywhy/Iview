@@ -40,6 +40,12 @@
                            label="IP"
                            show-overflow-tooltip>
           </el-table-column>
+          <el-table-column label="更新时间"
+                           align="center"
+                           width="180"
+                           show-overflow-tooltip>
+            <template slot-scope="scope">{{ scope.row.updated_at }}</template>
+          </el-table-column>
           <el-table-column prop="type"
                            align="center"
                            label="主机类别"
