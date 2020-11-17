@@ -497,7 +497,7 @@ export default {
               this.table.tabsFlag = 0;
               data.assets.data.forEach(function (v, k) {
                 v.new_label = v.label.join(',');
-               // v.src_ip = JSON.parse(v.src_ip).join(',');
+                // v.src_ip = JSON.parse(v.src_ip).join(',');
                 //v.dest_ip = JSON.parse(v.dest_ip).join(',');
               });
               this.table.tableData = data.assets.data;
@@ -511,9 +511,17 @@ export default {
             if (data.alerts) {
               //是告警
               this.table.tabsFlag = 1;
+              console.log(data.alerts.data)
               data.alerts.data.map(v => {
-                v.src_ip = JSON.parse(v.src_ip).join(',');
-                v.dest_ip = JSON.parse(v.dest_ip).join(',');
+                v.src_ip = v.src_ip.join(',');
+                v.dest_ip = v.dest_ip.join(',');
+
+                v.asset_name = JSON.parse(v.asset_name);
+                v.user = JSON.parse(v.user);
+                if (v.description) {
+                  v.description = JSON.parse(v.description).join(',');
+                }
+                v.labels = v.labels.join(',');
               })
               this.table.tableData = data.alerts.data;
               this.table.count = data.alerts.count;
@@ -697,6 +705,10 @@ export default {
           break;
       }
 
+      if(this.reply == '' || this.reply == undefined || this.reply == null){
+        this.$message({ message: '回复不能为空！', type: 'warning' });
+        return false;
+      }
 
       this.$axios.post(url2,
         {
