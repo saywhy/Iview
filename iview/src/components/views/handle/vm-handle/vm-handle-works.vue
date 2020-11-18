@@ -851,7 +851,7 @@ export default {
         startTime: "",
         endTime: "",
         priority: "",
-        status: "0",
+        status: "",
       },
       params: {
         key: "",
@@ -1127,7 +1127,12 @@ export default {
       })
         .then((resp) => {
           let { status, data } = resp.data;
+
           let datas = data;
+
+
+          console.log('()()')
+          console.log(datas)
           if (status == 0) {
             let { data, count, maxPage, pageNow } = datas;
 
@@ -1748,7 +1753,7 @@ export default {
           let { status, data } = resp.data;
           if (status == 0) {
             //console.log('console.log(this.edit);')
-            console.log(this.edit);
+           // console.log(this.edit);
             this.edit.operator_list = data;
             if (this.edit.data.perator && this.edit.data.perator.length != 0) {
               this.edit.operator_list.forEach(element => {
@@ -1858,10 +1863,6 @@ export default {
             this.edit.data.risk_alert_cn = []
           }
 
-
-
-          console.log('*****')
-          console.log(this.selected_list)
         })
         .catch(err => {
           console.log(err);
@@ -1883,7 +1884,6 @@ export default {
       }
       let selected_name_attr = this.edit.table_operator.map(x => { return x.username });
 
-
       // this.task_params.new_operator = selected_name_attr;
     },
     //下一步时候验证工单名称，优先级、经办人等参数
@@ -1903,7 +1903,7 @@ export default {
         this.$message.error('经办人未选择');
       } else {
         this.task.new_contet = false;
-        console.log(this.edit.data.type)
+       // console.log(this.edit.data.type)
         if (this.edit.data.type == 'asset') {
           this.get_list_assets()
         } else if (this.edit.data.type == 'alert') {
@@ -1972,10 +1972,6 @@ export default {
             }
           });
 
-          console.log('this.edit.alert_list='+this.edit.alert_list)
-          console.log('this.edit.handle_sel='+this.edit.handle_sel)
-          console.log(this.selected_list)
-
           this.edit.alert_list = data;
           if (this.edit.handle_sel.length != 0) {
             this.selected_list.concat(this.edit.handle_sel)
@@ -2039,13 +2035,20 @@ export default {
         }
         return v;
       });
-      handle_sel_list = handle_sel_list.concat(this.selected_list);
-      handle_sel_list = [...new Set(handle_sel_list)];
 
+      console.log(handle_sel_list);
+      console.log(this.selected_list);
+      let handle_sel_list_attr = [...new Set(this.selected_list)];
+
+     // console.log(handle_sel_list_attr);
+
+     /* handle_sel_list = handle_sel_list.concat(this.selected_list);
+      handle_sel_list = [...new Set(handle_sel_list)];*/
 
       //ycl添加（09/14）
       this.edit.perator = [...new Set(this.edit.perator)];
 
+      console.log(handle_sel_list);
 
       let all_params = {
         workorder_edit: '1',
@@ -2071,7 +2074,6 @@ export default {
         all_params.te_alert = handle_sel_list
       }
 
-      console.log(all_params)
 
       this.handle.save = true;
       this.$axios.post('/yiiapi/workorders', all_params)
@@ -2108,13 +2110,19 @@ export default {
         }
         return v;
       });
-      handle_sel_list = handle_sel_list.concat(this.selected_list);
-      handle_sel_list = [...new Set(handle_sel_list)];
+
+
+      console.log(handle_sel_list);
+      console.log(this.selected_list);
+      let handle_sel_list_attr = [...new Set(this.selected_list)];
+
+      // console.log(handle_sel_list_attr);
+
+      /* handle_sel_list = handle_sel_list.concat(this.selected_list);
+       handle_sel_list = [...new Set(handle_sel_list)];*/
 
       //ycl添加（09/14）
       this.edit.perator = [...new Set(this.edit.perator)];
-
-      console.log( this.edit.data.perator)
 
       let all_params = {
         workorder_edit: '1',

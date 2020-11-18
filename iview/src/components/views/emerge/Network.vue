@@ -939,8 +939,13 @@ export default {
   },
   created(){
     var stage = this.$route.query.stage;
-    if (!!stage) this.params.attack_stage  =  stage;
-    else this.params.attack_stage  =  '';
+    if (!!stage) {
+      this.params.attack_stage = stage;
+      this.old_params.attack_stage = stage;
+    } else {
+      this.params.attack_stage  =  '';
+      this.old_params.attack_stage = '';
+    }
   },
   mounted () {
     this.check_passwd();
