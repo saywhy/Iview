@@ -2033,7 +2033,7 @@ export default {
       })
         .then((resp) => {
           let { status, data } = resp.data;
-          data.data.map(v => {;
+          data.data.map(v => {
             if(v.src_ip != '[]'){
               v.src_ip = JSON.parse(v.src_ip).join(',');
             }
