@@ -36,7 +36,7 @@
             <h4 class="title">{{item.name}}：</h4>
 
             <div class="detail_list">
-              <el-button class="d_btn"
+              <el-button class="d_btn" v-if="it.name != '' && it.name != undefined && it.name != null"
                          :class="{'d_btn_active':it.flag}"
                          :title="it.name"
                          size="small"
