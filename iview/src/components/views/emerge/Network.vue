@@ -179,12 +179,13 @@
           </el-col>
         </el-row>
       </el-form>
-      <!--:render-header="col"-->
-      <el-row class="common-table-pattern">
+      <!--:render-header="col" :key="randomKey"-->
+      <el-row class="common-table-pattern table_wrap">
         <el-col :span="24">
           <el-table ref="multipleTable"
                     align="center"
                     border
+                    id="table_wrap_alert"
                     class="common-table common-table_alert"
                     v-loading="table.loading"
                     :data="table.tableData"
@@ -195,6 +196,7 @@
                     @selection-change="handleSelChange"
                     @header-click="header_click"
                     @sort-change="header_cell"
+                    @header-dragend="headerDragend"
                     row-key="id"
                     :key="randomKey"
                     @row-click="detail_click">
@@ -1048,6 +1050,9 @@ export default {
     },
     //列拖拽
     columnDrop () {
+      if(this.sortable) {
+        this.sortable.destroy();
+      }
       const wrapperTr = document.querySelector('.common-table_alert tr');
       this.sortable = Sortable.create(wrapperTr, {
         //handle: '.common-table_alert',
@@ -1257,6 +1262,10 @@ export default {
       }
       this.get_list_risk();
 
+    },
+
+    headerDragend(evt){
+      this.columnDrop ();
     },
     mousedown (event) {
       this.oldPositon = {

@@ -183,7 +183,7 @@
               </el-col>
             </el-row>
           </el-form>
-          <el-row class="common-table-pattern">
+          <el-row class="common-table-pattern table_wrap">
             <el-col :span="24">
               <el-table ref="multipleTable"
                         align="center"
@@ -198,6 +198,7 @@
                         @selection-change="handleSelChange"
                         @header-click="header_click"
                         @sort-change="header_cell"
+                        @header-dragend="headerDragend"
                         row-key="id"
                         :key="randomKey"
                         @row-click="detail_click">
@@ -1060,15 +1061,18 @@ export default {
         this.dropCol.push({label: name, prop: alias});
       }
     },
-    // 列拖拽
+    //列拖拽
     columnDrop () {
+      if(this.sortable){
+        this.sortable.destroy();
+      }
       const wrapperTr = document.querySelector('.common-table_alert tr');
       this.sortable = Sortable.create(wrapperTr, {
-       // handle: '.common-table_alert',
+        only: '.table_wrap',
         animation: 180,
+        preventOnFilter:true,
         delay: 0,
         onEnd: evt => {
-
           let newIndex = evt.newIndex - 2;
           let oldIndex = evt.oldIndex - 2;
           const oldItem = this.dropCol[oldIndex];
@@ -1268,7 +1272,6 @@ export default {
     handleSelChange (val) {
       this.table.multipleSelection = val;
     },
-
     //进入详情页面
     detail_click (val, column, cell) {
       this.detail_click_val = val
@@ -1276,6 +1279,9 @@ export default {
     },
     header_click (val) {
       this.detail_click_val = {}
+    },
+    headerDragend(evt){
+      this.columnDrop ();
     },
     mousedown (event) {
       this.oldPositon = {
