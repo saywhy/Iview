@@ -296,7 +296,7 @@ export default {
         }
         .p3_error_title {
           text-align: right;
-          color: #fff;
+          color: #bbb;
         }
         .p3_tips {
           text-align: right;
