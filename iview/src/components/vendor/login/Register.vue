@@ -9,7 +9,7 @@
              label-width="0">
       <!--用户名-->
       <el-form-item prop="username">
-       <!-- <label class="view-label">账户名称</label>-->
+        <!-- <label class="view-label">账户名称</label>-->
         <el-input class="view-input"
                   @keyup.enter.native="handleLogin"
                   v-model="registerForm.username"
@@ -79,9 +79,9 @@ export default {
         callback()
       }*/
       var reg = new RegExp('(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9])');
-      if(!reg.test(value)){
+      if (!reg.test(value)) {
         callback(new Error('密码包含大写、小写、数字和特殊字符其中三项'))
-      }else {
+      } else {
         callback();
       }
     }
@@ -97,7 +97,7 @@ export default {
       registerForm: {
         username: '',  //admin
         password: '', //Hoohoolab*123
-        repassword:'',
+        repassword: '',
         // password: '!@#QWEasd123'
       },
       registerRules: {
@@ -132,19 +132,19 @@ export default {
       this.$refs.registerForm.validate(valid => {
         if (valid) {
           this.$store.dispatch('LoginByUsername', this.registerForm)
-          .then((resp) => {
-            //返回成功跳转
-            if (resp[0]) {
-              this.$message.success('注册管理员成功，欢迎首次登录！');
-              this.$router.push({path:'/system/setting/licence'});//登录成功之后重定向到首页
-              //失败
-            } else {
-              this.$message.error(resp[1]);
-            }
-          }).catch(err => {
-            this.$message.error(err); //登录失败提示错误
-          });
-      }
+            .then((resp) => {
+              //返回成功跳转
+              if (resp[0]) {
+                this.$message.success('注册管理员成功，欢迎首次登录！');
+                this.$router.push({ path: '/system/setting/licence' });//登录成功之后重定向到首页
+                //失败
+              } else {
+                this.$message.error(resp[1]);
+              }
+            }).catch(err => {
+              this.$message.error(err); //登录失败提示错误
+            });
+        }
       })
     }
   }
@@ -152,8 +152,7 @@ export default {
 </script>
 <style scoped lang="less">
 #UserRegister {
-  /deep/
-  .el-form {
+  /deep/ .el-form {
     .el-form-item {
       margin-bottom: 30px;
       .el-form-item__content {
@@ -167,7 +166,7 @@ export default {
         .view-input {
           position: relative;
           .el-input__inner {
-            border: 2px solid rgba(255,255,255,.48);
+            border: 2px solid #bbb;
             background-color: transparent;
             color: #bbbbbb;
             height: 54px;
@@ -204,9 +203,9 @@ export default {
           }
         }
         .login-submit {
-          background: #0070ff;
+          background: #258245;
           width: 100%;
-          border-color: #0070ff;
+          border-color: #258245;
           margin: 10px 0;
           height: 54px;
         }

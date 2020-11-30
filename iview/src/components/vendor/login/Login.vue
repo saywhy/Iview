@@ -95,7 +95,7 @@ export default {
     left: 50px;
     .l_product_logo {
       vertical-align: middle;
-      width: 108px;
+      // width: 108px;
       height: 80px;
     }
   }
@@ -119,19 +119,20 @@ export default {
     .border-line {
       height: 6px;
       width: 100%;
-      background-color: #0070ff;
+      background-color: #258245;
     }
     .login-main {
       justify-content: center;
       padding: 25px 60px 18px;
-      background-color: rgba(79, 135, 255, 0.48);
+      // background-color: rgba(79, 135, 255, 0.48);
+      background-color: #fff;
       .l-container {
         width: 100%;
         height: auto;
         margin: auto;
         .l-container_img {
-          width: 108px;
-          height: 108px;
+          // width: 108px;
+          height: 80px;
           vertical-align: middle;
         }
       }
@@ -140,7 +141,7 @@ export default {
         text-align: center;
         font-family: PingFangSC-Semibold;
         font-size: 28px;
-        color: #ffffff;
+        color: #333;
       }
     }
   }

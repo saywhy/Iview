@@ -10,7 +10,8 @@
              @click="enter_home">
           <img class="e-image"
                :src="logoSrc">
-          <span class="e-name">iView</span>
+          <span class="e-name">安全运营中心</span>
+          <!-- <span class="e-name">iView</span> -->
         </div>
       </el-col>
       <el-col :span="12">
@@ -165,7 +166,7 @@ export default {
   name: 'Nav',
   data () {
     return {
-      logoSrc: require('@/assets/images/layout/nav/logo1.png'),
+      logoSrc: require('@/assets/images/login/logo01.png'),
       messageSrc: require('@/assets/images/layout/nav/message.png'),
       avatarSrc: require('@/assets/images/layout/nav/avatar.png'),
       pass_state: false,
@@ -234,8 +235,8 @@ export default {
               console.log('343434')
               console.log(response)
               if (status == 0) {
-                 console.log(data.data)
-                localStorage.setItem("token",data.data.token);
+                console.log(data.data)
+                localStorage.setItem("token", data.data.token);
                 let datas = data.data;
                 this.user_edit.department = datas.department;
                 this.user_edit.mobile = datas.mobile;
@@ -398,7 +399,7 @@ export default {
                   })
                 // location.reload();
               }, 500);
-            }else {
+            } else {
               this.$message({
                 message: '修改用户成功',
                 type: 'success'
@@ -415,17 +416,17 @@ export default {
             this.user_edit.allow_ip = '';
           } else {
             let msg = response.data.msg;
-            if(typeof(msg) == 'string'){
+            if (typeof (msg) == 'string') {
               this.$message({
-                  message: msg,
-                  type: 'error',
-                }
+                message: msg,
+                type: 'error',
+              }
               );
-            }else {
+            } else {
               this.$message({
                 message: msg[Object.keys(msg)[0]][0],
-                  type: 'error',
-                }
+                type: 'error',
+              }
               );
             }
           }
@@ -484,15 +485,18 @@ export default {
     .header-logo {
       .e-image {
         margin: 9px 0;
-        width: 56px;
+        // width: 56px;
+        vertical-align: middle;
         height: 42px;
         cursor: pointer;
       }
       .e-name {
         font-size: 20px;
+        // font-size: 14px;
+        vertical-align: middle;
         color: #fff;
         font-family: PingFang;
-        margin-top: 20px;
+        // margin-top: 20px;
         display: inline-block;
       }
     }

@@ -217,7 +217,7 @@ export default {
         .view-input {
           position: relative;
           .el-input__inner {
-            border: 2px solid rgba(255, 255, 255, 0.48);
+            border: 2px solid #bbb;
             background-color: transparent;
             color: #bbbbbb;
             height: 54px;
@@ -273,9 +273,9 @@ export default {
           }
         }
         .login-submit {
-          background: #0070ff;
+          background: #258245;
           width: 100%;
-          border-color: #0070ff;
+          border-color: #258245;
           margin: 20px 0 0;
           height: 54px;
         }
