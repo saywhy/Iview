@@ -34,7 +34,7 @@ export default {
   name: 'Login',
   data () {
     return {
-      name: 'iView 安全感知系统',
+      name: '汉川市人民医院安全运营中心',
       activeName: 'user',
       stu: true
     }
