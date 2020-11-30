@@ -374,7 +374,7 @@
         <li class="info_top_item"
             v-for="value in selectItem.info_list"
             v-if="value.name !='文件行为'&&value.name !='taskID'">
-          <span class="info_top_item_title" >{{value.name}}</span>
+          <span class="info_top_item_title">{{value.name}}</span>
           <span v-if="value.name=='文件大小'">
             {{value.value | filterType }}
           </span>
@@ -579,7 +579,7 @@ export default {
   },
   watch: {
     selectItem: function (val) {
-     // console.log(this.selectItem);
+      // console.log(this.selectItem);
       this.selectItem.whois_list = [];
       this.selectItem.sample_list = [];
 
@@ -601,7 +601,7 @@ export default {
           })
         }
       } else if (this.selectItem.alert_description.ip_whois) {
-      //  console.log(this.selectItem.alert_description.ip_whois);
+        //  console.log(this.selectItem.alert_description.ip_whois);
         for (let key in this.selectItem.alert_description.ip_whois) {
           this.selectItem.whois_list.push({
             name: key,
@@ -612,7 +612,7 @@ export default {
       this.event_obj = this.selectItem.network_event;
       // 情报类型匹配
       //console.log('**************************************');
-     // console.log(this.selectItem.description_type);
+      // console.log(this.selectItem.description_type);
 
       switch (this.selectItem.description_type) {
         case 'BotnetCAndCURL':
@@ -998,6 +998,30 @@ export default {
           var dateee = new Date(date).toJSON();
           return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
         }
+        var srcIP = ''
+        var desIP = ''
+        if (this.selectItem.network_event.src_port == 0) {
+          srcIP = this.selectItem.network_event.src_ip
+        } else {
+          srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
+        }
+        if (this.selectItem.network_event.dest_port == 0) {
+          desIP = this.selectItem.network_event.dest_ip
+        } else {
+          desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
+        }
+        var htttp_set = {
+          http_method: '',
+          url: '',
+          http_user_agent: '',
+          http_refer: '',
+        }
+        if (this.selectItem.network_event.http) {
+          htttp_set.http_method = this.selectItem.network_event.http.http_method
+          htttp_set.url = this.selectItem.network_event.http.url
+          htttp_set.http_user_agent = this.selectItem.network_event.http.http_user_agent
+          htttp_set.http_refer = this.selectItem.network_event.http.http_refer
+        }
         // 网络事件匹配
         switch (this.selectItem.network_event.event_type) {
           case 'fileinfo':
@@ -1007,18 +1031,6 @@ export default {
                   this.selectItem.network_event.email_to = this.selectItem.network_event.email.to.join(
                     ","
                   );
-                }
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
@@ -1048,21 +1060,10 @@ export default {
 
                 break;
               case 'http':
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-                }
+
                 this.selectItem.event_list = [{
                   name: 'Method',
-                  value: this.selectItem.network_event.http.http_method
+                  value: htttp_set.http_method
                 },
                 {
                   name: 'Source IP',
@@ -1074,15 +1075,15 @@ export default {
                 },
                 {
                   name: 'URL',
-                  value: this.selectItem.network_event.http.url
+                  value: htttp_set.url
                 },
                 {
                   name: 'User Agent',
-                  value: this.selectItem.network_event.http.http_user_agent
+                  value: htttp_set.http_user_agent
                 },
                 {
                   name: 'Referrer',
-                  value: this.selectItem.network_event.http.http_refer
+                  value: htttp_set.http_refer
                 },
                 {
                   name: 'Traffic',
@@ -1091,18 +1092,6 @@ export default {
                 ]
                 break;
               case 'ftp-data':
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: renderTime(this.selectItem.network_event.timestamp)
@@ -1130,18 +1119,6 @@ export default {
                   this.selectItem.network_event.email_to = this.selectItem.network_event.email.to.join(
                     ","
                   );
-                }
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
@@ -1175,18 +1152,6 @@ export default {
                     ","
                   );
                 }
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: renderTime(this.selectItem.network_event.timestamp)
@@ -1214,18 +1179,6 @@ export default {
                 ]
                 break;
               case 'smb':
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: renderTime(this.selectItem.network_event.timestamp)
@@ -1258,18 +1211,6 @@ export default {
                 } else if (this.selectItem.network_event.app_proto == 'failed') {
                   this.selectItem.network_event.app_proto = ''
                 }
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: renderTime(this.selectItem.network_event.timestamp)
@@ -1293,18 +1234,6 @@ export default {
           case 'flow':
             switch (this.selectItem.network_event.app_proto) {
               case 'ftp':
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: renderTime(this.selectItem.network_event.timestamp)
@@ -1333,18 +1262,6 @@ export default {
                 } else if (this.selectItem.network_event.app_proto == 'failed') {
                   this.selectItem.network_event.app_proto = ''
                 }
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-                }
                 this.selectItem.event_list = [{
                   name: 'Time',
                   value: renderTime(this.selectItem.network_event.timestamp)
@@ -1366,18 +1283,6 @@ export default {
             }
             break
           case 'smb':
-            var srcIP = ''
-            var desIP = ''
-            if (this.selectItem.network_event.src_port == 0) {
-              srcIP = this.selectItem.network_event.src_ip
-            } else {
-              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-            }
-            if (this.selectItem.network_event.dest_port == 0) {
-              desIP = this.selectItem.network_event.dest_ip
-            } else {
-              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: renderTime(this.selectItem.network_event.timestamp)
@@ -1405,18 +1310,6 @@ export default {
             ]
             break
           case 'ssh':
-            var srcIP = ''
-            var desIP = ''
-            if (this.selectItem.network_event.src_port == 0) {
-              srcIP = this.selectItem.network_event.src_ip
-            } else {
-              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-            }
-            if (this.selectItem.network_event.dest_port == 0) {
-              desIP = this.selectItem.network_event.dest_ip
-            } else {
-              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: renderTime(this.selectItem.network_event.timestamp)
@@ -1448,18 +1341,6 @@ export default {
               this.selectItem.network_event.tls.Authorizing = this.selectItem.network_event.tls.subject.substring(
                 this.selectItem.network_event.tls.subject.indexOf("CN=") + 3
               );
-            }
-            var srcIP = ''
-            var desIP = ''
-            if (this.selectItem.network_event.src_port == 0) {
-              srcIP = this.selectItem.network_event.src_ip
-            } else {
-              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-            }
-            if (this.selectItem.network_event.dest_port == 0) {
-              desIP = this.selectItem.network_event.dest_ip
-            } else {
-              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
             }
             this.selectItem.event_list = [{
               name: 'Time',
@@ -1509,18 +1390,6 @@ export default {
                 }
               });
             }
-            var srcIP = ''
-            var desIP = ''
-            if (this.selectItem.network_event.src_port == 0) {
-              srcIP = this.selectItem.network_event.src_ip
-            } else {
-              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-            }
-            if (this.selectItem.network_event.dest_port == 0) {
-              desIP = this.selectItem.network_event.dest_ip
-            } else {
-              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: renderTime(this.selectItem.network_event.timestamp)
@@ -1552,18 +1421,6 @@ export default {
             ]
             break
           case 'krb5':
-            var srcIP = ''
-            var desIP = ''
-            if (this.selectItem.network_event.src_port == 0) {
-              srcIP = this.selectItem.network_event.src_ip
-            } else {
-              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-            }
-            if (this.selectItem.network_event.dest_port == 0) {
-              desIP = this.selectItem.network_event.dest_ip
-            } else {
-              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-            }
             this.selectItem.event_list = [{
               name: 'Time',
               value: renderTime(this.selectItem.network_event.timestamp)
@@ -1599,21 +1456,9 @@ export default {
             ]
             break
           case 'http':
-            var srcIP = ''
-            var desIP = ''
-            if (this.selectItem.network_event.src_port == 0) {
-              srcIP = this.selectItem.network_event.src_ip
-            } else {
-              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-            }
-            if (this.selectItem.network_event.dest_port == 0) {
-              desIP = this.selectItem.network_event.dest_ip
-            } else {
-              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-            }
             this.selectItem.event_list = [{
               name: 'Method',
-              value: this.selectItem.network_event.http.http_method
+              value: htttp_set.http_method
             },
             {
               name: 'Source IP',
@@ -1625,15 +1470,15 @@ export default {
             },
             {
               name: 'URL',
-              value: this.selectItem.network_event.http.url
+              value: htttp_set.http.url
             },
             {
               name: 'User Agent',
-              value: this.selectItem.network_event.http.http_user_agent
+              value: htttp_set.http_user_agent
             },
             {
               name: 'Referrer',
-              value: this.selectItem.network_event.http.http_refer
+              value: htttp_set.http_refer
             },
             {
               name: 'Traffic',
@@ -1648,18 +1493,6 @@ export default {
                   this.selectItem.network_event.tls.Authorizing = this.selectItem.network_event.tls.subject.substring(
                     this.selectItem.network_event.tls.subject.indexOf("CN=") + 3
                   );
-                }
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
@@ -1696,21 +1529,9 @@ export default {
                 ]
                 break;
               case 'http':
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
-                }
                 this.selectItem.event_list = [{
                   name: 'Method',
-                  value: this.selectItem.network_event.http.http_method
+                  value: htttp_set.http_method
                 },
                 {
                   name: 'Source IP',
@@ -1722,15 +1543,15 @@ export default {
                 },
                 {
                   name: 'URL',
-                  value: this.selectItem.network_event.http.url
+                  value: htttp_set.http.url
                 },
                 {
                   name: 'User Agent',
-                  value: this.selectItem.network_event.http.http_user_agent
+                  value: htttp_set.http_user_agent
                 },
                 {
                   name: 'Referrer',
-                  value: this.selectItem.network_event.http.http_refer
+                  value: htttp_set.http_refer
                 },
                 {
                   name: 'Traffic',
@@ -1743,18 +1564,6 @@ export default {
                   this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
                 } else if (this.selectItem.network_event.app_proto == 'failed') {
                   this.selectItem.network_event.app_proto = ''
-                }
-                var srcIP = ''
-                var desIP = ''
-                if (this.selectItem.network_event.src_port == 0) {
-                  srcIP = this.selectItem.network_event.src_ip
-                } else {
-                  srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-                }
-                if (this.selectItem.network_event.dest_port == 0) {
-                  desIP = this.selectItem.network_event.dest_ip
-                } else {
-                  desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
                 }
                 this.selectItem.event_list = [{
                   name: 'Time',
@@ -1780,18 +1589,6 @@ export default {
               this.selectItem.network_event.app_proto = this.selectItem.network_event.proto
             } else if (this.selectItem.network_event.app_proto == 'failed') {
               this.selectItem.network_event.app_proto = ''
-            }
-            var srcIP = ''
-            var desIP = ''
-            if (this.selectItem.network_event.src_port == 0) {
-              srcIP = this.selectItem.network_event.src_ip
-            } else {
-              srcIP = this.selectItem.network_event.src_ip + ':' + this.selectItem.network_event.src_port
-            }
-            if (this.selectItem.network_event.dest_port == 0) {
-              desIP = this.selectItem.network_event.dest_ip
-            } else {
-              desIP = this.selectItem.network_event.dest_ip + ':' + this.selectItem.network_event.dest_port
             }
             this.selectItem.event_list = [{
               name: 'Time',
