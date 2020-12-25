@@ -31,10 +31,8 @@
         //获取数据
         getData() {
           this.$axios
-            .get('/yiiapi/demonstration/risk-trend')
+            .get('/yiiapi/demonstration/RiskTrend')
             .then((resp) => {
-
-
               let {status, data} = resp.data;
 
               if(status == 0){
@@ -96,8 +94,8 @@
             },
             grid: {
               top:'5%',
-              left: '0',
-              right: '4%',
+              left: '2%',
+              right: '6%',
               bottom: '0',
               containLabel: true
             },
@@ -119,6 +117,9 @@
             },
             yAxis: {
               type: 'value',
+              axisLabel: {
+                color: '#ffffff'
+              },
               axisLabel:{
                 color:'#ffffff'
               },

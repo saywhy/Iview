@@ -36,7 +36,7 @@
       getData(){
         this.loading = false;
         this.$axios
-          .get('/yiiapi/demonstration/external-distribution')
+          .get('/yiiapi/demonstration/ExternalDistribution')
 
           .then((resp) => {
             this.loading = true;
@@ -69,7 +69,6 @@
         var symbolSize1 = [12,12],symbolSize2 = [12,12];
 
         let mapData = this.mapData;
-
 
         mapData.forEach(item => {
 

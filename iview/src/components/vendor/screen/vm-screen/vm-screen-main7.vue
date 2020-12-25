@@ -50,7 +50,7 @@
         //获取数据
         getData() {
           this.$axios
-            .get('/yiiapi/demonstration/external-country-top5')
+            .get('/yiiapi/demonstration/ExternalCountryTop5')
 
             .then((resp) => {
 

@@ -47,7 +47,7 @@
         //获取数据
         getData() {
           this.$axios
-            .get('/yiiapi/demonstration/top-count')
+            .get('/yiiapi/demonstration/TopCount')
 
             .then((resp) => {
 

@@ -44,7 +44,7 @@
       methods:{
         getData() {
           this.$axios
-            .get('/yiiapi/demonstration/branch-situation')
+            .get('/yiiapi/demonstration/BranchSituation')
             .then((resp) => {
               let {status, data} = resp.data;
 

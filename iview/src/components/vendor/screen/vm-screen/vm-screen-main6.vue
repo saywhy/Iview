@@ -58,7 +58,7 @@
         //获取数据
         getData(){
           this.$axios
-            .get('/yiiapi/demonstration/attention-alarm')
+            .get('/yiiapi/demonstration/AttentionAlarm')
 
             .then((resp) => {
 
@@ -66,16 +66,18 @@
 
               this.dataInfo = [];
 
-              //console.log(data)
+              console.log(data)
               if(status == 0){
                 Object.keys(data).forEach((key) => {
                   this.dataInfo.push({name:key,value:data[key]});
                 });
 
                 //console.log(this.dataInfo);
-                this.$nextTick(function() {
-                  this.drawGraph();
-                });
+                /*this.$nextTick(function() {
+
+                });*/
+
+                this.drawGraph();
               }
             })
             .catch((error) => {

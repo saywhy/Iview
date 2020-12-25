@@ -143,11 +143,6 @@ export const constantRouterMap = [{
   ]
 },
 {
-  path: '/test',
-  name: 'test',
-  component: () => import('@/components/vendor/screen/test')
-},
-{
   path: '/screen',
   name: 'screen',
   component: () => import('@/components/vendor/screen/Screen')
@@ -218,8 +213,7 @@ export const constantRouterMap = [{
 {
   path: '*',
   component: () => import('@/components/vendor/404')
-}
-]
+}]
 
 //实例化vue的时候只挂载constantRouter
 export default new Router({
@@ -256,21 +250,19 @@ export const asyncRouterMap = [
         deep: 1
       },
       component: () => import('@/components/views/home/Overview')
-    },
-      /*{
+    },{
         path: '/home/screen_index',
         name: 'screen_index',
         meta: {
           title: '大屏',
-          auth: '3',
+          auth: '995',
           icon: 'e-aside-big',
           parentAuth: '1',
           rootAuth: '1',
           deep: 1
         },
         redirect: '/screen'
-      }*/
-    ]
+      }]
   },
   /*处置*/
   {

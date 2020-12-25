@@ -51,7 +51,7 @@
         getData(){
           this.loading = false;
           this.$axios
-            .get('/yiiapi/demonstration/horizontal-threat-situation')
+            .get('/yiiapi/demonstration/HorizontalThreatSituation')
             .then((resp) => {
               this.loading = true;
               let {status, data} = resp.data;

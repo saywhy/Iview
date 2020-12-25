@@ -104,9 +104,9 @@ export default {
   actions: {
     //获取大屏基础信息
     async getScreenBase({commit,dispatch},context){
-      let resp = await axios('/yiiapi/demonstration/get-base-config',{params:context});
+      let resp = await axios('/yiiapi/demonstration/GetBaseConfig',{params:context});
       let {status, data} = resp.data;
-     // console.log(data)
+      console.log(data)
 
       if(status == 0){
         commit('SET_BASE_INFO',data);
@@ -117,7 +117,7 @@ export default {
      * 大屏两侧数据
      * */
     async getScreenAside({commit,dispatch},context){
-      let resp = await axios('/yiiapi/demonstration/get-both-side',{params:context});
+      let resp = await axios('/yiiapi/demonstration/GetBothSide',{params:context});
       let {status, data} = resp.data;
       //console.log(data)
       if(status == 0){
@@ -127,7 +127,7 @@ export default {
     },
     async setScreenAside({commit,dispatch},context){
       let asideLists = this.state.screen.asideLists;
-      let resp = await axios.put('/yiiapi/demonstration/set-both-side',{param:asideLists});
+      let resp = await axios.put('/yiiapi/demonstration/SetBothSide',{param:asideLists});
       let {status, data} = resp.data;
       if(status == 0){
         return true;
@@ -137,7 +137,7 @@ export default {
      * 大屏顶部数据
      * */
     async getScreenTop({commit,dispatch},context){
-      let resp = await axios('/yiiapi/demonstration/get-top-config',{params:context});
+      let resp = await axios('/yiiapi/demonstration/GetTopConfig',{params:context});
       let {status, data} = resp.data;
       data.forEach(item => {
         if(!item.num){
@@ -151,7 +151,7 @@ export default {
     },
     async setScreenTop({commit,dispatch},context){
       let topLists = this.state.screen.topLists;
-      let resp = await axios.put('/yiiapi/demonstration/set-top-config',{param:topLists});
+      let resp = await axios.put('/yiiapi/demonstration/SetTopConfig',{param:topLists});
       let {status, data} = resp.data;
       if(status == 0){
         return true;

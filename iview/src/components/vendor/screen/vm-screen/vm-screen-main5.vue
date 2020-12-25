@@ -91,7 +91,7 @@
       getData() {
         this.loading = false;
         this.$axios
-          .get('/yiiapi/demonstration/system-status')
+          .get('/yiiapi/demonstration/SystemStatus')
 
           .then((resp) => {
             this.loading = true;

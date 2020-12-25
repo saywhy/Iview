@@ -71,7 +71,7 @@
           radio: '',
           area_array:[],
           baseInfo:{
-            ScreenName: 'ThreatEye高级威胁检测系统',
+            ScreenName: 'iView态势感知系统',
             ExtraneousDistribution:[],
             ExtraneousDistributionType:'headquarters'
           },
@@ -115,7 +115,7 @@
         //获取大屏名称
         getData () {
           this.$axios
-            .get('/yiiapi/demonstration/get-base-config')
+            .get('/yiiapi/demonstration/GetBaseConfig')
 
             .then((resp) => {
              // console.log(resp)
@@ -146,7 +146,7 @@
         //获取全部分支
         getBranch () {
           this.$axios
-            .get('/yiiapi/demonstration/get-branchs')
+            .get('/yiiapi/demonstration/GetBranchs')
             .then((resp) => {
               let {status, data} = resp.data;
 
@@ -212,7 +212,7 @@
           }
 
           this.$axios
-            .put('/yiiapi/demonstration/set-base-config',params)
+            .put('/yiiapi/demonstration/SetBaseConfig',params)
             .then((resp) => {
 
               let {status, data} = resp.data;
