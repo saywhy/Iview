@@ -17,7 +17,8 @@
               mediumLists:[],
               lowLists:[]
             },
-            timers:null
+            timers:null,
+            barWidth:'16'
           }
       },
       created(){
@@ -42,6 +43,10 @@
               if(status == 0){
 
                 data = data.reverse();
+
+                if(data.length > 5){
+                  this.barWidth = '50%';
+                }
 
                 this.branch.branchName = data.map(item => {return item.branch_name});
                 this.branch.branchCount = data.map(item => {return item.count});
@@ -156,21 +161,21 @@
                 name: '高危',
                 type: 'bar',
                 stack: '分支安全',
-                barWidth: '50%',
+                barWidth: this.barWidth,
                 data: this.branch.highLists
               },
               {
                 name: '中危',
                 type: 'bar',
                 stack: '分支安全',
-                barWidth: '50%',
+                barWidth: this.barWidth,
                 data: this.branch.mediumLists
               },
               {
                 name: '低危',
                 type: 'bar',
                 stack: '分支安全',
-                barWidth: '50%',
+                barWidth: this.barWidth,
                 showBackground: true,
                 backgroundStyle: {
                   color: 'rgba(0,215,233,.12)'

@@ -150,7 +150,7 @@
             .then((resp) => {
               let {status, data} = resp.data;
 
-              //console.log(data)
+              console.log(data)
 
               if(status == 0){
                 data.map(item => {

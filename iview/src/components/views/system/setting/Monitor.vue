@@ -204,7 +204,7 @@
                      v-if="!item.icon">
               </div>
             </div>
-            <!-- <div class="content_item">
+             <div class="content_item">
               <p>
                 <span class="title">地理位置</span>
               </p>
@@ -218,7 +218,7 @@
                              filterable
                              clearable></el-cascader>
               </div>
-            </div> -->
+            </div>
             <div class="content_item">
               <p>
                 <span class="title">责任人</span>
@@ -346,7 +346,7 @@
                      v-if="!item.icon">
               </div>
             </div>
-            <!-- <div class="content_item">
+             <div class="content_item">
               <p>
                 <span class="title">地理位置</span>
               </p>
@@ -358,7 +358,7 @@
                              filterable
                              clearable></el-cascader>
               </div>
-            </div> -->
+            </div>
             <div class="content_item">
               <p>
                 <span class="title">责任人</span>
@@ -775,6 +775,7 @@ export default {
           this.monitor_add.ip_segment.push(item.name)
         }
       });
+
       this.$axios.post('/yiiapi/ipsegments', {
         IpSegment: {
           name: this.monitor_add.name,
@@ -782,7 +783,7 @@ export default {
           network_type: this.monitor_add.type,
           person: this.monitor_add.person,
           label: this.monitor_add.tag,
-          // location: this.monitor_add.selected_cascader_add,
+          location: this.monitor_add.selected_cascader_add,
         }
       })
         .then(response => {
@@ -1019,7 +1020,7 @@ export default {
           network_type: this.monitor_edit.network_type,
           person: this.monitor_edit.person,
           label: this.monitor_edit.tag,
-          // location: this.monitor_edit.selected_cascader_edit,
+          location: this.monitor_edit.selected_cascader_edit,
         }
       })
         .then(response => {
