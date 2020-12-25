@@ -73,11 +73,9 @@
                 });
 
                 //console.log(this.dataInfo);
-                /*this.$nextTick(function() {
-
-                });*/
-
-                this.drawGraph();
+                this.$nextTick(function() {
+                  this.drawGraph();
+                });
               }
             })
             .catch((error) => {
@@ -98,14 +96,19 @@
           let alert0Data = []; let alert1Data = []; let alert2Data = [];
 
           Object.values(alert0).forEach((key) => {
-            alert0Data.push(key);
+            alert0Data.push(Number(key));
           });
           Object.values(alert1).forEach((key) => {
-            alert1Data.push(key);
+            alert1Data.push(Number(key));
           });
           Object.values(alert2).forEach((key) => {
-            alert2Data.push(key);
+            alert2Data.push(Number(key));
           });
+
+
+          console.log(alert0Data)
+          console.log(alert1Data)
+          console.log(alert2Data)
 
           let attent1 = this.$echarts.init(document.getElementById('attent1'));
           attent1.showLoading({ text: '正在加载数据...' });
