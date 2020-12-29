@@ -120,7 +120,7 @@ export default {
     async getScreenAside({commit,dispatch},context){
       let resp = await axios('/yiiapi/demonstration/GetBothSide',{params:context});
       let {status, data} = resp.data;
-      console.log(data)
+     // console.log(data)
       if(status == 0){
         commit('SET_ASIDE_LISTS',data);
         return true;

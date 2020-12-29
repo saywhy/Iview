@@ -150,7 +150,7 @@
             .then((resp) => {
               let {status, data} = resp.data;
 
-              console.log(data)
+             // console.log(data)
 
               if(status == 0){
                 data.map(item => {
@@ -243,7 +243,6 @@
       watch:{
         'baseInfo.ScreenName'(newValue, oldValue) {
           this.baseInfo.ScreenName =  this.baseInfo.ScreenName.replace(/[^A-Za-z0-9\u4e00-\u9fa5]/g,'');
-          console.log(this.baseInfo.ScreenName)
         }
       }
     }

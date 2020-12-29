@@ -6,18 +6,28 @@
            <marquee direction="left" hspace="0" vspace="0"
                     behavior="scroll" scrollamount="1" align="left"
                     scrolldelay="0" loop="-1" width="100%">
-             {{ scope.row.alert_time | time }}
+             <div class="it" > {{ scope.row.alert_time | time }}</div>
            </marquee>
          </template>
        </el-table-column>
 
-      <el-table-column prop="category" label="告警类型" show-overflow-tooltip></el-table-column>
-      <el-table-column label="威胁指标" show-overflow-tooltip>
+     <!-- <el-table-column prop="category" label="告警类型" show-overflow-tooltip></el-table-column>-->
+
+      <el-table-column label="告警类型" show-overflow-tooltip>
         <template slot-scope="scope">
-          <marquee direction="left"
+          <marquee direction="left" align="left" border="1px solid red"
                    behavior="scroll" scrollamount="1"
                    scrolldelay="0" loop="-1" width="100%">
-            {{ scope.row.indicator }}
+            <div class="it" >{{ scope.row.category }}</div>
+          </marquee>
+        </template>
+      </el-table-column>
+      <el-table-column label="威胁指标" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <marquee direction="left" align="left" border="1px solid red"
+                   behavior="scroll" scrollamount="1"
+                   scrolldelay="0" loop="-1" width="100%">
+            <div class="it" >{{ scope.row.indicator }}</div>
           </marquee>
         </template>
       </el-table-column>
@@ -167,6 +177,9 @@
 
           .cell {
             color: #fff;
+          }
+          .it{
+            width: 180px;
           }
         }
       }
