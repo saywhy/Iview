@@ -28,11 +28,11 @@
       data(){
           return{
             timers:null,
-            progress_list:[{pid:0,name:'CN',country_name:'英国', num:0, count:0},
-              {pid:1,name:'CN',country_name:'英国英国英国英国英国英国', num:0,count:0},
-              {pid:2,name:'CN',country_name:'英国', num:0,count:0},
-              {pid:3,name:'CN',country_name:'中国', num:0,count:0},
-              {pid:4,name:'CN',country_name:'中国', num:0,count:0}]
+            progress_list:[{pid:0,name:'CN',country_name:'英国', num:0, count:0,country:'CN'},
+              {pid:1,name:'CN',country_name:'英国英国英国英国英国英国', num:0,count:0,country:'CN'},
+              {pid:2,name:'CN',country_name:'英国', num:0,count:0,country:'BR'},
+              {pid:3,name:'CN',country_name:'中国', num:0,count:0,country:'BR'},
+              {pid:4,name:'BR',country_name:'中国', num:0,count:0,country:'BR'}]
           }
       },
       created() {
@@ -59,6 +59,7 @@
               let allNum = 0;
 
               if(status == 0){
+
                 data.map(item => {
                   allNum += Number(item.count);
                 });
@@ -75,6 +76,7 @@
 
                   Object.assign(item,{alias:alias});
                 });
+
                 this.progress_list = data;
               }
             })

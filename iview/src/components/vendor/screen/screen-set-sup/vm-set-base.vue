@@ -122,19 +122,23 @@
               let {status, data} = resp.data;
 
               if(status == 0){
+
+                this.getBranch();
+
                 this.radio = data.ExtraneousDistributionType;
 
                 if(data.ExtraneousDistributionType == 'headquarters'){
                   let feedback = data.ExtraneousDistribution;
-                  if (feedback != null || feedback != ''){
+
+                  if (feedback == null || feedback == '' || feedback == [] || feedback == '[]'){
+                    this.base_general.cascader = [];
+                  } else {
                     var feedAttr = feedback.split('-');
                     this.base_general.cascader = [feedAttr[0],feedAttr[1]];
-                  } else {
-                    this.base_general.cascader = [];
                   }
                 }
                 this.baseInfo = data;
-                this.getBranch();
+
               }
             })
             .catch((error) => {

@@ -1,5 +1,5 @@
 <template>
-  <div class="vm-screen-main2" id="box">
+  <div class="vm-screen-main2" id="box" v-cloak>
     <ul class="box-list" :class="{anim:animate == true}">
       <li v-for="(item,index) in items" :key="item.id" class="item">
         <i class="t-arrow"></i><span class="t-content" :title="item.title">{{item.title}}</span>
