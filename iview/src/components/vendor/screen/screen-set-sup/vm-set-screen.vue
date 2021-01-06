@@ -61,13 +61,19 @@
           //修改两侧
           this.$store.dispatch('setScreenAside')
             .then(resp => {
-              if(resp){this.$router.push({path: '/screen'});}
+              if(resp){
+                this.$message.success('提交成功！');
+                this.$router.push({path: '/screen'});
+              }
             });
         }else if(defaultIndex == 2){
           //修改顶部
           this.$store.dispatch('setScreenTop')
             .then(resp => {
-              if(resp){this.$router.push({path: '/screen'});}
+              if(resp){
+                this.$message.success('提交成功！');
+                this.$router.push({path: '/screen'});
+              }
             });
         }
       }
