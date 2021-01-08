@@ -1,8 +1,8 @@
 <template>
     <div class="vm-screen-middle1">
       <div id="spreader">
-        <el-carousel trigger="click" :autoplay="true"
-                     :interval="20000" @change="changeCal">
+        <el-carousel trigger="click" :autoplay="autoPlay"
+                     :interval="autoTime" @change="changeCal">
           <el-carousel-item>
             <vm-screen-map></vm-screen-map>
           </el-carousel-item>
@@ -16,25 +16,65 @@
 
 <script type="text/ecmascript-6">
   import VmScreenMap from '../vm-screen-sup/vm-screen-map';
-  import VmScreenSpread from '../vm-screen-sup/vm-screen-spread'
+  import VmScreenSpread from '../vm-screen-sup/vm-screen-spread';
+
+  import {mapGetters} from 'vuex'
   export default {
-      name: "vm-screen-middle1",
-      data(){
-          return{
-            tabFlag:false,
-            data:[]
-          }
-      },
-      components:{
-        VmScreenMap,
-        VmScreenSpread
-      },
-      methods:{
-        changeCal(){
-          this.tabFlag = !this.tabFlag;
-          this.$emit('childByValue', this.tabFlag)
+    name: "vm-screen-middle1",
+    data(){
+        return{
+          tabFlag:false,
+          data:[],
+          autoPlay:true,
+          autoTime: 600000
         }
+    },
+    components:{
+      VmScreenMap,
+      VmScreenSpread
+    },
+    computed:{
+      ...mapGetters(['baseInfo']),
+    },
+    created(){
+      //大屏基础信息
+      this.$store.dispatch('getScreenBase');
+      this.initCarousel();
+    },
+    methods:{
+      initCarousel(){
+
+        let carousel = this.baseInfo.Carousel;
+
+        console.log(carousel);
+
+        if(carousel == 'cal0'){
+          this.autoPlay = false;
+        }else {
+          this.autoPlay = true;
+
+          if(carousel == 'cal1'){
+            this.autoTime = 1000 * 60 * 10;
+          }else if(carousel == 'cal2'){
+            this.autoTime = 1000 * 60 * 30;
+          }else if(carousel == 'cal3'){
+            this.autoTime = 1000 * 60 * 60;
+          }else if(carousel == 'cal4'){
+            this.autoTime = 1000 * 60 * 60 * 24;
+          }
+        }
+      },
+      changeCal(){
+        this.tabFlag = !this.tabFlag;
+        this.$emit('childByValue', this.tabFlag)
       }
+    },
+    watch:{
+      'baseInfo.Carousel'(newValue, oldValue) {
+        this.baseInfo.Carousel = newValue;
+        this.initCarousel();
+      }
+    }
   }
 </script>
 

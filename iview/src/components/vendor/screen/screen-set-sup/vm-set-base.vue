@@ -6,12 +6,13 @@
           <div class="form-item">
             <label class="title">大屏名称</label>
             <el-form-item>
-              <el-input v-model="baseInfo.ScreenName" placeholder="请输入大屏名称"
+              <el-input v-model="base.ScreenName" placeholder="请输入大屏名称"
                         @input.enter.native="widthCheck($event.target, 28);"></el-input>
             </el-form-item>
             <el-divider></el-divider>
           </div>
         </div>
+        <!--网络地理位置-->
         <div class="section">
           <h3 class="name">网络地理位置</h3>
           <div class="radio-list">
@@ -54,6 +55,21 @@
             <el-divider></el-divider>
           </div>
         </div>
+
+        <!--轮播设置-->
+        <div class="section">
+          <h3 class="name">轮播设置</h3>
+          <div class="form-item">
+            <label class="title title1">轮播频次</label>
+            <el-form-item>
+              <el-radio v-model="base.Carousel" label="cal0">不轮播</el-radio>
+              <el-radio v-model="base.Carousel" label="cal1">每十分钟</el-radio>
+              <el-radio v-model="base.Carousel" label="cal2">每半小时</el-radio>
+              <el-radio v-model="base.Carousel" label="cal3">每一小时</el-radio>
+              <el-radio v-model="base.Carousel" label="cal4">每天</el-radio>
+            </el-form-item>
+          </div>
+        </div>
         <div class="btn-group">
           <el-button class="btn btn_cacel" @click="click_screen_cancel();">取消</el-button>
           <el-button class="btn btn_ok" @click="click_screen_ok();">保存</el-button>
@@ -64,13 +80,23 @@
 
 <script type="text/ecmascript-6">
   import { pca, pcaa } from "area-data";
+
+  import {mapGetters} from 'vuex'
     export default {
       name: "vm-set-base",
       data() {
         return {
           radio: '',
+          my_carousel:'',
           area_array:[],
-          baseInfo:{
+          /*baseInfo:{
+            Carousel:'cal0',
+            ScreenName: 'iView态势感知系统',
+            ExtraneousDistribution:[],
+            ExtraneousDistributionType:'headquarters'
+          },*/
+          base:{
+            Carousel:'cal0',
             ScreenName: 'iView态势感知系统',
             ExtraneousDistribution:[],
             ExtraneousDistributionType:'headquarters'
@@ -82,8 +108,12 @@
           branch: []
         }
       },
+      computed:{
+        ...mapGetters(['baseInfo']),
+      },
       created(){
         this.getData();
+        /*******************/
 
         var options = [];
         // 遍历省级
@@ -112,18 +142,15 @@
         this.area_array = options;
       },
       methods:{
-        //获取大屏名称
+        //获取大屏设置
         getData () {
-          this.$axios
-            .get('/yiiapi/demonstration/GetBaseConfig')
-
+          this.$store.dispatch('getScreenBase')
             .then((resp) => {
-             // console.log(resp)
-              let {status, data} = resp.data;
-
-              if(status == 0){
+              if (resp) {
 
                 this.getBranch();
+
+                let data = this.baseInfo;
 
                 this.radio = data.ExtraneousDistributionType;
 
@@ -137,14 +164,11 @@
                     this.base_general.cascader = [feedAttr[0],feedAttr[1]];
                   }
                 }
-                this.baseInfo = data;
+
+                this.base.Carousel = data.Carousel;
+                this.base.ScreenName = data.ScreenName;
 
               }
-            })
-            .catch((error) => {
-
-              console.log(error);
-
             });
         },
         //获取全部分支
@@ -153,8 +177,6 @@
             .get('/yiiapi/demonstration/GetBranchs')
             .then((resp) => {
               let {status, data} = resp.data;
-
-             // console.log(data)
 
               if(status == 0){
                 data.map(item => {
@@ -185,7 +207,6 @@
           this.$router.push({path: '/screen'});
         },
         click_screen_ok() {
-
           let types = this.radio;
           if(types == 'headquarters'){
             let cascader = this.base_general.cascader.toString();
@@ -210,9 +231,10 @@
           }
 
           let params = {
-            ScreenName:this.baseInfo.ScreenName,
+            ScreenName:this.base.ScreenName,
             ExtraneousDistributionType:this.radio,
-            ExtraneousDistribution: distribution
+            ExtraneousDistribution: distribution,
+            Carousel: this.base.Carousel
           }
 
           this.$axios
@@ -222,8 +244,13 @@
               let {status, data} = resp.data;
 
               if(status == 0){
-                this.$message.success('提交成功！');
-                this.$router.push({path: '/screen'});
+                this.$store.commit('SET_BASE_INFO',params);
+
+                setTimeout(()=>{
+                  this.$message.success('提交成功！');
+                  this.$router.push({path: '/screen'});
+                },200)
+
               }
             })
             .catch((error) => {
@@ -245,8 +272,8 @@
         }
       },
       watch:{
-        'baseInfo.ScreenName'(newValue, oldValue) {
-          this.baseInfo.ScreenName =  this.baseInfo.ScreenName.replace(/[^A-Za-z0-9\u4e00-\u9fa5]/g,'');
+        'base.ScreenName'(newValue, oldValue) {
+          this.base.ScreenName = this.base.ScreenName.replace(/[^A-Za-z0-9\u4e00-\u9fa5]/g,'');
         }
       }
     }
@@ -292,6 +319,9 @@
           margin: 30px 0 12px;
           display: block;
           font-family: PingFangSC-Regular;
+          &.title1{
+            margin: 30px 0 25px;
+          }
         }
         .el-divider--horizontal{
           width: 788px;

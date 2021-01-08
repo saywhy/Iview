@@ -6,7 +6,7 @@
       <div class="home_l">
         <label class="e_label"></label>
       </div>
-      <div class="home_c">{{baseInfo.ScreenName}}</div>
+      <div class="home_c">{{base.ScreenName}}</div>
       <div class="home_r">
         <el-button type="primary"
                    class="e_btn e_btn_quit"
@@ -125,7 +125,7 @@ export default {
   data () {
     return {
       isFullscreen: false,
-      threatEyeName: 'iView态势感知系统',
+      baseName: '',
       totalLists: [],
       totalTopLists: [],
       name: '外连分布'
@@ -134,12 +134,13 @@ export default {
 
   computed: {
     ...mapGetters({
-      baseInfo: 'baseInfo',
+      base: 'baseInfo',
       lists: 'asideLists',
       topLists: 'topLists',
     }),
   },
   created () {
+
     //大屏基础信息
     this.$store.dispatch('getScreenBase');
 
@@ -179,6 +180,9 @@ export default {
       //深度监听
       deep: true
     },
+    'base.ScreenName'(newValue, oldValue) {
+      this.base.ScreenName = newValue;
+    }
   },
   mounted () {
     window.onresize = () => {
@@ -190,25 +194,6 @@ export default {
     }
   },
   methods: {
-    //获取大屏名称
-    getName () {
-      this.$axios
-        .get('/yiiapi/demonstration/get-screen-name')
-
-        .then((resp) => {
-
-          let { status, data } = resp.data;
-
-          if (status == 0) {
-            this.threatEyeName = data.ScreenName;
-          }
-        })
-        .catch((error) => {
-
-          console.log(error);
-
-        });
-    },
     //退出
     quitScreen () {
       this.$router.push({ path: '/home/overview' });
