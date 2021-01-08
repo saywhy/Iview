@@ -3,9 +3,10 @@ export default {
   state: {
     //基础信息
     baseInfo:{
-      ScreenName:'',
-      ExtraneousDistributionType:'',
-      ExtraneousDistribution: [{name: "", cascader: []}]
+      Carousel:'cal0',
+      ScreenName: 'iView态势感知系统',
+      ExtraneousDistribution:[],
+      ExtraneousDistributionType:'headquarters'
     },
     //两侧数据
     asideLists:[{name:'威胁分布',alias:'threatDistribution', flag: true, aside_id: 0},
@@ -28,6 +29,7 @@ export default {
       {name: '风险网络设备数',alias:'network_equipment', flag: false, top_id: 6,num:[0,0,0,0,0]}]
   },
   getters: {
+    carousel: state => state.carousel,
     baseInfo: state => state.baseInfo,
     asideLists: state => state.asideLists,
     topLists: state => state.topLists,
@@ -108,7 +110,6 @@ export default {
     async getScreenBase({commit,dispatch},context){
       let resp = await axios('/yiiapi/demonstration/GetBaseConfig',{params:context});
       let {status, data} = resp.data;
-
       if(status == 0){
         commit('SET_BASE_INFO',data);
         return true;
