@@ -17,7 +17,7 @@ const store = new Vuex.Store({
     screen,
     alert
   },
-  strict: debug, //是否开启严格模式
+  //strict: debug, //是否开启严格模式
 })
 
 export default store;

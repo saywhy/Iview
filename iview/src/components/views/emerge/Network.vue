@@ -16,10 +16,9 @@
         <el-row class="common_box"
                 style="padding: 15px 0;">
           <!--1-->
-          <el-col :span="24"
-                  class="common_box_list">
+          <el-col :span="24" class="common_box_list">
             <!--搜索关键词-->
-            <el-input class="s_key_network"
+            <el-input class="s_key2"
                       placeholder="搜索关键词"
                       v-model.trim="params.key"
                       clearable>
@@ -29,7 +28,7 @@
             <!--时间-->
             <vm-emerge-picker @changeTime='changeTime'></vm-emerge-picker>
             <!--安全域-->
-            <el-select class="s_key_network s_key_types_network"
+            <el-select class="s_key2 s_key2_ok"
                        v-model="params.domain"
                        clearable
                        placeholder="安全域"
@@ -41,7 +40,7 @@
               </el-option>
             </el-select>
             <!--失陷确定性-->
-            <el-select class="s_key_network s_key_types_network_ok"
+            <el-select class="s_key2"
                        v-model="params.certainty"
                        clearable
                        placeholder="失陷确定性"
@@ -52,11 +51,9 @@
                          :value="item.value">
               </el-option>
             </el-select>
-          </el-col>
-          <!--2-->
-          <el-col :span="24" class="common_box_list common_box_list_network">
+
             <!--威胁等级-->
-            <el-select class="s_key_network"
+            <el-select class="s_key2"
                        v-model="params.degree"
                        clearable
                        placeholder="威胁等级"
@@ -67,9 +64,25 @@
                          :value="item.value">
               </el-option>
             </el-select>
+          </el-col>
+          <!--2-->
+          <el-col :span="24" class="common_box_list common_box_list_network">
+
+            <!--威胁等级-->
+            <el-select class="s_key2"
+                       v-model="params.log_source"
+                       clearable
+                       placeholder="威胁等级"
+                       :popper-append-to-body="false">
+              <el-option v-for="item in options_logs"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
+            </el-select>
 
             <!--处理状态-->
-            <el-select class="s_key_network1"
+            <el-select class="s_key2_network"
                        v-model="params.status"
                        clearable
                        placeholder="处理状态"
@@ -82,7 +95,7 @@
             </el-select>
 
             <!--攻击阶段-->
-            <el-select class="s_key_network2"
+            <el-select class="s_key2"
                        v-model="params.attack_stage"
                        clearable
                        placeholder="攻击阶段"
@@ -93,6 +106,7 @@
                          :value="item.value">
               </el-option>
             </el-select>
+
             <el-button class="s_btn"
                        @click="submitClick();">搜索</el-button>
             <el-link class="s_link"
@@ -693,7 +707,8 @@ export default {
         certainty: '',
         status: '',
         degree: '',
-        attack_stage:''
+        attack_stage:'',
+        log_source:''
       },
       params: {
         key: "",
@@ -704,9 +719,11 @@ export default {
         degree: '',
         status: '',
         attack_stage:'',
+        log_source:'',
         sort: '3',
         order: ''
       },
+      options_logs:[],
       options_degrees: [
         {
           value: "low",
@@ -951,6 +968,7 @@ export default {
   },
   mounted () {
     this.check_passwd();
+    this.get_log_source();
     this.get_echarts();
     this.get_list_risk();
     this.column_deploy();
@@ -979,6 +997,28 @@ export default {
           }
         })
     },
+
+    //获取日志列表
+    get_log_source() {
+      this.$axios.get('/yiiapi/site/LogSources')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+          
+          if (status == '0') {
+
+            var attr = []
+            data.forEach(item => {
+              attr.push({value:item.id,label:item.name});
+            })
+            this.options_logs = attr;
+          }
+        })
+    },
+
     //配置到取消
     label_cancel_Click () {
       this.$refs.messageDrop.hide();
@@ -1103,6 +1143,7 @@ export default {
           status: this.old_params.status,
           degree: this.old_params.degree,
           attack_stage:params_alert.attack_stage,
+          log_source:this.old_params.log_source,
 
           order: this.params.order,
           sort: this.params.sort,
@@ -1179,6 +1220,7 @@ export default {
       this.old_params.status = this.params.status;
       this.old_params.degree = this.params.degree;
       this.old_params.attack_stage = this.params.attack_stage;
+      this.old_params.log_source = this.params.log_source;
 
       this.get_list_risk();
     },
@@ -1195,6 +1237,7 @@ export default {
       this.params.degree = '';
       this.params.status = '';
       this.params.attack_stage = '';
+      this.params.log_source = '';
 
       this.old_params.key = this.params.key;
       this.old_params.startTime = this.params.startTime;
@@ -1204,6 +1247,7 @@ export default {
       this.old_params.status = this.params.status;
       this.old_params.degree = this.params.degree;
       this.old_params.attack_stage = this.params.attack_stage;
+      this.old_params.log_source = this.params.log_source;
 
       $(document.querySelector('.el-button--text')).trigger('click');
       this.get_list_risk();
