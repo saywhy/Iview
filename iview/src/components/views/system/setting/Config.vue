@@ -8,6 +8,7 @@
       <el-button class="btn_i"
                  @click="uploadConfig">导入配置</el-button>
       <uploader :options="options"
+                style="display:none"
                 :autoStart='true'
                 :fileStatusText='fileStatusText'
                 @file-added="onFileAdded"
@@ -17,7 +18,7 @@
                 @file-error="onFileError"
                 class="uploader_box">
         <uploader-unsupport></uploader-unsupport>
-        <uploader-drop>
+        <uploader-drop style="display:none">
           <uploader-btn class="select_btn"
                         :directory="false"
                         :attrs="attrs"
@@ -136,6 +137,7 @@ export default {
     },
     // 上传
     onFileAdded (file) {
+      this.loading = true
       console.log(file);
       // if (file.name.indexOf('.txt') < 0 && file.name.indexOf('.ioc') < 0) {
       //   this.$message({
@@ -146,14 +148,14 @@ export default {
       // }
     },
     onFileSuccess (rootFile, file, params_response, chunk) {
+      this.loading = false
       console.log(rootFile);
       console.log(file);
-
       console.log(params_response);
       console.log(chunk);
       if (JSON.parse(params_response).status == 1) {
-        // rootFile.ignored = true
-        file.cancel()
+        rootFile.ignored = true
+        // file.cancel()
         this.$message(
           {
             message: JSON.parse(params_response).msg,
@@ -167,12 +169,13 @@ export default {
             type: 'success',
           }
         );
-        // file.cancel()
+        file.cancel()
       }
 
       console.log(chunk);
     },
     onFileError (params, file) {
+      this.loading = false
       console.log(params);
       console.log(file);
       file.ignored = true
