@@ -138,7 +138,8 @@ input:-ms-input-placeholder {
   display: none;
 }
 
-.el-input__inner {
+.el-input__inner,
+.el-range-input {
   background-color: #f8f8f8;
   border-width: 0;
   outline: none;
@@ -246,6 +247,7 @@ textarea {
 .el-table--border::after {
   width: 0;
 }
-.el-popup-parent--hidden{
-  padding-right: 0!important;
+
+.el-popup-parent--hidden {
+  padding-right: 0 !important;
 }

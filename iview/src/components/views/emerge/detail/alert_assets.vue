@@ -149,6 +149,16 @@
                   <template slot-scope="scope">{{ scope.row.labels.join(',') }}</template>
                 </el-table-column>
               </template>
+              <!-- 日志来源 -->
+              <template v-if="item.pop =='log_source'">
+                <el-table-column align="center"
+                                 show-overflow-tooltip
+                                 max-width="180"
+                                 min-width="120"
+                                 :label="item.name">
+                  <template slot-scope="scope">{{ scope.row.log_source }}</template>
+                </el-table-column>
+              </template>
               <!-- 风险指数 -->
               <template v-if="item.pop =='risk_num'">
                 <el-table-column min-width="80"
@@ -315,6 +325,16 @@
                   <template slot-scope="scope">{{ scope.row.labels.join(',') }}</template>
                 </el-table-column>
               </template>
+              <!-- 日志来源 -->
+              <template v-if="item.pop =='log_source'">
+                <el-table-column align="center"
+                                 show-overflow-tooltip
+                                 max-width="180"
+                                 min-width="120"
+                                 :label="item.name">
+                  <template slot-scope="scope">{{ scope.row.log_source }}</template>
+                </el-table-column>
+              </template>
               <!-- 风险指数 -->
               <template v-if="item.pop =='risk_num'">
                 <el-table-column min-width="80"
@@ -466,6 +486,9 @@ export default {
                   break;
                 case 'log_count':
                   obj.name = '日志数量'
+                  break;
+                case 'log_source':
+                  obj.name = '日志来源'
                   break;
                 default:
                   break;

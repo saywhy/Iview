@@ -99,7 +99,7 @@ export default {
         },
       },
       attrs: {
-        accept: 'application/gzip'//接受文件类型
+        // accept: 'application/gzip'//接受文件类型
       },
       fileStatusText: {
         success: '成功',
@@ -235,18 +235,19 @@ export default {
       console.log(this.file_content);
       console.log(file);
       file.pause()
-      if (file.name == 'sdk.tgz' || file.name == 'ids.tgz' || file.name == 'df.tgz') {
-        this.file_content = file
-      } else {
-        this.$message({
-          message: '请上传文件名为sdk.tgz、ids.tgz、df.tgz的文件',
-          type: 'warning'
-        });
-        file.ignored = true
-        setTimeout(() => {
-          file.cancel()
-        }, 10)
-      }
+      this.file_content = file
+      // if (file.name == 'sdk.tgz' || file.name == 'ids.tgz' || file.name == 'df.tgz') {
+      //   this.file_content = file
+      // } else {
+      //   this.$message({
+      //     message: '请上传文件名为sdk.tgz、ids.tgz、df.tgz的文件',
+      //     type: 'warning'
+      //   });
+      //   file.ignored = true
+      //   setTimeout(() => {
+      //     file.cancel()
+      //   }, 10)
+      // }
     },
     onFilestart (file) {
       console.log('213123');
