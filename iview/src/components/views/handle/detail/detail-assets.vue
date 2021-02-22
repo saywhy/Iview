@@ -1041,6 +1041,7 @@ export default {
         { checked: true, disabled: false, name: "目的地址", alias: 'dest_ip' },
         { checked: false, disabled: false, name: "关联资产名", alias: 'asset_name' },
         { checked: false, disabled: false, name: "用户", alias: 'user' },
+        { checked: false, disabled: false, name: "日志来源", alias: 'log_source' },
         { checked: false, disabled: false, name: "标签", alias: 'labels' },
         { checked: false, disabled: false, name: "失陷确定性", alias: 'fall_certainty' },
         { checked: false, disabled: false, name: "风险指数", alias: 'risk_num' },

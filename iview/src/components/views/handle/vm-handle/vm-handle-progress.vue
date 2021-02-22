@@ -39,9 +39,9 @@
         return progress_data;
       }
     },
-    methods: {
 
-
+    created() {
+      console.log(this.progress_data)
     }
   }
 </script>

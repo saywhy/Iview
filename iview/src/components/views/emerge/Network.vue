@@ -39,6 +39,18 @@
                          :value="item.value">
               </el-option>
             </el-select>
+            <!--日志来源-->
+            <el-select class="s_key2"
+                       v-model="params.log_source"
+                       clearable
+                       placeholder="日志来源"
+                       :popper-append-to-body="false">
+              <el-option v-for="item in options_logs"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
+            </el-select>
             <!--失陷确定性-->
             <el-select class="s_key2"
                        v-model="params.certainty"
@@ -51,7 +63,9 @@
                          :value="item.value">
               </el-option>
             </el-select>
-
+          </el-col>
+          <!--2-->
+          <el-col :span="24" class="common_box_list common_box_list_network">
             <!--威胁等级-->
             <el-select class="s_key2"
                        v-model="params.degree"
@@ -64,23 +78,6 @@
                          :value="item.value">
               </el-option>
             </el-select>
-          </el-col>
-          <!--2-->
-          <el-col :span="24" class="common_box_list common_box_list_network">
-
-            <!--威胁等级-->
-            <el-select class="s_key2"
-                       v-model="params.log_source"
-                       clearable
-                       placeholder="威胁等级"
-                       :popper-append-to-body="false">
-              <el-option v-for="item in options_logs"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
-              </el-option>
-            </el-select>
-
             <!--处理状态-->
             <el-select class="s_key2_network"
                        v-model="params.status"
@@ -93,7 +90,6 @@
                          :value="item.value">
               </el-option>
             </el-select>
-
             <!--攻击阶段-->
             <el-select class="s_key2"
                        v-model="params.attack_stage"
@@ -106,7 +102,6 @@
                          :value="item.value">
               </el-option>
             </el-select>
-
             <el-button class="s_btn"
                        @click="submitClick();">搜索</el-button>
             <el-link class="s_link"
@@ -683,6 +678,7 @@ export default {
       { checked: true, disabled: false, name: "目的地址", alias: 'dest_ip' },
       { checked: false, disabled: false, name: "关联资产名", alias: 'asset_name' },
       { checked: false, disabled: false, name: "用户", alias: 'user' },
+      { checked: false, disabled: false, name: "日志来源", alias: 'log_source' },
       { checked: false, disabled: false, name: "标签", alias: 'labels' },
       { checked: false, disabled: false, name: "失陷确定性", alias: 'fall_certainty' },
       { checked: false, disabled: false, name: "风险指数", alias: 'risk_num' },
@@ -1007,13 +1003,13 @@ export default {
             msg,
             data
           } = resp.data;
-          
-          if (status == '0') {
 
-            var attr = []
+          if (status == '0') {
+            var attr = [];
             data.forEach(item => {
-              attr.push({value:item.id,label:item.name});
+              attr.push({value:item.name,label:item.name});
             })
+            attr.push({value:'网络镜像',label:'网络镜像'});
             this.options_logs = attr;
           }
         })

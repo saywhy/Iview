@@ -36,7 +36,7 @@
               <!--1-->
               <el-col :span="24" class="common_box_list">
                 <!--搜索关键词-->
-                <el-input class="s_key_network"
+                <el-input class="s_key2"
                           placeholder="搜索关键词"
                           v-model.trim="params.key"
                           clearable>
@@ -46,7 +46,7 @@
                 <!--时间-->
                 <vm-emerge-picker @changeTime='changeTime'></vm-emerge-picker>
                 <!--安全域-->
-                <el-select class="s_key_network s_key_types_network"
+                <el-select class="s_key2 s_key2_ok"
                            v-model="params.domain"
                            clearable
                            placeholder="安全域"
@@ -57,8 +57,20 @@
                              :value="item.value">
                   </el-option>
                 </el-select>
+                <!--日志来源-->
+                <el-select class="s_key2"
+                           v-model="params.log_source"
+                           clearable
+                           placeholder="日志来源"
+                           :popper-append-to-body="false">
+                  <el-option v-for="item in options_logs"
+                             :key="item.value"
+                             :label="item.label"
+                             :value="item.value">
+                  </el-option>
+                </el-select>
                 <!--失陷确定性-->
-                <el-select class="s_key_network s_key_types_network_ok"
+                <el-select class="s_key2"
                            v-model="params.certainty"
                            clearable
                            placeholder="失陷确定性"
@@ -69,11 +81,12 @@
                              :value="item.value">
                   </el-option>
                 </el-select>
+
               </el-col>
               <!--2-->
               <el-col :span="24" class="common_box_list common_box_list_network">
                 <!--威胁等级-->
-                <el-select class="s_key_network"
+                <el-select class="s_key2"
                            v-model="params.degree"
                            clearable
                            placeholder="威胁等级"
@@ -85,7 +98,7 @@
                   </el-option>
                 </el-select>
                 <!--处理状态-->
-                <el-select class="s_key_network1"
+                <el-select class="s_key2_network"
                            v-model="params.status"
                            clearable
                            placeholder="处理状态"
@@ -96,9 +109,8 @@
                              :value="item.value">
                   </el-option>
                 </el-select>
-
                 <!--攻击阶段-->
-                <el-select class="s_key_network2"
+                <el-select class="s_key2"
                            v-model="params.attack_stage"
                            clearable
                            placeholder="攻击阶段"
@@ -109,12 +121,13 @@
                              :value="item.value">
                   </el-option>
                 </el-select>
+
                 <el-button class="s_btn"
                            @click="submitClick();">搜索</el-button>
                 <el-link class="s_link"
                          @click="resetClick();">重置</el-link>
-                <!--<el-button class="s_btn_edit"
-                           @click="export_box">导出</el-button>-->
+                <el-button class="s_btn_edit"
+                           @click="export_box()">导出</el-button>
               </el-col>
 
             </el-row>
@@ -670,22 +683,23 @@ export default {
       randomKey:0,
       dropCol:[],
       fieldFlag:false,
-      fieldList:[{checked:true,disabled:true,name:"告警时间",alias:'alert_time'},
-        {checked:true,disabled:true,name:"告警类型",alias:'category'},
-        {checked:true,disabled:true,name:"威胁等级",alias:'degree'},
-        {checked:true,disabled:false,name:"描述",alias:'description'},
-        {checked:true,disabled:false,name:"安全域",alias:'security_domain'},
-        {checked:true,disabled:false,name:"源地址",alias:'src_ip'},
-        {checked:true,disabled:false,name:"目的地址",alias:'dest_ip'},
-        {checked:false,disabled:false,name:"关联资产名",alias:'asset_name'},
-        {checked:false,disabled:false,name:"用户",alias:'user'},
-        {checked:false,disabled:false,name:"标签",alias:'labels'},
-        {checked:false,disabled:false,name:"失陷确定性",alias:'fall_certainty'},
-        {checked:false,disabled:false,name:"风险指数",alias:'risk_num'},
-        {checked:true,disabled:false,name:"更新时间",alias:'update_time'},
-        {checked:false,disabled:false,name:"工单状态",alias:'workorder_status'},
-        {checked:false,disabled:false,name:"日志数量",alias:'log_count'},
-        {checked:true,disabled:false,name:"状态",alias:'status'}],
+      fieldList: [{ checked: true, disabled: true, name: "告警时间", alias: 'alert_time' },
+        { checked: true, disabled: true, name: "告警类型", alias: 'category' },
+        { checked: true, disabled: true, name: "威胁等级", alias: 'degree' },
+        { checked: true, disabled: false, name: "描述", alias: 'description' },
+        { checked: true, disabled: false, name: "安全域", alias: 'security_domain' },
+        { checked: true, disabled: false, name: "源地址", alias: 'src_ip' },
+        { checked: true, disabled: false, name: "目的地址", alias: 'dest_ip' },
+        { checked: false, disabled: false, name: "关联资产名", alias: 'asset_name' },
+        { checked: false, disabled: false, name: "用户", alias: 'user' },
+        { checked: false, disabled: false, name: "日志来源", alias: 'log_source' },
+        { checked: false, disabled: false, name: "标签", alias: 'labels' },
+        { checked: false, disabled: false, name: "失陷确定性", alias: 'fall_certainty' },
+        { checked: false, disabled: false, name: "风险指数", alias: 'risk_num' },
+        { checked: true, disabled: false, name: "更新时间", alias: 'update_time' },
+        { checked: false, disabled: false, name: "工单状态", alias: 'workorder_status' },
+        { checked: false, disabled: false, name: "日志数量", alias: 'log_count' },
+        { checked: true, disabled: false, name: "状态", alias: 'status' }],
       progress_data_source5: [],
       progress_data_source5_show: false,
       form_data_threat5: [],
@@ -698,20 +712,23 @@ export default {
         certainty: '',
         status: '',
         degree: '',
-        attack_stage:''
+        attack_stage:'',
+        log_source:''
       },
       params: {
         key: "",
-        certainty: "",
         startTime: '',
         endTime: '',
+        domain: '',
+        certainty: '',
         degree: '',
         status: '',
-        domain: '',
         attack_stage:'',
+        log_source:'',
         sort: '3',
         order: ''
       },
+      options_logs:[],
       options_degrees: [
         {
           value: "low",
@@ -947,6 +964,7 @@ export default {
   },
   created () {
     this.check_passwd();
+    this.get_log_source();
     this.get_list_source_top5();
     this.get_list_threat_top5();
     this.get_list_threat();
@@ -973,6 +991,26 @@ export default {
               }
             );
             eventBus.$emit('reset')
+          }
+        })
+    },
+    //获取日志列表
+    get_log_source() {
+      this.$axios.get('/yiiapi/site/LogSources')
+        .then((resp) => {
+          let {
+            status,
+            msg,
+            data
+          } = resp.data;
+
+          if (status == '0') {
+            var attr = [];
+            data.forEach(item => {
+              attr.push({value:item.name,label:item.name});
+            })
+            attr.push({value:'网络镜像',label:'网络镜像'});
+            this.options_logs = attr;
           }
         })
     },
@@ -1142,6 +1180,8 @@ export default {
           status: this.old_params.status,
           degree: this.old_params.degree,
           attack_stage:params_alert.attack_stage,
+          log_source:this.old_params.log_source,
+
           order:this.params.order,
           sort:this.params.sort,
           page: this.table.pageNow,
@@ -1239,6 +1279,7 @@ export default {
       this.old_params.status = this.params.status;
       this.old_params.degree = this.params.degree;
       this.old_params.attack_stage = this.params.attack_stage;
+      this.old_params.log_source = this.params.log_source;
 
       this.get_list_threat();
     },
@@ -1255,6 +1296,7 @@ export default {
       this.params.degree = '';
       this.params.status = '';
       this.params.attack_stage = '';
+      this.params.log_source = '';
 
       this.old_params.key = this.params.key;
       this.old_params.startTime = this.params.startTime;
@@ -1264,6 +1306,7 @@ export default {
       this.old_params.status = this.params.status;
       this.old_params.degree = this.params.degree;
       this.old_params.attack_stage = this.params.attack_stage;
+      this.old_params.log_source = this.params.log_source;
 
       $(document.querySelector('.el-button--text')).trigger('click');
       this.get_list_threat();
