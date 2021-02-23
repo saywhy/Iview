@@ -1048,7 +1048,7 @@ export default {
         { checked: true, disabled: false, name: "更新时间", alias: 'update_time' },
         { checked: false, disabled: false, name: "工单状态", alias: 'workorder_status' },
         { checked: false, disabled: false, name: "日志数量", alias: 'log_count' },
-        { checked: true, disabled: false, name: "状态", alias: 'status' }]
+        { checked: true, disabled: false, name: "状态", alias: 'status' }],
     };
   },
 
