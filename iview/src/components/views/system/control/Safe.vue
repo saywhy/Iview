@@ -42,9 +42,14 @@
           </el-table-column>
           <el-table-column label="更新时间"
                            align="center"
-                           width="180"
+                           min-width="140"
                            show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.updated_at }}</template>
+          </el-table-column>
+          <el-table-column prop="login_addr"
+                           align="center"
+                           label="登录地址"
+                           show-overflow-tooltip>
           </el-table-column>
           <el-table-column prop="type"
                            align="center"
@@ -53,7 +58,7 @@
           </el-table-column>
           <el-table-column label="创建日期"
                            align="center"
-                           width="180"
+                           min-width="140"
                            show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.created_at }}</template>
           </el-table-column>
@@ -71,6 +76,7 @@
             </template>
           </el-table-column>
           <el-table-column label="操作"
+                           min-width="140"
                            align="center">
             <template slot-scope="scope">
               <el-button type="primary"
@@ -210,6 +216,16 @@
                         clearable>
               </el-input>
             </div>
+            <div class="content_item">
+              <p>
+                <span class="title">登录地址</span>
+              </p>
+              <el-input class="select_box"
+                        placeholder="请输入登录地址"
+                        v-model="monitor_add.login_addr"
+                        clearable>
+              </el-input>
+            </div>
           </div>
         </div>
         <div class="btn_box">
@@ -265,7 +281,8 @@
           character: "",
           cpu: "",
           memory:"",
-          disk:""
+          disk:"",
+          login_addr:""
         },
         select_list: [],
       };
@@ -406,6 +423,7 @@
         this.monitor_add.cpu = '';
         this.monitor_add.memory = '';
         this.monitor_add.disk = '';
+        this.monitor_add.login_addr = '';
 
         if(row){
           this.monitor_add.id = row.id;
@@ -419,6 +437,7 @@
           this.monitor_add.cpu = row.cpu;
           this.monitor_add.memory = row.memory;
           this.monitor_add.disk = row.disk;
+          this.monitor_add.login_addr = row.login_addr;
         }
       },
 
@@ -511,7 +530,8 @@
             memory:this.monitor_add.memory,
             disk:this.monitor_add.disk,
             port:this.monitor_add.port,
-            snmp:this.monitor_add.snmp
+            snmp:this.monitor_add.snmp,
+            login_addr:this.monitor_add.login_addr
           }
         })
           .then(resp => {
@@ -630,7 +650,8 @@
             memory:this.monitor_add.memory,
             disk:this.monitor_add.disk,
             port:this.monitor_add.port,
-            snmp:this.monitor_add.snmp
+            snmp:this.monitor_add.snmp,
+            login_addr:this.monitor_add.login_addr
           }
         })
           .then(resp => {
