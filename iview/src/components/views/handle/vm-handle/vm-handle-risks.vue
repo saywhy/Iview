@@ -126,8 +126,6 @@
                            @click="submitClick();">搜索</el-button>
                 <el-link class="s_link"
                          @click="resetClick();">重置</el-link>
-                <el-button class="s_btn_edit"
-                           @click="export_box()">导出</el-button>
               </el-col>
 
             </el-row>
