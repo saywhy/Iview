@@ -164,10 +164,8 @@
                     this.base_general.cascader = [feedAttr[0],feedAttr[1]];
                   }
                 }
-
                 this.base.Carousel = data.Carousel;
                 this.base.ScreenName = data.ScreenName;
-
               }
             });
         },
