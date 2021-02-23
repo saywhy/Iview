@@ -250,19 +250,19 @@ export const asyncRouterMap = [
         deep: 1
       },
       component: () => import('@/components/views/home/Overview')
-    },{
-        path: '/home/screen_index',
-        name: 'screen_index',
-        meta: {
-          title: '大屏',
-          auth: '995',
-          icon: 'e-aside-big',
-          parentAuth: '1',
-          rootAuth: '1',
-          deep: 1
-        },
-        redirect: '/screen'
-      }]
+    }, {
+      path: '/home/screen_index',
+      name: 'screen_index',
+      meta: {
+        title: '大屏',
+        auth: '995',
+        icon: 'e-aside-big',
+        parentAuth: '1',
+        rootAuth: '1',
+        deep: 1
+      },
+      redirect: '/screen'
+    }]
   },
   /*处置*/
   {
@@ -796,6 +796,19 @@ export const asyncRouterMap = [
           deep: 2
         },
         component: () => import('@/components/views/system/setting/Resume')
+      },
+      {
+        path: '/system/setting/Config',
+        name: 'Config',
+        meta: {
+          title: '配置信息',
+          auth: '341',
+          icon: 'e-aside-none',
+          parentAuth: '31',
+          rootAuth: '27',
+          deep: 2
+        },
+        component: () => import('@/components/views/system/setting/Config')
       },
       {
         path: '/system/setting/licence',

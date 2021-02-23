@@ -2299,6 +2299,7 @@ export default {
           width: 124px;
           padding: 0;
           background: #0070ff;
+          margin-right: 10px;
         }
 
         .edit_btn {

@@ -379,9 +379,9 @@
             {{value.value | filterType }}
           </span>
           <span class="info_top_item_content"
-                v-if="value.name!='文件大小'"
-                :class="value.value=='点击下载'?'download_text':''">
-            <span @click="download(value,selectItem)">{{value.value}}</span>
+                v-if="value.name!='文件大小'">
+            <span @click="download(value,selectItem)"
+                  :class="value.value=='点击下载'?'download_text':''">{{value.value}}</span>
           </span>
         </li>
       </div>
@@ -1633,7 +1633,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-/deep/ .reset_tab {
+.reset_tab {
   .el-tabs__header {
     margin: 0;
   }
