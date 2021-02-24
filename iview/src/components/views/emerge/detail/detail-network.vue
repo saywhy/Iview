@@ -169,7 +169,21 @@
           <div class="content_item">
             <span class="item_title">日志来源：</span>
             <div class="item_right">
-              <span>{{detail_main.log_source }}</span>
+
+              <!-- <span>{{detail_main.log_source }}</span> -->
+
+              <span v-if="detail_main.login_addr==null||detail_main.login_addr==''">
+                <!-- <a href="http://www.baidu.com"
+                   title=""
+                   target="_blank">{{detail_main.log_source}}</a> -->
+                {{detail_main.log_source}}
+              </span>
+              <span v-if="detail_main.login_addr!=null&&detail_main.login_addr!=''"
+                    class="login_addr">
+                <a :href="detail_main.login_addr"
+                   title=""
+                   target="_blank">{{detail_main.log_source}}</a>
+              </span>
             </div>
           </div>
           <div class="content_item">
@@ -2273,6 +2287,11 @@ export default {
 .detail_box {
   // border: 1px solid red;
   // 顶部基础信息
+  .login_addr {
+    color: #0070ff !important;
+    cursor: pointer;
+    text-decoration: underline;
+  }
   .detail_top {
     background: #fff;
     padding-bottom: 48px;

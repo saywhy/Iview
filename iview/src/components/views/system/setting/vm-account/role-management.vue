@@ -389,6 +389,10 @@ export default {
                   id: 282,
                   label: '恢复/重启',
                 },
+                {
+                  id: 341,
+                  label: '配置信息',
+                },
               ]
             }
           ]
