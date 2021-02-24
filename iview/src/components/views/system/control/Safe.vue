@@ -220,11 +220,22 @@
               <p>
                 <span class="title">登录地址</span>
               </p>
-              <el-input class="select_box"
-                        placeholder="请输入登录地址"
-                        v-model="monitor_add.login_addr"
-                        clearable>
-              </el-input>
+              <div class="select_box_list">
+                <el-select class="select_box1"
+                           v-model="sel_type"
+                           placeholder="请选择类型">
+                  <el-option v-for="item in type_list"
+                             :key="item.name"
+                             :label="item.name"
+                             :value="item.name">
+                  </el-option>
+                </el-select>
+                <el-input class="select_box2"
+                          placeholder="请输入登录地址"
+                          v-model="monitor_add.login_addr"
+                          clearable>
+                </el-input>
+              </div>
             </div>
           </div>
         </div>
@@ -249,6 +260,15 @@
     data () {
       return {
         loading:false,
+        sel_type:'http',
+        type_list: [
+          {
+            name: "http"
+          },
+          {
+            name: "https"
+          }
+        ],
         detail_click_val: {},
         detail_click_column: {},
         oldPositon: {
@@ -438,11 +458,25 @@
           this.monitor_add.memory = row.memory;
           this.monitor_add.disk = row.disk;
           this.monitor_add.login_addr = row.login_addr;
+
+          if(row.login_addr != ''){
+
+            var attr = row.login_addr.split('://');
+
+            if(attr.length == 1){
+              this.sel_type = 'http';
+              this.monitor_add.login_addr = attr[0];
+            }else {
+              this.sel_type = attr[0];
+              this.monitor_add.login_addr = attr[1];
+            }
+          }
         }
       },
 
       //取消
       closed_cancel_box () {
+        this.sel_type = 'http';
         this.monitor_state.tab = false;
         this.$refs.multipleTable.clearSelection();
       },
@@ -520,6 +554,21 @@
           return false;
         }
 
+        var pattern1 = /^(http(s)?:\/\/)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:[0-9]{1,5})?$/;
+
+        var login_addr = '';
+
+        if(this.monitor_add.login_addr != ''){
+          login_addr = this.sel_type +'://' + this.monitor_add.login_addr;
+          if (!pattern1.test(login_addr)) {
+            this.$message({
+              message: '登录地址格式错误！',
+              type: 'warning',
+            });
+            return false;
+          }
+        }
+
         this.$axios.post('/yiiapi/safetyequipments', {
           SafetyEquipment: {
             name: this.monitor_add.name,
@@ -531,7 +580,7 @@
             disk:this.monitor_add.disk,
             port:this.monitor_add.port,
             snmp:this.monitor_add.snmp,
-            login_addr:this.monitor_add.login_addr
+            login_addr:login_addr
           }
         })
           .then(resp => {
@@ -640,6 +689,21 @@
           return false;
         }
 
+        var pattern1 = /^(http(s)?:\/\/)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:[0-9]{1,5})?$/;
+
+        var login_addr = '';
+
+        if(this.monitor_add.login_addr != ''){
+          login_addr = this.sel_type +'://' + this.monitor_add.login_addr;
+          if (!pattern1.test(login_addr)) {
+            this.$message({
+              message: '登录地址格式错误！',
+              type: 'warning',
+            });
+            return false;
+          }
+        }
+
         this.$axios.put('/yiiapi/safetyequipments/'+this.monitor_add.id, {
           SafetyEquipment: {
             name: this.monitor_add.name,
@@ -651,7 +715,7 @@
             disk:this.monitor_add.disk,
             port:this.monitor_add.port,
             snmp:this.monitor_add.snmp,
-            login_addr:this.monitor_add.login_addr
+            login_addr:login_addr
           }
         })
           .then(resp => {
@@ -849,6 +913,28 @@
                   .el-input__inner {
                     background: #f8f8f8;
                     border: 0;
+                  }
+                }
+                .select_box_list{
+                  display: flex;
+                  .select_box1 {
+                    width: 80px;
+                    margin-right: 10px;
+                    height: 38px;
+                    margin-top: 6px;
+                    .el-input__inner {
+                      background: #f8f8f8;
+                      border: 0;
+                    }
+                  }
+                  .select_box2 {
+                    flex: 1;
+                    height: 38px;
+                    margin-top: 6px;
+                    .el-input__inner {
+                      background: #f8f8f8;
+                      border: 0;
+                    }
                   }
                 }
                 .el-cascader {
