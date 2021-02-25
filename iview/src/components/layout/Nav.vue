@@ -207,6 +207,9 @@ export default {
     eventBus.$on('reset', () => {
       this.modifyPassword()
     })
+    eventBus.$on('badge', () => {
+      this.get_news()
+    })
   },
   methods: {
     /*login(){
@@ -234,8 +237,8 @@ export default {
               console.log('343434')
               console.log(response)
               if (status == 0) {
-                 console.log(data.data)
-                localStorage.setItem("token",data.data.token);
+                console.log(data.data)
+                localStorage.setItem("token", data.data.token);
                 let datas = data.data;
                 this.user_edit.department = datas.department;
                 this.user_edit.mobile = datas.mobile;
@@ -398,7 +401,7 @@ export default {
                   })
                 // location.reload();
               }, 500);
-            }else {
+            } else {
               this.$message({
                 message: '修改用户成功',
                 type: 'success'
@@ -415,17 +418,17 @@ export default {
             this.user_edit.allow_ip = '';
           } else {
             let msg = response.data.msg;
-            if(typeof(msg) == 'string'){
+            if (typeof (msg) == 'string') {
               this.$message({
-                  message: msg,
-                  type: 'error',
-                }
+                message: msg,
+                type: 'error',
+              }
               );
-            }else {
+            } else {
               this.$message({
                 message: msg[Object.keys(msg)[0]][0],
-                  type: 'error',
-                }
+                type: 'error',
+              }
               );
             }
           }
@@ -461,7 +464,9 @@ export default {
         .then((resp) => {
           let { status, data } = resp.data;
           let datas = data;
-          this.news_count = datas.count
+          this.news_count = datas.count - 0
+          // this.news_count = datas.count
+          console.log(this.news_count);
         })
         .catch(error => {
           console.log(error);

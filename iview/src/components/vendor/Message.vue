@@ -200,6 +200,7 @@ export default {
               break;
             case 0:
               this.get_news()
+              eventBus.$emit('badge')
               this.$message({ message: '标记成功', type: 'success' });
               break;
             default:
@@ -239,6 +240,7 @@ export default {
                 break;
               case 0:
                 this.get_news()
+                eventBus.$emit('badge')
                 this.$message({ message: '删除成功', type: 'success' });
                 break;
               default:
