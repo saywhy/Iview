@@ -349,9 +349,6 @@ export default {
           this.host_network_data = data.data
           this.host_network_data.data.forEach((item, index) => {
             item.index_cn = index + 1
-            var arr = item.timestamp.split(' ')
-            arr[2] = '--'
-            item.timestamp = arr.join(' ')
           });
         })
         .catch(error => {
