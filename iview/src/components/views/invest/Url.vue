@@ -52,11 +52,16 @@
                   {{(url_search.page-1)*(url_search.rows) + scope.row.index_cn}}
                 </template>
               </el-table-column>
-              <el-table-column prop="timestamp"
-                               align="center"
+              <el-table-column align="center"
+                               prop="timestamp"
                                width="320"
                                label="时间"
                                show-overflow-tooltip>
+                <!-- <template slot-scope="scope">
+                  <div>
+                    {{scope.row.timestamp.replace('\u00A0/g','-')}}
+                  </div>
+                </template> -->
               </el-table-column>
               <el-table-column prop="src_ip"
                                align="center"
@@ -233,6 +238,9 @@ export default {
           this.url_list_data = data.data
           this.url_list_data.data.forEach((item, index) => {
             item.index_cn = index + 1
+            var arr = item.timestamp.split(' ')
+            arr[2] = '--'
+            item.timestamp = arr.join(' ')
           });
         })
         .catch(error => {
