@@ -279,6 +279,12 @@
           x: '',
           y: ''
         },
+        params:{
+          name:'',
+          ip:'',
+          type:'',
+          status:''
+        },
         monitor_data: {},
         monitor_page: {
           page: 1,
@@ -339,6 +345,10 @@
           params: {
             page: this.monitor_page.page,
             rows: this.monitor_page.rows,
+            name: this.params.name,
+            ip: this.params.ip,
+            type: this.params.type,
+            status: this.params.status
           }
         })
           .then(resp => {
