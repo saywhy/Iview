@@ -511,6 +511,11 @@ export default {
           text-decoration: none;
           max-width: 104px;
           .el-menu-item {
+            &:hover,
+            &:focus{
+              height: 60px;
+              line-height: 56px;
+            }
             color: #fff;
             height: 60px;
             line-height: 56px;
@@ -551,11 +556,17 @@ export default {
           .el-menu-item:hover,
           .el-menu-item:focus {
             background-color: #2e3f60;
+            height: 60px;
+            line-height: 56px;
           }
           .el-menu-item.is-active {
             border-width: 0;
             color: #fff;
             background-color: #5389e0;
+          }
+          a.item:hover,
+          a.item:focus{
+            background-color: #2e3f60;
           }
         }
       }
@@ -597,7 +608,8 @@ export default {
       }
     }
   }
-  /deep/ .el-dialog {
+  /deep/
+  .el-dialog {
     width: 550px;
     .el-dialog__body {
       width: 550px;
