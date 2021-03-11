@@ -13,6 +13,52 @@
                    class="btn_o"
                    @click="del_monitor">删除</el-button>
       </div>
+      <div class="common_box">
+        <el-col :span="24" class="common_box_list">
+          <!--设备名称-->
+          <el-input class="s_key2"
+                    placeholder="设备名称"
+                    v-model.trim="params.name"
+                    clearable>
+            <i slot="prefix"
+               class="el-input__icon el-icon-search"></i>
+          </el-input>
+          <!--Ip-->
+          <el-input class="s_key2"
+                    placeholder="请输入IP"
+                    v-model.trim="params.ip"
+                    clearable>
+            <i slot="prefix"
+               class="el-input__icon el-icon-search"></i>
+          </el-input>
+          <!--主机类别-->
+          <el-input class="s_key2"
+                    placeholder="主机类别"
+                    v-model.trim="params.type"
+                    clearable>
+            <i slot="prefix"
+               class="el-input__icon el-icon-search"></i>
+          </el-input>
+
+          <!--设备状态-->
+          <el-select class="s_key2"
+                     v-model="params.status"
+                     clearable
+                     placeholder="设备状态"
+                     :popper-append-to-body="false">
+            <el-option v-for="item in options_status"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value">
+            </el-option>
+          </el-select>
+
+          <el-button class="s_btn"
+                     @click="submitClick();">搜索</el-button>
+          <el-link class="s_link"
+                   @click="resetClick();">重置</el-link>
+        </el-col>
+      </div>
       <div class="monitor_table">
         <el-table ref="multipleTable"
                   class="reset_table"
@@ -279,12 +325,32 @@
           x: '',
           y: ''
         },
+        old_params:{
+          name:'',
+          ip:'',
+          type:'',
+          status:''
+        },
         params:{
           name:'',
           ip:'',
           type:'',
           status:''
         },
+        options_status: [
+          {
+            value: "0",
+            label: "正常"
+          },
+          {
+            value: "1",
+            label: "告警"
+          },
+          {
+            value: "2",
+            label: "离线"
+          }
+        ],
         monitor_data: {},
         monitor_page: {
           page: 1,
@@ -318,6 +384,34 @@
       this.get_data();
     },
     methods: {
+      //搜索按鈕點擊事件
+      submitClick () {
+        this.monitor_page.page = 1;
+
+        this.old_params.name = this.params.name;
+        this.old_params.ip = this.params.ip;
+        this.old_params.type = this.params.type;
+        this.old_params.status = this.params.status;
+
+        this.get_data();
+      },
+
+      //重置按鈕點擊事件
+      resetClick () {
+        this.monitor_page.page = 1;
+
+        this.params.name = '';
+        this.params.ip = '';
+        this.params.type = '';
+        this.params.status = '';
+
+        this.old_params.name = this.params.name;
+        this.old_params.ip = this.params.ip;
+        this.old_params.type = this.params.type;
+        this.old_params.status = this.params.status;
+
+        this.get_data();
+      },
       // 测试密码过期
       check_passwd () {
         this.$axios.get('/yiiapi/site/CheckPasswdReset')
@@ -345,10 +439,10 @@
           params: {
             page: this.monitor_page.page,
             rows: this.monitor_page.rows,
-            name: this.params.name,
-            ip: this.params.ip,
-            type: this.params.type,
-            status: this.params.status
+            name: this.old_params.name,
+            ip: this.old_params.ip,
+            type: this.old_params.type,
+            status: this.old_params.status
           }
         })
           .then(resp => {
@@ -989,6 +1083,239 @@
           width: 148px;
           height: 42px;
         }
+      }
+      .common_box {
+        padding: 9px 0;
+        line-height: normal;
+        height: 80px;
+        .common_box_list {
+          font-size: 0;
+          text-align: left;
+          .s_key {
+            height: 40px;
+            width: 164px;
+            margin-right: 8px;
+            line-height: 40px;
+            display: inline-block;
+
+            /deep/
+            .el-input__inner {
+              border-width: 0;
+              font-size: 14px;
+              height: 40px;
+              background: #F8F8F8;
+              font-family: PingFang;
+            }
+
+            &.s_key_types {
+              margin-left: 8px;
+            }
+          }
+          .s_key1 {
+            height: 40px;
+            width: 230px;
+            margin-right: 9px;
+            line-height: 40px;
+            display: inline-block;
+
+            /deep/
+            .el-input__inner {
+              border-width: 0;
+              font-size: 14px;
+              height: 40px;
+              background: #F8F8F8;
+              font-family: PingFang;
+            }
+
+            &.s_key1_ok {
+              margin-left: 8px;
+            }
+
+            &.s_key_types_network {
+              margin-left: 45px;
+            }
+
+            &.s_key_types_network_ok {
+              margin-right: 0;
+            }
+          }
+          .s_key2 {
+            height: 40px;
+            width: 290px;
+            margin-right: 9px;
+            line-height: 40px;
+            display: inline-block;
+
+            /deep/
+            .el-input__inner {
+              border-width: 0;
+              font-size: 14px;
+              height: 40px;
+              background: #F8F8F8;
+              font-family: PingFang;
+            }
+
+            &.s_key2_ok {
+              margin-left: 8px;
+            }
+          }
+          .s_key2_network {
+            height: 40px;
+            width: 400px;
+            margin-right: 8px;
+            line-height: 40px;
+            display: inline-block;
+            text-align: justify;
+
+            /deep/
+            .el-input__inner {
+              border-width: 0;
+              font-size: 14px;
+              height: 40px;
+              background: #F8F8F8;
+              font-family: PingFang;
+            }
+
+            &.s_key_types {
+              margin-left: 8px;
+            }
+
+            &.s_key_types_network {
+              margin-left: 20px;
+            }
+          }
+
+          .s_key_network {
+            height: 40px;
+            width: 356px;
+            margin-right: 45px;
+            line-height: 40px;
+            display: inline-block;
+            text-align: justify;
+            /deep/
+            .el-input__inner {
+              border-width: 0;
+              font-size: 14px;
+              height: 40px;
+              background: #F8F8F8;
+            }
+            &.s_key_types {
+              margin-left: 8px;
+            }
+            &.s_key_types_network {
+              margin-left: 45px;
+            }
+            &.s_key_types_network_ok {
+              margin-right: 0;
+            }
+          }
+
+          .s_key_network2 {
+            height: 40px;
+            width: 356px;
+            margin-right: 30px;
+            line-height: 40px;
+            display: inline-block;
+            text-align: justify;
+
+            /deep/ .el-input__inner {
+              border-width: 0;
+              font-size: 14px;
+              height: 40px;
+              background: #F8F8F8;
+              font-family: PingFang;
+            }
+
+            &.s_key_types {
+              margin-left: 8px;
+            }
+
+            &.s_key_types_network {
+              margin-left: 20px;
+            }
+          }
+          /deep/
+          .el-date-editor{
+            /*border: 1px solid #F8F8F8;*/
+            height: 40px;
+            vertical-align: bottom;
+            min-width: 250px!important;
+            .el-range-input{
+              font-size: 14px;
+              &:hover{
+                font-size: 14px;
+              }
+            }
+          }
+          /deep/
+          .b_btn{
+            background: #F8F8F8;
+            border-width: 0;
+            height: 40px;
+            width: 164px;
+            margin-left: 8px;
+            font-family: PingFang;
+            font-size: 14px;
+            color: #BBBBBB;
+          }
+          /deep/
+          .dropdown_ul_box{
+            width: 164px;
+            margin-left: 8px;
+            background: red;
+          }
+          /deep/
+          .s_btn {
+            display: inline-block;
+            width: 102px;
+            height: 40px;
+            line-height: 0;
+            outline: none;
+            border-width: 0;
+            color: #fff;
+            margin: 0 16px;
+            background: #0070FF;
+            font-family: PingFang;
+            font-size: 16px;
+            .el-input__inner{
+              &:hover{
+                font-size: 16px;
+              }
+            }
+          }
+          /deep/
+          .s_link {
+            color: #0070FF;
+            margin-left: 8px;
+            vertical-align: baseline;
+            text-decoration: none;
+            font-family: PingFang;
+            font-size: 16px;
+            &:hover{
+              text-decoration: none;
+            }
+            &::after{
+              text-decoration: none;
+              border-width: 0;
+            }
+          }
+          /deep/
+          .s_btn_edit{
+            background: #fff;
+            height: 40px;
+            width: 102px;
+            float: right;
+            font-family: PingFang;
+            font-size: 14px;
+            color: #0070ff;
+            line-height: 0;
+            border: 1px solid #0070ff;
+          }
+          &.common_box_list_network{
+            margin-top: 20px;
+          }
+        }
+
       }
       .monitor_table {
         padding-right: 24px;
